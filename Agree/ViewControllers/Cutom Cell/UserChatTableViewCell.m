@@ -16,7 +16,7 @@
 
 
 #import "IEMMessageBody.h"
-#import "EMChatServiceDefs.h"
+//#import "EMChatServiceDefs.h"
 #import "EMTextMessageBody.h"
 #import "EMImageMessageBody.h"
 

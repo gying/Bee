@@ -154,6 +154,8 @@
         //添加聚会按钮
         [cell initAddView];
     } else {
+        
+        
         Model_Group *theGroup = [self.groupAry objectAtIndex:indexPath.row];
         
         EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:theGroup.em_id isGroup:YES];
