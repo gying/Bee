@@ -64,7 +64,8 @@
 - (void)didFinishedReceiveOfflineMessages:(NSArray *)offlineMessages {
     NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"contact_update"];
     for (EMMessage *message in offlineMessages) {
-        if (message.isGroup) {
+        
+        if (message.messageType == eMessageTypeGroupChat) {
             //小组信息
         } else {
             //私聊信息
@@ -82,7 +83,7 @@
 
 - (void)didReceiveMessage:(EMMessage *)message {
     //这里收到了信息
-    if (message.isGroup) {
+    if (message.messageType == eMessageTypeGroupChat) {
         //群聊
         if (self.chatDelegate) {
             //处于某小组的详情界面中

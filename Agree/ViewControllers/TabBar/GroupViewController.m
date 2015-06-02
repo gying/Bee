@@ -158,7 +158,7 @@
         
         Model_Group *theGroup = [self.groupAry objectAtIndex:indexPath.row];
         
-        EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:theGroup.em_id isGroup:YES];
+        EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:theGroup.em_id conversationType:eConversationTypeGroupChat];
         [theGroup setChat_update:[NSNumber numberWithInteger:conversation.unreadMessagesCount]];
         [cell initCellWithGroup:theGroup];
     }
