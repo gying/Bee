@@ -24,7 +24,6 @@
 		F0068C241A679E6C00B9CB60 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0068C231A679E6C00B9CB60 /* CFNetwork.framework */; };
 		F01487E91A8F827800E41A63 /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F01487E81A8F827800E41A63 /* UserViewController.m */; };
 		F0158B5E1ACE1F0900FB69F9 /* SRMoveArray.m in Sources */ = {isa = PBXBuildFile; fileRef = F0158B5D1ACE1F0900FB69F9 /* SRMoveArray.m */; };
-		F0177FBA1B1D71EA0009FED3 /* libEaseMobClientSDKLite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F0177FB61B1D71EA0009FED3 /* libEaseMobClientSDKLite.a */; };
 		F0177FBB1B1D71EA0009FED3 /* EaseMob.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F0177FB81B1D71EA0009FED3 /* EaseMob.bundle */; };
 		F01B4A5F1B0C7A4B0097144E /* libTXYDownloader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F01B4A591B0C7A4B0097144E /* libTXYDownloader.a */; };
 		F01B4A601B0C7A4C0097144E /* libTXYUploader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F01B4A5E1B0C7A4B0097144E /* libTXYUploader.a */; };
@@ -802,7 +801,6 @@
 				F0068C161A679E3500B9CB60 /* Security.framework in Frameworks */,
 				F0068C1C1A679E4B00B9CB60 /* CoreGraphics.framework in Frameworks */,
 				F0BB7B441A72802900A0E4A0 /* OpenGLES.framework in Frameworks */,
-				F0177FBA1B1D71EA0009FED3 /* libEaseMobClientSDKLite.a in Frameworks */,
 				F0BB7B421A72801D00A0E4A0 /* QuartzCore.framework in Frameworks */,
 				F01B4A5F1B0C7A4B0097144E /* libTXYDownloader.a in Frameworks */,
 				F0BB7B401A72801300A0E4A0 /* CoreLocation.framework in Frameworks */,
@@ -2135,7 +2133,7 @@
 		F0F5C1BC1A66CEBE0029BF7A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = superRabbit;
 				TargetAttributes = {
 					F0F5C1C31A66CEBE0029BF7A = {
