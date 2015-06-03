@@ -249,6 +249,13 @@
 }
 
 - (IBAction)pressedTheWechatButton:(UIButton *)sender {
+    NSLog(@"i");
+    if (!_netManager) {
+        _netManager = [[SRNet_Manager alloc] init];
+        [_netManager setDelegate:self];
+    }
+    [_netManager testInterface];
+    
     
 }
 - (IBAction)nicknameEditingChanged:(UITextField *)sender {
@@ -373,6 +380,12 @@
             } else {
                 
             }
+        }
+            
+            break;
+            
+        case kTestInterface: {    //读取用户资料
+
         }
             
             break;

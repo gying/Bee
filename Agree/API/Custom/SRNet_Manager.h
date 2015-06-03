@@ -75,6 +75,8 @@
 
 #define kImageManagerSign           101
 
+#define kTestInterface              1101
+
 
 
 
@@ -128,4 +130,5 @@
 - (BOOL)createRelationshipForParty: (Model_Party_User *)relation;
 - (BOOL)cancelParty: (Model_Party *)party;
 - (BOOL)imageManagerSign;
+- (BOOL)testInterface;
 @end

@@ -30,6 +30,12 @@
 
 - (void)awakeFromNib {
     // Initialization code
+    
+//#pragma mark -- 暂时设置CELL颜色为红色测试过后删除
+//    self.backgroundColor = [UIColor redColor];
+    
+    
+    
     [self.avatarButton.layer setCornerRadius:self.avatarButton.frame.size.width/2];
     [self.avatarButton.layer setMasksToBounds:YES];
     

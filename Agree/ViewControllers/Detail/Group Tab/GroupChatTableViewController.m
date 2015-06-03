@@ -340,7 +340,7 @@
                     _relationship = [Model_Group_User objectArrayWithKeyValuesArray:jsonDic];
                     
                     //读取私信的消息列表
-                    _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:self.group.em_id isGroup:YES];
+                    _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:self.group.em_id conversationType:eConversationTypeGroupChat];
                     NSArray *messages = [_conversation loadAllMessages];
                     
                     for (EMMessage *message in messages) {

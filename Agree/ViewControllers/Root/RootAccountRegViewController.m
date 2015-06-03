@@ -117,7 +117,7 @@
 }
 
 - (void)imageUploadDoneWithFieldID:(NSString *)fieldID {
-    NSLog([SRImageManager originalImageFromTXYFieldID:fieldID]);
+//    NSLog([SRImageManager originalImageFromTXYFieldID:fieldID]);
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

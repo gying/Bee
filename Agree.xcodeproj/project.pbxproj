@@ -36,7 +36,6 @@
 		F02469151AD1813500FED32D /* EmojiEmoticons.m in Sources */ = {isa = PBXBuildFile; fileRef = F02469131AD1813500FED32D /* EmojiEmoticons.m */; };
 		F036D2721AB492C3002C3B81 /* BandingPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F036D2711AB492C3002C3B81 /* BandingPhoneViewController.m */; };
 		F03922B41AAA98E100DAAF0F /* MBProgressHUD+Add.m in Sources */ = {isa = PBXBuildFile; fileRef = F03922B01AAA98E100DAAF0F /* MBProgressHUD+Add.m */; };
-		F03922B51AAA98E100DAAF0F /* MBProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F03922B11AAA98E100DAAF0F /* MBProgressHUD.bundle */; };
 		F03922B61AAA98E100DAAF0F /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = F03922B31AAA98E100DAAF0F /* MBProgressHUD.m */; };
 		F03923111AAABDA500DAAF0F /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = F03922F11AAABDA500DAAF0F /* MKAnnotationView+WebCache.m */; };
 		F03923121AAABDA500DAAF0F /* NSData+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = F03922F31AAABDA500DAAF0F /* NSData+GIF.m */; };
@@ -2182,7 +2181,6 @@
 				F0B5F4AA1AAA97180013111F /* MJPhotoBrowser.bundle in Resources */,
 				F07642E01AF1CE4F0075E0C2 /* LICENSE in Resources */,
 				F0BB7B3C1A727F3500A0E4A0 /* mapapi.bundle in Resources */,
-				F03922B51AAA98E100DAAF0F /* MBProgressHUD.bundle in Resources */,
 				F0F5C27E1A66F1490029BF7A /* ProgressHUD.bundle in Resources */,
 				F0177FBB1B1D71EA0009FED3 /* EaseMob.bundle in Resources */,
 				F0F87F371A6CE4FE00DBC19E /* PushConfig.plist in Resources */,

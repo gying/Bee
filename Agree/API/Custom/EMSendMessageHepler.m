@@ -91,7 +91,12 @@
 {
     EMMessage *retureMsg = [[EMMessage alloc] initWithReceiver:username bodies:[NSArray arrayWithObject:body]];
     retureMsg.requireEncryption = requireEncryption;
-    retureMsg.isGroup = isChatGroup;
+    if (isChatGroup) {
+        [retureMsg setMessageType:eMessageTypeGroupChat];
+    } else {
+        [retureMsg setMessageType:eMessageTypeChat];
+    }
+    
     retureMsg.ext = ext;
     EMMessage *message = [[EaseMob sharedInstance].chatManager asyncSendMessage:retureMsg progress:nil];
     
