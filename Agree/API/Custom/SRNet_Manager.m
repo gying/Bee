@@ -43,7 +43,7 @@
     NSLog(@"%@",sendDic);
     
 //    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/json",@"text/javascript",@"text/html",nil];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",nil];
 //    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     
     
@@ -376,5 +376,10 @@
                                                   andRequestType:kImageManagerSign]];
 }
 
+
+- (BOOL)testInterface {
+    return [self requestNetorkWithDic:[self toRequestDicWithData:[NSDictionary dictionaryWithObjectsAndKeys:@"jim",@"name",nil]
+                                                  andRequestType:kTestInterface]];
+}
 
 @end

@@ -158,7 +158,7 @@
     _friendArray = [[NSMutableArray alloc] init];
     
     for (Model_User *user in tempArray) {  //循环标记用户未读取的信息
-        EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:user.pk_user.stringValue isGroup:NO];
+        EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:user.pk_user.stringValue conversationType:eConversationTypeChat];
         user.chat_update = [NSNumber numberWithLong:conversation.unreadMessagesCount];
         
         if (0 != user.chat_update.integerValue) {
@@ -205,7 +205,7 @@
                 _friendArray = [[NSMutableArray alloc] init];
                 
                 for (Model_User *user in tempArray) {  //循环标记用户未读取的信息
-                    EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:user.pk_user.stringValue isGroup:NO];
+                    EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:user.pk_user.stringValue conversationType:eConversationTypeChat];
                     user.chat_update = [NSNumber numberWithLong:conversation.unreadMessagesCount];
                     
                     if (0 != user.chat_update.integerValue) {
