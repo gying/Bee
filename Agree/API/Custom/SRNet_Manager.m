@@ -22,7 +22,7 @@
 
 - (BOOL)requestNetorkWithDic:(NSMutableDictionary *)sendDic {
     
-//    [ProgressHUD show:@"正在读取中"];
+    [ProgressHUD show:@"正在读取中"];
     
     if ([self.delegate isKindOfClass:[UIViewController class]]) {
         if ([_theDelegate isKindOfClass:[UIViewController class]]) {
