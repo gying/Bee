@@ -24,7 +24,7 @@
 #define kLoadChatData       1
 #define kSendMessage        2
 
-@interface UserChatViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIAlertViewDelegate, EMChatManagerDelegate> {
+@interface UserChatViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIAlertViewDelegate, EMChatManagerDelegate,UITableViewDelegate> {
     SRNet_Manager *_netManager;
     int _netStatus;
     
@@ -54,12 +54,17 @@
     self.accountView = [[SRAccountView alloc] init];
     self.accountView.rootController = self;
     
+    //
+    self.automaticallyAdjustsScrollViewInsets = false;
+    
+    
     //读取私信的消息列表
     _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:self.user.pk_user.stringValue conversationType:eConversationTypeChat];
     NSArray *messages = [_conversation loadAllMessages];
     
     [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
     
+    //可变数组
     _chatArray = [[NSMutableArray alloc] init];
     for (EMMessage *message in messages) {
         EModel_User_Chat *chat;
@@ -132,6 +137,30 @@
 
 #pragma mark - Table view data source
 
+
+//HeadView
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView * HeadView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 0)];
+    
+
+  //  HeadView.backgroundColor = [UIColor blackColor];
+    
+  _userChatTableView.tableHeaderView = HeadView;
+    
+//    _userChatTableView.tableHeaderView.backgroundColor = [UIColor blackColor];
+    
+    return HeadView;
+}
+
+//HeadView高度
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+
+    
+    return 210;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     if (_chatArray) {
@@ -141,11 +170,13 @@
     }
 }
 
-
+//Cell内容
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    
     static NSString *kCellIdentifier = @"UserChatCell";
     UserChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
-     
+    //
     EModel_User_Chat *chat = [_chatArray objectAtIndex:indexPath.row];
     if (nil == cell) {
         cell = [[UserChatTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifier];
@@ -156,12 +187,16 @@
     return cell;
 }
 
-
+//CELL自适应消息高度
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    //message内容
     EModel_User_Chat *message = [_chatArray objectAtIndex:indexPath.row];
+    
     return [self cellHeightFromMessage:message].floatValue;
 }
 
+
+//
 - (NSNumber *)cellHeightFromMessage:(EModel_User_Chat *)message {
     id<IEMMessageBody> msgBody = message.message.messageBodies.firstObject;
     
@@ -175,6 +210,8 @@
                 //自己发的信息
                 //自己发言
                 UILabel *chatLabel_self = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width - 185, MAXFLOAT)];
+                
+                
                 [chatLabel_self setFont:[UIFont systemFontOfSize:14]];
                 [chatLabel_self setLineBreakMode:NSLineBreakByWordWrapping];
                 [chatLabel_self setTextAlignment:NSTextAlignmentLeft];
@@ -195,6 +232,9 @@
             } else {
                 //他人发的信息
                 UILabel *chatLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width - 132, MAXFLOAT)];
+                
+                
+                
                 [chatLabel setFont:[UIFont systemFontOfSize:14]];
                 [chatLabel setLineBreakMode:NSLineBreakByWordWrapping];
                 [chatLabel setTextAlignment:NSTextAlignmentLeft];
@@ -233,6 +273,8 @@
     }
 }
 
+
+
 #pragma mark - key board
 - (void)talkBtnClick:(UITextView *)textViewGet {
     [self sendMessageDone:[EMSendMessageHepler sendTextMessageWithString:textViewGet.text
@@ -243,6 +285,7 @@
 }
 
 
+//输入框左边BUTTON（图片发送选择)
 - (void)imageBtnClick {
     //点击图片按钮
     if (!_imagePicker) {
@@ -275,6 +318,7 @@
     }
     _imagePicker.sourceType = sourceType;
     [self presentViewController:_imagePicker animated:YES completion:nil];
+    
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -325,9 +369,12 @@
     }
 }
 
+
+//详情BUTTON
 - (IBAction)tapDetailButton:(id)sender {
     [self.accountView loadWithUser:self.user withGroup:nil];
     [self.accountView show];
+    NSLog(@"详情页");
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
