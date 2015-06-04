@@ -8,7 +8,7 @@
 
 #import "SelectFriendViewController.h"
 #import "SRNet_Manager.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "MJExtension.h"
 #import "UIImageView+WebCache.h"
 #import "SRTool.h"
@@ -107,11 +107,11 @@
             break;
     }
     
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
 }
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];

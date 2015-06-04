@@ -7,7 +7,7 @@
 //
 
 #import "JoinUserViewController.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "SRImageManager.h"
 #import "GroupViewController.h"
 #import "EaseMob.h"
@@ -46,7 +46,7 @@
 - (void)createEMGroup {
     
     
-    [ProgressHUD show:@"正在建立小组"];
+    [SVProgressHUD showWithStatus:@"正在建立小组"];
     EMError *error = nil;
     EMGroupStyleSetting *groupStyleSetting = [[EMGroupStyleSetting alloc] init];
     //    groupStyleSetting.groupMaxUsersCount = 500; // 创建500人的群，如果不设置，默认是200人。
@@ -90,7 +90,7 @@
 
 - (void)interfaceReturnDataSuccess:(NSMutableDictionary *)jsonDic with:(int)interfaceType {
     //群组创建成功
-    [ProgressHUD showSuccess:@"小组创建成功"];
+    [SVProgressHUD showSuccessWithStatus:@"小组创建成功"];
     
     switch (interfaceType) {
         case kAddGroup: {
@@ -110,7 +110,7 @@
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD showError:@"网络错误"];
+    [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
 - (void)imageUpladDone {

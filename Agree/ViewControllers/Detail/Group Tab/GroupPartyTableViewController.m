@@ -9,7 +9,7 @@
 #import "GroupPartyTableViewController.h"
 #import "SRNet_Manager.h"
 #import "MJExtension.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "GroupPartyTableViewCell.h"
 #import "AppDelegate.h"
 
@@ -70,9 +70,9 @@
             if (jsonDic) {
                 self.partyArray = (NSMutableArray *)[Model_Party objectArrayWithKeyValuesArray:jsonDic];
                 [self.partyTableView reloadData];
-                [ProgressHUD showSuccess:@"读取数据成功"];
+                [SVProgressHUD showSuccessWithStatus:@"读取数据成功"];
             } else {
-                [ProgressHUD showSuccess:@"未找到相关数据"];
+                [SVProgressHUD showSuccessWithStatus:@"未找到相关数据"];
             }
         }
             break;
@@ -83,7 +83,7 @@
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD showError:@"网络错误"];
+    [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
 

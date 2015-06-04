@@ -11,7 +11,7 @@
 
 #import "SRNet_Manager.h"
 #import "People.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "MJExtension.h"
 
 #import "AddressBookTableViewCell.h"
@@ -215,11 +215,11 @@
             break;
     }
     
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD showError:@"网络错误"];
+    [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];

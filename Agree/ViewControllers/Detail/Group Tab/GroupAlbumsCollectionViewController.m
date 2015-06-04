@@ -14,10 +14,10 @@
 #import "MJPhoto.h"
 #import "SRTool.h"
 #import "MJExtension.h"
-#import "ProgressHUD.h"
-
 #import "SRNet_Manager.h"
 #import "UIImageView+WebCache.h"
+
+#import <SVProgressHUD.h>
 
 @interface GroupAlbumsCollectionViewController () <SRImageManagerDelegate, UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRNetManagerDelegate, SRPhotoManagerDelegate> {
     
@@ -282,12 +282,11 @@
         default:
             break;
     }
-    
-    [ProgressHUD dismiss];
+    [SVProgressHUD showSuccessWithStatus:@"成功"];
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD dismiss];
+    [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
 

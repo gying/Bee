@@ -8,7 +8,7 @@
 
 #import "GroupViewController.h"
 #import "GroupCollectionViewCell.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "MJExtension.h"
 #import "GroupDetailViewController.h"
 #import "SRTool.h"
@@ -158,7 +158,7 @@
         
         Model_Group *theGroup = [self.groupAry objectAtIndex:indexPath.row];
         
-        EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:theGroup.em_id conversationType:eConversationTypeGroupChat];
+        EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:theGroup.em_id isGroup:YES];
         [theGroup setChat_update:[NSNumber numberWithInteger:conversation.unreadMessagesCount]];
         [cell initCellWithGroup:theGroup];
     }
@@ -312,7 +312,7 @@
 
 #pragma mark - Net Manager Delegate
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD showError:@"网络错误"];
+    [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
 - (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
@@ -325,7 +325,7 @@
             
         case kJoinTheGroupByCode: { //输入小组验证码
             if (jsonDic) {
-                [ProgressHUD showSuccess:@"找到小组"];
+                [SVProgressHUD showSuccessWithStatus:@"找到小组"];
                 self.joinGroup = [[Model_Group objectArrayWithKeyValuesArray:jsonDic] firstObject];
                 
                 //显示要加入的小组
@@ -343,7 +343,7 @@
                 [self.groupNameLabel setText:_joinGroup.name];
                 [self.groupCoverImageView setImageWithURL:[SRTool imageUrlFromPath:_joinGroup.avatar_path]];
             } else {
-                [ProgressHUD showSuccess:@"未找到相关数据"];
+                [SVProgressHUD showSuccessWithStatus:@"未找到相关数据"];
                 //未找到小组的相关数据
                 [self.remarkLabel setText:@"未找到小组信息,请再次确认输入"];
                 [self.codeInputTextField becomeFirstResponder];
@@ -355,10 +355,10 @@
             if (jsonDic) {
                 self.groupAry = [Model_Group objectArrayWithKeyValuesArray:jsonDic];
                 [self.groupCollectionView reloadData];
-                [ProgressHUD showSuccess:@"读取数据成功"];
+                [SVProgressHUD showSuccessWithStatus:@"读取数据成功"];
             } else {
                 //没有加入的小组信息
-                [ProgressHUD showSuccess:@"没有小组信息"];
+                [SVProgressHUD showSuccessWithStatus:@"没有小组信息"];
             }
             
         }

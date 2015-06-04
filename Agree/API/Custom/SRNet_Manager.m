@@ -7,7 +7,7 @@
 //
 
 #import "SRNet_Manager.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "AFNetworking.h"
 #import "MJExtension.h"
 
@@ -22,7 +22,7 @@
 
 - (BOOL)requestNetorkWithDic:(NSMutableDictionary *)sendDic {
     
-    [ProgressHUD show:@"正在读取中"];
+    [SVProgressHUD showWithStatus:@"正在读取中"];
     
     if ([self.delegate isKindOfClass:[UIViewController class]]) {
         if ([_theDelegate isKindOfClass:[UIViewController class]]) {
@@ -84,7 +84,7 @@
             _theDelegate.navigationController.view.userInteractionEnabled = YES;
             _theDelegate.tabBarController.view.userInteractionEnabled = YES;
         }
-//        [ProgressHUD showError:@"网络错误"];
+//        [SVProgressHUD showErrorWithStatus:@"网络错误"];
     }];
     return TRUE;
     

@@ -10,7 +10,7 @@
 #import "SRTool.h"
 #import "UIImageView+WebCache.h"
 #import "People.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 
 
 @implementation AddressBookTableViewCell {
@@ -214,11 +214,11 @@
         default:
             break;
     }
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD showError:@"网络错误"];
+    [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
 @end

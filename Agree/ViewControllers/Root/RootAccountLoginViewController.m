@@ -10,7 +10,7 @@
 #import "RootAccountRegViewController.h"
 #import "SRNet_Manager.h"
 #import "MJExtension.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
@@ -85,7 +85,7 @@
     switch (interfaceType) {
         case kLoginAccount: {
             if (jsonDic) {
-                [ProgressHUD showSuccess:@"登录成功"];
+                [SVProgressHUD showSuccessWithStatus:@"登录成功"];
                 //找到帐号
                 Model_User *user = [[Model_User objectArrayWithKeyValuesArray:jsonDic] objectAtIndex:0];
                 [user saveToUserDefaults];
@@ -93,7 +93,7 @@
                 [self popToRootController];
             } else {
                 //没有找到帐号
-                [ProgressHUD dismiss];
+                [SVProgressHUD dismiss];
                 
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"通知"
                                                                 message:@"帐号或者密码错误,请确认后再次输入"
@@ -111,7 +111,7 @@
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD showError:@"网络错误"];
+    [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
 

@@ -11,7 +11,7 @@
 #import "SRImageManager.h"
 #import "SRNet_Manager.h"
 #import "MJExtension.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "UserChatTableViewCell.h"
 #import "AppDelegate.h"
 #import "EaseMob.h"
@@ -59,7 +59,8 @@
     
     
     //读取私信的消息列表
-    _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:self.user.pk_user.stringValue conversationType:eConversationTypeChat];
+    _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:self.user.pk_user.stringValue isGroup:NO];
+    
     NSArray *messages = [_conversation loadAllMessages];
     
     [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
@@ -95,7 +96,7 @@
     [self tableViewIsScrollToBottom:YES withAnimated:NO];
     [_conversation markAllMessagesAsRead:YES];
     
-//    [self.rootController.tableView reloadData];
+    //    [self.rootController.tableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -139,23 +140,21 @@
 
 
 //HeadView
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     UIView * HeadView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 0)];
     
-
-  //  HeadView.backgroundColor = [UIColor blackColor];
     
-  _userChatTableView.tableHeaderView = HeadView;
+    //  HeadView.backgroundColor = [UIColor blackColor];
     
-//    _userChatTableView.tableHeaderView.backgroundColor = [UIColor blackColor];
+    _userChatTableView.tableHeaderView = HeadView;
+    
+    //    _userChatTableView.tableHeaderView.backgroundColor = [UIColor blackColor];
     
     return HeadView;
 }
 
 //HeadView高度
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return 210;
 }
 
@@ -170,20 +169,55 @@
 
 //Cell内容
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    
     static NSString *kCellIdentifier = @"UserChatCell";
     UserChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
     //
+    
     EModel_User_Chat *chat = [_chatArray objectAtIndex:indexPath.row];
     if (nil == cell) {
         cell = [[UserChatTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifier];
     }
+    
+
+    UILongPressGestureRecognizer * longPressGesture =  [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(cellLongPress:)];
+    
     [cell setTopViewController:self];
     [cell initWithChat:chat];
     
+    id<IEMMessageBody> msgBody = chat.message.messageBodies.firstObject;
+    
+    switch (msgBody.messageBodyType) {
+        case eMessageBodyType_Text: {
+            //文本
+            if (chat.sendFromSelf) {
+                //自己发言
+                [cell.messageBackgroundButton_self addGestureRecognizer:longPressGesture];
+                
+            } else {
+                //他人发的信息
+                [cell.messageBackgroundButton addGestureRecognizer:longPressGesture];
+            }
+        }
+            break;
+        case eMessageBodyType_Image: {
+            //图片
+            if (chat.sendFromSelf) {
+                
+                
+            } else {
+            //他人发的图片
+
+            }
+        }
+        default:
+            break;
+    }
+    
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    
     return cell;
 }
+
 
 //CELL自适应消息高度
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -372,7 +406,6 @@
 - (IBAction)tapDetailButton:(id)sender {
     [self.accountView loadWithUser:self.user withGroup:nil];
     [self.accountView show];
-    NSLog(@"详情页");
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -384,14 +417,83 @@
     }
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+#define mark 聊天信息的操作方法
+- (void)cellLongPress:(UIGestureRecognizer *)recognizer{
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+        
+        CGPoint location = [recognizer locationInView:self.userChatTableView];
+        NSIndexPath * indexPath = [self.userChatTableView indexPathForRowAtPoint:location];
+        //        UserChatTableViewCell *cell = (UserChatTableViewCell *)recognizer.view;
+        UserChatTableViewCell *cell = (UserChatTableViewCell *)[self.userChatTableView cellForRowAtIndexPath:indexPath];
+        [cell becomeFirstResponder];
+        
+        UIMenuItem *itCopy = [[UIMenuItem alloc] initWithTitle:@"复制" action:@selector(handleCopyCell:)];
+        UIMenuItem *itReSend = [[UIMenuItem alloc] initWithTitle:@"再次发送" action:@selector(handleResendCell:)];
+        UIMenuController *menu = [UIMenuController sharedMenuController];
+        [menu setMenuItems:[NSArray arrayWithObjects:itCopy,itReSend, nil]];
+        
+        
+        
+        EModel_User_Chat *chat = [_chatArray objectAtIndex:indexPath.row];
+        
+        
+        id<IEMMessageBody> msgBody = chat.message.messageBodies.firstObject;
+        
+        switch (msgBody.messageBodyType) {
+            case eMessageBodyType_Text: {
+                //文本
+                if (chat.sendFromSelf) {
+                    //自己发言
+                    [menu setTargetRect:CGRectMake(cell.chatMessageBackground_self.frame.origin.x, cell.frame.origin.y + 30, cell.messageBackgroundButton_self.frame.size.width, cell.messageBackgroundButton_self.frame.size.height) inView:self.userChatTableView];
+                    
+                } else {
+                    //他人发的信息
+                    [menu setTargetRect:CGRectMake(cell.chatMessageBackground.frame.origin.x, cell.frame.origin.y + 30, cell.messageBackgroundButton.frame.size.width, cell.messageBackgroundButton.frame.size.height) inView:self.userChatTableView];
+                }
+            }
+                break;
+            case eMessageBodyType_Image: {
+                //图片
+                if (chat.sendFromSelf) {
+                    
+                    
+                } else {
+                    //他人发的图片
+                    
+                }
+            }
+            default:
+                break;
+        }
+        
+        [menu setMenuVisible:YES animated:YES];
+    }
 }
-*/
+
+- (void)handleCopyCell:(id)sender {
+    NSLog(@"handle copy cell");
+}
+
+- (void)handleResendCell:(id)sender {
+    NSLog(@"handle resend cell");
+}
+
+- (BOOL)canBecomeFirstResponder{
+    return YES;
+}
+
+/*
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
+
+
+
+
 
 @end

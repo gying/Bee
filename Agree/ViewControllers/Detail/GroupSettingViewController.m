@@ -8,7 +8,7 @@
 
 #import "GroupSettingViewController.h"
 #import "SRNet_Manager.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "SRTool.h"
 #import "Model_Group_Code.h"
 #import "MJExtension.h"
@@ -181,7 +181,7 @@
 }
 
 - (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
     switch (interfaceType) {
         case kGetGroupRelationship: {
             NSArray *relAry = jsonDic;
@@ -225,9 +225,9 @@
             if (jsonDic) {
                 _relationArray = (NSMutableArray *)[Model_Group_User objectArrayWithKeyValuesArray:jsonDic];
                 [self.peopleCollectionView reloadData];
-                [ProgressHUD showSuccess:@"读取数据成功"];
+                [SVProgressHUD showSuccessWithStatus:@"读取数据成功"];
             } else {
-                [ProgressHUD showSuccess:@"未找到相关数据"];
+                [SVProgressHUD showSuccessWithStatus:@"未找到相关数据"];
             }
         }
             break;
@@ -238,7 +238,7 @@
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD showError:@"网络错误"];
+    [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
 - (IBAction)tapBackButton:(id)sender {

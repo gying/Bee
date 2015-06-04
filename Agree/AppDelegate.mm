@@ -10,16 +10,15 @@
 #import "ScheduleTableViewController.h"
 #import "APService.h"
 #import "SRNet_Manager.h"
-#import "ProgressHUD.h"
-#import "OSSClient.h"
-#import "OSSTool.h"
+#import <SVProgressHUD.h>
+#import <ALBB_OSS_IOS_SDK/OSSClient.h>
+#import <ALBB_OSS_IOS_SDK/OSSTool.h>
 #import "RootAccountLoginViewController.h"
 
 #import "BMapKit.h"
 #import "SDImageCache.h"
 
 #import "EaseMob.h"
-
 
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
@@ -65,7 +64,8 @@
     NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"contact_update"];
     for (EMMessage *message in offlineMessages) {
         
-        if (message.messageType == eMessageTypeGroupChat) {
+        
+        if (message.isGroup) {
             //小组信息
         } else {
             //私聊信息
@@ -83,7 +83,7 @@
 
 - (void)didReceiveMessage:(EMMessage *)message {
     //这里收到了信息
-    if (message.messageType == eMessageTypeGroupChat) {
+    if (message.isGroup) {
         //群聊
         if (self.chatDelegate) {
             //处于某小组的详情界面中
@@ -515,7 +515,7 @@
 }
 
 - (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
     switch (interfaceType) {
         case kUpdateUserInfo: {
         
@@ -534,7 +534,7 @@
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
 }
 
 @end

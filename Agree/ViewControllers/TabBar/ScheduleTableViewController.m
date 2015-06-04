@@ -7,7 +7,7 @@
 //
 
 #import "ScheduleTableViewController.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "SRNet_Manager.h"
 #import "MJExtension.h"
 #import "PartyDetailViewController.h"
@@ -153,10 +153,10 @@
                 
                 
                 [self.tableView reloadData];
-                [ProgressHUD showSuccess:@"读取数据成功"];
+                [SVProgressHUD showSuccessWithStatus:@"读取数据成功"];
                 [_refreshControl endRefreshing];
             } else {
-                [ProgressHUD showSuccess:@"未找到相关数据"];
+                [SVProgressHUD showErrorWithStatus:@"未找到相关数据"];
             }
             //在成功读取了所有聚会后,将聚会提示设置为0
             [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"party_update"];
@@ -169,7 +169,7 @@
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType{
-    [ProgressHUD showError:@"网络错误"];
+    [SVProgressHUD dismiss];
 }
 
 

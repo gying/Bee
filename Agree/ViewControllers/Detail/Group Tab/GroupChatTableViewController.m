@@ -11,7 +11,7 @@
 #import "SRNet_Manager.h"
 
 #import "MJExtension.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "SRImageManager.h"
 
 #import "SRChatLabel.h"
@@ -331,7 +331,7 @@
             if (jsonDic) {
                 //读取信息
                 
-                [ProgressHUD dismiss];
+                [SVProgressHUD dismiss];
                 
                 if (!_relationship) {
                     _relationship = [[NSMutableArray alloc] init];
@@ -340,7 +340,7 @@
                     _relationship = [Model_Group_User objectArrayWithKeyValuesArray:jsonDic];
                     
                     //读取私信的消息列表
-                    _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:self.group.em_id conversationType:eConversationTypeGroupChat];
+                    _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:self.group.em_id isGroup:YES];
                     NSArray *messages = [_conversation loadAllMessages];
                     
                     for (EMMessage *message in messages) {
@@ -371,18 +371,18 @@
         }
             break;
         case kAddChatMessageToGroup: {
-            [ProgressHUD dismiss];
+            [SVProgressHUD dismiss];
         }
             break;
         default:
             break;
     }
     
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD showError:@"网络错误"];
+    [SVProgressHUD dismiss];
 }
 
 /*

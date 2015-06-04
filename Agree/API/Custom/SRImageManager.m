@@ -7,8 +7,7 @@
 //
 
 #import "SRImageManager.h"
-#import "ProgressHUD.h"
-#import "OSSData.h"
+#import <ALBB_OSS_IOS_SDK/OSSData.h>
 #import "TXYUploadManager.h"
 
 @implementation SRImageManager
@@ -47,7 +46,6 @@
 - (NSString *)updateAvatarImageToBucket: (UIImage *)image {
     NSString *imageName = [[NSUUID UUID] UUIDString];
     
-    [ProgressHUD show:@"正在上传"];
     OSSBucket *bucket = [[OSSBucket alloc] initWithBucket:@"superrabbit"];
     OSSData *imageData = [[OSSData alloc] initWithBucket:bucket withKey:[NSString stringWithFormat:@"%@.png", imageName]];
     
@@ -65,7 +63,7 @@
     } withProgressCallback:^(float progress) {
         NSLog(@"current get %f", progress);
         if (1.0 == progress) {
-            //            [ProgressHUD showSuccess:@"上传成功"];
+            //            [SVProgressHUD showSuccessWithStatus:@"上传成功"];
         }
     }];
     return imageName;
@@ -84,7 +82,7 @@
     [imageData uploadWithUploadCallback:^(BOOL isSuccess, NSError *error) {
         if (isSuccess) {
             [self.delegate imageUpladDone];
-            [ProgressHUD showSuccess:@"上传成功"];
+            
         } else {
             [self.delegate imageUpladError];
             NSLog(@"errorInfo_testDataUploadWithProgress:%@", [error userInfo]);
@@ -100,8 +98,7 @@
 
 - (NSString *)updateImageToBucket: (UIImage *)image {
     NSString *imageName = [[NSUUID UUID] UUIDString];
-    
-    [ProgressHUD show:@"正在上传"];
+
     OSSBucket *bucket = [[OSSBucket alloc] initWithBucket:@"superrabbit"];
     OSSData *imageData = [[OSSData alloc] initWithBucket:bucket withKey:[NSString stringWithFormat:@"%@.png", imageName]];
     image = [SRImageManager scaleImage:image toScale:image.size.height>image.size.width?1920/image.size.height:1920/image.size.width];
@@ -120,7 +117,7 @@
     } withProgressCallback:^(float progress) {
         NSLog(@"current get %f", progress);
         if (1.0 == progress) {
-//            [ProgressHUD showSuccess:@"上传成功"];
+//            [SVProgressHUD showSuccessWithStatus:@"上传成功"];
         }
     }];
     return imageName;
@@ -129,7 +126,6 @@
 - (NSString *)updateGroupCoverToBucket: (UIImage *)image {
     NSString *imageName = [[NSUUID UUID] UUIDString];
     
-    [ProgressHUD show:@"正在上传"];
     OSSBucket *bucket = [[OSSBucket alloc] initWithBucket:@"superrabbit"];
     OSSData *imageData = [[OSSData alloc] initWithBucket:bucket withKey:[NSString stringWithFormat:@"%@.png", imageName]];
     image = [SRImageManager scaleImage:image toScale:image.size.height>image.size.width?1920/image.size.height:1920/image.size.width];
@@ -142,7 +138,6 @@
 //            NSLog(@"done");
 //            [self updateMiniImageToBucket:image withName:imageName];
             [self.delegate imageUpladDone];
-            [ProgressHUD showSuccess:@"上传成功"];
         } else {
             [self.delegate imageUpladError];
             NSLog(@"errorInfo_testDataUploadWithProgress:%@", [error userInfo]);
@@ -151,7 +146,7 @@
     } withProgressCallback:^(float progress) {
         NSLog(@"current get %f", progress);
         if (1.0 == progress) {
-            //            [ProgressHUD showSuccess:@"上传成功"];
+            //            [SVProgressHUD showSuccessWithStatus:@"上传成功"];
         }
     }];
     return imageName;
@@ -172,7 +167,6 @@
     [imageData uploadWithUploadCallback:^(BOOL isSuccess, NSError *error) {
         if (isSuccess) {
             [self.delegate imageUpladDone];
-            [ProgressHUD showSuccess:@"上传成功"];
         } else {
             [self.delegate imageUpladError];
             NSLog(@"errorInfo_testDataUploadWithProgress:%@", [error userInfo]);

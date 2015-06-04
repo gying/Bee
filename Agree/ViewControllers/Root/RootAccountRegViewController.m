@@ -9,7 +9,7 @@
 #import "RootAccountRegViewController.h"
 #import "SRImageManager.h"
 #import "SRNet_Manager.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "APService.h"
 #import "AppDelegate.h"
 #import "EaseMob.h"
@@ -216,7 +216,7 @@
                     NSLog(@"em注册成功");
                 }
 
-                [ProgressHUD dismiss];
+                [SVProgressHUD dismiss];
                 
                 //            UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
                 //            UITabBarController *rootController = [sb instantiateViewControllerWithIdentifier:@"rootTabbar"];
@@ -237,7 +237,7 @@
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
 }
 
 //键盘回收

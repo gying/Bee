@@ -9,7 +9,7 @@
 #import "SRAccountView.h"
 #import "UIImageView+WebCache.h"
 #import "SRTool.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "MJExtension.h"
 #import <AddressBook/AddressBook.h>
 #import "UserChatViewController.h"
@@ -646,11 +646,11 @@
             break;
     }
     
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
 }
 
 @end
