@@ -40,6 +40,12 @@
     
     UIAlertView *_sendImageAlert;
     EMConversation *_conversation;
+    
+    
+    UserChatTableViewCell *cell;
+    UIView * HeadView;
+    
+    float tableCellHeight;
 }
 
 @end
@@ -138,26 +144,8 @@
 #pragma mark - Table view data source
 
 
-//HeadView
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    UIView * HeadView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 0)];
-    
 
-  //  HeadView.backgroundColor = [UIColor blackColor];
-    
-  _userChatTableView.tableHeaderView = HeadView;
-    
-//    _userChatTableView.tableHeaderView.backgroundColor = [UIColor blackColor];
-    
-    return HeadView;
-}
 
-//HeadView高度
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 210;
-}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
@@ -173,9 +161,11 @@
     
     
     static NSString *kCellIdentifier = @"UserChatCell";
-    UserChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
+    cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
     //
     EModel_User_Chat *chat = [_chatArray objectAtIndex:indexPath.row];
+
+    
     if (nil == cell) {
         cell = [[UserChatTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifier];
     }
@@ -269,6 +259,42 @@
             return 0;
             break;
     }
+}
+
+//HeadView
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    HeadView = [[UIView alloc]init];
+      //HeadView.backgroundColor = [UIColor blackColor];
+    _userChatTableView.tableHeaderView = HeadView;
+
+    return HeadView;
+}
+
+
+//HeadView高度
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    
+//   // return self.view.frame.size.height;
+//
+//    if (_userChatTableView.frame.size.height >= self.view.frame.size.height) {
+//        
+//    }
+//
+//    return HeadView.frame.size.height - cell.frame.size.height;
+    
+    float headHight = 0;
+    for (EModel_User_Chat *message in _chatArray) {
+        headHight += [self cellHeightFromMessage:message].floatValue;
+    }
+    
+    headHight = self.userChatTableView.frame.size.height - headHight;
+    if (headHight <= 0) {
+        headHight = 0;
+    }
+    
+    return headHight;
 }
 
 
