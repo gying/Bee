@@ -452,8 +452,8 @@
         CGPoint location = [recognizer locationInView:self.userChatTableView];
         NSIndexPath * indexPath = [self.userChatTableView indexPathForRowAtPoint:location];
         //        UserChatTableViewCell *cell = (UserChatTableViewCell *)recognizer.view;
-        UserChatTableViewCell *cell = (UserChatTableViewCell *)[self.userChatTableView cellForRowAtIndexPath:indexPath];
-        [cell becomeFirstResponder];
+        UserChatTableViewCell *tableCell = (UserChatTableViewCell *)[self.userChatTableView cellForRowAtIndexPath:indexPath];
+        [tableCell becomeFirstResponder];
         
         UIMenuItem *itCopy = [[UIMenuItem alloc] initWithTitle:@"复制" action:@selector(handleCopyCell:)];
         UIMenuItem *itReSend = [[UIMenuItem alloc] initWithTitle:@"再次发送" action:@selector(handleResendCell:)];
