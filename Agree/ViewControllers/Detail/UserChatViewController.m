@@ -21,6 +21,7 @@
 
 
 
+
 #define kLoadChatData       1
 #define kSendMessage        2
 
@@ -40,6 +41,17 @@
     
     UIAlertView *_sendImageAlert;
     EMConversation *_conversation;
+    
+    
+    UserChatTableViewCell *cell;
+    UIView * HeadView;
+    
+    float tableCellHeight;
+    
+    UILabel * chatLabel;
+    UILabel * chatLabel_self;
+    
+    
 }
 
 @end
@@ -53,9 +65,16 @@
     
     self.accountView = [[SRAccountView alloc] init];
     self.accountView.rootController = self;
-    
     //
-    self.automaticallyAdjustsScrollViewInsets = false;
+//    self.automaticallyAdjustsScrollViewInsets = false;
+    
+    
+    
+    
+
+
+    
+
     
     
     //读取私信的消息列表
@@ -99,6 +118,11 @@
     //    [self.rootController.tableView reloadData];
 }
 
+
+
+
+
+
 - (void)viewWillAppear:(BOOL)animated {
     _srKeyBoard = [[SRKeyboard alloc] init];
     [_srKeyBoard textViewShowView:self
@@ -137,27 +161,6 @@
 }
 
 #pragma mark - Table view data source
-
-
-//HeadView
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UIView * HeadView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 0)];
-    
-    
-    //  HeadView.backgroundColor = [UIColor blackColor];
-    
-    _userChatTableView.tableHeaderView = HeadView;
-    
-    //    _userChatTableView.tableHeaderView.backgroundColor = [UIColor blackColor];
-    
-    return HeadView;
-}
-
-//HeadView高度
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 210;
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     if (_chatArray) {
@@ -170,13 +173,19 @@
 //Cell内容
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *kCellIdentifier = @"UserChatCell";
-    UserChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
+    cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
     //
     
     EModel_User_Chat *chat = [_chatArray objectAtIndex:indexPath.row];
+
+    
     if (nil == cell) {
         cell = [[UserChatTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifier];
     }
+
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+
     
 
     UILongPressGestureRecognizer * longPressGesture =  [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(cellLongPress:)];
@@ -214,7 +223,6 @@
     }
     
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    
     return cell;
 }
 
@@ -241,13 +249,14 @@
             if (message.sendFromSelf) {
                 //自己发的信息
                 //自己发言
-                UILabel *chatLabel_self = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width - 185, MAXFLOAT)];
+                chatLabel_self = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width - 185, MAXFLOAT)];
                 
                 
                 [chatLabel_self setFont:[UIFont systemFontOfSize:14]];
                 [chatLabel_self setLineBreakMode:NSLineBreakByWordWrapping];
                 [chatLabel_self setTextAlignment:NSTextAlignmentLeft];
                 [chatLabel_self setNumberOfLines:0];
+                
                 
                 chatLabel_self.text = ((EMTextMessageBody *)msgBody).text;
                 //在这里进行宽度的测算
@@ -263,7 +272,7 @@
                 return [NSNumber numberWithFloat:size.height + 45.0];
             } else {
                 //他人发的信息
-                UILabel *chatLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width - 132, MAXFLOAT)];
+                chatLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width - 132, MAXFLOAT)];
                 
                 
                 
@@ -271,6 +280,7 @@
                 [chatLabel setLineBreakMode:NSLineBreakByWordWrapping];
                 [chatLabel setTextAlignment:NSTextAlignmentLeft];
                 [chatLabel setNumberOfLines:0];
+                
                 chatLabel.text = ((EMTextMessageBody *)msgBody).text;
                 //在这里进行宽度的测算
                 NSDictionary *attribute = @{NSFontAttributeName: chatLabel.font};
@@ -303,6 +313,23 @@
             return 0;
             break;
     }
+}
+
+//HeadView高度
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+
+    float headHight = 0;
+    for (EModel_User_Chat *message in _chatArray) {
+        headHight += [self cellHeightFromMessage:message].floatValue;
+    }
+    
+    headHight = self.userChatTableView.frame.size.height - headHight;
+    if (headHight <= 0) {
+        headHight = 0;
+    }
+    
+    return headHight;
 }
 
 
@@ -417,6 +444,7 @@
     }
 }
 
+
 #define mark 聊天信息的操作方法
 - (void)cellLongPress:(UIGestureRecognizer *)recognizer{
     if (recognizer.state == UIGestureRecognizerStateBegan) {
@@ -478,10 +506,10 @@
     NSLog(@"handle resend cell");
 }
 
+
 - (BOOL)canBecomeFirstResponder{
     return YES;
 }
-
 /*
  #pragma mark - Navigation
  

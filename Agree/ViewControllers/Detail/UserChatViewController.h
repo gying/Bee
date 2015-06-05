@@ -11,6 +11,7 @@
 #import "ContactsTableViewController.h"
 #import "SRAccountView.h"
 
+
 @interface UserChatViewController : UIViewController
 
 @property (nonatomic, strong)Model_User *user;
@@ -18,5 +19,7 @@
 //@property (nonatomic, weak)ContactsTableViewController *rootController;
 
 @property (nonatomic, strong)SRAccountView *accountView;
+
+//@property (nonatomic , strong )UserChatTableViewCell *cell;
 
 @end
