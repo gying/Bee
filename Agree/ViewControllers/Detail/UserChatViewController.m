@@ -21,6 +21,7 @@
 
 
 
+
 #define kLoadChatData       1
 #define kSendMessage        2
 
@@ -46,6 +47,11 @@
     UIView * HeadView;
     
     float tableCellHeight;
+    
+    UILabel * chatLabel;
+    UILabel * chatLabel_self;
+    
+    
 }
 
 @end
@@ -59,9 +65,16 @@
     
     self.accountView = [[SRAccountView alloc] init];
     self.accountView.rootController = self;
-    
     //
-    self.automaticallyAdjustsScrollViewInsets = false;
+//    self.automaticallyAdjustsScrollViewInsets = false;
+    
+    
+    
+    
+
+
+    
+
     
     
     //读取私信的消息列表
@@ -103,6 +116,11 @@
     
 //    [self.rootController.tableView reloadData];
 }
+
+
+
+
+
 
 - (void)viewWillAppear:(BOOL)animated {
     _srKeyBoard = [[SRKeyboard alloc] init];
@@ -169,9 +187,23 @@
     if (nil == cell) {
         cell = [[UserChatTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifier];
     }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//    cell.userInteractionEnabled = NO;
+    
+    
+
+    
+    
+    //这里我只注册cell的长按方法,同理可推button的长按方法
+    UILongPressGestureRecognizer * longPressGesture =  [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(cellLongPress:)];
+//    [cell addGestureRecognizer:longPressGesture];
+    
+    [cell.messageBackgroundButton_self addGestureRecognizer:longPressGesture];
+    
+    
     [cell setTopViewController:self];
     [cell initWithChat:chat];
-    
+
     return cell;
 }
 
@@ -197,13 +229,14 @@
             if (message.sendFromSelf) {
                 //自己发的信息
                 //自己发言
-                UILabel *chatLabel_self = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width - 185, MAXFLOAT)];
+                chatLabel_self = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width - 185, MAXFLOAT)];
                 
                 
                 [chatLabel_self setFont:[UIFont systemFontOfSize:14]];
                 [chatLabel_self setLineBreakMode:NSLineBreakByWordWrapping];
                 [chatLabel_self setTextAlignment:NSTextAlignmentLeft];
                 [chatLabel_self setNumberOfLines:0];
+                
                 
                 chatLabel_self.text = ((EMTextMessageBody *)msgBody).text;
                 //在这里进行宽度的测算
@@ -219,7 +252,7 @@
                 return [NSNumber numberWithFloat:size.height + 45.0];
             } else {
                 //他人发的信息
-                UILabel *chatLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width - 132, MAXFLOAT)];
+                chatLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width - 132, MAXFLOAT)];
                 
                 
                 
@@ -227,6 +260,7 @@
                 [chatLabel setLineBreakMode:NSLineBreakByWordWrapping];
                 [chatLabel setTextAlignment:NSTextAlignmentLeft];
                 [chatLabel setNumberOfLines:0];
+                
                 chatLabel.text = ((EMTextMessageBody *)msgBody).text;
                 //在这里进行宽度的测算
                 NSDictionary *attribute = @{NSFontAttributeName: chatLabel.font};
@@ -276,13 +310,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     
-//   // return self.view.frame.size.height;
-//
-//    if (_userChatTableView.frame.size.height >= self.view.frame.size.height) {
-//        
-//    }
-//
-//    return HeadView.frame.size.height - cell.frame.size.height;
+
     
     float headHight = 0;
     for (EModel_User_Chat *message in _chatArray) {
@@ -408,6 +436,42 @@
         //确认发送
         [self sendImage];
     }
+}
+
+#pragma mark -- CELL
+- (void)cellLongPress:(UIGestureRecognizer *)recognizer{
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+        
+        //这里可以获取cell的indexpath 在赋值的时候可以针对行数来进行一定的操作
+        //如果激活对象改为button,将会出现按钮在上方的错误哦,尝试着使用indexPath或者其他方法来修复这个错误
+        CGPoint location = [recognizer locationInView:self.userChatTableView];
+        NSIndexPath * indexPath = [self.userChatTableView indexPathForRowAtPoint:location];
+        cell = (UserChatTableViewCell *)recognizer.view;
+        
+        [cell becomeFirstResponder];
+        
+        UIMenuItem *itCopy = [[UIMenuItem alloc] initWithTitle:@"复制" action:@selector(handleCopyCell:)];
+        UIMenuController *menu = [UIMenuController sharedMenuController];
+        [menu setMenuItems:[NSArray arrayWithObjects:itCopy, nil]];
+        [menu setTargetRect:cell.messageBackgroundButton_self.bounds inView:cell ];
+        [menu setMenuVisible:YES animated:YES];
+        
+        
+        
+        
+    }
+}
+
+- (void)handleCopyCell:(id)sender{//复制cell
+    NSLog(@"handle copy cell");
+}
+
+- (void)handleDeleteCell:(id)sender{//删除cell
+    NSLog(@"handle delete cell");
+}
+
+- (BOOL)canBecomeFirstResponder{
+    return YES;
 }
 
 /*

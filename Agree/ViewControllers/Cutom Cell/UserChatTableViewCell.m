@@ -34,6 +34,8 @@
 //#pragma mark -- 暂时设置CELL颜色为红色测试过后删除
 //    self.backgroundColor = [UIColor redColor];
     
+    [self.messageBackgroundButton_self canBecomeFirstResponder];
+    
     
     
     [self.avatarButton.layer setCornerRadius:self.avatarButton.frame.size.width/2];
@@ -54,7 +56,92 @@
     
     UIImage *stretchableImage_self = [[UIImage imageNamed:@"MessageBackGround"] resizableImageWithCapInsets:UIEdgeInsetsMake(7, 10, 12, 20) resizingMode:UIImageResizingModeStretch];
     [self.messageBackgroundButton_self setBackgroundImage:stretchableImage_self forState:UIControlStateNormal];
+    
+   
+    
+
+    
+#pragma mark --  长按弹出复制框
+    
+    UILongPressGestureRecognizer *longPress_self =
+    [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                  action:@selector(longPress_self)];
+    longPress_self.minimumPressDuration = 1;
+    [_messageBackgroundButton_self addGestureRecognizer:longPress_self];
+
+    
+        
+    
+    
+//    UILongPressGestureRecognizer *longPress =
+//    [[UILongPressGestureRecognizer alloc] initWithTarget:self
+//                                                  action:@selector(longPress:)];
+//    longPress.minimumPressDuration = 1;
+//    [_messageBackgroundButton addGestureRecognizer:longPress];
+
+    
 }
+
+#pragma mark -- 复制方法
+
+//自己的复制弹窗以及方法
+-(void)longPress_self
+{
+    
+    
+    NSLog(@"自己长按弹出复制框");
+    
+    
+    UIMenuController *menuController_self = [UIMenuController sharedMenuController];
+    
+    UIMenuItem * menuItem_self = [[UIMenuItem alloc]initWithTitle:@"复制" action:@selector(Item_self)];
+    
+    menuController_self.menuItems = [NSArray arrayWithObjects: menuItem_self, nil];
+    
+    [menuController_self setTargetRect:(CGRectMake(0, 0, 300, 300)) inView:_messageBackgroundButton_self];
+    
+    [menuController_self setMenuVisible:YES animated:NO];
+    
+    
+}
+
+-(void)Item_self
+{
+    
+}
+
+
+
+
+////复制弹窗以及方法
+//-(void)longPress
+//{
+//    NSLog(@"长按弹出复制框");
+//}
+
+//-(void)Item
+//{
+//    
+//}
+
+
+- (BOOL)canBecomeFirstResponder{
+    
+    return YES;
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 - (void)initWithChat: (EModel_User_Chat *)message {
     
@@ -117,7 +204,13 @@
                 self.chatMessageTextLabel_self.text = ((EMTextMessageBody *)msgBody).text;
                 [self.chatDateLabel_self setText:dateString];
                 
+#pragma mark -- 自己发送消息的测试用颜色 稍后修改
+                self.chatMessageTextLabel_self.backgroundColor = [UIColor redColor];
+                
+                
+                
                 [self.avatarButton_self setBackgroundImageWithURL:[SRTool miniImageUrlFromPath:message.avatar_path_from] forState:UIControlStateNormal];
+
                 
             } else {
                 //他人发的信息
@@ -210,6 +303,7 @@
             [self.chatNicknameLabel setHidden:YES];
             [self.chatDateLabel setHidden:YES];
             
+            
             [self.chatMessageTextLabel_self setHidden:NO];
             [self.chatMessageBackground_self setHidden:NO];
             [self.chatDateLabel_self setHidden:NO];
@@ -286,6 +380,8 @@
             break;
     }
 }
+
+
 
 //点击其他人发的图片
 - (IBAction)pressedTheImageButton:(UIButton *)sender {
