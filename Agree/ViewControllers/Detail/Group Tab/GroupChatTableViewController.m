@@ -15,7 +15,7 @@
 #import "SRImageManager.h"
 
 #import "SRChatLabel.h"
-#import "GroupChatTableViewCell.h"
+
 #import "AppDelegate.h"
 
 #import "EaseMob.h"
@@ -23,6 +23,7 @@
 
 #import "EMCommandMessageBody.h"
 #import "EMSendMessageHepler.h"
+#import "GroupChatTableViewCell.h"
 
 
 
@@ -41,7 +42,6 @@
     NSArray *_relationship;
     
     EMConversation *_conversation;
-    UITableViewCell * longTapCell;
     
     
     
@@ -157,62 +157,23 @@
 
 #define mark 聊天信息的操作方法
 - (void)cellLongPress:(UIGestureRecognizer *)recognizer{
-    if (recognizer.state == UIGestureRecognizerStateBegan) {
-        
-        CGPoint location = [recognizer locationInView:self.chatTableView];
-        NSIndexPath * indexPath = [self.chatTableView indexPathForRowAtPoint:location];
-        //        UserChatTableViewCell *cell = (UserChatTableViewCell *)recognizer.view;
-        GroupChatTableViewCell *cell = (GroupChatTableViewCell *)[self.chatTableView cellForRowAtIndexPath:indexPath];
-        [cell becomeFirstResponder];
-        longTapCell = nil;
-        longTapCell = cell;
-        
-        UIMenuItem *itCopy = [[UIMenuItem alloc] initWithTitle:@"复制" action:@selector(handleCopyCell:)];
-        UIMenuItem *itReSend = [[UIMenuItem alloc] initWithTitle:@"再次发送" action:@selector(handleResendCell:)];
-        UIMenuController *menu = [UIMenuController sharedMenuController];
-        [menu setMenuItems:[NSArray arrayWithObjects:itCopy,itReSend, nil]];
-        
-        EModel_Chat *chat = [_chatArray objectAtIndex:indexPath.row];
-        
-        
-        id<IEMMessageBody> msgBody = chat.message.messageBodies.firstObject;
-        
-        switch (msgBody.messageBodyType) {
-            case eMessageBodyType_Text: {
-                //文本
-                if (chat.sendFromSelf) {
-                    //自己发言
-                    [menu setTargetRect:CGRectMake(cell.chatMessageBackground_self.frame.origin.x, cell.frame.origin.y + 30, cell.messageBackgroundButton_self.frame.size.width, cell.messageBackgroundButton_self.frame.size.height) inView:self.chatTableView];
-                    
-                } else {
-                    //他人发的信息
-                    [menu setTargetRect:CGRectMake(cell.chatMessageBackground.frame.origin.x, cell.frame.origin.y + 30, cell.messageBackgroundButton.frame.size.width, cell.messageBackgroundButton.frame.size.height) inView:self.chatTableView];
-                }
-            }
-                break;
-            case eMessageBodyType_Image: {
-                //图片
-                if (chat.sendFromSelf) {
-                    
-                    
-                } else {
-                    //他人发的图片
-                    
-                }
-            }
-            default:
-                break;
-        }
-        
-        [menu setMenuVisible:YES animated:YES];
-    }
     
-    NSLog(@"小组复制");
+    
+    
+    
+    CGPoint location = [recognizer locationInView:self.chatTableView];
+    NSIndexPath * indexPath = [self.chatTableView indexPathForRowAtPoint:location];
+    //        UserChatTableViewCell *cell = (UserChatTableViewCell *)recognizer.view;
+    GroupChatTableViewCell *cell = (GroupChatTableViewCell *)[self.chatTableView cellForRowAtIndexPath:indexPath];
+    [cell becomeFirstResponder];
+    self.longTapCell = nil;
+    self.longTapCell = cell;
+    
+    [self.rootController longTapCell];
+    
 }
 
-- (BOOL)canBecomeFirstResponder{
-    return YES;
-}
+
 
  
 

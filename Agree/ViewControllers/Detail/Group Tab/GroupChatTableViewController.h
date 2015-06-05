@@ -17,6 +17,8 @@
 @property (nonatomic, strong)UITableView *chatTableView;
 @property (nonatomic, strong)GroupDetailViewController *rootController;
 
+@property (nonatomic, strong)UITableViewCell * longTapCell;
+
 - (void)loadChatData;
 //- (void)loadChatFromNet;
 //- (void)setkeyBoard: (UIViewController *)viewController;

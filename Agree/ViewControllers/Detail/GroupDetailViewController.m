@@ -20,8 +20,9 @@
 #import "MJExtension.h"
 #import "AppDelegate.h"
 #import "GroupAlbumsCollectionViewCell.h"
-
+#import "GroupChatTableViewCell.h"
 #import "MJPhotoBrowser.h"
+#import <EaseMob.h>
 
 #import "SRKeyboard.h"
 
@@ -38,6 +39,8 @@
     
     NSDictionary *norDic;
     NSDictionary *selDic;
+    
+    GroupChatTableViewCell *cell;
 }
 
 @end
@@ -49,15 +52,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+   
+    
     
     
     [self.groupTabBar setSelectedItem:self.groupTalk];
-    
-
-    
-    
-    
-    
+  
     [self.navigationItem setTitle:self.group.name];
     [self.selectLineWidth setConstant:[[UIScreen mainScreen] bounds].size.width/3];
     
@@ -247,6 +247,90 @@
 }
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+- (void)longTapCell {
+    
+     cell = (GroupChatTableViewCell *)_chatDelegate.longTapCell;
+    
+    [cell becomeFirstResponder];
+    if (![self canBecomeFirstResponder]) {
+        NSLog(@"become f");
+    }
+        UIMenuItem *itCopy = [[UIMenuItem alloc] initWithTitle:@"复制" action:@selector(handleCopyCell:)];
+        UIMenuItem *itReSend = [[UIMenuItem alloc] initWithTitle:@"再次发送" action:@selector(handleResendCell:)];
+        UIMenuController *menu = [UIMenuController sharedMenuController];
+        [menu setMenuItems:[NSArray arrayWithObjects:itCopy,itReSend, nil]];
+    
+
+        EModel_Chat *chat = [_chatDelegate.chatArray objectAtIndex:[[self.chatTableView indexPathForCell:cell] row]];
+        
+        
+        id<IEMMessageBody> msgBody = chat.message.messageBodies.firstObject;
+    
+        switch (msgBody.messageBodyType) {
+            case eMessageBodyType_Text: {
+                //文本
+                if (chat.sendFromSelf) {
+                    //自己发言
+                    [menu setTargetRect:CGRectMake(cell.chatMessageBackground_self.frame.origin.x, cell.frame.origin.y + 30, cell.messageBackgroundButton_self.frame.size.width, cell.messageBackgroundButton_self.frame.size.height) inView:self.chatTableView];
+                    
+                } else {
+                    //他人发的信息
+                    [menu setTargetRect:CGRectMake(cell.chatMessageBackground.frame.origin.x, cell.frame.origin.y + 30, cell.messageBackgroundButton.frame.size.width, cell.messageBackgroundButton.frame.size.height) inView:self.chatTableView];
+                }
+            }
+                break;
+            case eMessageBodyType_Image: {
+                //图片
+                if (chat.sendFromSelf) {
+                    
+                    
+                } else {
+                    //他人发的图片
+                    
+                }
+            }
+            default:
+                break;
+        }
+        
+    [menu setMenuVisible:YES animated:YES];
+    
+    NSLog(@"小组复制");
+}
+
+- (void)handleCopyCell:(id)sender
+{
+    NSLog(@"复制");
+    
+
+    UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+    
+    if (cell.chatMessageTextLabel_self) {
+        pboard.string = cell.chatMessageTextLabel_self.text;
+    }else if
+        (cell.chatMessageTextLabel)
+    {
+        pboard.string = cell.chatMessageTextLabel.text;
+    }
+    
+    //复制出的内容
+    NSLog(@"%@",cell.chatMessageTextLabel_self.text);
+    
+    NSLog(@"%@",cell.chatMessageTextLabel.text);
+    
+    
+}
+
+- (void)handleResendCell:(id)sender {
+    NSLog(@"handle resend cell");
+}
+
+
+- (BOOL)canBecomeFirstResponder{
+    return YES;
 }
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
