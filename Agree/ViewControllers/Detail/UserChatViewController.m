@@ -161,32 +161,6 @@
 }
 
 #pragma mark - Table view data source
-
-
-<<<<<<< HEAD
-
-
-=======
-//HeadView
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UIView * HeadView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 0)];
-    
-    
-    //  HeadView.backgroundColor = [UIColor blackColor];
-    
-    _userChatTableView.tableHeaderView = HeadView;
-    
-    //    _userChatTableView.tableHeaderView.backgroundColor = [UIColor blackColor];
-    
-    return HeadView;
-}
-
-//HeadView高度
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 210;
-}
->>>>>>> Gaddle
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     if (_chatArray) {
@@ -208,25 +182,10 @@
     if (nil == cell) {
         cell = [[UserChatTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifier];
     }
-<<<<<<< HEAD
+
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//    cell.userInteractionEnabled = NO;
-    
     
 
-    
-    
-    //这里我只注册cell的长按方法,同理可推button的长按方法
-    UILongPressGestureRecognizer * longPressGesture =  [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(cellLongPress:)];
-//    [cell addGestureRecognizer:longPressGesture];
-    
-    [cell.messageBackgroundButton_self addGestureRecognizer:longPressGesture];
-    
-    
-    [cell setTopViewController:self];
-    [cell initWithChat:chat];
-
-=======
     
 
     UILongPressGestureRecognizer * longPressGesture =  [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(cellLongPress:)];
@@ -264,8 +223,6 @@
     }
     
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    
->>>>>>> Gaddle
     return cell;
 }
 
@@ -358,23 +315,10 @@
     }
 }
 
-//HeadView
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    HeadView = [[UIView alloc]init];
-      //HeadView.backgroundColor = [UIColor blackColor];
-    _userChatTableView.tableHeaderView = HeadView;
-
-    return HeadView;
-}
-
-
 //HeadView高度
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    
 
-    
     float headHight = 0;
     for (EModel_User_Chat *message in _chatArray) {
         headHight += [self cellHeightFromMessage:message].floatValue;
@@ -500,46 +444,7 @@
     }
 }
 
-<<<<<<< HEAD
-#pragma mark -- CELL
-- (void)cellLongPress:(UIGestureRecognizer *)recognizer{
-    if (recognizer.state == UIGestureRecognizerStateBegan) {
-        
-        //这里可以获取cell的indexpath 在赋值的时候可以针对行数来进行一定的操作
-        //如果激活对象改为button,将会出现按钮在上方的错误哦,尝试着使用indexPath或者其他方法来修复这个错误
-        CGPoint location = [recognizer locationInView:self.userChatTableView];
-        NSIndexPath * indexPath = [self.userChatTableView indexPathForRowAtPoint:location];
-        cell = (UserChatTableViewCell *)recognizer.view;
-        
-        [cell becomeFirstResponder];
-        
-        UIMenuItem *itCopy = [[UIMenuItem alloc] initWithTitle:@"复制" action:@selector(handleCopyCell:)];
-        UIMenuController *menu = [UIMenuController sharedMenuController];
-        [menu setMenuItems:[NSArray arrayWithObjects:itCopy, nil]];
-        [menu setTargetRect:cell.messageBackgroundButton_self.bounds inView:cell ];
-        [menu setMenuVisible:YES animated:YES];
-        
-        
-        
-        
-    }
-}
 
-- (void)handleCopyCell:(id)sender{//复制cell
-    NSLog(@"handle copy cell");
-}
-
-- (void)handleDeleteCell:(id)sender{//删除cell
-    NSLog(@"handle delete cell");
-}
-
-- (BOOL)canBecomeFirstResponder{
-    return YES;
-}
-
-/*
-#pragma mark - Navigation
-=======
 #define mark 聊天信息的操作方法
 - (void)cellLongPress:(UIGestureRecognizer *)recognizer{
     if (recognizer.state == UIGestureRecognizerStateBegan) {
@@ -600,12 +505,11 @@
 - (void)handleResendCell:(id)sender {
     NSLog(@"handle resend cell");
 }
->>>>>>> Gaddle
+
 
 - (BOOL)canBecomeFirstResponder{
     return YES;
 }
-
 /*
  #pragma mark - Navigation
  
