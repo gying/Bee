@@ -41,6 +41,10 @@
     NSArray *_relationship;
     
     EMConversation *_conversation;
+    UITableViewCell * longTapCell;
+    
+    
+    
 }
 
 @end
@@ -90,14 +94,13 @@
 }
 
 
+#pragma mark -- 小组CELL内容
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *kCellIdentifier = @"GroupChatCell";
-    GroupChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
-    
-        UILongPressGestureRecognizer * longPressGesture =  [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(cellLongPress:)];
+   GroupChatTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
     
  
-    
      
     
     
@@ -105,17 +108,117 @@
     if (nil == cell) {
         cell = [[GroupChatTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifier];
     }
+    
 
     [cell setTopViewController:self.rootController];
     [cell initWithChat:message];
     
+      UILongPressGestureRecognizer * longPressGesture =  [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(cellLongPress:)];
     
+    id<IEMMessageBody> msgBody = message.message.messageBodies.firstObject;
     
+    switch (msgBody.messageBodyType) {
+        case eMessageBodyType_Text: {
+            //文本
+            if (message.sendFromSelf) {
+                //自己发言
+                [cell.messageBackgroundButton_self addGestureRecognizer:longPressGesture];
+                
+            } else {
+                //他人发的信息
+                [cell.messageBackgroundButton addGestureRecognizer:longPressGesture];
+            }
+        }
+            break;
+        case eMessageBodyType_Image: {
+            //图片
+            if (message.sendFromSelf) {
+                
+                
+            } else {
+                //他人发的图片
+                
+            }
+        }
+        default:
+            break;
+    }
     
-    
-    
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
+
+    
+    
+    
+    
+    
+ 
 }
+
+#define mark 聊天信息的操作方法
+- (void)cellLongPress:(UIGestureRecognizer *)recognizer{
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+        
+        CGPoint location = [recognizer locationInView:self.chatTableView];
+        NSIndexPath * indexPath = [self.chatTableView indexPathForRowAtPoint:location];
+        //        UserChatTableViewCell *cell = (UserChatTableViewCell *)recognizer.view;
+        GroupChatTableViewCell *cell = (GroupChatTableViewCell *)[self.chatTableView cellForRowAtIndexPath:indexPath];
+        [cell becomeFirstResponder];
+        longTapCell = nil;
+        longTapCell = cell;
+        
+        UIMenuItem *itCopy = [[UIMenuItem alloc] initWithTitle:@"复制" action:@selector(handleCopyCell:)];
+        UIMenuItem *itReSend = [[UIMenuItem alloc] initWithTitle:@"再次发送" action:@selector(handleResendCell:)];
+        UIMenuController *menu = [UIMenuController sharedMenuController];
+        [menu setMenuItems:[NSArray arrayWithObjects:itCopy,itReSend, nil]];
+        
+        EModel_Chat *chat = [_chatArray objectAtIndex:indexPath.row];
+        
+        
+        id<IEMMessageBody> msgBody = chat.message.messageBodies.firstObject;
+        
+        switch (msgBody.messageBodyType) {
+            case eMessageBodyType_Text: {
+                //文本
+                if (chat.sendFromSelf) {
+                    //自己发言
+                    [menu setTargetRect:CGRectMake(cell.chatMessageBackground_self.frame.origin.x, cell.frame.origin.y + 30, cell.messageBackgroundButton_self.frame.size.width, cell.messageBackgroundButton_self.frame.size.height) inView:self.chatTableView];
+                    
+                } else {
+                    //他人发的信息
+                    [menu setTargetRect:CGRectMake(cell.chatMessageBackground.frame.origin.x, cell.frame.origin.y + 30, cell.messageBackgroundButton.frame.size.width, cell.messageBackgroundButton.frame.size.height) inView:self.chatTableView];
+                }
+            }
+                break;
+            case eMessageBodyType_Image: {
+                //图片
+                if (chat.sendFromSelf) {
+                    
+                    
+                } else {
+                    //他人发的图片
+                    
+                }
+            }
+            default:
+                break;
+        }
+        
+        [menu setMenuVisible:YES animated:YES];
+    }
+    
+    NSLog(@"小组复制");
+}
+
+- (BOOL)canBecomeFirstResponder{
+    return YES;
+}
+
+ 
+
+
+
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     EModel_Chat *message = [self.chatArray objectAtIndex:indexPath.row];
@@ -142,6 +245,16 @@
     return headHight;
     
 }
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView * bgview = [[UIView alloc]init];
+    bgview.backgroundColor = [UIColor blackColor];
+    self.chatTableView.tableHeaderView = bgview;
+    bgview.hidden = YES;
+    return bgview;
+}
+
 
 - (void)talkBtnClick:(UITextView *)textViewGet {
     [self sendMessageDone:[EMSendMessageHepler sendTextMessageWithString:textViewGet.text

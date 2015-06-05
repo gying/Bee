@@ -66,7 +66,10 @@
     //
    self.automaticallyAdjustsScrollViewInsets = false;
     
-    self.userChatTableView.tableHeaderView.hidden = YES;
+//    self.userChatTableView.tableHeaderView.hidden = YES;
+//    
+//    self.userChatTableView.tableHeaderView.backgroundColor = [UIColor redColor];
+//    
     
     
      
@@ -184,14 +187,13 @@
     }
 
 
-    
+    [cell setTopViewController:self];
+    [cell initWithChat:chat];
     
     
 
     UILongPressGestureRecognizer * longPressGesture =  [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(cellLongPress:)];
     
-    [cell setTopViewController:self];
-    [cell initWithChat:chat];
     
     id<IEMMessageBody> msgBody = chat.message.messageBodies.firstObject;
     
@@ -225,6 +227,8 @@
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
+
+
 
 
 //CELL自适应消息高度
@@ -315,23 +319,35 @@
     }
 }
 
-//HeadView高度
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-
-    float headHight = 0;
-    for (EModel_User_Chat *message in _chatArray) {
-        headHight += [self cellHeightFromMessage:message].floatValue;
-    }
-    
-    headHight = self.userChatTableView.frame.size.height - headHight;
-    if (headHight <= 0) {
-        headHight = 0;
-    }
-    
-    return headHight;
-    
-}
+////HeadView高度
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+//{
+//
+//    float headHight = 0;
+//    for (EModel_User_Chat *message in _chatArray) {
+//        headHight += [self cellHeightFromMessage:message].floatValue;
+//    }
+//    
+//    headHight = self.userChatTableView.frame.size.height - headHight;
+//    if (headHight <= 0) {
+//        headHight = 0;
+//    }
+//    return headHight;
+//}
+//
+//#pragma mark -- HeadView的背景
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+//{
+////    UIView * bgview = [[UIView alloc]init];
+////    bgview.backgroundColor = [UIColor blackColor];
+////    self.userChatTableView.tableHeaderView = bgview;
+////    bgview.hidden = YES;
+////    return bgview;
+//    
+//    self.userChatTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.userChatTableView.frame.size.width, 100)];
+//    
+//    return nil;
+//}
 
 
 
@@ -416,6 +432,18 @@
 
 - (void)tableViewIsScrollToBottom: (BOOL) isScroll
                      withAnimated: (BOOL)isAnimated {
+    
+    float headHight = 0;
+    for (EModel_User_Chat *message in _chatArray) {
+        headHight += [self cellHeightFromMessage:message].floatValue;
+    }
+    
+    headHight = self.userChatTableView.frame.size.height - headHight;
+    if (headHight <= 0) {
+        headHight = 0;
+    }
+    
+    self.userChatTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.userChatTableView.frame.size.width, headHight)];
     if (isScroll) {
         dispatch_async(dispatch_get_main_queue(), ^{
             NSInteger s = [self.userChatTableView numberOfSections];
@@ -503,6 +531,13 @@
 {
     NSLog(@"复制");
 
+    CGPoint location = [sender locationInView:self.userChatTableView];
+    NSIndexPath * indexPath = [self.userChatTableView indexPathForRowAtPoint:location];
+    //        UserChatTableViewCell *cell = (UserChatTableViewCell *)recognizer.view;
+    UserChatTableViewCell *cell = (UserChatTableViewCell *)[self.userChatTableView cellForRowAtIndexPath:indexPath];
+
+    
+    
     UIPasteboard *pboard = [UIPasteboard generalPasteboard];
     
     if (_longTapCell.chatMessageTextLabel_self) {
