@@ -61,80 +61,7 @@
     
 
     
-#pragma mark --  长按弹出复制框
-    
-    UILongPressGestureRecognizer *longPress_self =
-    [[UILongPressGestureRecognizer alloc] initWithTarget:self
-                                                  action:@selector(longPress_self)];
-    longPress_self.minimumPressDuration = 1;
-    [_messageBackgroundButton_self addGestureRecognizer:longPress_self];
-
-    
-        
-    
-    
-//    UILongPressGestureRecognizer *longPress =
-//    [[UILongPressGestureRecognizer alloc] initWithTarget:self
-//                                                  action:@selector(longPress:)];
-//    longPress.minimumPressDuration = 1;
-//    [_messageBackgroundButton addGestureRecognizer:longPress];
-
-    
 }
-
-#pragma mark -- 复制方法
-
-//自己的复制弹窗以及方法
--(void)longPress_self
-{
-    
-    
-    NSLog(@"自己长按弹出复制框");
-    
-    
-    UIMenuController *menuController_self = [UIMenuController sharedMenuController];
-    
-    UIMenuItem * menuItem_self = [[UIMenuItem alloc]initWithTitle:@"复制" action:@selector(Item_self)];
-    
-    menuController_self.menuItems = [NSArray arrayWithObjects: menuItem_self, nil];
-    
-    [menuController_self setTargetRect:(CGRectMake(0, 0, 300, 300)) inView:_messageBackgroundButton_self];
-    
-    [menuController_self setMenuVisible:YES animated:NO];
-    
-    
-}
-
--(void)Item_self
-{
-    
-}
-
-
-
-
-////复制弹窗以及方法
-//-(void)longPress
-//{
-//    NSLog(@"长按弹出复制框");
-//}
-
-//-(void)Item
-//{
-//    
-//}
-
-
-- (BOOL)canBecomeFirstResponder{
-    
-    return YES;
-    
-}
-
-
-
-
-
 
 
 
@@ -204,8 +131,7 @@
                 self.chatMessageTextLabel_self.text = ((EMTextMessageBody *)msgBody).text;
                 [self.chatDateLabel_self setText:dateString];
                 
-#pragma mark -- 自己发送消息的测试用颜色 稍后修改
-                self.chatMessageTextLabel_self.backgroundColor = [UIColor redColor];
+
                 
                 
                 

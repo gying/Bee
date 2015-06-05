@@ -50,6 +50,10 @@
     // Do any additional setup after loading the view.
     [self.groupTabBar setSelectedItem:self.groupTalk];
     
+
+    
+    
+    
     
     [self.navigationItem setTitle:self.group.name];
     [self.selectLineWidth setConstant:[[UIScreen mainScreen] bounds].size.width/3];
@@ -91,14 +95,28 @@
     [self.accountView setRootController:self];
     
     //设置聊天表单代理
+    
+    
     _chatDelegate = [[GroupChatTableViewController alloc] init];
+    
+//    self.chatTableView.tableHeaderView.hidden = YES;
+//    self.chatTableView.tableHeaderView.backgroundColor = [UIColor redColor];
+    
     _chatDelegate.group = self.group;
+
     _chatDelegate.chatTableView = self.chatTableView;
     [self.chatTableView setDelegate:_chatDelegate];
     [self.chatTableView setDataSource:_chatDelegate];
     
+
+//    self.chatTableView.tableHeaderView.hidden = YES;
+     // _chatDelegate.chatTableView.tableHeaderView.hidden = YES;
+    
+
     [_chatDelegate setRootController:self];
     [_chatDelegate loadChatData];
+    
+    
     self.view.backgroundColor =[UIColor groupTableViewBackgroundColor];
     
     _albumsDelegate = [[GroupAlbumsCollectionViewController alloc] init];

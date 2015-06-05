@@ -43,13 +43,11 @@
     EMConversation *_conversation;
     
     
-    UserChatTableViewCell *cell;
+    UserChatTableViewCell *_longTapCell;
     UIView * HeadView;
     
     float tableCellHeight;
-    
-    UILabel * chatLabel;
-    UILabel * chatLabel_self;
+
     
     
 }
@@ -66,7 +64,12 @@
     self.accountView = [[SRAccountView alloc] init];
     self.accountView.rootController = self;
     //
-//    self.automaticallyAdjustsScrollViewInsets = false;
+   self.automaticallyAdjustsScrollViewInsets = false;
+    
+    self.userChatTableView.tableHeaderView.hidden = YES;
+    
+    
+     
     
     
     
@@ -173,19 +176,16 @@
 //Cell内容
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *kCellIdentifier = @"UserChatCell";
-    cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
-    //
+    UserChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
     
     EModel_User_Chat *chat = [_chatArray objectAtIndex:indexPath.row];
-
-    
     if (nil == cell) {
         cell = [[UserChatTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifier];
     }
 
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
 
+    
+    
     
 
     UILongPressGestureRecognizer * longPressGesture =  [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(cellLongPress:)];
@@ -249,7 +249,7 @@
             if (message.sendFromSelf) {
                 //自己发的信息
                 //自己发言
-                chatLabel_self = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width - 185, MAXFLOAT)];
+                UILabel *chatLabel_self = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width - 185, MAXFLOAT)];
                 
                 
                 [chatLabel_self setFont:[UIFont systemFontOfSize:14]];
@@ -272,7 +272,7 @@
                 return [NSNumber numberWithFloat:size.height + 45.0];
             } else {
                 //他人发的信息
-                chatLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width - 132, MAXFLOAT)];
+                UILabel *chatLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width - 132, MAXFLOAT)];
                 
                 
                 
@@ -330,6 +330,7 @@
     }
     
     return headHight;
+    
 }
 
 
@@ -454,14 +455,14 @@
         //        UserChatTableViewCell *cell = (UserChatTableViewCell *)recognizer.view;
         UserChatTableViewCell *cell = (UserChatTableViewCell *)[self.userChatTableView cellForRowAtIndexPath:indexPath];
         [cell becomeFirstResponder];
+        _longTapCell = nil;
+        _longTapCell = cell;
         
         UIMenuItem *itCopy = [[UIMenuItem alloc] initWithTitle:@"复制" action:@selector(handleCopyCell:)];
         UIMenuItem *itReSend = [[UIMenuItem alloc] initWithTitle:@"再次发送" action:@selector(handleResendCell:)];
         UIMenuController *menu = [UIMenuController sharedMenuController];
         [menu setMenuItems:[NSArray arrayWithObjects:itCopy,itReSend, nil]];
-        
-        
-        
+
         EModel_User_Chat *chat = [_chatArray objectAtIndex:indexPath.row];
         
         
@@ -498,8 +499,28 @@
     }
 }
 
-- (void)handleCopyCell:(id)sender {
-    NSLog(@"handle copy cell");
+- (void)handleCopyCell:(id)sender
+{
+    NSLog(@"复制");
+
+    UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+    
+    if (_longTapCell.chatMessageTextLabel_self) {
+        pboard.string = _longTapCell.chatMessageTextLabel_self.text;
+    }else if
+        (_longTapCell.chatMessageTextLabel)
+    {
+        pboard.string = _longTapCell.chatMessageTextLabel.text;
+    }
+    
+    
+    
+    //复制出的内容
+    NSLog(@"%@",_longTapCell.chatMessageTextLabel_self.text);
+    
+    NSLog(@"%@",_longTapCell.chatMessageTextLabel.text);
+    
+    
 }
 
 - (void)handleResendCell:(id)sender {

@@ -45,9 +45,14 @@
 
 @end
 
+
+
 @implementation GroupChatTableViewController
 
 - (void)loadChatData {
+
+     
+    
     if (!self.chatArray) {
         self.chatArray = [[NSMutableArray alloc] init];
     }
@@ -60,11 +65,17 @@
     Model_Group *sendGroup = [[Model_Group alloc] init];
     [sendGroup setPk_group:self.group.pk_group];
     [_netManager getAllRelationFromGroup:sendGroup];
+    
+    
 }
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    
+    
 }
 
 #pragma mark - Table view data source
@@ -83,6 +94,13 @@
     static NSString *kCellIdentifier = @"GroupChatCell";
     GroupChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
     
+        UILongPressGestureRecognizer * longPressGesture =  [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(cellLongPress:)];
+    
+ 
+    
+     
+    
+    
     EModel_Chat *message = [self.chatArray objectAtIndex:indexPath.row];
     if (nil == cell) {
         cell = [[GroupChatTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifier];
@@ -90,12 +108,39 @@
 
     [cell setTopViewController:self.rootController];
     [cell initWithChat:message];
+    
+    
+    
+    
+    
+    
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     EModel_Chat *message = [self.chatArray objectAtIndex:indexPath.row];
     return [self cellHeightFromMessage:message].floatValue;
+}
+
+
+
+
+//HeadView高度
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    
+    float headHight = 0;
+    for (EModel_Chat *message in _chatArray) {
+        headHight += [self cellHeightFromMessage:message].floatValue;
+    }
+    
+    headHight = self.chatTableView.frame.size.height - headHight;
+    if (headHight <= 0) {
+        headHight = 0;
+    }
+    
+    return headHight;
+    
 }
 
 - (void)talkBtnClick:(UITextView *)textViewGet {
