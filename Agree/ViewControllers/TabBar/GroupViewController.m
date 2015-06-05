@@ -15,12 +15,18 @@
 #import "AppDelegate.h"
 #import "UIImageView+WebCache.h"
 
+
+
+
+
 #import "EaseMob.h"
 
 @interface GroupViewController () <UICollectionViewDelegate, UICollectionViewDataSource, SRNetManagerDelegate, UITextFieldDelegate, IChatManagerDelegate> {
     SRNet_Manager *_netManager;
 //    NSArray *_groupAry;
     NSUInteger _chooseIndexPath;
+    
+    GroupChatTableViewController * GCTC;
 }
 
 
@@ -304,6 +310,18 @@
     [self.codeInputTextField setHidden:NO];
 //    [self.groupCoverButton setHidden:NO];
     [self.remarkLabel setHidden:NO];
+    
+#pragma mark 小组图像点击BUTTON位置（稍后删除）
+    
+
+    NSLog(@"111");
+    
+    
+    
+
+
+
+    
     
     if (sender) {
         [self.codeInputTextField becomeFirstResponder];

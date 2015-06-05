@@ -11,6 +11,10 @@
 #import "Model_Party.h"
 #import "Model_Photo.h"
 #import "SRAccountView.h"
+//#import "GroupChatTableViewCell.h"
+
+
+
 
 
 @interface GroupDetailViewController : UIViewController <UIScrollViewDelegate>
@@ -40,6 +44,8 @@
 
 - (void)receiveParty;
 - (void)showImageAtIndexPath:(int)indexPath withImageArray: (NSMutableArray *)imageViewArray;
+
+- (void)longTapCell;
 
 @property BOOL partyLoadingAgain;
 

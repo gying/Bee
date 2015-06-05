@@ -15,7 +15,7 @@
 #import "SRImageManager.h"
 
 #import "SRChatLabel.h"
-#import "GroupChatTableViewCell.h"
+
 #import "AppDelegate.h"
 
 #import "EaseMob.h"
@@ -23,6 +23,7 @@
 
 #import "EMCommandMessageBody.h"
 #import "EMSendMessageHepler.h"
+#import "GroupChatTableViewCell.h"
 
 
 
@@ -41,13 +42,21 @@
     NSArray *_relationship;
     
     EMConversation *_conversation;
+    
+    
+    
 }
 
 @end
 
+
+
 @implementation GroupChatTableViewController
 
 - (void)loadChatData {
+
+     
+    
     if (!self.chatArray) {
         self.chatArray = [[NSMutableArray alloc] init];
     }
@@ -60,11 +69,17 @@
     Model_Group *sendGroup = [[Model_Group alloc] init];
     [sendGroup setPk_group:self.group.pk_group];
     [_netManager getAllRelationFromGroup:sendGroup];
+    
+    
 }
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    
+    
 }
 
 #pragma mark - Table view data source
@@ -79,24 +94,128 @@
 }
 
 
+#pragma mark -- 小组CELL内容
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *kCellIdentifier = @"GroupChatCell";
-    GroupChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
+   GroupChatTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
+    
+ 
+     
+    
     
     EModel_Chat *message = [self.chatArray objectAtIndex:indexPath.row];
     if (nil == cell) {
         cell = [[GroupChatTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifier];
     }
+    
 
     [cell setTopViewController:self.rootController];
     [cell initWithChat:message];
+    
+      UILongPressGestureRecognizer * longPressGesture =  [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(cellLongPress:)];
+    
+    id<IEMMessageBody> msgBody = message.message.messageBodies.firstObject;
+    
+    switch (msgBody.messageBodyType) {
+        case eMessageBodyType_Text: {
+            //文本
+            if (message.sendFromSelf) {
+                //自己发言
+                [cell.messageBackgroundButton_self addGestureRecognizer:longPressGesture];
+                
+            } else {
+                //他人发的信息
+                [cell.messageBackgroundButton addGestureRecognizer:longPressGesture];
+            }
+        }
+            break;
+        case eMessageBodyType_Image: {
+            //图片
+            if (message.sendFromSelf) {
+                
+                
+            } else {
+                //他人发的图片
+                
+            }
+        }
+        default:
+            break;
+    }
+    
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
+
+    
+    
+    
+    
+    
+ 
 }
+
+#define mark 聊天信息的操作方法
+- (void)cellLongPress:(UIGestureRecognizer *)recognizer{
+    
+    
+    
+    
+    CGPoint location = [recognizer locationInView:self.chatTableView];
+    NSIndexPath * indexPath = [self.chatTableView indexPathForRowAtPoint:location];
+    //        UserChatTableViewCell *cell = (UserChatTableViewCell *)recognizer.view;
+    GroupChatTableViewCell *cell = (GroupChatTableViewCell *)[self.chatTableView cellForRowAtIndexPath:indexPath];
+    [cell becomeFirstResponder];
+    self.longTapCell = nil;
+    self.longTapCell = cell;
+    
+    [self.rootController longTapCell];
+    
+}
+
+
+
+ 
+
+
+
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     EModel_Chat *message = [self.chatArray objectAtIndex:indexPath.row];
     return [self cellHeightFromMessage:message].floatValue;
 }
+
+
+
+
+//HeadView高度
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    
+    float headHight = 0;
+    for (EModel_Chat *message in _chatArray) {
+        headHight += [self cellHeightFromMessage:message].floatValue;
+    }
+    
+    headHight = self.chatTableView.frame.size.height - headHight;
+    if (headHight <= 0) {
+        headHight = 0;
+    }
+    
+    return headHight;
+    
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView * bgview = [[UIView alloc]init];
+    bgview.backgroundColor = [UIColor blackColor];
+    self.chatTableView.tableHeaderView = bgview;
+    bgview.hidden = YES;
+    return bgview;
+}
+
 
 - (void)talkBtnClick:(UITextView *)textViewGet {
     [self sendMessageDone:[EMSendMessageHepler sendTextMessageWithString:textViewGet.text
@@ -164,6 +283,19 @@
 
 - (void)reloadTableViewIsScrollToBottom: (BOOL) isScroll
                            withAnimated: (BOOL)isAnimated {
+    
+    float headHight = 0;
+    for (EModel_Chat *message in _chatArray) {
+        headHight += [self cellHeightFromMessage:message].floatValue;
+    }
+    
+    headHight = self.chatTableView.frame.size.height - headHight;
+    if (headHight <= 0) {
+        headHight = 0;
+    }
+    
+    self.chatTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.chatTableView.frame.size.width, headHight)];
+
     
     [self.chatTableView reloadData];
     if (isScroll) {
