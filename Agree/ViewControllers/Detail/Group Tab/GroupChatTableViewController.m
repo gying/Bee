@@ -323,6 +323,19 @@
 - (void)reloadTableViewIsScrollToBottom: (BOOL) isScroll
                            withAnimated: (BOOL)isAnimated {
     
+    float headHight = 0;
+    for (EModel_Chat *message in _chatArray) {
+        headHight += [self cellHeightFromMessage:message].floatValue;
+    }
+    
+    headHight = self.chatTableView.frame.size.height - headHight;
+    if (headHight <= 0) {
+        headHight = 0;
+    }
+    
+    self.chatTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.chatTableView.frame.size.width, headHight)];
+
+    
     [self.chatTableView reloadData];
     if (isScroll) {
         dispatch_async(dispatch_get_main_queue(), ^{

@@ -531,10 +531,7 @@
 {
     NSLog(@"复制");
 
-    CGPoint location = [sender locationInView:self.userChatTableView];
-    NSIndexPath * indexPath = [self.userChatTableView indexPathForRowAtPoint:location];
-    //        UserChatTableViewCell *cell = (UserChatTableViewCell *)recognizer.view;
-    UserChatTableViewCell *cell = (UserChatTableViewCell *)[self.userChatTableView cellForRowAtIndexPath:indexPath];
+   
 
     
     
