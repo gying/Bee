@@ -9,7 +9,7 @@
 #import "FeedBackViewController.h"
 #import "SRNet_Manager.h"
 
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 
 @interface FeedBackViewController ()<SRNetManagerDelegate> {
     SRNet_Manager *_netManager;
@@ -47,7 +47,7 @@
     
     switch (interfaceType) {
         case kFeedBackMessage: {    //反馈信息
-            [ProgressHUD showSuccess:@"反馈成功"];
+            [SVProgressHUD showSuccessWithStatus:@"反馈成功"];
             //    [self.navigationController popToViewController:self animated:YES];
             
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -62,7 +62,7 @@
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD showError:@"反馈失败"];
+    [SVProgressHUD dismiss];
 }
 
 - (IBAction)tapBackButton:(id)sender {

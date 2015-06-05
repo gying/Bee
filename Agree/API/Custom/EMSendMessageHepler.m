@@ -92,9 +92,12 @@
     EMMessage *retureMsg = [[EMMessage alloc] initWithReceiver:username bodies:[NSArray arrayWithObject:body]];
     retureMsg.requireEncryption = requireEncryption;
     if (isChatGroup) {
-        [retureMsg setMessageType:eMessageTypeGroupChat];
+//        [retureMsg setMessageType:eMessageTypeGroupChat];
+        [retureMsg setIsGroup:YES];
+        
     } else {
-        [retureMsg setMessageType:eMessageTypeChat];
+//        [retureMsg setMessageType:eMessageTypeChat];
+        [retureMsg setIsGroup:NO];
     }
     
     retureMsg.ext = ext;

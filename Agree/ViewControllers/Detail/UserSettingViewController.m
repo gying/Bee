@@ -10,7 +10,7 @@
 #import "Model_User.h"
 #import "SRNet_Manager.h"
 #import "SRTool.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "MJExtension.h"
 
 #import "SRTool.h"
@@ -392,12 +392,11 @@
         default:
             break;
     }
-    
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
 }
 
 #pragma mark - Navigation

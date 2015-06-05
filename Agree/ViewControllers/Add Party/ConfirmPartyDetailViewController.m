@@ -9,7 +9,7 @@
 #import "ConfirmPartyDetailViewController.h"
 #import "SRNet_Manager.h"
 #import "MJExtension.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "ScheduleTableViewController.h"
 #import "GroupDetailViewController.h"
 
@@ -124,11 +124,11 @@
             break;
     }
     
-    [ProgressHUD showSuccess:@"成功"];
+    [SVProgressHUD dismiss];
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
 }
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];

@@ -9,7 +9,7 @@
 #import "ContactsTableViewController.h"
 #import "SRNet_Manager.h"
 #import "MJExtension.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "ContactsTableViewCell.h"
 #import "SRAccountView.h"
 #import "UserChatViewController.h"
@@ -158,7 +158,7 @@
     _friendArray = [[NSMutableArray alloc] init];
     
     for (Model_User *user in tempArray) {  //循环标记用户未读取的信息
-        EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:user.pk_user.stringValue conversationType:eConversationTypeChat];
+        EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:user.pk_user.stringValue isGroup:NO];
         user.chat_update = [NSNumber numberWithLong:conversation.unreadMessagesCount];
         
         if (0 != user.chat_update.integerValue) {
@@ -205,7 +205,7 @@
                 _friendArray = [[NSMutableArray alloc] init];
                 
                 for (Model_User *user in tempArray) {  //循环标记用户未读取的信息
-                    EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:user.pk_user.stringValue conversationType:eConversationTypeChat];
+                    EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:user.pk_user.stringValue isGroup:NO];
                     user.chat_update = [NSNumber numberWithLong:conversation.unreadMessagesCount];
                     
                     if (0 != user.chat_update.integerValue) {
@@ -230,7 +230,7 @@
     [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"contact_update"];
     [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"relation_update"];
     self.navigationController.tabBarItem.badgeValue = nil;
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
     [_refreshControl endRefreshing];
     _isfirstLoad = FALSE;
     
@@ -256,7 +256,7 @@
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD showError:@"网络错误"];
+    [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
 #pragma mark - Navigation

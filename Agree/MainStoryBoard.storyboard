@@ -4111,10 +4111,10 @@
         <image name="test.png" width="200" height="200"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="NNN-op-p3r"/>
-        <segue reference="c42-zg-aVC"/>
-        <segue reference="7g0-Ma-cMP"/>
         <segue reference="Re4-1s-AtI"/>
+        <segue reference="yUl-vl-Sui"/>
+        <segue reference="xWd-dq-8Ci"/>
+        <segue reference="7g0-Ma-cMP"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.34901960780000002" green="0.81960784310000001" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
 </document>

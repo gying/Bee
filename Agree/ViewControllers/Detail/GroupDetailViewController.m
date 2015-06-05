@@ -8,7 +8,7 @@
 
 #import "GroupDetailViewController.h"
 #import "Model_Chat.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "GroupChatTableViewController.h"
 #import "GroupPartyTableViewController.h"
 #import "ChooseLoctaionViewController.h"
@@ -21,7 +21,6 @@
 #import "AppDelegate.h"
 #import "GroupAlbumsCollectionViewCell.h"
 
-//#import "HcCustomKeyboard.h"
 #import "MJPhotoBrowser.h"
 
 #import "SRKeyboard.h"
@@ -35,7 +34,6 @@
     GroupPartyTableViewController *_partyDelegate;
     GroupAlbumsCollectionViewController *_albumsDelegate;
     
-//    HcCustomKeyboard *_hcKeyBoard;
     SRKeyboard *_srKeyboard;
     
     NSDictionary *norDic;
