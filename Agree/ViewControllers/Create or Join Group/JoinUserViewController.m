@@ -12,11 +12,16 @@
 #import "GroupViewController.h"
 #import "EaseMob.h"
 
+#import "ChoosefriendsViewController.h"
+
 
 @interface JoinUserViewController () <SRImageManagerDelegate> {
     SRNet_Manager *_netManager;
     SRImageManager *_imageManager;
     NSMutableArray *_groupMembers;
+    
+    ChoosefriendsViewController * choosefriendsVC;
+    
 }
 
 @end
@@ -32,6 +37,11 @@
     [self.groupCoverButton setTitle:@"" forState:UIControlStateNormal];
     
     [self.groupNameTextField setText:self.theGroup.name];
+    
+    
+    
+
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -123,6 +133,8 @@
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+
 
 /*
 #pragma mark - Navigation

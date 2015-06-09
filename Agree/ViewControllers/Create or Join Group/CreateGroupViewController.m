@@ -49,6 +49,8 @@
 - (IBAction)pressedTheCoverButton:(id)sender {
     //点击小组封面按钮
     [self imageBtnClick];
+    NSLog(@"现在操作小组封面按钮");
+    
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -86,6 +88,8 @@
         UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择图片来源" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"拍照" otherButtonTitles:@"图片库", nil];
         [sheet showInView:self.view];
     }
+    
+    NSLog(@"现在操作图片按钮");
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -127,6 +131,7 @@
 - (IBAction)pressedTheCodeBackButton:(id)sender {
     [self.codeInputTextField resignFirstResponder];
     [self.codeView setHidden:YES];
+    NSLog(@"收到邀请码");
 }
 
 - (IBAction)pressedTheJoinButton:(id)sender {
@@ -146,6 +151,10 @@
         GroupViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
         [rootController joinGroupRelation];
     });
+    
+    NSLog(@"222");
+    
+    
 }
 
 - (IBAction)pressedTheRecodeButton:(id)sender {
@@ -167,6 +176,9 @@
     
     
     [self.codeInputTextField becomeFirstResponder];
+    
+    NSLog(@"333");
+    
 }
 
 - (void)didReceiveMemoryWarning {

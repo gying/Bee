@@ -7,13 +7,21 @@
 //
 
 #import "ContactsTableViewController.h"
+
 #import "SRNet_Manager.h"
+
 #import "MJExtension.h"
+
 #import <SVProgressHUD.h>
+
 #import "ContactsTableViewCell.h"
+
 #import "SRAccountView.h"
+
 #import "UserChatViewController.h"
+
 #import "AppDelegate.h"
+
 #import "EaseMob.h"
 
 
@@ -201,6 +209,7 @@
                 //        NSMutableArray *tempArray = [[NSMutableArray alloc] init];
                 NSMutableArray *tempArray = (NSMutableArray *)[Model_User objectArrayWithKeyValuesArray:jsonDic];
                 
+                
                 _friendArray = nil;
                 _friendArray = [[NSMutableArray alloc] init];
                 
@@ -224,7 +233,7 @@
         default:
             break;
     }
-    
+
     
     [self.tableView reloadData];
     [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"contact_update"];

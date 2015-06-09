@@ -5,7 +5,7 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <mutableArray key="LangTingGBK.TTF">
+        <mutableArray key="Lantinghei.ttc">
             <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHK--GBK1-0</string>
@@ -1415,6 +1415,9 @@
                                 <state key="normal" title="邀请好友加入您的小组">
                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <segue destination="75R-C4-GW2" kind="push" id="sib-Nm-X2J"/>
+                                </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="GroupNameField" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="小组名称" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7ML-Co-RWE">
                                 <rect key="frame" x="181" y="136" width="238" height="30"/>
@@ -1478,7 +1481,48 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wrE-wG-gAs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2067" y="-756"/>
+            <point key="canvasLocation" x="2091" y="-908"/>
+        </scene>
+        <!--Choosefriends View Controller-->
+        <scene sceneID="UYT-Or-rLw">
+            <objects>
+                <viewController id="75R-C4-GW2" customClass="ChoosefriendsViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="rto-9p-FiB"/>
+                        <viewControllerLayoutGuide type="bottom" id="9U4-8U-W3c"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="jdh-CR-vhu">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="69" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="OtY-2I-2CT">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="69" id="fea-VI-bnI">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fea-VI-bnI" id="ysU-CE-Hjm">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="75R-C4-GW2" id="zwS-bW-7kR"/>
+                                    <outlet property="delegate" destination="75R-C4-GW2" id="oLq-3v-OJA"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Sx0-FZ-eWR"/>
+                    <connections>
+                        <outlet property="choosefriendsTableview" destination="OtY-2I-2CT" id="yk8-Rd-XQX"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bc3-EX-VBv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="76" y="1401"/>
         </scene>
         <!--Party Map View Controller-->
         <scene sceneID="g87-CI-Lf6">
