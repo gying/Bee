@@ -21,11 +21,15 @@ PODS:
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
   - EaseMobSDK (2.1.6)
+  - SDWebImage (3.7.2):
+    - SDWebImage/Core (= 3.7.2)
+  - SDWebImage/Core (3.7.2)
   - SVProgressHUD (1.1.3)
 
 DEPENDENCIES:
   - AFNetworking (~> 2.0)
   - EaseMobSDK (from `https://github.com/easemob/sdk-ios-cocoapods.git`)
+  - SDWebImage (~> 3.7)
   - SVProgressHUD
 
 EXTERNAL SOURCES:
@@ -40,6 +44,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   AFNetworking: 05edc0ac4c4c8cf57bcf4b84be5b0744b6d8e71e
   EaseMobSDK: 0c82af1019b19940cc25fa9d4e52b89e737e8205
+  SDWebImage: 71b7cdc1d1721d6a82ed62889030225f2c249e29
   SVProgressHUD: 748080e4f36e603f6c02aec292664239df5279c1
 
 COCOAPODS: 0.36.4

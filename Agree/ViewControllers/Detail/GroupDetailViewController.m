@@ -16,7 +16,6 @@
 #import "PartyDetailViewController.h"
 #import "GroupAlbumsCollectionViewController.h"
 #import "SRNet_Manager.h"
-#import "SRTool.h"
 #import "MJExtension.h"
 #import "AppDelegate.h"
 #import "GroupAlbumsCollectionViewCell.h"

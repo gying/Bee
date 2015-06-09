@@ -8,13 +8,13 @@
 
 #import "SRAccountView.h"
 #import "UIImageView+WebCache.h"
-#import "SRTool.h"
 #import <SVProgressHUD.h>
 #import "MJExtension.h"
 #import <AddressBook/AddressBook.h>
 #import "UserChatViewController.h"
 
 #import "AppDelegate.h"
+#import "SRImageManager.h"
 
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
@@ -232,7 +232,9 @@
 
 - (void)loadWithUser:(Model_User *)user withGroup: (Model_Group *)group {
     self.nicknameLabel.text = user.nickname;
-    [self.avatarImageView setImageWithURL:[SRTool imageUrlFromPath:user.avatar_path]];
+    
+    [self.avatarImageView sd_setImageWithURL:[SRImageManager avatarImageFromTXYFieldID:user.avatar_path]];
+    
     
     [self.callButton setHidden:YES];
     [self.callLabel setHidden:YES];

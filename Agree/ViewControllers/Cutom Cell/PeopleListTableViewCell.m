@@ -7,8 +7,8 @@
 //
 
 #import "PeopleListTableViewCell.h"
-#import "SRTool.h"
 #import "UIImageView+WebCache.h"
+#import "SRImageManager.h"
 
 @implementation PeopleListTableViewCell
 
@@ -51,7 +51,8 @@
     
     
     //读取头像
-    [self.avatarImageView setImageWithURL:[SRTool miniImageUrlFromPath:user.avatar_path]];
+    [self.avatarImageView sd_setImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:user.avatar_path]];
+    
 }
 
 @end

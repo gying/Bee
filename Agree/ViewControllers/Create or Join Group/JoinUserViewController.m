@@ -79,7 +79,7 @@
             if (!_imageManager) {
                 _imageManager = [[SRImageManager alloc] initWithDelegate:self];
             }
-            self.theGroup.avatar_path =  [_imageManager updateGroupCoverToBucket:self.groupCover];
+            [_imageManager updateImageToTXY:self.groupCover];
             self.groupCover = nil;
         } else {
             [_netManager addGroup:self.theGroup withMembers:_groupMembers];
@@ -113,7 +113,8 @@
     [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
-- (void)imageUpladDone {
+- (void)imageUploadDoneWithFieldID:(NSString *)fieldID {
+    self.theGroup.avatar_path = fieldID;
     [_netManager addGroup:self.theGroup withMembers:_groupMembers];
 }
 

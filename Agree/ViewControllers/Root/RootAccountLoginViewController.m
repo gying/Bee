@@ -30,10 +30,6 @@
     [self.doneButton setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
     [self.doneButton.layer setMasksToBounds:YES];
     [self.doneButton setEnabled:NO];
-    
-
-    
-    
 }
 
 
@@ -67,11 +63,6 @@
     
     [_netManager loginAccount:sendUser];
 }
-
-
-
-
-
 
 - (void)popToRootController {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -130,7 +121,6 @@
 
 //键盘回收
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    
     [self.accountTextField resignFirstResponder];
     [self.passwordTextField resignFirstResponder];
     

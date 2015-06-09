@@ -8,7 +8,7 @@
 
 #import "GroupCollectionViewCell.h"
 #import "UIImageView+WebCache.h"
-#import "SRTool.h"
+#import "SRImageManager.h"
 
 
 @implementation GroupCollectionViewCell {
@@ -40,7 +40,9 @@
     [self.group2ndView.layer setMasksToBounds:YES];
     [self.group2ndView.layer setCornerRadius:3];
 
-    [self.groupImageView setImageWithURL:[SRTool imageUrlFromPath:group.avatar_path]];
+    ;
+    [self.groupImageView sd_setImageWithURL:[SRImageManager groupFrontCoverImageFromTXYFieldID:group.avatar_path]];
+    
     
 }
 

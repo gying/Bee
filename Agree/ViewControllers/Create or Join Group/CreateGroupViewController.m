@@ -15,7 +15,6 @@
 #import "GroupViewController.h"
 #import "SRImageManager.h"
 #import "UIImageView+WebCache.h"
-#import "SRTool.h"
 
 @interface CreateGroupViewController () <UITextFieldDelegate, SRNetManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, SRImageManagerDelegate> {
     Model_Group *_newGroup;
@@ -206,7 +205,7 @@
                 [self.remarkLabel setHidden:YES];
                 
                 [self.groupNameLabel setText:_joinGroup.name];
-                [self.groupCoverImageView setImageWithURL:[SRTool imageUrlFromPath:_joinGroup.avatar_path]];
+                [self.groupCoverImageView sd_setImageWithURL:[SRImageManager groupFrontCoverImageFromTXYFieldID:_joinGroup.avatar_path]];
             } else {
                 [SVProgressHUD showErrorWithStatus:@"未找到相关数据"];
                 //未找到小组的相关数据
@@ -240,7 +239,6 @@
         childController.theGroup.name = self.groupNameTextField.text;
         childController.groupCover = _groupCoverImage;
     }
-    
 }
 
 @end

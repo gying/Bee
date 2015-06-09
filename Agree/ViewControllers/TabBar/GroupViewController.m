@@ -11,9 +11,9 @@
 #import <SVProgressHUD.h>
 #import "MJExtension.h"
 #import "GroupDetailViewController.h"
-#import "SRTool.h"
 #import "AppDelegate.h"
 #import "UIImageView+WebCache.h"
+#import "SRImageManager.h"
 
 
 
@@ -359,7 +359,7 @@
                 [self.remarkLabel setHidden:YES];
                 
                 [self.groupNameLabel setText:_joinGroup.name];
-                [self.groupCoverImageView setImageWithURL:[SRTool imageUrlFromPath:_joinGroup.avatar_path]];
+                [self.groupCoverImageView sd_setImageWithURL:[SRImageManager groupFrontCoverImageFromTXYFieldID:_joinGroup.avatar_path]];
             } else {
                 [SVProgressHUD showSuccessWithStatus:@"未找到相关数据"];
                 //未找到小组的相关数据

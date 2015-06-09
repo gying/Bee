@@ -11,7 +11,6 @@
 #import "Model_Party_User.h"
 #import <SVProgressHUD.h>
 #import "MJExtension.h"
-#import "SRTool.h"
 #import "PartyPeopleListViewController.h"
 #import "PartyMapViewController.h"
 
