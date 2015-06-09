@@ -372,6 +372,13 @@
     
     [_conversation markAllMessagesAsRead:YES];
     [self reloadTableViewIsScrollToBottom:YES withAnimated:YES];
+    
+    
+//    //聊天信息切换到最底层显示`
+//    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:self.chatArray.count-1  inSection:0];
+//    [self reloadTableViewIsScrollToBottom:YES withAnimated:NO];
+//    
+//    [self.chatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -498,7 +505,12 @@
                     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
                     [delegate.groupDelegate setDataChange:TRUE];
                     [self reloadTableViewIsScrollToBottom:YES withAnimated:NO];
-                }
+                    
+                    
+                    
+                    
+                    
+                } 
             }
         }
             break;

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		38688464E2D960851E81912B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B124D697D5B1D9DCE5C3CE49 /* libPods.a */; };
+		C64F1D5E1B26881A0063C012 /* ChoosefriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C64F1D5D1B26881A0063C012 /* ChoosefriendsViewController.m */; };
 		F0068C0D1A679E0600B9CB60 /* ChooseDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0068C001A679E0600B9CB60 /* ChooseDateViewController.m */; };
 		F0068C0E1A679E0600B9CB60 /* ChooseLoctaionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0068C021A679E0600B9CB60 /* ChooseLoctaionViewController.m */; };
 		F0068C0F1A679E0600B9CB60 /* ConfirmPartyDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0068C041A679E0600B9CB60 /* ConfirmPartyDetailViewController.m */; };
@@ -163,6 +164,8 @@
 		4F57D7C30B72292B090AF91B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		B124D697D5B1D9DCE5C3CE49 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFA0C9B5EF0862273C1170F8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		C64F1D5C1B26881A0063C012 /* ChoosefriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosefriendsViewController.h; sourceTree = "<group>"; };
+		C64F1D5D1B26881A0063C012 /* ChoosefriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosefriendsViewController.m; sourceTree = "<group>"; };
 		F0068BFF1A679E0600B9CB60 /* ChooseDateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseDateViewController.h; sourceTree = "<group>"; };
 		F0068C001A679E0600B9CB60 /* ChooseDateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseDateViewController.m; sourceTree = "<group>"; };
 		F0068C011A679E0600B9CB60 /* ChooseLoctaionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseLoctaionViewController.h; sourceTree = "<group>"; };
@@ -538,6 +541,8 @@
 			children = (
 				F0068C061A679E0600B9CB60 /* CreateGroupViewController.h */,
 				F0068C071A679E0600B9CB60 /* CreateGroupViewController.m */,
+				C64F1D5C1B26881A0063C012 /* ChoosefriendsViewController.h */,
+				C64F1D5D1B26881A0063C012 /* ChoosefriendsViewController.m */,
 				F0068C081A679E0600B9CB60 /* JoinUserViewController.h */,
 				F0068C091A679E0600B9CB60 /* JoinUserViewController.m */,
 			);
@@ -1275,6 +1280,7 @@
 				F073CAFB1ACF937E00E282E6 /* PartyMapViewController.m in Sources */,
 				F0F5C27C1A66F1490029BF7A /* NSObject+MJKeyValue.m in Sources */,
 				F0F5C1CD1A66CEBE0029BF7A /* AppDelegate.mm in Sources */,
+				C64F1D5E1B26881A0063C012 /* ChoosefriendsViewController.m in Sources */,
 				F01487E91A8F827800E41A63 /* UserViewController.m in Sources */,
 				F0F5C2921A66F1620029BF7A /* Model_Feedback.m in Sources */,
 				F0F5C27B1A66F1490029BF7A /* NSObject+MJCoding.m in Sources */,

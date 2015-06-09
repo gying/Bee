@@ -19,6 +19,9 @@
 
 
 
+
+
+
 #import "EaseMob.h"
 
 @interface GroupViewController () <UICollectionViewDelegate, UICollectionViewDataSource, SRNetManagerDelegate, UITextFieldDelegate, IChatManagerDelegate> {
@@ -27,6 +30,8 @@
     NSUInteger _chooseIndexPath;
     
     GroupChatTableViewController * GCTC;
+    
+    
 }
 
 
@@ -295,6 +300,8 @@
     [self joinGroupRelation];
 }
 
+
+//新建小组BUTTON
 - (IBAction)pressedTheRecodeButton:(id)sender {
     //重新输入验证码
     [self.groupNameLabel setText:@""];
@@ -314,7 +321,12 @@
 #pragma mark 小组图像点击BUTTON位置（稍后删除）
     
 
-    NSLog(@"111");
+    NSLog(@"小组图像点击BUTTON");
+    NSLog(@"新建小组点击BUTTON");
+    
+
+    
+    
     
     
     
@@ -390,6 +402,7 @@
 - (void)intoChatView {
     [self.navigationController.tabBarController setSelectedIndex:2];
 }
+
 
 
 @end
