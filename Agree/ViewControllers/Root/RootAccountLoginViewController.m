@@ -30,10 +30,6 @@
     [self.doneButton setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
     [self.doneButton.layer setMasksToBounds:YES];
     [self.doneButton setEnabled:NO];
-    
-
-    
-    
 }
 
 
@@ -67,11 +63,6 @@
     
     [_netManager loginAccount:sendUser];
 }
-
-
-
-
-
 
 - (void)popToRootController {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -114,6 +105,9 @@
     [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
+//点击微信登录按钮
+- (IBAction)tapWechatButton:(UIButton *)sender {
+}
 
 
 #pragma mark - Navigation
@@ -130,7 +124,6 @@
 
 //键盘回收
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    
     [self.accountTextField resignFirstResponder];
     [self.passwordTextField resignFirstResponder];
     

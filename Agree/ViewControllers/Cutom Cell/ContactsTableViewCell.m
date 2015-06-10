@@ -1,4 +1,4 @@
-//
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             //
 //  ContectsTableViewCell.m
 //  Agree
 //
@@ -8,7 +8,7 @@
 
 #import "ContactsTableViewCell.h"
 #import "UIButton+WebCache.h"
-#import "SRTool.h"
+#import "SRImageManager.h"
 
 @implementation ContactsTableViewCell {
     Model_User *_user;
@@ -30,7 +30,8 @@
     [self.avatarButton.layer setMasksToBounds:YES];
     
     [self.avatarButton addTarget:self action:@selector(tapAvatarButton:) forControlEvents:UIControlEventTouchUpInside];
-    [self.avatarButton setBackgroundImageWithURL:[SRTool miniImageUrlFromPath:user.avatar_path] forState:UIControlStateNormal];
+    
+    [self.avatarButton sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:user.avatar_path] forState:UIControlStateNormal];
     [self.nicknameLabel setText:user.nickname];
     
     

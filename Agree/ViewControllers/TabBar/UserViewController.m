@@ -9,9 +9,9 @@
 #import "UserViewController.h"
 #import "UserSettingViewController.h"
 #import "UIImageView+WebCache.h"
-#import "SRTool.h"
 #import "AppDelegate.h"
 #import "EaseMob.h"
+#import "SRImageManager.h"
 
 @interface UserViewController () <UIAlertViewDelegate>{
     NSString *_imageName;
@@ -26,19 +26,20 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    
+    //头像区
     _backImageViwe = [[UIImageView alloc] initWithFrame:CGRectMake(4.5, 4.5, 90, 90)];
     
     [self.avatarButton addSubview:_backImageViwe];
     [_backImageViwe.layer setMasksToBounds:YES];
     [_backImageViwe.layer setCornerRadius:_backImageViwe.frame.size.width/2];
+    [self resetAvatar];
     
-    [_backImageViwe setImageWithURL:[SRTool imageUrlFromPath:[Model_User loadFromUserDefaults].avatar_path]];
-    [self.accountLabel setText:[NSString stringWithFormat:@"比聚号:  %@",[Model_User loadFromUserDefaults].pk_user.stringValue]];
+    //BB号
+    [self.accountLabel setText:[NSString stringWithFormat:@"BB号:  %@",[Model_User loadFromUserDefaults].pk_user.stringValue]];
 }
 
 - (void)resetAvatar {
-    [_backImageViwe setImageWithURL:[SRTool imageUrlFromPath:[Model_User loadFromUserDefaults].avatar_path]];
+    [_backImageViwe sd_setImageWithURL:[SRImageManager avatarImageFromTXYFieldID:[Model_User loadFromUserDefaults].avatar_path]];
 }
 
 - (void)didReceiveMemoryWarning {

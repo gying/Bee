@@ -40,20 +40,18 @@
     // Do any additional setup after loading the view.
     [self.nicknameTextField setDelegate:self];
     _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    
-//    [self.nicknameTextField setDelegate:self];
 
     
     [self.doneButton.layer setCornerRadius:self.doneButton.frame.size.height/2];
     [self.doneButton setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
     [self.doneButton.layer setMasksToBounds:YES];
-//    [self.doneButton setEnabled:NO];
     
     _backImageViwe = [[UIImageView alloc] initWithFrame:CGRectMake(4.5, 4.5, 90, 90)];
     [_backImageViwe.layer setMasksToBounds:YES];
     [_backImageViwe.layer setCornerRadius:_backImageViwe.frame.size.width/2];
     [self.avatarButton addSubview:_backImageViwe];
     
+    //进入立即初始化图片代理
     _imageManager = [[SRImageManager alloc] initWithDelegate:self];
     
 }
@@ -108,16 +106,9 @@
                                               withRect:CGRectMake(0, 0, 360, 360)];
     [_backImageViwe setImage:_avatarImage];
     
-    [_imageManager updateImageToTXY:_avatarImage];
-    
     if (true) {
         [self.doneButton setBackgroundColor:AgreeBlue];
-//        [self.doneButton setEnabled:YES];
     }
-}
-
-- (void)imageUploadDoneWithFieldID:(NSString *)fieldID {
-//    NSLog([SRImageManager originalImageFromTXYFieldID:fieldID]);
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -144,8 +135,7 @@
 - (IBAction)pressedTheDoneButton:(id)sender {
     
     BOOL isDone = NO;
-    
-    if (self.userInfo.nickname) {
+    if (self.nicknameTextField.text) {
         //昵称为空
 
         if (_avatarImage) {
@@ -157,35 +147,38 @@
 
     } else {
         UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您的昵称不能为空" delegate:nil cancelButtonTitle:@"确认" otherButtonTitles: nil];
+        self.userInfo.nickname = self.nicknameTextField.text;
         [alertview show];
     }
     
     if (isDone) {
         //设置账户创建时间
         [self.userInfo setSetup_time:[NSDate date]];
-        
         //保存头像信息
-        NSString *imageName = [_imageManager updateAvatarImageToBucket:_avatarImage];
-        self.userInfo.avatar_path = imageName;
-        Model_User *userInfo = [Model_User loadFromUserDefaults];
-        userInfo.avatar_path = imageName;
-        userInfo.nickname = self.nicknameTextField.text;
-        [userInfo saveToUserDefaults];
+        [_imageManager updateImageToTXY:_avatarImage];
     }
 }
 
-- (void)imageUpladDone {
+- (void)imageUploadDoneWithFieldID:(NSString *)fieldID {
+    //图片在保存完成之后开始保存默认的帐号信息
+    self.userInfo.avatar_path = fieldID;
+//    Model_User *userInfo = [Model_User loadFromUserDefaults];
+//    userInfo.avatar_path = fieldID;
+    self.userInfo.nickname = self.nicknameTextField.text;
+//    [userInfo saveToUserDefaults];
+    
+    //从程序代理获取推送信息以及设备号以便于注册
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     self.userInfo.jpush_id = delegate.jPushString;
     self.userInfo.device_id = delegate.deviceToken;
     
-//    [self.userInfo setJpush_id:[APService registrationID]];
     [_netManager regUser:self.userInfo];
 }
 
 - (void)imageUpladError {
     
 }
+
 - (IBAction)tapCloseButton:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -209,7 +202,7 @@
                 }
                 
                 [self.userInfo saveToUserDefaults];
-                
+
                 EMError *error = nil;
                 [[EaseMob sharedInstance].chatManager registerNewAccount:self.userInfo.pk_user.stringValue password:@"paopian" error:&error];
                 if (!error) {
@@ -218,12 +211,7 @@
 
                 [SVProgressHUD dismiss];
                 
-                //            UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-                //            UITabBarController *rootController = [sb instantiateViewControllerWithIdentifier:@"rootTabbar"];
-                //            [self presentViewController:rootController animated:YES completion:nil];
-                
                 [self dismissViewControllerAnimated:YES completion:nil];
-                
                 [self.rootController popToRootController];
                 
             } else {

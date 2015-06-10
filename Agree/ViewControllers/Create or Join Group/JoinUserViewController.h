@@ -19,4 +19,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *groupCoverButton;
 @property (weak, nonatomic) IBOutlet UIButton *joinButton;
 
+@property (nonatomic, strong)NSMutableArray *choosePeopleArray;
+
 @end

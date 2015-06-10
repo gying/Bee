@@ -9,15 +9,14 @@
 #import "GroupSettingViewController.h"
 #import "SRNet_Manager.h"
 #import <SVProgressHUD.h>
-#import "SRTool.h"
 #import "Model_Group_Code.h"
 #import "MJExtension.h"
-#import "SRTool.h"
 #import "GroupViewController.h"
 #import "UIImageView+WebCache.h"
 #import "GroupPeopleCollectionViewCell.h"
 #import "SRAccountView.h"
 #import "Model_User.h"
+#import "SRImageManager.h"
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
@@ -52,7 +51,7 @@
     [_backImageViwe.layer setMasksToBounds:YES];
     [_backImageViwe.layer setCornerRadius:_backImageViwe.frame.size.width/2];
     
-    [_backImageViwe setImageWithURL:[SRTool imageUrlFromPath:[Model_User loadFromUserDefaults].avatar_path]];
+    [SRImageManager avatarImageFromTXYFieldID:[Model_User loadFromUserDefaults].avatar_path];
     
     if (!_netManager) {
         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];

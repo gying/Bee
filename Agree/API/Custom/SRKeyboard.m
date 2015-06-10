@@ -28,54 +28,35 @@
     self.mViewController =viewController;
     self.mDelegate =delegate;
     
+    //BACKVIEW
     self.mBackView =[[UIView alloc]initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-45, WIDTH_SCREEN, 45)];
     self.mBackView.backgroundColor =[UIColor colorWithWhite:0.1 alpha:1.0];
     [self.mViewController.view addSubview:self.mBackView];
     
+    //TEXTVIEW
     self.mTextView =[[UITextView alloc]initWithFrame:CGRectMake(53, 9, WIDTH_SCREEN-70, 27)];
-    self.mTextView.backgroundColor =[UIColor whiteColor];
     [self.mTextView.layer setCornerRadius:2.5];
-    [self.mTextView setFont:[UIFont systemFontOfSize:16.0]];
+    [self.mTextView setFont:[UIFont systemFontOfSize:18.0]];
     self.mTextView.delegate = self;
     self.mTextView.text = @"";
-//    self.mTextView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
-//    [self.mTextView setContentMode:UIViewContentModeBottom];
-//    self.mTextView.lineBreakMode
     self.mTextView.textContainer.lineBreakMode = NSLineBreakByClipping;
-//    self.mTextView.textContainer.lineBreakMode = NSLineBreakByCharWrapping;
-//    self.mTextView.textContainer.lineFragmentPadding = 5.0;
-//    self.mTextView.textContainer.lineBreakMode = NSLineBreakByWordWrapping;
     self.mTextView.returnKeyType = UIReturnKeySend;
-    
+    self.mTextView.layoutManager.allowsNonContiguousLayout = NO;
+    self.mTextView.contentInset = UIEdgeInsetsMake(3, 0, 0, 0);
     [self.mBackView addSubview:self.mTextView];
     
+    //选择照片的IMAGE
     self.sendPicImg =[[UIImageView alloc]initWithFrame:CGRectMake(15, 13, 20, 20)];
     self.sendPicImg.image =[UIImage imageNamed:@"agree_send_picture.pdf"];
     [self.mBackView addSubview:self.sendPicImg];
     
-    //    self.mTalkBtn =[UIButton buttonWithType:UIButtonTypeRoundedRect];
-    //    [self.mTalkBtn setTitle:@"发送" forState:UIControlStateNormal];
-    //    [self.mTalkBtn.titleLabel setFont:[UIFont fontWithName:@"STHeitiSC-Light" size:14.0f]];
-    //    [self.mTalkBtn addTarget:self action:@selector(forTalk) forControlEvents:UIControlEventTouchUpInside];
-    //    self.mTalkBtn.frame =CGRectMake(WIDTH_SCREEN - 55, 0, 50, 50);
-    //    [self.mTalkBtn setTintColor:AgreeBlue];
-    //    [self.mBackView addSubview:self.mTalkBtn];
-    
+    //选择照片的BUTTON
     self.mImageBtn =[UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.mImageBtn setTitle:@"" forState:UIControlStateNormal];
-    //    [self.mImageBtn setBackgroundImage:[UIImage imageNamed:@"agree_send_picture.pdf"] forState:UIControlStateNormal];
-    
     [self.mImageBtn addTarget:self action:@selector(forImage) forControlEvents:UIControlEventTouchUpInside];
     self.mImageBtn.frame =CGRectMake(0, 0, 50, 50);
     [self.mImageBtn setTintColor:AgreeBlue];
     [self.mBackView addSubview:self.mImageBtn];
-    
-    
-//    self.mTextView.textContainerInset = UIEdgeInsetsZero;
-    self.mTextView.layoutManager.allowsNonContiguousLayout = NO;
-    self.mTextView.contentInset = UIEdgeInsetsMake(3, 0, 0, 0);
-//    self.mTextView.textContainer.lineFragmentPadding = 0;
-    
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -117,8 +98,6 @@
 - (void)keyboardWillShow:(NSNotification*)notification //键盘出现
 {
         _keyboardRect = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-        //    NSLog(@"%f-%f",_keyboardRect.origin.y,_keyboardRect.size.height);
-        
         if (!self.mHiddeView)
         {
             self.mHiddeView =[[UIView alloc]initWithFrame:CGRectMake(0, 0,WIDTH_SCREEN,HEIGHT_SCREEN)];
@@ -153,17 +132,6 @@
             self.mHiddeView.alpha =0.0f;
             
             
-            
-//            if (_moveView) {
-//                self.mBackView.frame=CGRectMake(0, HEIGHT_SCREEN-25, WIDTH_SCREEN, 45);
-//                self.mTextView.frame = CGRectMake(53, 10, WIDTH_SCREEN-70, 27);
-//                _moveView.center = _initPoint;
-//            } else {
-//                self.mBackView.frame=CGRectMake(0, HEIGHT_SCREEN-25, WIDTH_SCREEN, 45);
-//                self.mTextView.frame = CGRectMake(53, 10, WIDTH_SCREEN-70, 27);
-//                self.mViewController.view.center = _initPoint;
-//            }
-            
             self.mViewController.view.center = _initPoint;
             _initPoint.x = 0;
             _initPoint.y = 0;
@@ -189,44 +157,44 @@
 
 - (void)textDidChanged:(NSNotification *)notif //监听文字改变 换行时要更改输入框的位置
 {
-//    CGRect textFrame=[[self.mTextView layoutManager]usedRectForTextContainer:[self.mTextView textContainer]];
-//    CGSize contentSize = textFrame.size;
-    
-    CGSize contentSize = self.mTextView.contentSize;
-    contentSize.height = contentSize.height - 9;
-    //如果超过最大空间则直接返回
-    if (contentSize.height > 140) {
-        return;
-    }
-    
-    CGRect selfFrame = self.mBackView.frame;
-    CGFloat selfHeight = self.mTextView.frame.origin.y * 2  + contentSize.height;
 
 
-    CGFloat selfOriginY = selfFrame.origin.y - (selfHeight - selfFrame.size.height);
-    selfFrame.origin.y = selfOriginY;
-    selfFrame.size.height = selfHeight;
-    self.mBackView.frame = selfFrame;
     
-    //    53, 10, WIDTH_SCREEN-110, 27
-//    self.mTextView.frame =CGRectMake(10, 9, WIDTH_SCREEN-70+45, selfHeight-20);
-    self.mTextView.frame =CGRectMake(10, 9, WIDTH_SCREEN-70+45, selfHeight-19);
-    
-    self.mImageBtn.hidden = YES;
-    self.sendPicImg.hidden = YES;
+
+    [UIView animateWithDuration:0.3 animations:^{
+
+        CGSize tvcontentSize = self.mTextView.contentSize;
+        if (tvcontentSize.height > 140) {
+            return;
+        }
+        
+        CGRect selfFrame = self.mBackView.frame;
+        CGFloat selfHeight = self.mTextView.frame.origin.y*2  + tvcontentSize.height;
+        CGFloat selfOriginY = selfFrame.origin.y - (selfHeight - selfFrame.size.height);
+        
+        selfFrame.origin.y = selfOriginY;
+        selfFrame.size.height = selfHeight;
+        
+        self.mBackView.frame = selfFrame;
+        //     self.mTextView.frame =CGRectMake(10, 9, WIDTH_SCREEN-70+45, tvcontentSize.height);
+        self.mTextView.frame = CGRectMake(10, 9, WIDTH_SCREEN-70+45, selfFrame.size.height -19);
+        
+        
+        
+        
+        self.mImageBtn.hidden = YES;
+        self.sendPicImg.hidden = YES;
+    }];
     
 }
+
 
 - (void)initTextViewFrame {
     CGRect textFrame=[[self.mTextView layoutManager]usedRectForTextContainer:[self.mTextView textContainer]];
     CGSize contentSize = textFrame.size;
     //如果超过最大空间则直接返回
-    contentSize.height =27;
-    
-    
-    //    if (contentSize.height > 140 ){
-    //        return;
-    //    }
+    contentSize.height =30;
+
     
     CGRect selfFrame = self.mBackView.frame;
     CGFloat selfHeight = self.mTextView.frame.origin.y * 2  + contentSize.height;
@@ -237,8 +205,7 @@
     selfFrame.size.height = selfHeight;
     self.mBackView.frame = selfFrame;
     
-    //    53, 10, WIDTH_SCREEN-110, 27
-    //    self.mTextView.frame =CGRectMake(10, 9, WIDTH_SCREEN-70+45, selfHeight-20);
+
     self.mTextView.frame =CGRectMake(10, 9, WIDTH_SCREEN-70+45, selfHeight-18);
     
 //    self.mTextView.contentInset = self.mTextView.contentInset.bottom;

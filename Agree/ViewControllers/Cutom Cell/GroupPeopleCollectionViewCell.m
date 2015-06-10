@@ -7,16 +7,15 @@
 //
 
 #import "GroupPeopleCollectionViewCell.h"
-#import "SRTool.h"
 #import "UIImageView+WebCache.h"
+#import "SRImageManager.h"
 
 @implementation GroupPeopleCollectionViewCell
 
 - (void)initWithGroupUser: (Model_Group_User *)group_user {
     [self.avatarImageView.layer setCornerRadius:self.avatarImageView.frame.size.width/2];
     [self.avatarImageView.layer setMasksToBounds:YES];
-    
-    [self.avatarImageView setImageWithURL:[SRTool imageUrlFromPath:group_user.avatar_path]];
+    [self.avatarImageView sd_setImageWithURL:[SRImageManager avatarImageFromTXYFieldID:group_user.avatar_path]];
     [self.nicknameLabel setText:group_user.nickname];
     
 //    switch (group_user.role.intValue) {

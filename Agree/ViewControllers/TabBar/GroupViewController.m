@@ -11,9 +11,12 @@
 #import <SVProgressHUD.h>
 #import "MJExtension.h"
 #import "GroupDetailViewController.h"
-#import "SRTool.h"
 #import "AppDelegate.h"
 #import "UIImageView+WebCache.h"
+#import "SRImageManager.h"
+
+
+
 
 
 
@@ -27,6 +30,8 @@
     NSUInteger _chooseIndexPath;
     
     GroupChatTableViewController * GCTC;
+    
+    
 }
 
 
@@ -295,6 +300,8 @@
     [self joinGroupRelation];
 }
 
+
+//新建小组BUTTON
 - (IBAction)pressedTheRecodeButton:(id)sender {
     //重新输入验证码
     [self.groupNameLabel setText:@""];
@@ -314,7 +321,20 @@
 #pragma mark 小组图像点击BUTTON位置（稍后删除）
     
 
-    NSLog(@"111");
+    NSLog(@"小组图像点击BUTTON");
+    NSLog(@"新建小组点击BUTTON");
+    
+//    //聊天信息切换到最底层显示
+//    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:messages.count-1  inSection:0];
+//    [self tableViewIsScrollToBottom:YES withAnimated:NO];
+//    
+//    [self.userChatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+//    
+//    [_conversation markAllMessagesAsRead:YES];
+    
+
+    
+    
     
     
     
@@ -359,7 +379,7 @@
                 [self.remarkLabel setHidden:YES];
                 
                 [self.groupNameLabel setText:_joinGroup.name];
-                [self.groupCoverImageView setImageWithURL:[SRTool imageUrlFromPath:_joinGroup.avatar_path]];
+                [self.groupCoverImageView sd_setImageWithURL:[SRImageManager groupFrontCoverImageFromTXYFieldID:_joinGroup.avatar_path]];
             } else {
                 [SVProgressHUD showSuccessWithStatus:@"未找到相关数据"];
                 //未找到小组的相关数据
@@ -390,6 +410,7 @@
 - (void)intoChatView {
     [self.navigationController.tabBarController setSelectedIndex:2];
 }
+
 
 
 @end

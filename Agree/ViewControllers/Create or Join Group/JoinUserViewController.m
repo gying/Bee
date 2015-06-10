@@ -12,11 +12,16 @@
 #import "GroupViewController.h"
 #import "EaseMob.h"
 
+#import "ChoosefriendsViewController.h"
+
 
 @interface JoinUserViewController () <SRImageManagerDelegate> {
     SRNet_Manager *_netManager;
     SRImageManager *_imageManager;
     NSMutableArray *_groupMembers;
+    
+    ChoosefriendsViewController * choosefriendsVC;
+    
 }
 
 @end
@@ -79,7 +84,7 @@
             if (!_imageManager) {
                 _imageManager = [[SRImageManager alloc] initWithDelegate:self];
             }
-            self.theGroup.avatar_path =  [_imageManager updateGroupCoverToBucket:self.groupCover];
+            [_imageManager updateImageToTXY:self.groupCover];
             self.groupCover = nil;
         } else {
             [_netManager addGroup:self.theGroup withMembers:_groupMembers];
@@ -113,7 +118,8 @@
     [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
-- (void)imageUpladDone {
+- (void)imageUploadDoneWithFieldID:(NSString *)fieldID {
+    self.theGroup.avatar_path = fieldID;
     [_netManager addGroup:self.theGroup withMembers:_groupMembers];
 }
 
@@ -124,14 +130,20 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
+#pragma mark - Navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"gotoChooseFriend"]) {
+        //进入多选加入好友界面时,将原本的备选数组置入
+        if (!self.choosePeopleArray) {
+            self.choosePeopleArray = [[NSMutableArray alloc] init];
+        }
+        ChoosefriendsViewController *childController = (ChoosefriendsViewController *)segue.destinationViewController;
+        childController.choosePeopleArray = self.choosePeopleArray;
+    }
 }
-*/
+
 
 @end

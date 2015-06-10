@@ -29,8 +29,8 @@
 //#define kBaseUrlString  @"http://115.28.170.240/webroot/"
 
 //#define kBaseUrlString  @"http://203.195.159.110/webroot/"
-//#define kBaseUrlString  @"http://interface.beagree.com/webroot/"
-#define kBaseUrlString  @"http://120.25.218.3/webroot/"
+#define kBaseUrlString  @"http://interface.beagree.com/webroot/"
+//#define kBaseUrlString  @"http://120.25.218.3/webroot/"
 #define kInterfaceUrlString @"sr_interface.php"
 //#define kInterfaceUrlString @"srtext.php"
 

@@ -15,7 +15,6 @@
 #import "GroupViewController.h"
 #import "SRImageManager.h"
 #import "UIImageView+WebCache.h"
-#import "SRTool.h"
 
 @interface CreateGroupViewController () <UITextFieldDelegate, SRNetManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, SRImageManagerDelegate> {
     Model_Group *_newGroup;
@@ -49,6 +48,8 @@
 - (IBAction)pressedTheCoverButton:(id)sender {
     //点击小组封面按钮
     [self imageBtnClick];
+    NSLog(@"现在操作小组封面按钮");
+    
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -86,6 +87,8 @@
         UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择图片来源" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"拍照" otherButtonTitles:@"图片库", nil];
         [sheet showInView:self.view];
     }
+    
+    NSLog(@"现在操作图片按钮");
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -127,6 +130,7 @@
 - (IBAction)pressedTheCodeBackButton:(id)sender {
     [self.codeInputTextField resignFirstResponder];
     [self.codeView setHidden:YES];
+    NSLog(@"收到邀请码");
 }
 
 - (IBAction)pressedTheJoinButton:(id)sender {
@@ -146,6 +150,10 @@
         GroupViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
         [rootController joinGroupRelation];
     });
+    
+    NSLog(@"222");
+    
+    
 }
 
 - (IBAction)pressedTheRecodeButton:(id)sender {
@@ -167,6 +175,9 @@
     
     
     [self.codeInputTextField becomeFirstResponder];
+    
+    NSLog(@"333");
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -206,7 +217,7 @@
                 [self.remarkLabel setHidden:YES];
                 
                 [self.groupNameLabel setText:_joinGroup.name];
-                [self.groupCoverImageView setImageWithURL:[SRTool imageUrlFromPath:_joinGroup.avatar_path]];
+                [self.groupCoverImageView sd_setImageWithURL:[SRImageManager groupFrontCoverImageFromTXYFieldID:_joinGroup.avatar_path]];
             } else {
                 [SVProgressHUD showErrorWithStatus:@"未找到相关数据"];
                 //未找到小组的相关数据
@@ -240,7 +251,6 @@
         childController.theGroup.name = self.groupNameTextField.text;
         childController.groupCover = _groupCoverImage;
     }
-    
 }
 
 @end

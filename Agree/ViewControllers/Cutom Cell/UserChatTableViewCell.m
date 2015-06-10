@@ -10,17 +10,16 @@
 #import "SRTool.h"
 #import "MJPhoto.h"
 #import "MJPhotoBrowser.h"
-//#import "SRAccountView.h"
 #import "UIImageView+WebCache.h"
 #import "UIButton+WebCache.h"
 
 
 #import "IEMMessageBody.h"
-//#import "EMChatServiceDefs.h"
 #import "EMTextMessageBody.h"
 #import "EMImageMessageBody.h"
 
 #import "EaseMob.h"
+#import "SRImageManager.h"
 
 @implementation UserChatTableViewCell {
 
@@ -56,18 +55,7 @@
     
     UIImage *stretchableImage_self = [[UIImage imageNamed:@"MessageBackGround"] resizableImageWithCapInsets:UIEdgeInsetsMake(7, 10, 12, 20) resizingMode:UIImageResizingModeStretch];
     [self.messageBackgroundButton_self setBackgroundImage:stretchableImage_self forState:UIControlStateNormal];
-    
-   
-    
-
-    
 }
-
-
-
-
-
-
 
 
 - (void)initWithChat: (EModel_User_Chat *)message {
@@ -131,11 +119,10 @@
                 self.chatMessageTextLabel_self.text = ((EMTextMessageBody *)msgBody).text;
                 [self.chatDateLabel_self setText:dateString];
                 
-
+                
+                [self.avatarButton_self sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:message.avatar_path_from] forState:UIControlStateNormal];
                 
                 
-                
-                [self.avatarButton_self setBackgroundImageWithURL:[SRTool miniImageUrlFromPath:message.avatar_path_from] forState:UIControlStateNormal];
 
                 
             } else {
@@ -160,7 +147,8 @@
                 [self.chatDateLabel setText:dateString];
                 
                 //处理头像信息
-                [self.avatarButton setBackgroundImageWithURL:[SRTool miniImageUrlFromPath:_chat.avatar_path_from] forState:UIControlStateNormal];
+                [self.avatarButton sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:message.avatar_path_from] forState:UIControlStateNormal];
+                
             }
         }
             break;
@@ -177,7 +165,7 @@
                 
                 [self.chatDateLabel_self setText:dateString];
                 
-                [self.avatarButton_self setBackgroundImageWithURL:[SRTool miniImageUrlFromPath:_chat.avatar_path_from] forState:UIControlStateNormal];
+                [self.avatarButton_self sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:message.avatar_path_from] forState:UIControlStateNormal];
                 
                 self.imageButton_self.frame = CGRectMake(self.imageButton_self.frame.origin.x, self.imageButton_self.frame.origin.y, body.thumbnailImage.size.width, body.thumbnailImage.size.height);
                 
@@ -188,7 +176,7 @@
                     [self.imageButton_self setBackgroundImage:[UIImage imageWithContentsOfFile:body.thumbnailLocalPath] forState:UIControlStateNormal];
                 } else {
                     //如果本地文件不存在,读取网络文件
-                    [self.imageButton_self setBackgroundImageWithURL:[NSURL URLWithString:body.thumbnailRemotePath] forState:UIControlStateNormal];
+                    [self.imageButton_self sd_setBackgroundImageWithURL:[NSURL URLWithString:body.thumbnailRemotePath] forState:UIControlStateNormal];
                 }
 
             } else {
@@ -202,7 +190,7 @@
                 [self.chatDateLabel setText:dateString];
                 
                 //处理头像信息
-                [self.avatarButton setBackgroundImageWithURL:[SRTool miniImageUrlFromPath:message.avatar_path_from] forState:UIControlStateNormal];
+                [self.avatarButton sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:message.avatar_path_from] forState:UIControlStateNormal];
                 
                 
                 if (body.thumbnailLocalPath) {
@@ -211,7 +199,7 @@
                     [self.imageButton setBackgroundImage:[UIImage imageWithContentsOfFile:body.thumbnailLocalPath] forState:UIControlStateNormal];
                 } else {
                     //如果本地文件不存在,读取网络文件
-                    [self.imageButton setBackgroundImageWithURL:[NSURL URLWithString:body.thumbnailRemotePath] forState:UIControlStateNormal];
+                    [self.imageButton sd_setBackgroundImageWithURL:[NSURL URLWithString:body.thumbnailRemotePath] forState:UIControlStateNormal];
                 }
             }
         }

@@ -10,6 +10,8 @@
 #import "Model_Group.h"
 #import "GroupDetailViewController.h"
 
+
+
 @interface GroupChatTableViewController : UITableViewController
 
 @property (nonatomic, strong)NSMutableArray *chatArray;
@@ -18,6 +20,11 @@
 @property (nonatomic, strong)GroupDetailViewController *rootController;
 
 @property (nonatomic, strong)UITableViewCell * longTapCell;
+
+
+@property (nonatomic, strong)Model_Group_User*user;
+
+
 
 - (void)loadChatData;
 //- (void)loadChatFromNet;

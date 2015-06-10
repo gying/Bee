@@ -11,7 +11,7 @@
 #import <SVProgressHUD.h>
 #import "MJExtension.h"
 #import "UIImageView+WebCache.h"
-#import "SRTool.h"
+#import "SRImageManager.h"
 
 
 @interface SelectFriendViewController () <SRNetManagerDelegate> {
@@ -68,7 +68,7 @@
     [self.accountTextField setText:@""];
 //    [self.remarkLabel setText:@""];
     [self.avatarImage setHidden:YES];
-    [self.avatarImage setImageWithURL:nil];
+    [self.avatarImage sd_setImageWithURL:nil];
     [self.reInputButton setHidden:YES];
     [self.remarkLabel setText:@"输入好友必聚号或绑定的手机号码"];
     
@@ -90,7 +90,7 @@
                 [self.remarkLabel setText:_user.nickname];
                 
                 [self.accountTextField setHidden:YES];
-                [self.avatarImage setImageWithURL:[SRTool imageUrlFromPath:_user.avatar_path]];
+                [self.avatarImage sd_setImageWithURL:[SRImageManager avatarImageFromTXYFieldID:_user.avatar_path]];
                 [self.avatarImage setHidden:NO];
                 
                 [self.reInputButton setHidden:NO];

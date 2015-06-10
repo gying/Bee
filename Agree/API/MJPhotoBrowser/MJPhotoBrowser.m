@@ -7,9 +7,10 @@
 #import <QuartzCore/QuartzCore.h>
 #import "MJPhotoBrowser.h"
 #import "MJPhoto.h"
-#import "SDWebImageManager+MJ.h"
+//#import "SDWebImageManager+MJ.h"
 #import "MJPhotoView.h"
 #import "MJPhotoToolbar.h"
+#import <SDWebImage/SDWebImageManager.h>
 
 #define kPadding 10
 #define kPhotoViewTagOffset 1000
@@ -230,12 +231,20 @@
 {
     if (index > 0) {
         MJPhoto *photo = _photos[index - 1];
-        [SDWebImageManager downloadWithURL:photo.url];
+        [[SDWebImageManager sharedManager] downloadImageWithURL:photo.url
+                                                        options:SDWebImageLowPriority|SDWebImageRetryFailed
+                                                       progress:nil completed: ^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+                                                
+                                                       }];
     }
     
     if (index < _photos.count - 1) {
         MJPhoto *photo = _photos[index + 1];
-        [SDWebImageManager downloadWithURL:photo.url];
+        [[SDWebImageManager sharedManager] downloadImageWithURL:photo.url
+                                                        options:SDWebImageLowPriority|SDWebImageRetryFailed
+                                                       progress:nil completed: ^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+                                                           
+                                                       }];
     }
 }
 

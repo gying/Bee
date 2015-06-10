@@ -47,9 +47,6 @@
     UIView * HeadView;
     
     float tableCellHeight;
-
-    
-    
 }
 
 @end
@@ -62,26 +59,14 @@
     // Do any additional setup after loading the view.
     
     self.accountView = [[SRAccountView alloc] init];
+    
     self.accountView.rootController = self;
     //
    self.automaticallyAdjustsScrollViewInsets = false;
     
-//    self.userChatTableView.tableHeaderView.hidden = YES;
-//    
-//    self.userChatTableView.tableHeaderView.backgroundColor = [UIColor redColor];
-//    
-    
-    
-     
-    
-    
     
     
 
-
-    
-
-    
     
     //读取私信的消息列表
     _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:self.user.pk_user.stringValue isGroup:NO];
@@ -117,11 +102,21 @@
                                                 delegate:self
                                        cancelButtonTitle:@"取消"
                                        otherButtonTitles:@"确认", nil];
-    [self.userChatTableView reloadData];
+
+
+//  [self.userChatTableView reloadData];
+    
+
+    //聊天信息切换到最底层显示
+    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:messages.count-1  inSection:0];
+    
     [self tableViewIsScrollToBottom:YES withAnimated:NO];
+    
+    [self.userChatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    
     [_conversation markAllMessagesAsRead:YES];
     
-    //    [self.rootController.tableView reloadData];
+    
 }
 
 
@@ -153,7 +148,8 @@
         EModel_User_Chat *chat = [EModel_User_Chat repackEmessage:message withSender:self.user];
         [_chatArray addObject:chat];
         [self.userChatTableView reloadData];
-        [self tableViewIsScrollToBottom:YES withAnimated:YES];
+        //聊天信息切换到最底层显示
+
     }
 }
 
@@ -551,6 +547,7 @@
     NSLog(@"%@",_longTapCell.chatMessageTextLabel_self.text);
     
     NSLog(@"%@",_longTapCell.chatMessageTextLabel.text);
+    
     
     
 }
