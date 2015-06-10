@@ -105,6 +105,9 @@
     [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
+//点击微信登录按钮
+- (IBAction)tapWechatButton:(UIButton *)sender {
+}
 
 
 #pragma mark - Navigation

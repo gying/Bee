@@ -58,16 +58,6 @@
     
     
 //    [self.choosefriendsTableview setEditing:YES];
-    
-    [self.choosefriendsTableview setEditing:YES];
-    
-    
-    
-    
-    
-    
-    
-    
 }
 
 - (void)loadDataFromNet
@@ -101,46 +91,33 @@
     }
     Model_User *user = [_friendArray objectAtIndex:indexPath.row];
     [cell initWithUser:user];
-
-    ;
     
-    
+    if ([self checkPeopleExist:user]) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }
     
     return cell;
 }
 
-
--(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 3;
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    //选中的cell对象
+    ChoosefriendsTableViewCell *cell = (ChoosefriendsTableViewCell *)[self.choosefriendsTableview cellForRowAtIndexPath:indexPath];
+   
+    Model_User *chooseUser = [_friendArray objectAtIndex:indexPath.row];
+    if (cell.accessoryType == UITableViewCellAccessoryNone) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        //选定加入备选数组
+        [self addPeopleToAry:chooseUser];
+    } else {
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        //取消选定,从备选数组中删除
+        [self removePeopleFromAry:chooseUser];
+    }
+    
+    //如丝般顺滑
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
-
-//-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    NSLog(@"1111");
-//    
-//    ChoosefriendsTableViewCell *cell = (ChoosefriendsTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
-//   
-//    
-//    cell.selected = !cell.selected;
-//
-//////    if (1 == cell.tag) {
-//////        cell.tag = 0;
-//////        cell.selected = false;
-//////    }else {
-//////        cell.tag = 1;
-//////        cell.selected = YES;
-//////    }
-////    
-////    cell.selected = !cell.selected;
-//
-////    if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
-////        cell.accessoryType = UITableViewCellAccessoryNone;
-////    } else {
-////        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-////    }
-//
-//    
-//}
 
 - (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType
 {
@@ -166,11 +143,50 @@
     [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
+#pragma mark - 用户备选数组的操作方法
+
+//添加用户进入备选数组
+- (void)addPeopleToAry: (Model_User *) user {
+    if (!self.choosePeopleArray) {
+        self.choosePeopleArray = [[NSMutableArray alloc] init];
+    }
+    [self.choosePeopleArray addObject:user];
+}
+
+//将用户从备选数组中删除
+- (void)removePeopleFromAry: (Model_User *) user {
+    if (!self.choosePeopleArray) {
+        return;
+    }
+    [self.choosePeopleArray removeObject:user];
+}
+
+//循环遍历,查看用户是否存在于数组中
+- (BOOL)checkPeopleExist: (Model_User *) user {
+    if (!self.choosePeopleArray) {
+        return FALSE;
+    }
+    for (Model_User *chooseUser in self.choosePeopleArray) {
+        if ([user.pk_user isEqual:chooseUser.pk_user]) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+//界面将要退出的时候,对父控制器进行被备选数组的赋值
+- (void)viewWillDisappear:(BOOL)animated {
+    
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+
 
 /*
 #pragma mark - Navigation
