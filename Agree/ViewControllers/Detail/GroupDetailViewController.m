@@ -109,7 +109,6 @@
     [self.chatTableView setDelegate:_chatDelegate];
     [self.chatTableView setDataSource:_chatDelegate];
     [_chatDelegate setRootController:self];
-    
     [_chatDelegate loadChatData];
     
     
