@@ -14,7 +14,7 @@
 
 @optional
 
-- (void)imageUpladDone;
+//- (void)imageUpladDone;
 - (void)imageUpladError;
 
 - (void)imageDelDone;
@@ -30,12 +30,12 @@
 - (id)initWithDelegate: (id<SRImageManagerDelegate>)delegate;
 
 //上传头像信息
-- (NSString *)updateAvatarImageToBucket: (UIImage *)image;
-- (NSString *)updateImageToBucket: (UIImage *)image;
+//- (NSString *)updateAvatarImageToBucket: (UIImage *)image;
+//- (NSString *)updateImageToBucket: (UIImage *)image;
 
 + (UIImage *)getSubImage:(UIImage *)image withRect:(CGRect)rect;
 
-- (NSString *)updateGroupCoverToBucket: (UIImage *)image;
+//- (NSString *)updateGroupCoverToBucket: (UIImage *)image;
 - (void)delImage:(NSString *)imageName;
 
 
@@ -45,6 +45,13 @@
 
 
 //获取原始图片
-+ (NSString *)originalImageFromTXYFieldID: (NSString *)fieldID;
-
++ (NSURL *)originalImageFromTXYFieldID: (NSString *)fieldID;
+//小组封面
++ (NSURL *)groupFrontCoverImageFromTXYFieldID: (NSString *)fieldID;
+//相册缩略图
++ (NSURL *)albumThumbnailImageFromTXYFieldID: (NSString *)fieldID;
+//头像
++ (NSURL *)avatarImageFromTXYFieldID: (NSString *)fieldID;
+//头像小图
++ (NSURL *)miniAvatarImageFromTXYFieldID: (NSString *)fieldID;
 @end

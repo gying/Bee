@@ -43,141 +43,141 @@
     return smallImage;
 }
 
-- (NSString *)updateAvatarImageToBucket: (UIImage *)image {
-    NSString *imageName = [[NSUUID UUID] UUIDString];
-    
-    OSSBucket *bucket = [[OSSBucket alloc] initWithBucket:@"superrabbit"];
-    OSSData *imageData = [[OSSData alloc] initWithBucket:bucket withKey:[NSString stringWithFormat:@"%@.png", imageName]];
-    
-    NSData *update = UIImageJPEGRepresentation(image, 0.75);
-    [imageData setData:update withType:@"image"];
-    
-    [imageData uploadWithUploadCallback:^(BOOL isSuccess, NSError *error) {
-        if (isSuccess) {
-            NSLog(@"done");
-            [self updateMiniAvatarImageToBucket:image withName:imageName];
-        } else {
-            NSLog(@"errorInfo_testDataUploadWithProgress:%@", [error userInfo]);
-            
-        }
-    } withProgressCallback:^(float progress) {
-        NSLog(@"current get %f", progress);
-        if (1.0 == progress) {
-            //            [SVProgressHUD showSuccessWithStatus:@"上传成功"];
-        }
-    }];
-    return imageName;
-}
+//- (NSString *)updateAvatarImageToBucket: (UIImage *)image {
+//    NSString *imageName = [[NSUUID UUID] UUIDString];
+//    
+//    OSSBucket *bucket = [[OSSBucket alloc] initWithBucket:@"superrabbit"];
+//    OSSData *imageData = [[OSSData alloc] initWithBucket:bucket withKey:[NSString stringWithFormat:@"%@.png", imageName]];
+//    
+//    NSData *update = UIImageJPEGRepresentation(image, 0.75);
+//    [imageData setData:update withType:@"image"];
+//    
+//    [imageData uploadWithUploadCallback:^(BOOL isSuccess, NSError *error) {
+//        if (isSuccess) {
+//            NSLog(@"done");
+//            [self updateMiniAvatarImageToBucket:image withName:imageName];
+//        } else {
+//            NSLog(@"errorInfo_testDataUploadWithProgress:%@", [error userInfo]);
+//            
+//        }
+//    } withProgressCallback:^(float progress) {
+//        NSLog(@"current get %f", progress);
+//        if (1.0 == progress) {
+//            //            [SVProgressHUD showSuccessWithStatus:@"上传成功"];
+//        }
+//    }];
+//    return imageName;
+//}
 
-//上传缩小的头像图片
-- (NSString *)updateMiniAvatarImageToBucket: (UIImage *)image withName: (NSString *)imageName {
-    NSString *miniImageName = [[NSString alloc] initWithFormat:@"%@_mini.png",imageName];
-    UIImage *miniImage = [SRImageManager getSubImage:image withRect:CGRectMake(0, 0, 90, 90)];
-    NSData *update = UIImageJPEGRepresentation(miniImage, 0.2);
-    
-    OSSBucket *bucket = [[OSSBucket alloc] initWithBucket:@"superrabbit"];
-    OSSData *imageData = [[OSSData alloc] initWithBucket:bucket withKey:miniImageName];
-    
-    [imageData setData:update withType:@"image"];
-    [imageData uploadWithUploadCallback:^(BOOL isSuccess, NSError *error) {
-        if (isSuccess) {
-            [self.delegate imageUpladDone];
-            
-        } else {
-            [self.delegate imageUpladError];
-            NSLog(@"errorInfo_testDataUploadWithProgress:%@", [error userInfo]);
-            
-        }
-    } withProgressCallback:^(float progress) {
-        NSLog(@"current get %f", progress);
-    }];
-    
-    
-    return nil;
-}
+////上传缩小的头像图片
+//- (NSString *)updateMiniAvatarImageToBucket: (UIImage *)image withName: (NSString *)imageName {
+//    NSString *miniImageName = [[NSString alloc] initWithFormat:@"%@_mini.png",imageName];
+//    UIImage *miniImage = [SRImageManager getSubImage:image withRect:CGRectMake(0, 0, 90, 90)];
+//    NSData *update = UIImageJPEGRepresentation(miniImage, 0.2);
+//    
+//    OSSBucket *bucket = [[OSSBucket alloc] initWithBucket:@"superrabbit"];
+//    OSSData *imageData = [[OSSData alloc] initWithBucket:bucket withKey:miniImageName];
+//    
+//    [imageData setData:update withType:@"image"];
+//    [imageData uploadWithUploadCallback:^(BOOL isSuccess, NSError *error) {
+//        if (isSuccess) {
+//            [self.delegate imageUpladDone];
+//            
+//        } else {
+//            [self.delegate imageUpladError];
+//            NSLog(@"errorInfo_testDataUploadWithProgress:%@", [error userInfo]);
+//            
+//        }
+//    } withProgressCallback:^(float progress) {
+//        NSLog(@"current get %f", progress);
+//    }];
+//    
+//    
+//    return nil;
+//}
 
-- (NSString *)updateImageToBucket: (UIImage *)image {
-    NSString *imageName = [[NSUUID UUID] UUIDString];
-
-    OSSBucket *bucket = [[OSSBucket alloc] initWithBucket:@"superrabbit"];
-    OSSData *imageData = [[OSSData alloc] initWithBucket:bucket withKey:[NSString stringWithFormat:@"%@.png", imageName]];
-    image = [SRImageManager scaleImage:image toScale:image.size.height>image.size.width?1920/image.size.height:1920/image.size.width];
-    
-    NSData *update = UIImageJPEGRepresentation(image, 0.2);
-    [imageData setData:update withType:@"image"];
-    
-    [imageData uploadWithUploadCallback:^(BOOL isSuccess, NSError *error) {
-        if (isSuccess) {
-            NSLog(@"done");
-            [self updateMiniImageToBucket:image withName:imageName];
-        } else {
-            NSLog(@"errorInfo_testDataUploadWithProgress:%@", [error userInfo]);
-            
-        }
-    } withProgressCallback:^(float progress) {
-        NSLog(@"current get %f", progress);
-        if (1.0 == progress) {
-//            [SVProgressHUD showSuccessWithStatus:@"上传成功"];
-        }
-    }];
-    return imageName;
-}
-
-- (NSString *)updateGroupCoverToBucket: (UIImage *)image {
-    NSString *imageName = [[NSUUID UUID] UUIDString];
-    
-    OSSBucket *bucket = [[OSSBucket alloc] initWithBucket:@"superrabbit"];
-    OSSData *imageData = [[OSSData alloc] initWithBucket:bucket withKey:[NSString stringWithFormat:@"%@.png", imageName]];
-    image = [SRImageManager scaleImage:image toScale:image.size.height>image.size.width?1920/image.size.height:1920/image.size.width];
-    image = [SRImageManager getSubImage:image withRect:CGRectMake(0, 0, 300, 300)];
-    NSData *update = UIImageJPEGRepresentation(image, 0.7);
-    [imageData setData:update withType:@"image"];
-    
-    [imageData uploadWithUploadCallback:^(BOOL isSuccess, NSError *error) {
-        if (isSuccess) {
+//- (NSString *)updateImageToBucket: (UIImage *)image {
+//    NSString *imageName = [[NSUUID UUID] UUIDString];
+//
+//    OSSBucket *bucket = [[OSSBucket alloc] initWithBucket:@"superrabbit"];
+//    OSSData *imageData = [[OSSData alloc] initWithBucket:bucket withKey:[NSString stringWithFormat:@"%@.png", imageName]];
+//    image = [SRImageManager scaleImage:image toScale:image.size.height>image.size.width?1920/image.size.height:1920/image.size.width];
+//    
+//    NSData *update = UIImageJPEGRepresentation(image, 0.2);
+//    [imageData setData:update withType:@"image"];
+//    
+//    [imageData uploadWithUploadCallback:^(BOOL isSuccess, NSError *error) {
+//        if (isSuccess) {
 //            NSLog(@"done");
 //            [self updateMiniImageToBucket:image withName:imageName];
-            [self.delegate imageUpladDone];
-        } else {
-            [self.delegate imageUpladError];
-            NSLog(@"errorInfo_testDataUploadWithProgress:%@", [error userInfo]);
-            
-        }
-    } withProgressCallback:^(float progress) {
-        NSLog(@"current get %f", progress);
-        if (1.0 == progress) {
-            //            [SVProgressHUD showSuccessWithStatus:@"上传成功"];
-        }
-    }];
-    return imageName;
-}
+//        } else {
+//            NSLog(@"errorInfo_testDataUploadWithProgress:%@", [error userInfo]);
+//            
+//        }
+//    } withProgressCallback:^(float progress) {
+//        NSLog(@"current get %f", progress);
+//        if (1.0 == progress) {
+////            [SVProgressHUD showSuccessWithStatus:@"上传成功"];
+//        }
+//    }];
+//    return imageName;
+//}
 
-- (NSString *)updateMiniImageToBucket: (UIImage *)image withName: (NSString *)imageName {
-    
-    
-    NSString *miniImageName = [[NSString alloc] initWithFormat:@"%@_mini.png",imageName];
-    UIImage *miniImage = [SRImageManager getSubImage:image withRect:CGRectMake(0, 0, 300, 300)];
+//- (NSString *)updateGroupCoverToBucket: (UIImage *)image {
+//    NSString *imageName = [[NSUUID UUID] UUIDString];
+//    
+//    OSSBucket *bucket = [[OSSBucket alloc] initWithBucket:@"superrabbit"];
+//    OSSData *imageData = [[OSSData alloc] initWithBucket:bucket withKey:[NSString stringWithFormat:@"%@.png", imageName]];
+//    image = [SRImageManager scaleImage:image toScale:image.size.height>image.size.width?1920/image.size.height:1920/image.size.width];
+//    image = [SRImageManager getSubImage:image withRect:CGRectMake(0, 0, 300, 300)];
+//    NSData *update = UIImageJPEGRepresentation(image, 0.7);
+//    [imageData setData:update withType:@"image"];
+//    
+//    [imageData uploadWithUploadCallback:^(BOOL isSuccess, NSError *error) {
+//        if (isSuccess) {
+////            NSLog(@"done");
+////            [self updateMiniImageToBucket:image withName:imageName];
+//            [self.delegate imageUpladDone];
+//        } else {
+//            [self.delegate imageUpladError];
+//            NSLog(@"errorInfo_testDataUploadWithProgress:%@", [error userInfo]);
+//            
+//        }
+//    } withProgressCallback:^(float progress) {
+//        NSLog(@"current get %f", progress);
+//        if (1.0 == progress) {
+//            //            [SVProgressHUD showSuccessWithStatus:@"上传成功"];
+//        }
+//    }];
+//    return imageName;
+//}
 
-    NSData *update = UIImageJPEGRepresentation(miniImage, 0.2);
-    
-    OSSBucket *bucket = [[OSSBucket alloc] initWithBucket:@"superrabbit"];
-    OSSData *imageData = [[OSSData alloc] initWithBucket:bucket withKey:miniImageName];
-    
-    [imageData setData:update withType:@"image"];
-    [imageData uploadWithUploadCallback:^(BOOL isSuccess, NSError *error) {
-        if (isSuccess) {
-            [self.delegate imageUpladDone];
-        } else {
-            [self.delegate imageUpladError];
-            NSLog(@"errorInfo_testDataUploadWithProgress:%@", [error userInfo]);
-            
-        }
-    } withProgressCallback:^(float progress) {
-        NSLog(@"current get %f", progress);
-    }];
-
-    return nil;
-}
+//- (NSString *)updateMiniImageToBucket: (UIImage *)image withName: (NSString *)imageName {
+//    
+//    
+//    NSString *miniImageName = [[NSString alloc] initWithFormat:@"%@_mini.png",imageName];
+//    UIImage *miniImage = [SRImageManager getSubImage:image withRect:CGRectMake(0, 0, 300, 300)];
+//
+//    NSData *update = UIImageJPEGRepresentation(miniImage, 0.2);
+//    
+//    OSSBucket *bucket = [[OSSBucket alloc] initWithBucket:@"superrabbit"];
+//    OSSData *imageData = [[OSSData alloc] initWithBucket:bucket withKey:miniImageName];
+//    
+//    [imageData setData:update withType:@"image"];
+//    [imageData uploadWithUploadCallback:^(BOOL isSuccess, NSError *error) {
+//        if (isSuccess) {
+//            [self.delegate imageUpladDone];
+//        } else {
+//            [self.delegate imageUpladError];
+//            NSLog(@"errorInfo_testDataUploadWithProgress:%@", [error userInfo]);
+//            
+//        }
+//    } withProgressCallback:^(float progress) {
+//        NSLog(@"current get %f", progress);
+//    }];
+//
+//    return nil;
+//}
 
 - (void)delImage:(NSString *)imageName {
     NSString *miniImageName = [[NSString alloc] initWithFormat:@"%@_mini.png",imageName];
@@ -206,7 +206,7 @@
 }
 
 - (BOOL)updateImageToTXY: (UIImage *)image {
-    __block NSString *fieldID;
+//    __block NSString *fieldID;
     
     //JEPG格式
     NSData *imagedata = UIImageJPEGRepresentation(image, 0.8);
@@ -225,9 +225,8 @@
                  complete:^(TXYTaskRsp *resp, NSDictionary *context)
      {
          TXYPhotoUploadTaskRsp *photoResp = (TXYPhotoUploadTaskRsp *)resp;
-         NSLog(@"upload return=%d",photoResp.retCode);
-         NSLog(@"field ID = %@", photoResp.photoURL);
-         fieldID = photoResp.photoFileId;
+//         NSLog(@"upload return=%d",photoResp.retCode);
+//         NSLog(@"field ID = %@", photoResp.photoURL);
          [self.delegate imageUploadDoneWithFieldID:photoResp.photoFileId];
      } progress:^(int64_t totalSize, int64_t sendSize, NSDictionary *context) { }
                stateChange:^(TXYUploadTaskState state, NSDictionary *context) {
@@ -238,11 +237,15 @@
                        case TXYUploadTaskStateConnecting:
                            //任务连接中
                            break;
-                       case TXYUploadTaskStateFail:
+                       case TXYUploadTaskStateFail: {
                            //任务失败
+                           [self.delegate imageUpladError];
+                       }
                            break;
-                       case TXYUploadTaskStateSuccess:
+                       case TXYUploadTaskStateSuccess: {
                            //任务成功
+                           
+                       }
                            break;
                        default:
                            break;
@@ -253,10 +256,36 @@
     return TRUE;
 }
 
-+ (NSString *)originalImageFromTXYFieldID: (NSString *)fieldID {
+//原图
++ (NSURL *)originalImageFromTXYFieldID: (NSString *)fieldID {
     NSString *urlString = [[NSString alloc] initWithFormat:@"http://201139.image.myqcloud.com/201139/0/%@/original", fieldID];
-    return urlString; 
+    return [NSURL URLWithString:urlString];
 }
+
+//小组封面
++ (NSURL *)groupFrontCoverImageFromTXYFieldID: (NSString *)fieldID {
+    NSString *urlString = [[NSString alloc] initWithFormat:@"http://201139.image.myqcloud.com/201139/0/%@/groupFrontCover", fieldID];
+    return [NSURL URLWithString:urlString];
+}
+
+//相册缩略图
++ (NSURL *)albumThumbnailImageFromTXYFieldID: (NSString *)fieldID {
+    NSString *urlString = [[NSString alloc] initWithFormat:@"http://201139.image.myqcloud.com/201139/0/%@/albumThumbnail", fieldID];
+    return [NSURL URLWithString:urlString];
+}
+
+//头像
++ (NSURL *)avatarImageFromTXYFieldID: (NSString *)fieldID {
+    NSString *urlString = [[NSString alloc] initWithFormat:@"http://201139.image.myqcloud.com/201139/0/%@/avatar", fieldID];
+    return [NSURL URLWithString:urlString];
+}
+
+//头像小图
++ (NSURL *)miniAvatarImageFromTXYFieldID: (NSString *)fieldID {
+    NSString *urlString = [[NSString alloc] initWithFormat:@"http://201139.image.myqcloud.com/201139/0/%@/miniAvatar", fieldID];
+    return [NSURL URLWithString:urlString];
+}
+
 
 
 @end

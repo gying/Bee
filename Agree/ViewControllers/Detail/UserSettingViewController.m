@@ -9,11 +9,9 @@
 #import "UserSettingViewController.h"
 #import "Model_User.h"
 #import "SRNet_Manager.h"
-#import "SRTool.h"
 #import <SVProgressHUD.h>
 #import "MJExtension.h"
 
-#import "SRTool.h"
 #import "UIImageView+WebCache.h"
 #import "SRImageManager.h"
 
@@ -62,7 +60,7 @@
 }
 
 - (void)reloadDataView {
-    [_backImageViwe setImageWithURL:[SRTool imageUrlFromPath:[Model_User loadFromUserDefaults].avatar_path]];
+    [_backImageViwe sd_setImageWithURL:[SRImageManager avatarImageFromTXYFieldID:[Model_User loadFromUserDefaults].avatar_path]];
 
     self.nicknameTextField.text = _userInfo.nickname;
     
@@ -133,8 +131,6 @@
             self.passwordTextField.text = nil;
         }
     }
-    
-    
 }
 
 - (void)imageBtnClick {
@@ -202,11 +198,13 @@
     [_backImageViwe setImage:_avatarImage];
 }
 
-- (void)imageUpladDone {
+- (void)imageUploadDoneWithFieldID:(NSString *)fieldID {
     //图片上传成功,开始更新用户数据
     Model_User *userInfo = [Model_User loadFromUserDefaults];
-    userInfo.avatar_path = _userInfo.avatar_path;
+    userInfo.avatar_path = fieldID;
     [userInfo saveToUserDefaults];
+    
+    
     //更新根控制器的用户头像
     [self.rootViewController resetAvatar];
     
@@ -288,8 +286,7 @@
             _imageManager = [[SRImageManager alloc] initWithDelegate:self];
         }
         //设置头像路径到系统头像路径
-        NSString *imageName = [_imageManager updateAvatarImageToBucket:_avatarImage];
-        _userInfo.avatar_path = imageName;
+        [_imageManager updateImageToTXY:_avatarImage];
 
     } else {
         if (_isUpdateData) {

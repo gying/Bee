@@ -70,16 +70,12 @@
     NSString *yesterdayString = [[yesterday description] substringToIndex:10];
     NSString *refDateString = [[refDate description] substringToIndex:10];
     
-    if ([refDateString isEqualToString:todayString])
-    {
+    if ([refDateString isEqualToString:todayString]) {
         return 1;
-        
     } else if ([refDateString isEqualToString:yesterdayString]) {
         return 2;
-        
     } else {
         return 3;
-        
     }
 }
 

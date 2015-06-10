@@ -7,10 +7,10 @@
 //
 
 #import "AddressBookTableViewCell.h"
-#import "SRTool.h"
 #import "UIImageView+WebCache.h"
 #import "People.h"
 #import <SVProgressHUD.h>
+#import "SRImageManager.h"
 
 
 @implementation AddressBookTableViewCell {
@@ -52,7 +52,9 @@
         [self.nicknameLabel setHidden:YES];
         [self.addressBookNameLabel setHidden:YES];
         [self.nameLabel setText:adPeople.userInfo.nickname];
-        [self.avatarImageView setImageWithURL:[SRTool miniImageUrlFromPath:adPeople.userInfo.avatar_path]];
+        [self.avatarImageView sd_setImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path]];
+
+        
         if (adPeople.userInfo.relationship) {
             switch (adPeople.userInfo.relationship.intValue) {
                 case 1: {
@@ -110,7 +112,9 @@
         
         [self.nicknameLabel setText:adPeople.userInfo.nickname];
         [self.addressBookNameLabel setText:[NSString stringWithFormat:@"通讯录名称: %@",adPeople.name]];
-        [self.avatarImageView setImageWithURL:[SRTool miniImageUrlFromPath:adPeople.userInfo.avatar_path]];
+        
+        
+        [self.avatarImageView sd_setImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path]];
     }
 }
 - (IBAction)pressedTheSendButton:(id)sender {

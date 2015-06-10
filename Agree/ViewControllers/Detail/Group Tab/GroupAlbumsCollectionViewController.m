@@ -25,7 +25,6 @@
     UIImage *_pickImage;
     SRImageManager *_imageManager;
     
-    NSString *_imageName;
     NSMutableArray *_imageViewAry;
     NSMutableDictionary *_imageViewDic;
     SRNet_Manager *_netManager;
@@ -84,20 +83,28 @@
     }
     
     [cell.cellImageView setContentMode:UIViewContentModeScaleAspectFill];
-    [cell.cellImageView setImageWithURL:[SRTool miniImageUrlFromPath:newPhoto.pk_photo] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
-        
-        //将图片转化成MJPhoto并加入数组
-        MJPhoto *photo = [[MJPhoto alloc] init];
-        photo.url = [SRTool imageUrlFromPath:newPhoto.pk_photo]; // 图片路径
-        photo.srcImageView = cell.cellImageView; // 来源于哪个UIImageView
-        if ([newPhoto.fk_user isEqual:[Model_User loadFromUserDefaults].pk_user] || [self.rootController.group.creater isEqual:[Model_User loadFromUserDefaults].pk_user] ) {
-            //如果为群主或者为图片的上传者,则可以设置删除图片代理
-            photo.delegate = self;
-        }
-            
-        //按照数序放入字典
-        [_imageViewDic setObject:photo forKey:[NSNumber numberWithInteger:indexPath.row]];
-    }];
+    
+    
+    
+    [cell.cellImageView sd_setImageWithURL:[SRImageManager albumThumbnailImageFromTXYFieldID:newPhoto.pk_photo]
+                                 completed:^(UIImage *image,
+                                             NSError *error,
+                                             SDImageCacheType cacheType,
+                                             NSURL *imageURL) {
+                                     
+                                     //将图片转化成MJPhoto并加入数组
+                                     MJPhoto *photo = [[MJPhoto alloc] init];
+                                     
+                                     photo.url = [SRImageManager originalImageFromTXYFieldID:newPhoto.pk_photo]; // 图片路径
+                                     photo.srcImageView = cell.cellImageView; // 来源于哪个UIImageView
+                                     if ([newPhoto.fk_user isEqual:[Model_User loadFromUserDefaults].pk_user] || [self.rootController.group.creater isEqual:[Model_User loadFromUserDefaults].pk_user] ) {
+                                         //如果为群主或者为图片的上传者,则可以设置删除图片代理
+                                         photo.delegate = self;
+                                     }
+                                     
+                                     //按照数序放入字典
+                                     [_imageViewDic setObject:photo forKey:[NSNumber numberWithInteger:indexPath.row]];
+                                 }];
 
     return cell;
 }
@@ -180,8 +187,9 @@
     if (!_imageManager) {
         _imageManager = [[SRImageManager alloc] initWithDelegate:self];
     }
-    _imageName = [_imageManager updateImageToBucket:_pickImage];
+    [_imageManager updateImageToTXY:_pickImage];
 }
+
 
 - (void)deletePhoto:(NSUInteger)index {
     _removePhoto = [self.photoAry objectAtIndex:index];
@@ -203,18 +211,16 @@
     //图片删除错误
 }
 
-
-- (void)imageUpladDone {
+- (void)imageUploadDoneWithFieldID:(NSString *)fieldID {
     Model_Photo *newPhoto = [[Model_Photo alloc] init];
     [newPhoto setCreate_time:[NSDate date]];
     [newPhoto setFk_group:self.rootController.group.pk_group];
     [newPhoto setFk_user:[Model_User loadFromUserDefaults].pk_user];
-    [newPhoto setPk_photo:_imageName];
+    [newPhoto setPk_photo:fieldID];
     [newPhoto setStatus:@1];
-
+    
     [self.photoAry insertObject:newPhoto atIndex:0];
     [self saveImageData:newPhoto];
-    
 }
 
 - (void)saveImageData: (Model_Photo *)photo {

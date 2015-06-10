@@ -106,20 +106,20 @@
 
 #pragma mark -
 
-- (void)setImageWithURL:(NSURL *)url {
-    [self setImageWithURL:url placeholderImage:nil];
+- (void)sd_setImageWithURL:(NSURL *)url {
+    [self sd_setImageWithURL:url placeholderImage:nil];
 }
 
-- (void)setImageWithURL:(NSURL *)url
+- (void)sd_setImageWithURL:(NSURL *)url
        placeholderImage:(UIImage *)placeholderImage
 {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request addValue:@"image/*" forHTTPHeaderField:@"Accept"];
 
-    [self setImageWithURLRequest:request placeholderImage:placeholderImage success:nil failure:nil];
+    [self sd_setImageWithURLRequest:request placeholderImage:placeholderImage success:nil failure:nil];
 }
 
-- (void)setImageWithURLRequest:(NSURLRequest *)urlRequest
+- (void)sd_setImageWithURLRequest:(NSURLRequest *)urlRequest
               placeholderImage:(UIImage *)placeholderImage
                        success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image))success
                        failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error))failure
