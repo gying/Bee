@@ -43,6 +43,8 @@
     
     EMConversation *_conversation;
     
+     
+    
     
     
 }
@@ -145,15 +147,18 @@
     }
     
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    return cell;
+    
+#pragma mark -- 消息显示最底层获取消息列表（条件）
+
 
     
-    
-    
+    return cell;
     
     
  
 }
+
+
 
 #define mark 聊天信息的操作方法
 - (void)cellLongPress:(UIGestureRecognizer *)recognizer{
