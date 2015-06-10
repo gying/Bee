@@ -9,6 +9,7 @@
 #import "ChoosefriendsTableViewCell.h"
 #import "UIButton+WebCache.h"
 #import "SRTool.h"
+#import "SRImageManager.h"
 
 @implementation ChoosefriendsTableViewCell {
     Model_User *_user;
@@ -35,9 +36,8 @@
     [self.avataButton.layer setMasksToBounds:YES];
     
     [self.avataButton addTarget:self action:@selector(tapAvatarButton:) forControlEvents:UIControlEventTouchUpInside];
-    [self.avataButton setBackgroundImageWithURL:[SRTool miniImageUrlFromPath:user.avatar_path] forState:UIControlStateNormal];
+    [self.avataButton sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:user.avatar_path] forState:UIControlStateNormal];
     [self.nicknameLabel setText:user.nickname];
-    
 
 }
 
@@ -46,9 +46,9 @@
         [self.topViewController.accountView show];
         [self.topViewController.accountView loadWithUser:_user withGroup:nil];
     }
-
-
 }
+
+
 
 
 

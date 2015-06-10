@@ -19,4 +19,7 @@
 
 
 - (void)initWithUser: (Model_User *)user;
+
+
+
 @end

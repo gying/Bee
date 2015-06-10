@@ -19,4 +19,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *choosefriendsTableview;
 
 @property (nonatomic, strong)SRAccountView *accountView;
+
+@property (nonatomic, strong)NSMutableArray *choosePeopleArray;
+
 @end

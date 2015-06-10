@@ -37,11 +37,6 @@
     [self.groupCoverButton setTitle:@"" forState:UIControlStateNormal];
     
     [self.groupNameTextField setText:self.theGroup.name];
-    
-    
-    
-
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -136,15 +131,19 @@
 }
 
 
-
-/*
 #pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"gotoChooseFriend"]) {
+        //进入多选加入好友界面时,将原本的备选数组置入
+        if (!self.choosePeopleArray) {
+            self.choosePeopleArray = [[NSMutableArray alloc] init];
+        }
+        ChoosefriendsViewController *childController = (ChoosefriendsViewController *)segue.destinationViewController;
+        childController.choosePeopleArray = self.choosePeopleArray;
+    }
 }
-*/
+
 
 @end

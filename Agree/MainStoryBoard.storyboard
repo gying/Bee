@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <mutableArray key="LangTingGBK.TTF">
+        <mutableArray key="Lantinghei.ttc">
+            <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHK--GBK1-0</string>
@@ -126,7 +127,7 @@
                                 </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kTe-pA-SMr">
-                                <rect key="frame" x="255" y="444" width="90" height="90"/>
+                                <rect key="frame" x="255" y="413" width="90" height="90"/>
                                 <color key="backgroundColor" red="0.34901960780000002" green="0.81960784310000001" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="90" id="lm7-9Q-Aai"/>
@@ -166,22 +167,38 @@
                                     <segue destination="cZm-l6-3sw" kind="show" id="qgH-Hj-qc4"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rou-Mr-LsS">
+                                <rect key="frame" x="16" y="533" width="568" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="y21-1c-4Zn"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="Lantinghei SC" pointSize="16"/>
+                                <state key="normal" title="使用微信帐号登录">
+                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="tapWechatButton:" destination="xiO-U3-gLt" eventType="touchUpInside" id="Ate-cP-SdW"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="f9o-6e-QZR" firstAttribute="top" secondItem="O7U-3V-OwQ" secondAttribute="bottom" constant="35" id="0GI-4H-DbP"/>
+                            <constraint firstItem="rou-Mr-LsS" firstAttribute="top" secondItem="kTe-pA-SMr" secondAttribute="bottom" constant="30" id="42a-Of-j81"/>
                             <constraint firstAttribute="centerX" secondItem="O7U-3V-OwQ" secondAttribute="centerX" id="7SZ-51-FdA"/>
                             <constraint firstItem="f9o-6e-QZR" firstAttribute="trailing" secondItem="ZUV-VS-cKv" secondAttribute="trailingMargin" id="8M3-gX-Rfi"/>
                             <constraint firstItem="cNP-e4-2eI" firstAttribute="trailing" secondItem="ZUV-VS-cKv" secondAttribute="trailingMargin" id="Amt-Bb-ovx"/>
+                            <constraint firstItem="rou-Mr-LsS" firstAttribute="leading" secondItem="ZUV-VS-cKv" secondAttribute="leading" constant="16" id="IoG-Ha-1dp"/>
                             <constraint firstAttribute="centerX" secondItem="cNP-e4-2eI" secondAttribute="centerX" id="MXE-wN-C8E"/>
                             <constraint firstItem="O7U-3V-OwQ" firstAttribute="trailing" secondItem="ZUV-VS-cKv" secondAttribute="trailingMargin" id="XVI-bM-nRe"/>
                             <constraint firstItem="O7U-3V-OwQ" firstAttribute="top" secondItem="cNP-e4-2eI" secondAttribute="bottom" constant="69" id="aGc-3L-4HE"/>
+                            <constraint firstAttribute="trailing" secondItem="rou-Mr-LsS" secondAttribute="trailing" constant="16" id="bBr-AZ-UIR"/>
                             <constraint firstItem="O7U-3V-OwQ" firstAttribute="leading" secondItem="ZUV-VS-cKv" secondAttribute="leadingMargin" id="chI-Hm-v4K"/>
                             <constraint firstItem="f9o-6e-QZR" firstAttribute="leading" secondItem="ZUV-VS-cKv" secondAttribute="leadingMargin" id="dIH-GD-AYa"/>
                             <constraint firstAttribute="centerX" secondItem="kTe-pA-SMr" secondAttribute="centerX" id="doz-rg-pvh"/>
                             <constraint firstAttribute="centerX" secondItem="f9o-6e-QZR" secondAttribute="centerX" id="fOQ-jQ-Jhu"/>
                             <constraint firstItem="cNP-e4-2eI" firstAttribute="top" secondItem="3Bg-o2-avO" secondAttribute="bottom" constant="62" id="kwO-kt-bB6"/>
-                            <constraint firstItem="aLe-bl-0cW" firstAttribute="top" secondItem="kTe-pA-SMr" secondAttribute="bottom" constant="66" id="l7v-Fn-NTl"/>
+                            <constraint firstItem="aLe-bl-0cW" firstAttribute="top" secondItem="rou-Mr-LsS" secondAttribute="bottom" constant="37" id="wEa-NA-RG2"/>
                             <constraint firstItem="cNP-e4-2eI" firstAttribute="leading" secondItem="ZUV-VS-cKv" secondAttribute="leadingMargin" id="zoq-27-3wS"/>
                         </constraints>
                     </view>
@@ -1416,7 +1433,7 @@
                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="75R-C4-GW2" kind="push" id="sib-Nm-X2J"/>
+                                    <segue destination="75R-C4-GW2" kind="show" id="sib-Nm-X2J"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="GroupNameField" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="小组名称" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7ML-Co-RWE">
@@ -1495,7 +1512,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="70" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="OtY-2I-2CT">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="70" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="OtY-2I-2CT">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -1514,7 +1531,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yBi-Fl-JCe">
                                                     <rect key="frame" x="65" y="4" width="451" height="46"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -1532,6 +1549,12 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="OtY-2I-2CT" secondAttribute="trailing" id="NxY-lU-rmn"/>
+                            <constraint firstItem="9U4-8U-W3c" firstAttribute="top" secondItem="OtY-2I-2CT" secondAttribute="bottom" id="POp-1X-QqP"/>
+                            <constraint firstItem="OtY-2I-2CT" firstAttribute="leading" secondItem="jdh-CR-vhu" secondAttribute="leading" id="bv7-K2-hFR"/>
+                            <constraint firstItem="OtY-2I-2CT" firstAttribute="top" secondItem="jdh-CR-vhu" secondAttribute="top" id="j08-g9-jO6"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Sx0-FZ-eWR"/>
                     <connections>
