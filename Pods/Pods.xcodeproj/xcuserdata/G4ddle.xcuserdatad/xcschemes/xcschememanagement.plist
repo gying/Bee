@@ -2,34 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>SchemeUserState</key>
-	<dict>
-		<key>Pods-AFNetworking.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>Pods-EaseMobSDK.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict
-		<key>Pods-SDWebImage.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>Pods-SVProgressHUD.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>Pods.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>173F313795068EC19177F224</key>
@@ -42,49 +14,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-<<<<<<< HEAD
-		<key>173F313795068EC19177F224</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>2F47A6C4E6CADCBF39BE5827</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>60440DA062B940C6710DB1A7</key>
-=======
-		<key>8B991B05CAB4E4B3987EA05D</key>
->>>>>>> Gaddle_TXImage
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-<<<<<<< HEAD
 		<key>8B991B05CAB4E4B3987EA05D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>CC96D10BB44BAE61B7255A13</key>
-=======
 		<key>D13C938093C2BB89FFD14B68</key>
->>>>>>> Gaddle_TXImage
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-<<<<<<< HEAD
-		<key>D13C938093C2BB89FFD14B68</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>D3CC553AC226B6676537300C</key>
-=======
-		<key>D53D55B86E114871E97063B1</key>
->>>>>>> Gaddle_TXImage
 		<dict>
 			<key>primary</key>
 			<true/>
