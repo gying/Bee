@@ -14,8 +14,9 @@
 
 #import <SVProgressHUD.h>
 
-#import "ContactsTableViewCell.h"
 
+
+#import "ChoosefriendsTableViewCell.h"
 #import "SRAccountView.h"
 
 #import "UserChatViewController.h"
@@ -31,12 +32,14 @@
 
 
 
-@interface ChoosefriendsViewController ()<SRNetManagerDelegate>
+@interface ChoosefriendsViewController ()<SRNetManagerDelegate,UITableViewDelegate>
 
 {
     NSInteger _selectIndex;
     NSMutableArray *_friendArray;
     SRNet_Manager *_netManager;
+    
+//    ChoosefriendsTableViewCell *cell;
 }
 
 @end
@@ -48,10 +51,18 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    self.view.backgroundColor = [UIColor yellowColor];
-    
     [self setTitle:@"选择好友"];
     [self loadDataFromNet];
+    
+//    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
+    
+    
+//    [self.choosefriendsTableview setEditing:YES];
+    
+    [self.choosefriendsTableview setEditing:YES];
+    
+    
+    
     
     
     
@@ -59,17 +70,17 @@
     
 }
 
-- (void)loadDataFromNet {
+- (void)loadDataFromNet
+{
     if (!_netManager) {
         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
     }
-    
     Model_User *sendUser = [[Model_User alloc] init];
     [sendUser setPk_user:[Model_User loadFromUserDefaults].pk_user];
     [_netManager getFriendList:sendUser];
 }
 
-#pragma mark - Table view data source
+#pragma mark - ChooseFriendsTableView的代理
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
@@ -80,73 +91,80 @@
 }
 
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ContactsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContactsCell" forIndexPath:indexPath];
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    ChoosefriendsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ChooseFriends" forIndexPath:indexPath];
     
     if (nil == cell) {
-        cell = [[ContactsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                            reuseIdentifier:@"ContactsCell"];
+        cell = [[ChoosefriendsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                            reuseIdentifier:@"ChooseFriends"];
     }
     Model_User *user = [_friendArray objectAtIndex:indexPath.row];
     [cell initWithUser:user];
-//    [cell setTopViewController:self];
-    
 
+    ;
+    
+    
     
     return cell;
-    
-    
-
 }
 
-//- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+
+-(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 3;
+}
+
+//-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    NSLog(@"1111");
 //    
-//    _selectIndex = indexPath.row;
-//    return indexPath;
+//    ChoosefriendsTableViewCell *cell = (ChoosefriendsTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+//   
+//    
+//    cell.selected = !cell.selected;
+//
+//////    if (1 == cell.tag) {
+//////        cell.tag = 0;
+//////        cell.selected = false;
+//////    }else {
+//////        cell.tag = 1;
+//////        cell.selected = YES;
+//////    }
+////    
+////    cell.selected = !cell.selected;
+//
+////    if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
+////        cell.accessoryType = UITableViewCellAccessoryNone;
+////    } else {
+////        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+////    }
+//
+//    
 //}
 
-
-
-
-
-
-
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    
- 
+- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType
+{
     switch (interfaceType) {
         case kGetFriendList: {
             if (jsonDic) {
-                //        NSMutableArray *tempArray = [[NSMutableArray alloc] init];
                 _friendArray = (NSMutableArray *)[Model_User objectArrayWithKeyValuesArray:jsonDic];
-                
-                
-                
             } else {
                 _friendArray = nil;
                 _friendArray = [[NSMutableArray alloc] init];
             }
         }
             break;
-            
         default:
             break;
     }
     [SVProgressHUD dismiss];
     [self.choosefriendsTableview reloadData];
     
-    
 }
-
-- (void)interfaceReturnDataError:(int)interfaceType {
+- (void)interfaceReturnDataError:(int)interfaceType
+{
     [SVProgressHUD showErrorWithStatus:@"网络错误"];
-    
 }
-
-
-
-
-
 
 
 - (void)didReceiveMemoryWarning {

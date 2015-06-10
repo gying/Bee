@@ -43,6 +43,8 @@
     
     EMConversation *_conversation;
     
+     
+    
     
     
 }
@@ -145,15 +147,18 @@
     }
     
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    return cell;
+    
+#pragma mark -- 消息显示最底层获取消息列表（条件）
+
 
     
-    
-    
+    return cell;
     
     
  
 }
+
+
 
 #define mark 聊天信息的操作方法
 - (void)cellLongPress:(UIGestureRecognizer *)recognizer{
@@ -499,16 +504,23 @@
                             [self.chatArray addObject:chat];
                         }
                     }
+
+                    
                     
                     [_conversation markAllMessagesAsRead:YES];
                     //清空小组的提示
                     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
                     [delegate.groupDelegate setDataChange:TRUE];
-                    [self reloadTableViewIsScrollToBottom:YES withAnimated:NO];
                     
+                    //聊天信息切换到最底层显示
+                    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:messages.count-1  inSection:0];
                     
+                    [self reloadTableViewIsScrollToBottom:NO withAnimated:NO];
                     
+                    [self.chatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                     
                     
+
                     
                 } 
             }
@@ -524,6 +536,34 @@
     
     [SVProgressHUD dismiss];
 }
+
+- (void)tableViewIsScrollToBottom: (BOOL) isScroll
+                     withAnimated: (BOOL)isAnimated {
+    
+    float headHight = 0;
+    for (EModel_Chat *message in _chatArray) {
+        headHight += [self cellHeightFromMessage:message].floatValue;
+    }
+    
+    headHight = self.chatTableView.frame.size.height - headHight;
+    if (headHight <= 0) {
+        headHight = 0;
+    }
+    
+    self.chatTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.chatTableView.frame.size.width, headHight)];
+    if (isScroll) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSInteger s = [self.chatTableView numberOfSections];
+            if (s<1) return;
+            NSInteger r = [self.chatTableView numberOfRowsInSection:s-1];
+            if (r<1) return;
+            NSIndexPath *ip = [NSIndexPath indexPathForRow:r-1 inSection:s-1];
+            
+            [self.chatTableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionBottom animated:isAnimated];
+        });
+    }
+}
+
 
 - (void)interfaceReturnDataError:(int)interfaceType {
     [SVProgressHUD dismiss];

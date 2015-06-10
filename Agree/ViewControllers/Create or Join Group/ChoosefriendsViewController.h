@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SRAccountView.h"
 
 
 
@@ -17,5 +18,5 @@
 @interface ChoosefriendsViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UITableView *choosefriendsTableview;
 
-
+@property (nonatomic, strong)SRAccountView *accountView;
 @end

@@ -40,6 +40,8 @@
     NSDictionary *selDic;
     
     GroupChatTableViewCell *cell;
+    
+    EMConversation *_conversation;
 }
 
 @end
@@ -100,23 +102,23 @@
     
     
     _chatDelegate = [[GroupChatTableViewController alloc] init];
-    
-//    self.chatTableView.tableHeaderView.hidden = YES;
-//    self.chatTableView.tableHeaderView.backgroundColor = [UIColor redColor];
-    
-    _chatDelegate.group = self.group;
 
+    _chatDelegate.group = self.group;
     _chatDelegate.chatTableView = self.chatTableView;
     [self.chatTableView setDelegate:_chatDelegate];
     [self.chatTableView setDataSource:_chatDelegate];
-    
-
-//    self.chatTableView.tableHeaderView.hidden = YES;
-     // _chatDelegate.chatTableView.tableHeaderView.hidden = YES;
-    
-
     [_chatDelegate setRootController:self];
     [_chatDelegate loadChatData];
+    
+    
+    //聊天信息切换到最底层显示
+    
+//    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:_chatDelegate.chatArray.count-1  inSection:0];
+//  [_chatDelegate tableViewIsScrollToBottom:YES withAnimated:NO];
+//    [_chatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+//    [_conversation markAllMessagesAsRead:YES];
+    
+    
     
     
     self.view.backgroundColor =[UIColor groupTableViewBackgroundColor];
@@ -130,7 +132,13 @@
     _albumsDelegate.rootController = self;
     
     [self setkeyBoard];
+    
+
+    
+    
 }
+
+
 
 - (void)didReceiveMemoryWarning {
     
