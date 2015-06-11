@@ -29,14 +29,7 @@
 //以建立代理协议的模式初始化
 - (id)initWithDelegate: (id<SRImageManagerDelegate>)delegate;
 
-//上传头像信息
-//- (NSString *)updateAvatarImageToBucket: (UIImage *)image;
-//- (NSString *)updateImageToBucket: (UIImage *)image;
-
 + (UIImage *)getSubImage:(UIImage *)image withRect:(CGRect)rect;
-
-//- (NSString *)updateGroupCoverToBucket: (UIImage *)image;
-- (void)delImage:(NSString *)imageName;
 
 
 - (BOOL)updateImageToTXY: (UIImage *)image;

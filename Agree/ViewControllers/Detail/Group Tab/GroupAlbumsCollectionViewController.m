@@ -196,7 +196,7 @@
     if (!_imageManager) {
         _imageManager = [[SRImageManager alloc] initWithDelegate:self];
     }
-    [_imageManager delImage:_removePhoto.pk_photo];
+//    [_imageManager delImage:_removePhoto.pk_photo];
 }
 
 - (void)imageDelDone {

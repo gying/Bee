@@ -11,8 +11,6 @@
 #import "APService.h"
 #import "SRNet_Manager.h"
 #import <SVProgressHUD.h>
-#import <ALBB_OSS_IOS_SDK/OSSClient.h>
-#import <ALBB_OSS_IOS_SDK/OSSTool.h>
 #import "RootAccountLoginViewController.h"
 
 #import "BMapKit.h"
@@ -150,22 +148,6 @@
     if (!ret) {
         NSLog(@"manager start failed!");
     }
-    
-    //注册阿里云OSS
-    
-    OSSClient *ossclient = [OSSClient sharedInstanceManage];
-    NSString *accessKey = @"HyDprHu2BQHp7edn"; // 实际使用中,AK/SK不应明文保存在代码中
-    NSString *secretKey = @"loWKqemVvcWH7u2RSn4EncVCkRuQcJ";
-    [ossclient setGenerateToken:^(NSString *method, NSString *md5, NSString *type, NSString *date, NSString *xoss, NSString *resource){
-        NSString *signature = nil;
-        NSString *content = [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@%@", method, md5, type, date, xoss, resource];
-        signature = [OSSTool calBase64Sha1WithData:content withKey:secretKey];
-        signature = [NSString stringWithFormat:@"OSS %@:%@", accessKey, signature];
-        NSLog(@"signature:%@", signature);
-        return signature;
-    }];
-    [ossclient setGlobalDefaultBucketAcl:PUBLIC_READ_WRITE];
-    [ossclient setGlobalDefaultBucketHostId:@"oss-cn-qingdao.aliyuncs.com"];
     
     //清除推送的消息
     [APService clearAllLocalNotifications];
