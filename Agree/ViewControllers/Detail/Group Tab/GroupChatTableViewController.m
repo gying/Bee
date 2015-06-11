@@ -517,11 +517,9 @@
                     
                     [self reloadTableViewIsScrollToBottom:NO withAnimated:NO];
                     
-                    [self.chatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-                     
-                    
-
-                    
+                    if (!(0 >= indexPath.row)) {
+                        [self.chatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                    }
                 } 
             }
         }

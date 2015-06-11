@@ -46,7 +46,6 @@
 		F05F30001AFBD50300AA6BE8 /* SRKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = F05F2FFF1AFBD50300AA6BE8 /* SRKeyboard.m */; };
 		F06765A41A9DA81E005937B4 /* PartyPeopleListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F06765A31A9DA81E005937B4 /* PartyPeopleListViewController.m */; };
 		F06A62B21A7EA016005C6155 /* GroupAlbumsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F06A62B11A7EA016005C6155 /* GroupAlbumsCollectionViewController.m */; };
-		F06C762A1B203EAE00B2DD72 /* ALBB_OSS_IOS_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F06C76291B203EAE00B2DD72 /* ALBB_OSS_IOS_SDK.framework */; };
 		F073CAFB1ACF937E00E282E6 /* PartyMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F073CAFA1ACF937E00E282E6 /* PartyMapViewController.m */; };
 		F07642EC1AF1D91E0075E0C2 /* GroupPeopleCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F07642EB1AF1D91E0075E0C2 /* GroupPeopleCollectionViewCell.m */; };
 		F07642EE1AF1DDFC0075E0C2 /* MainStoryBoard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F07642ED1AF1DDFC0075E0C2 /* MainStoryBoard.storyboard */; };
@@ -465,7 +464,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F06C762A1B203EAE00B2DD72 /* ALBB_OSS_IOS_SDK.framework in Frameworks */,
 				F01B4A621B0C7B1E0097144E /* libstdc++.6.dylib in Frameworks */,
 				F0068C141A679E2F00B9CB60 /* libz.dylib in Frameworks */,
 				F0FC6A221ACA6D9100A512B7 /* libxml2.dylib in Frameworks */,

@@ -18,7 +18,7 @@
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface PartyDetailViewController () <SRNetManagerDelegate> {
+@interface PartyDetailViewController () <SRNetManagerDelegate, UIActionSheetDelegate> {
     SRNet_Manager *_netManager;
     Model_Party_User *_relation;
     NSArray *_relArray;
@@ -220,8 +220,12 @@
 }
 
 - (IBAction)pressedTheCanelButton:(id)sender {
-    //取消聚会
-    [_netManager cancelParty:self.party];
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择操作类型"
+                                                       delegate:self
+                                              cancelButtonTitle:@"取消"
+                                         destructiveButtonTitle:@"取消聚会"
+                                              otherButtonTitles:@"分享",@"添加到系统日历",nil];
+    [sheet showInView:self.view];
 }
 
 - (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
@@ -280,6 +284,75 @@
 
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    switch (buttonIndex) {
+        case 0: {
+            //取消聚会
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                message:@"确定要取消该聚会吗?"
+                                                               delegate:self
+                                                      cancelButtonTitle:@"取消"
+                                                      otherButtonTitles:@"确定", nil];
+            alertView.tag = 1;
+            [alertView show];
+            
+        }
+            break;
+        case 1: {
+            //分享聚会
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                message:@"聚会链接已复制到您的粘贴板"
+                                                               delegate:self
+                                                      cancelButtonTitle:@"确定"
+                                                      otherButtonTitles:nil];
+            alertView.tag = 2;
+            [alertView show];
+        }
+            break;
+        case 2: {
+            //添加到日程
+            
+            NSLog(@"添加到日程");
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    switch (alertView.tag) {
+        case 1: {
+            //取消聚会
+            switch (buttonIndex) {
+                case 0: {   //取消
+                }
+                    break;
+                case 1: {   //确定
+                    //取消聚会
+                    [_netManager cancelParty:self.party];
+                }
+                    break;
+                default:
+                    break;
+            }
+        }
+            
+            break;
+            
+        case 2: {
+            //分享聚会
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
 }
 
 
