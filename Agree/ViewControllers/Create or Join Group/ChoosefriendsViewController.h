@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "SRAccountView.h"
 
+#import "JoinUserViewController.h"
+
 
 
 
@@ -21,5 +23,7 @@
 @property (nonatomic, strong)SRAccountView *accountView;
 
 @property (nonatomic, strong)NSMutableArray *choosePeopleArray;
+
+@property (nonatomic, weak)JoinUserViewController *rootController;
 
 @end

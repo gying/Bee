@@ -158,7 +158,14 @@
     if (!self.choosePeopleArray) {
         return;
     }
-    [self.choosePeopleArray removeObject:user];
+    Model_User *delUser ;
+    for (Model_User *chooseUser in self.choosePeopleArray) {
+        if ([user.pk_user isEqual:chooseUser.pk_user]) {
+            
+            delUser = chooseUser;
+        }
+    }
+    [self.choosePeopleArray removeObject:delUser];
 }
 
 //循环遍历,查看用户是否存在于数组中
@@ -176,7 +183,7 @@
 
 //界面将要退出的时候,对父控制器进行被备选数组的赋值
 - (void)viewWillDisappear:(BOOL)animated {
-    
+    self.rootController.choosePeopleArray = self.choosePeopleArray;
 }
 
 

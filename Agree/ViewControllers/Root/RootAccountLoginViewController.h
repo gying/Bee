@@ -9,6 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "Model_User.h"
 
+
+#import "WXApiObject.h"
+@protocol RootAccountRegViewController <NSObject>
+
+- (void) sendAuthRequest;
+
+@end
 @interface RootAccountLoginViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UITextField *accountTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
@@ -16,6 +23,12 @@
 
 @property (nonatomic, strong)Model_User *userInfo;
 
+@property (nonatomic, assign) id<RootAccountRegViewController,NSObject> delegate;
+
 - (void)popToRootController;
+
+
+
+
 
 @end

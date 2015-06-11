@@ -513,12 +513,18 @@
                     [delegate.groupDelegate setDataChange:TRUE];
                     
                     //聊天信息切换到最底层显示
-                    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:messages.count-1  inSection:0];
+                    if (messages.count == 0) {
+                        return;
+                    }
+                        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:messages.count-1  inSection:0];
+                        
+                        [self reloadTableViewIsScrollToBottom:NO withAnimated:NO];
+                        
+                        [self.chatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                        
                     
-                    [self reloadTableViewIsScrollToBottom:NO withAnimated:NO];
                     
-                    [self.chatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-                     
+                   
                     
 
                     

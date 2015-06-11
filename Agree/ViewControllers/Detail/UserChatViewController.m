@@ -108,13 +108,19 @@
     
 
     //聊天信息切换到最底层显示
+    
+    if (messages.count == 0) {
+        return;
+    }
     NSIndexPath * indexPath = [NSIndexPath indexPathForRow:messages.count-1  inSection:0];
     
     [self tableViewIsScrollToBottom:YES withAnimated:NO];
     
-    [self.userChatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    
+    [self.userChatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+
     [_conversation markAllMessagesAsRead:YES];
+
+
     
     
 }

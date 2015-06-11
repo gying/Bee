@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		38688464E2D960851E81912B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B124D697D5B1D9DCE5C3CE49 /* libPods.a */; };
+		C60A755F1B2825C500707D84 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C60A755B1B2825C500707D84 /* libWeChatSDK.a */; };
+		C60A75601B2825C500707D84 /* read_me.txt in Resources */ = {isa = PBXBuildFile; fileRef = C60A755C1B2825C500707D84 /* read_me.txt */; };
 		C64F1D5E1B26881A0063C012 /* ChoosefriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C64F1D5D1B26881A0063C012 /* ChoosefriendsViewController.m */; };
 		C64F1D641B26CB9D0063C012 /* ChoosefriendsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C64F1D631B26CB9D0063C012 /* ChoosefriendsTableViewCell.m */; };
 		F0068C0D1A679E0600B9CB60 /* ChooseDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0068C001A679E0600B9CB60 /* ChooseDateViewController.m */; };
@@ -165,6 +167,10 @@
 		4F57D7C30B72292B090AF91B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		B124D697D5B1D9DCE5C3CE49 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFA0C9B5EF0862273C1170F8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		C60A755B1B2825C500707D84 /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
+		C60A755C1B2825C500707D84 /* read_me.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = read_me.txt; sourceTree = "<group>"; };
+		C60A755D1B2825C500707D84 /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
+		C60A755E1B2825C500707D84 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
 		C64F1D5C1B26881A0063C012 /* ChoosefriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosefriendsViewController.h; sourceTree = "<group>"; };
 		C64F1D5D1B26881A0063C012 /* ChoosefriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosefriendsViewController.m; sourceTree = "<group>"; };
 		C64F1D621B26CB9D0063C012 /* ChoosefriendsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosefriendsTableViewCell.h; sourceTree = "<group>"; };
@@ -474,6 +480,7 @@
 				F0068C1E1A679E5300B9CB60 /* SystemConfiguration.framework in Frameworks */,
 				F0FC6A201ACA6D8900A512B7 /* libresolv.dylib in Frameworks */,
 				F0FC6A1E1ACA6D7E00A512B7 /* libiconv.dylib in Frameworks */,
+				C60A755F1B2825C500707D84 /* libWeChatSDK.a in Frameworks */,
 				F0FC6A1C1ACA6D6B00A512B7 /* libstdc++.6.0.9.dylib in Frameworks */,
 				F050EE821AAD31B7002DD2C2 /* libsqlite3.dylib in Frameworks */,
 				F0068C241A679E6C00B9CB60 /* CFNetwork.framework in Frameworks */,
@@ -522,6 +529,17 @@
 				4F57D7C30B72292B090AF91B /* Pods.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		C60A755A1B2825C500707D84 /* WeChatSDK_1.5 */ = {
+			isa = PBXGroup;
+			children = (
+				C60A755B1B2825C500707D84 /* libWeChatSDK.a */,
+				C60A755C1B2825C500707D84 /* read_me.txt */,
+				C60A755D1B2825C500707D84 /* WXApi.h */,
+				C60A755E1B2825C500707D84 /* WXApiObject.h */,
+			);
+			path = WeChatSDK_1.5;
 			sourceTree = "<group>";
 		};
 		F0068BFE1A679E0600B9CB60 /* Add Party */ = {
@@ -936,6 +954,7 @@
 		F0F5C2341A66F1490029BF7A /* API */ = {
 			isa = PBXGroup;
 			children = (
+				C60A755A1B2825C500707D84 /* WeChatSDK_1.5 */,
 				F0D519621B20921500AD24F9 /* Emoji */,
 				F01B4A561B0C7A4B0097144E /* QCloudDownloadSDK */,
 				F01B4A5A1B0C7A4B0097144E /* QCloudUploadSDK */,
@@ -1157,6 +1176,7 @@
 				F07642EE1AF1DDFC0075E0C2 /* MainStoryBoard.storyboard in Resources */,
 				F0B5F4AA1AAA97180013111F /* MJPhotoBrowser.bundle in Resources */,
 				F0BB7B3C1A727F3500A0E4A0 /* mapapi.bundle in Resources */,
+				C60A75601B2825C500707D84 /* read_me.txt in Resources */,
 				F0F87F371A6CE4FE00DBC19E /* PushConfig.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1435,6 +1455,9 @@
 					"$(PROJECT_DIR)/Agree/API/BMMap",
 					"$(PROJECT_DIR)/Agree/API/QCloudDownloadSDK",
 					"$(PROJECT_DIR)/Agree/API/QCloudUploadSDK",
+					"$(PROJECT_DIR)/Agree/API/WeChatSDK_1.5/WeChatSDK_1.5",
+					"$(PROJECT_DIR)/Agree/API/WeChatSDK_1.5/WeChatSDK_1.5_OnlyIphone",
+					"$(PROJECT_DIR)/Agree/API/WeChatSDK_1.5",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(inherited)";
@@ -1467,6 +1490,9 @@
 					"$(PROJECT_DIR)/Agree/API/BMMap",
 					"$(PROJECT_DIR)/Agree/API/QCloudDownloadSDK",
 					"$(PROJECT_DIR)/Agree/API/QCloudUploadSDK",
+					"$(PROJECT_DIR)/Agree/API/WeChatSDK_1.5/WeChatSDK_1.5",
+					"$(PROJECT_DIR)/Agree/API/WeChatSDK_1.5/WeChatSDK_1.5_OnlyIphone",
+					"$(PROJECT_DIR)/Agree/API/WeChatSDK_1.5",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(inherited)";

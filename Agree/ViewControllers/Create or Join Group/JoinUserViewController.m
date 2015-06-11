@@ -140,7 +140,9 @@
         if (!self.choosePeopleArray) {
             self.choosePeopleArray = [[NSMutableArray alloc] init];
         }
+        
         ChoosefriendsViewController *childController = (ChoosefriendsViewController *)segue.destinationViewController;
+        childController.rootController = self;
         childController.choosePeopleArray = self.choosePeopleArray;
     }
 }
