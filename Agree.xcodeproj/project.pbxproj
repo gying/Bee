@@ -130,6 +130,7 @@
 		F0F5C2981A66F1620029BF7A /* Model_User.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F5C2901A66F1620029BF7A /* Model_User.m */; };
 		F0F87F371A6CE4FE00DBC19E /* PushConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = F0F87F361A6CE4FE00DBC19E /* PushConfig.plist */; };
 		F0F87F421A6D36A800DBC19E /* GroupChatTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F87F411A6D36A800DBC19E /* GroupChatTableViewController.m */; };
+		F0F969061B2A83D00030C84B /* SRShimmerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F969051B2A83D00030C84B /* SRShimmerManager.m */; };
 		F0FC6A1A1ACA6D1600A512B7 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0FC6A191ACA6D1600A512B7 /* MobileCoreServices.framework */; };
 		F0FC6A1C1ACA6D6B00A512B7 /* libstdc++.6.0.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F0FC6A1B1ACA6D6B00A512B7 /* libstdc++.6.0.9.dylib */; };
 		F0FC6A1E1ACA6D7E00A512B7 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F0FC6A1D1ACA6D7E00A512B7 /* libiconv.dylib */; };
@@ -452,6 +453,8 @@
 		F0F87F361A6CE4FE00DBC19E /* PushConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PushConfig.plist; sourceTree = "<group>"; };
 		F0F87F401A6D36A800DBC19E /* GroupChatTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatTableViewController.h; sourceTree = "<group>"; };
 		F0F87F411A6D36A800DBC19E /* GroupChatTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupChatTableViewController.m; sourceTree = "<group>"; };
+		F0F969041B2A83D00030C84B /* SRShimmerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRShimmerManager.h; sourceTree = "<group>"; };
+		F0F969051B2A83D00030C84B /* SRShimmerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRShimmerManager.m; sourceTree = "<group>"; };
 		F0FC6A191ACA6D1600A512B7 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		F0FC6A1B1ACA6D6B00A512B7 /* libstdc++.6.0.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.0.9.dylib"; path = "usr/lib/libstdc++.6.0.9.dylib"; sourceTree = SDKROOT; };
 		F0FC6A1D1ACA6D7E00A512B7 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
@@ -968,6 +971,8 @@
 				F024690A1AD1804900FED32D /* EMSendMessageHepler.m */,
 				F05F2FFE1AFBD50300AA6BE8 /* SRKeyboard.h */,
 				F05F2FFF1AFBD50300AA6BE8 /* SRKeyboard.m */,
+				F0F969041B2A83D00030C84B /* SRShimmerManager.h */,
+				F0F969051B2A83D00030C84B /* SRShimmerManager.m */,
 			);
 			path = Custom;
 			sourceTree = "<group>";
@@ -1278,6 +1283,7 @@
 				F0A971301ABC083B00829942 /* AddressBookTableViewCell.m in Sources */,
 				F0A9712D1ABB278C00829942 /* People.m in Sources */,
 				F0A592EC1AB9D9CB007C822A /* ContactsTableViewCell.m in Sources */,
+				F0F969061B2A83D00030C84B /* SRShimmerManager.m in Sources */,
 				F0068C111A679E0600B9CB60 /* JoinUserViewController.m in Sources */,
 				F0DA151A1AC019EA00FA6199 /* Model_User_Chat.m in Sources */,
 				F073CAFB1ACF937E00E282E6 /* PartyMapViewController.m in Sources */,

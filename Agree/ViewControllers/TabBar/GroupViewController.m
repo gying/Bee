@@ -15,7 +15,8 @@
 #import "UIImageView+WebCache.h"
 #import "SRImageManager.h"
 
-
+#import <FBShimmeringView.h>
+#import "SRShimmerManager.h"
 
 
 
@@ -28,10 +29,7 @@
     SRNet_Manager *_netManager;
 //    NSArray *_groupAry;
     NSUInteger _chooseIndexPath;
-    
-    GroupChatTableViewController * GCTC;
-    
-    
+    FBShimmeringView *_naviTitleView;
 }
 
 
@@ -47,6 +45,10 @@
         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
     }
     [self loadUserGroupRelationship];
+
+    _naviTitleView = [SRShimmerManager createNaviShimmeringTitleView:self.navigationController.view withTitle:@"我的小组"];
+    _naviTitleView.shimmering = YES;
+    
     
 //    CGRect wRect = [[UIScreen mainScreen] bounds];
     [self.codeInputTextField setDelegate:self];

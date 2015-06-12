@@ -22,6 +22,7 @@
 #import "GroupChatTableViewCell.h"
 #import "MJPhotoBrowser.h"
 #import <EaseMob.h>
+#import <FBShimmeringView.h>
 
 #import "SRKeyboard.h"
 
@@ -52,10 +53,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-   
-    
-    
+
     
     [self.groupTabBar setSelectedItem:self.groupTalk];
   

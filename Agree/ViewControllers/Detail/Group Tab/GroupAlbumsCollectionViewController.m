@@ -68,7 +68,7 @@
     if (self.photoAry) {
         return self.photoAry.count;
     } else {
-        return 1;
+        return 0;
     }
 }
 
