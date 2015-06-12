@@ -16,6 +16,8 @@
 
 #import "BMapKit.h"
 
+#import "Model_Party.h"
+
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
 @interface PartyDetailViewController () <SRNetManagerDelegate, UIActionSheetDelegate> {
@@ -24,6 +26,8 @@
     NSArray *_relArray;
     int _showStatus;
     BMKMapView *_bdMapView;
+    
+    
 }
 
 @end
@@ -312,10 +316,86 @@
             [alertView show];
         }
             break;
+            
+#pragma mark -- 将日程添加到系统日历
         case 2: {
             //添加到日程
-            
             NSLog(@"添加到日程");
+            //事件市场
+            EKEventStore *eventStore = [[EKEventStore alloc] init];
+            
+            //6.0及以上通过下面方式写入事件
+            if ([eventStore respondsToSelector:@selector(requestAccessToEntityType:completion:)])
+            {
+                // the selector is available, so we must be on iOS 6 or newer
+                [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (error)
+                        {
+                            //错误细心
+                            // display error message here
+                        }
+                        else if (!granted)
+                        {
+                            //被用户拒绝，不允许访问日历
+                            // display access denied error message here
+                        }
+                        else
+                        {
+                            // access granted
+                            // ***** do the important stuff here *****
+                            
+                            //事件保存到日历
+                            
+                            
+                            //创建事件
+                            EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
+                            event.title     = self.party.name;
+                            event.location = self.party.location;
+                            
+                            NSDateFormatter *tempFormatter = [[NSDateFormatter alloc]init];
+
+                            [tempFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
+               
+                            event.allDay = NO;
+      
+                            NSDate * startTime = _party.begin_time;
+                            NSDate * endTime = [NSDate dateWithTimeInterval:3600 sinceDate:startTime];
+     
+                            event.startDate = startTime;
+                            event.endDate = endTime;
+                            
+                            NSLog(@"%@",_party.begin_time);
+                            NSLog(@"%@",startTime);
+//                            添加提醒
+//                            [event addAlarm:[EKAlarm alarmWithRelativeOffset:60.0f * -60.0f * 24]];
+//                            [event addAlarm:[EKAlarm alarmWithRelativeOffset:60.0f * -15.0f]];
+                            
+                            [event addAlarm:[EKAlarm alarmWithRelativeOffset:1]];
+                            
+                            
+                            [event setCalendar:[eventStore defaultCalendarForNewEvents]];
+                            NSError *err;
+                            [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
+                            
+                            
+                            if (err) {
+                                
+                            }
+                            UIAlertView *alert = [[UIAlertView alloc]
+                                                  initWithTitle:@"添加成功"
+                                                  message:@" "
+                                                  delegate:nil
+                                                  cancelButtonTitle:@"完成"
+                                                  otherButtonTitles:nil];
+                            [alert show];
+                            
+                            
+                        }
+                    });
+                }];
+            }
+            
         }
             break;
         default:

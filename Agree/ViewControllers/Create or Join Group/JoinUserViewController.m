@@ -48,10 +48,18 @@
     [self createEMGroup];
 }
 
+-(void)imageUploading:(float)proFloat
+{
+    [SVProgressHUD showProgress:proFloat*0.9];
+    NSLog(@"小组正在创建");
+}
+
 - (void)createEMGroup {
     
     
-    [SVProgressHUD showWithStatus:@"正在建立小组"];
+//    [SVProgressHUD showWithStatus:@"正在建立小组"];
+    [SVProgressHUD showProgress:1.0];
+    
     EMError *error = nil;
     EMGroupStyleSetting *groupStyleSetting = [[EMGroupStyleSetting alloc] init];
     //    groupStyleSetting.groupMaxUsersCount = 500; // 创建500人的群，如果不设置，默认是200人。
@@ -93,9 +101,12 @@
     }
 }
 
+
 - (void)interfaceReturnDataSuccess:(NSMutableDictionary *)jsonDic with:(int)interfaceType {
     //群组创建成功
     [SVProgressHUD showSuccessWithStatus:@"小组创建成功"];
+//    [SVProgressHUD showProgress:1.0];
+    
     
     switch (interfaceType) {
         case kAddGroup: {
@@ -114,6 +125,8 @@
     }
 }
 
+
+
 - (void)interfaceReturnDataError:(int)interfaceType {
     [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
@@ -129,6 +142,8 @@
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+
 
 
 #pragma mark - Navigation

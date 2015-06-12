@@ -14,8 +14,6 @@
 
 
 
-#import "WXApiObject.h"
-
 
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
@@ -29,15 +27,8 @@
 
 @implementation RootAccountLoginViewController
 
-@synthesize delegate = _delegate;
 
-- (void)sendAuthRequest
-{
-    if (_delegate)
-    {
-        [_delegate sendAuthRequest];
-    }
-}
+
 
 
 - (void)viewDidLoad {
@@ -121,29 +112,19 @@
 
 - (void)interfaceReturnDataError:(int)interfaceType {
     [SVProgressHUD showErrorWithStatus:@"网络错误"];
+    
+//    SVProgressHUD showProgress:<#(float)#> status:<#(NSString *)#> maskType:<#(SVProgressHUDMaskType)#>
 }
 
 
 
-////点击微信登录按钮
-//- (IBAction)tapWechatButton:(UIButton *)sender {
-//    
-//    NSLog(@"微信授权登陆");
-//    
-////    SendAuthReq* req = [[[SendAuthReq alloc] init] autorelease];
-//    SendAuthReq * req = [[SendAuthReq alloc]init];
-//    
-//    req.scope = @"snsapi_message,snsapi_userinfo,snsapi_friend,snsapi_contact"; // @"post_timeline,sns"
-//    req.state = @"xxx";
-//    req.openID = @"0c806938e2413ce73eef92cc3";
-//    
-//    req.openID = @"wxa2449c8fae44c041";
-//
-//    [WXApi sendAuthReq:req viewController:self delegate:self];
-//    
-//
-//    
-//}
+//点击微信登录按钮
+- (IBAction)tapWechatButton:(UIButton *)sender {
+    
+    NSLog(@"微信授权登陆");
+
+    
+}
 
 
 

@@ -21,7 +21,7 @@
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface AppDelegate () <EMChatManagerDelegate, SRNetManagerDelegate, WXApiDelegate>
+@interface AppDelegate () <EMChatManagerDelegate, SRNetManagerDelegate>
 
 @end
 
@@ -32,7 +32,7 @@
     
     BOOL _viewForLogin;
 }
-@synthesize viewController = _viewController;
+
 
 - (void)logout {
     for(UIViewController *viewController in self.rootController.viewControllers)
@@ -521,19 +521,6 @@
 }
 
 
-#pragma  mark -- 微信授权
-- (void)sendAuthRequest
-{
-//    SendAuthReq* req = [[[SendAuthReq alloc] init] autorelease];
-    SendAuthReq * req = [[SendAuthReq alloc]init];
-    
-    req.scope = @"snsapi_message,snsapi_userinfo,snsapi_friend,snsapi_contact";
-    // @"post_timeline,sns"
-    req.state = @"xxx";
-    req.openID = @"0c806938e2413ce73eef92cc3";
-    
-    [WXApi sendAuthReq:req viewController:self.viewController delegate:self];
-}
 
 
 @end

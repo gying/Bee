@@ -9,10 +9,14 @@
 #import "SRImageManager.h"
 #import "TXYUploadManager.h"
 
+
+#import "SVProgressHUD.h"
+
 @implementation SRImageManager
 
 - (id)initWithDelegate: (id<SRImageManagerDelegate>)delegate {
     self.delegate = delegate;
+    
     return [super init];
 }
 
@@ -43,6 +47,7 @@
 }
 
 
+
 - (BOOL)updateImageToTXY: (UIImage *)image {
 //    __block NSString *fieldID;
     
@@ -66,11 +71,26 @@
 //         NSLog(@"upload return=%d",photoResp.retCode);
 //         NSLog(@"field ID = %@", photoResp.photoURL);
          [self.delegate imageUploadDoneWithFieldID:photoResp.photoFileId];
-     } progress:^(int64_t totalSize, int64_t sendSize, NSDictionary *context) { }
+     } progress:^(int64_t totalSize, int64_t sendSize, NSDictionary *context) {
+         
+         
+         [self.delegate imageUploading:(float)sendSize/(float)totalSize];
+         
+
+         
+//         float stfloat = sendSize/totalSize;
+////         [SVProgressHUD showProgress:stfloat status:@"上传中" maskType:SVProgressHUDMaskTypeBlack];
+//         [SVProgressHUD showProgress:stfloat maskType:SVProgressHUDMaskTypeGradient];
+         
+         
+      
+         
+     }
                stateChange:^(TXYUploadTaskState state, NSDictionary *context) {
                    switch (state) {
                        case TXYUploadTaskStateWait:
                            //任务等待中
+
                            break;
                        case TXYUploadTaskStateConnecting:
                            //任务连接中
@@ -90,7 +110,7 @@
                    }
                }
      ];
-    
+
     return TRUE;
 }
 

@@ -219,6 +219,8 @@
     
 }
 
+
+
 - (IBAction)pressedThePasswordButton:(UIButton *)sender {
     self.passwordView.hidden = NO;
     [self.passwordTextField becomeFirstResponder];
@@ -277,17 +279,29 @@
     return TRUE;
 }
 
+-(void)imageUploading:(float)proFloat
+{
+    
+    [SVProgressHUD showProgress:proFloat*0.9];
+}
+
 
 - (void)saveAccountData {
     //上传头像信息
+    
+    
     if (_isUpdateAvatar) {
         //更新头像信息
         if (!_imageManager) {
             _imageManager = [[SRImageManager alloc] initWithDelegate:self];
         }
         //设置头像路径到系统头像路径
+        [SVProgressHUD showProgress:1.0];
         [_imageManager updateImageToTXY:_avatarImage];
-
+        [SVProgressHUD dismiss];
+        
+        
+ 
     } else {
         if (_isUpdateData) {
             //查看是否需要更新数据
@@ -347,7 +361,12 @@
     return YES;
 }
 
+
+
 - (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
+    
+    
+    
     switch (interfaceType) {
         case kUpdateUserInfo: { //更新用户资料
             //更新用户资料
@@ -367,7 +386,7 @@
         }
             
             break;
-        case kGetUserInfo: {    //读取用户资料
+        case kGetUserInfo: {
             //读取用户资料
             NSArray *accountAry = [Model_User objectArrayWithKeyValuesArray:jsonDic];
             
@@ -389,7 +408,7 @@
         default:
             break;
     }
-    [SVProgressHUD dismiss];
+//    [SVProgressHUD dismiss];
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {

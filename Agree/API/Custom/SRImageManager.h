@@ -22,6 +22,8 @@
 
 - (void)imageUploadDoneWithFieldID: (NSString *)fieldID;
 
+- (void)imageUploading: (float)proFloat;
+
 @end
 
 @interface SRImageManager : NSObject
