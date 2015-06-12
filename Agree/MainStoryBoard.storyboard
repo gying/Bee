@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <mutableArray key="Lantinghei.ttc">
+        <mutableArray key="LangTingGBK.TTF">
             <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHK--GBK1-0</string>
@@ -1433,7 +1433,7 @@
                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="75R-C4-GW2" kind="show" id="sib-Nm-X2J"/>
+                                    <segue destination="75R-C4-GW2" kind="show" identifier="gotoChooseFriend" id="sib-Nm-X2J"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="GroupNameField" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="小组名称" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7ML-Co-RWE">
@@ -1512,7 +1512,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="70" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="OtY-2I-2CT">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="55" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="OtY-2I-2CT">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -1987,11 +1987,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="OVv-ag-eKJ">
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="0.0" id="OVv-ag-eKJ">
                             <size key="itemSize" width="160" height="160"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                            <inset key="sectionInset" minX="10" minY="15" maxX="10" maxY="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="15" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="GroupCollectionCell" reuseIdentifier="GroupCollectionCell" id="8fk-Mg-FVi" customClass="GroupCollectionViewCell">
@@ -4196,10 +4196,10 @@
         <image name="test.png" width="200" height="200"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="NNN-op-p3r"/>
+        <segue reference="7g0-Ma-cMP"/>
         <segue reference="c42-zg-aVC"/>
         <segue reference="Re4-1s-AtI"/>
-        <segue reference="yUl-vl-Sui"/>
-        <segue reference="7g0-Ma-cMP"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.34901960780000002" green="0.81960784310000001" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
 </document>

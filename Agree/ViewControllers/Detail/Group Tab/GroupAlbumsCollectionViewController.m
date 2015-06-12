@@ -196,13 +196,6 @@
 //    [_imageManager delImage:_removePhoto.pk_photo];
 }
 
-- (void)imageDelDone {
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
-    [_netManager removePhoto:_removePhoto];
-    
-}
 
 - (void)imageDelError {
     //图片删除错误
@@ -227,6 +220,13 @@
     [_netManager addImageToGroup:photo];
 }
 
+-(void)imageUploading:(float)proFloat
+{
+
+    
+    [SVProgressHUD showProgress:proFloat*0.9];
+    
+}
 
 - (void)imageUpladError {
     
@@ -269,6 +269,15 @@
             break;
         
         case kAddImageToGroup: {
+//            [SVProgressHUD showProgress:1.0];
+            
+            [SVProgressHUD showProgress:1.0];
+            
+            
+            
+            
+            
+            
             if (jsonDic) {
                 //清除原先数组中的元素
                 [_imageViewAry removeAllObjects];

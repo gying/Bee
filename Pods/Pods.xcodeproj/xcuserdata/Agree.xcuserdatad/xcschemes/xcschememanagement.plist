@@ -14,6 +14,11 @@
 			<key>orderHint</key>
 			<integer>3</integer>
 		</dict>
+		<key>Pods-SDWebImage.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>5</integer>
+		</dict>
 		<key>Pods-SVProgressHUD.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -32,7 +37,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>173F313795068EC19177F224</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2F47A6C4E6CADCBF39BE5827</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>60440DA062B940C6710DB1A7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8B991B05CAB4E4B3987EA05D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -42,7 +62,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>D13C938093C2BB89FFD14B68</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>D3CC553AC226B6676537300C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D53D55B86E114871E97063B1</key>
 		<dict>
 			<key>primary</key>
 			<true/>

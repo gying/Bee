@@ -156,11 +156,18 @@
         [self.userInfo setSetup_time:[NSDate date]];
         //保存头像信息
         [_imageManager updateImageToTXY:_avatarImage];
+
     }
+    
+}
+- (void)imageUploading: (float)proFloat
+{
+    [SVProgressHUD showProgress:proFloat*0.9];
 }
 
 - (void)imageUploadDoneWithFieldID:(NSString *)fieldID {
     //图片在保存完成之后开始保存默认的帐号信息
+    [SVProgressHUD showProgress:1.0];
     self.userInfo.avatar_path = fieldID;
 //    Model_User *userInfo = [Model_User loadFromUserDefaults];
 //    userInfo.avatar_path = fieldID;
@@ -210,6 +217,7 @@
                 }
 
                 [SVProgressHUD dismiss];
+                 
                 
                 [self dismissViewControllerAnimated:YES completion:nil];
                 [self.rootController popToRootController];

@@ -9,6 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "Model_User.h"
 
+
+
+@protocol RootAccountRegViewController <NSObject>
+
+
+@end
 @interface RootAccountLoginViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UITextField *accountTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
@@ -16,6 +22,12 @@
 
 @property (nonatomic, strong)Model_User *userInfo;
 
+
+
 - (void)popToRootController;
+
+
+
+
 
 @end

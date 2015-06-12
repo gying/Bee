@@ -309,25 +309,7 @@
 
     NSLog(@"小组图像点击BUTTON");
     NSLog(@"新建小组点击BUTTON");
-    
-//    //聊天信息切换到最底层显示
-//    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:messages.count-1  inSection:0];
-//    [self tableViewIsScrollToBottom:YES withAnimated:NO];
-//    
-//    [self.userChatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-//    
-//    [_conversation markAllMessagesAsRead:YES];
-    
 
-    
-    
-    
-    
-    
-
-
-
-    
     
     if (sender) {
         [self.codeInputTextField becomeFirstResponder];

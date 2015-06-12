@@ -41,29 +41,44 @@ static NSString * const reuseIdentifier = @"GroupCollectionCell";
 
 #pragma mark <UICollectionViewDataSource>
 
-
+//返回CELL个数
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    
+    int i = 1;
+    
     if (_groupAry) {
-        return _groupAry.count;
+        return _groupAry.count + i;
     }
-    return 0;
-}
+    return i;
+    
 
+}
+//CELL内容
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     GroupCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     
     // Configure the cell
-    if (indexPath.row == _groupAry.count) {
-        //最后一条信息
-        //添加聚会按钮
-        [cell initAddView];
-    } else {
-        Model_Group *theGroup = [_groupAry objectAtIndex:indexPath.row];
+//    if (indexPath.row == _groupAry.count) {
+//        //最后一条信息
+//        //添加聚会按钮
+//        [cell initAddView];
+//    } else {
+//        Model_Group *theGroup = [_groupAry objectAtIndex:indexPath.row];
+//
+        if (indexPath.row == 0) {
+            //第一条信息
+            //添加聚会按钮
+            [cell initAddView];
+        } else {
+            Model_Group *theGroup = [_groupAry objectAtIndex:indexPath.row-1];
+
         
 //        EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:theGroup.em_id isGroup:YES];
         [theGroup setChat_update:[NSNumber numberWithInteger:0]];
         [cell initCellWithGroup:theGroup];
+            
     }
+
     return cell;
 }
 

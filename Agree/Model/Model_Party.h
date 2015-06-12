@@ -13,9 +13,13 @@
 @property (nonatomic, strong)NSNumber *fk_group;
 @property (nonatomic, strong)NSString *name;
 @property (nonatomic, strong)NSString *remark;
+
+#pragma mark -- 聚会日期
 @property (nonatomic, strong)NSDate *begin_time;
 @property (nonatomic, strong)NSDate *end_time;
 @property (nonatomic, strong)NSDate *tip_time;
+
+
 @property (nonatomic, strong)NSNumber *longitude;
 @property (nonatomic, strong)NSNumber *latitude;
 @property (nonatomic, strong)NSString *location;

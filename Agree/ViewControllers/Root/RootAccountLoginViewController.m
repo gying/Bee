@@ -12,15 +12,24 @@
 #import "MJExtension.h"
 #import <SVProgressHUD.h>
 
+
+
+
+
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
 @interface RootAccountLoginViewController () <SRNetManagerDelegate> {
     SRNet_Manager *_netManager;
+    
 }
 
 @end
 
 @implementation RootAccountLoginViewController
+
+
+
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -103,11 +112,21 @@
 
 - (void)interfaceReturnDataError:(int)interfaceType {
     [SVProgressHUD showErrorWithStatus:@"网络错误"];
+    
+//    SVProgressHUD showProgress:<#(float)#> status:<#(NSString *)#> maskType:<#(SVProgressHUDMaskType)#>
 }
+
+
 
 //点击微信登录按钮
 - (IBAction)tapWechatButton:(UIButton *)sender {
+    
+    NSLog(@"微信授权登陆");
+
+    
 }
+
+
 
 
 #pragma mark - Navigation
