@@ -15,6 +15,7 @@
     FBShimmeringView *titleView = [[FBShimmeringView alloc] initWithFrame:CGRectMake(60, 30, [UIScreen mainScreen].bounds.size.width - 120, 30)];
     [naviView addSubview:titleView];
     
+    
     UILabel *loadingLabel = [[UILabel alloc] initWithFrame:titleView.bounds];
     loadingLabel.textAlignment = NSTextAlignmentCenter;
     loadingLabel.text = NSLocalizedString(naviTitle, nil);

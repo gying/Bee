@@ -22,7 +22,6 @@
 #import "GroupChatTableViewCell.h"
 #import "MJPhotoBrowser.h"
 #import <EaseMob.h>
-#import <FBShimmeringView.h>
 
 #import "SRKeyboard.h"
 

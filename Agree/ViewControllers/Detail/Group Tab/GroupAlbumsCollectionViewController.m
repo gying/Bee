@@ -72,7 +72,6 @@
     }
 }
 
-
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     GroupAlbumsCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ImageCollectionViewCell" forIndexPath:indexPath];
     
@@ -83,8 +82,6 @@
     }
     
     [cell.cellImageView setContentMode:UIViewContentModeScaleAspectFill];
-    
-    
     
     [cell.cellImageView sd_setImageWithURL:[SRImageManager albumThumbnailImageFromTXYFieldID:newPhoto.pk_photo]
                                  completed:^(UIImage *image,

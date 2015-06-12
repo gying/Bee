@@ -3892,7 +3892,7 @@
             </objects>
             <point key="canvasLocation" x="-609" y="-756"/>
         </scene>
-        <!--Group View Controller-->
+        <!--必聚-->
         <scene sceneID="nfp-nK-GUE">
             <objects>
                 <viewController id="ett-qU-PgC" customClass="GroupViewController" sceneMemberID="viewController">
@@ -4152,7 +4152,7 @@
                             <constraint firstAttribute="bottom" secondItem="JrF-3R-vJ9" secondAttribute="bottom" constant="49" id="ucp-lL-VV9"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="bOu-UK-Ccb">
+                    <navigationItem key="navigationItem" title="必聚" id="bOu-UK-Ccb">
                         <barButtonItem key="backBarButtonItem" title=" " id="mWV-Ih-53N"/>
                         <barButtonItem key="rightBarButtonItem" style="done" id="AeH-je-BZV">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="RGT-N6-bCG">
