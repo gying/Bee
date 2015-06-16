@@ -15,6 +15,14 @@
 @interface GroupChatTableViewController : UITableViewController
 
 @property (nonatomic, strong)NSMutableArray *chatArray;
+@property (nonatomic, strong)NSMutableArray *mchatArray;
+
+//
+//@property (nonatomic, assign)    int page;
+//@property (nonatomic , assign)     int pageSize;
+
+
+
 @property (nonatomic, strong)Model_Group *group;
 @property (nonatomic, strong)UITableView *chatTableView;
 @property (nonatomic, strong)GroupDetailViewController *rootController;
@@ -29,7 +37,7 @@
 - (void)loadChatData;
 //- (void)loadChatFromNet;
 //- (void)setkeyBoard: (UIViewController *)viewController;
-
+//- (void)subChatArray;
 
 
 @end

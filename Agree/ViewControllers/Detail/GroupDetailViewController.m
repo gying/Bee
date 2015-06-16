@@ -42,6 +42,9 @@
     GroupChatTableViewCell *cell;
     
     EMConversation *_conversation;
+    
+ 
+
 }
 
 @end
@@ -53,10 +56,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-   
-    
-    
-    
+ 
     [self.groupTabBar setSelectedItem:self.groupTalk];
   
     [self.navigationItem setTitle:self.group.name];
@@ -109,16 +109,10 @@
     [self.chatTableView setDataSource:_chatDelegate];
     [_chatDelegate setRootController:self];
     [_chatDelegate loadChatData];
+//    [self subChatArray];
     
     
-    //聊天信息切换到最底层显示
-    
-//    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:_chatDelegate.chatArray.count-1  inSection:0];
-//  [_chatDelegate tableViewIsScrollToBottom:YES withAnimated:NO];
-//    [_chatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-//    [_conversation markAllMessagesAsRead:YES];
-    
-    
+
     
     
     self.view.backgroundColor =[UIColor groupTableViewBackgroundColor];
@@ -196,6 +190,11 @@
     }
 }
 
+
+//- (void)subChatArray {
+//    _chatDelegate.mchatArray = (NSMutableArray *)[_chatDelegate.chatArray subarrayWithRange:NSMakeRange(0,_pageSize *_page)];
+//}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (0.0 == scrollView.contentOffset.x) {
         
@@ -236,9 +235,40 @@
             [_albumsDelegate loadPhotoData];
             _albumsDelegate.albumsLoadingDone = TRUE;
         }
-    } else {
-        
     }
+//    else {
+//        
+//    }
+    
+#pragma mark -- 下拉加载数据
+    
+//    float contentoffsetY = _chatTableView.contentOffset.y;
+//    
+//    //判断如果下拉超过限定 就加载数据
+//    if ((-110  >= (contentoffsetY))&&!(_chatDelegate.mchatArray.count == _chatDelegate.chatArray.count) ){
+//        NSLog(@"下拉如果超过-110realoadata");
+//        _page++;
+//        NSLog(@"%d",_page);
+//        [self subChatArray];
+//        [_chatTableView reloadData];
+//        
+//    }
+//    //默认一次10个 这是最后一次加载大于0小于10的个数
+//    else if( _chatDelegate.chatArray.count - _chatDelegate.mchatArray.count > 0 && _chatDelegate.chatArray.count - _chatDelegate.mchatArray.count < 10  ){
+//        _chatDelegate.mchatArray = _chatDelegate.chatArray;
+//        
+//        [_chatTableView reloadData];
+//        
+//    }else if( _chatDelegate.mchatArray.count == _chatDelegate.chatArray.count )
+//    {
+//        NSLog(@"数组已经加载结束 停止加载");
+//    }
+//    
+//    NSLog(@"%d",_chatDelegate.mchatArray.count);
+//    NSLog(@"%d",_chatDelegate.chatArray.count);
+//    
+    
+    
 }
 
 - (IBAction)tapCreateNewPhotoButton:(id)sender {

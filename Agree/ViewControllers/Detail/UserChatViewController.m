@@ -25,7 +25,7 @@
 #define kLoadChatData       1
 #define kSendMessage        2
 
-@interface UserChatViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIAlertViewDelegate, EMChatManagerDelegate,UITableViewDelegate> {
+@interface UserChatViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIAlertViewDelegate, EMChatManagerDelegate,UITableViewDelegate,UIScrollViewDelegate> {
     SRNet_Manager *_netManager;
     int _netStatus;
     
@@ -39,6 +39,9 @@
     Model_User_Chat *_userChat;
     NSMutableArray *_chatArray;
     
+    NSMutableArray * _mchatArray;
+    
+    
     UIAlertView *_sendImageAlert;
     EMConversation *_conversation;
     
@@ -47,6 +50,10 @@
     UIView * HeadView;
     
     float tableCellHeight;
+    
+    int _page;
+    int _pageSize;
+
 }
 
 @end
@@ -63,6 +70,16 @@
     self.accountView.rootController = self;
     //
    self.automaticallyAdjustsScrollViewInsets = false;
+    
+    
+    
+    
+    _page = 1;
+    _pageSize = 10;
+
+    
+
+    
     
     
     
@@ -93,7 +110,10 @@
         [_chatArray addObject:chat];
     }
     
+
+    [self subChatArray];
     
+
     [self.navigationItem setTitle:self.user.nickname];
     
     //初始化图片发送确认警告框
@@ -112,7 +132,7 @@
     if (messages.count == 0) {
         return;
     }
-    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:messages.count-1  inSection:0];
+    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:_mchatArray.count-1  inSection:0];
     
     [self tableViewIsScrollToBottom:YES withAnimated:NO];
     
@@ -123,6 +143,11 @@
 
     
     
+}
+
+- (void)subChatArray {
+    
+    _mchatArray = (NSMutableArray *)[_chatArray subarrayWithRange:NSMakeRange(_chatArray.count - (_pageSize*_page),_pageSize*_page)];
 }
 
 
@@ -171,19 +196,21 @@
 #pragma mark - Table view data source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    if (_chatArray) {
-        return _chatArray.count;
+    if (_mchatArray) {
+        return (_mchatArray.count);
     } else {
         return 0;
     }
+    
+
 }
 
 //Cell内容
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *kCellIdentifier = @"UserChatCell";
+     static NSString *kCellIdentifier = @"UserChatCell";
     UserChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
     
-    EModel_User_Chat *chat = [_chatArray objectAtIndex:indexPath.row];
+    EModel_User_Chat *chat = [_mchatArray objectAtIndex:indexPath.row];
     if (nil == cell) {
         cell = [[UserChatTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifier];
     }
@@ -236,7 +263,7 @@
 //CELL自适应消息高度
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     //message内容
-    EModel_User_Chat *message = [_chatArray objectAtIndex:indexPath.row];
+    EModel_User_Chat *message = [_mchatArray objectAtIndex:indexPath.row];
     
     return [self cellHeightFromMessage:message].floatValue;
 }
@@ -320,36 +347,6 @@
             break;
     }
 }
-
-////HeadView高度
-//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-//{
-//
-//    float headHight = 0;
-//    for (EModel_User_Chat *message in _chatArray) {
-//        headHight += [self cellHeightFromMessage:message].floatValue;
-//    }
-//    
-//    headHight = self.userChatTableView.frame.size.height - headHight;
-//    if (headHight <= 0) {
-//        headHight = 0;
-//    }
-//    return headHight;
-//}
-//
-//#pragma mark -- HeadView的背景
-//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-//{
-////    UIView * bgview = [[UIView alloc]init];
-////    bgview.backgroundColor = [UIColor blackColor];
-////    self.userChatTableView.tableHeaderView = bgview;
-////    bgview.hidden = YES;
-////    return bgview;
-//    
-//    self.userChatTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.userChatTableView.frame.size.width, 100)];
-//    
-//    return nil;
-//}
 
 
 
@@ -436,7 +433,7 @@
                      withAnimated: (BOOL)isAnimated {
     
     float headHight = 0;
-    for (EModel_User_Chat *message in _chatArray) {
+    for (EModel_User_Chat *message in _mchatArray) {
         headHight += [self cellHeightFromMessage:message].floatValue;
     }
     
@@ -493,7 +490,7 @@
         UIMenuController *menu = [UIMenuController sharedMenuController];
         [menu setMenuItems:[NSArray arrayWithObjects:itCopy,itReSend, nil]];
 
-        EModel_User_Chat *chat = [_chatArray objectAtIndex:indexPath.row];
+        EModel_User_Chat *chat = [_mchatArray objectAtIndex:indexPath.row];
         
         
         id<IEMMessageBody> msgBody = chat.message.messageBodies.firstObject;
@@ -566,6 +563,45 @@
 - (BOOL)canBecomeFirstResponder{
     return YES;
 }
+
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+#pragma mark -- 下拉加载数据
+
+    float contentoffsetY = _userChatTableView.contentOffset.y;
+
+    //判断如果下拉超过限定 就加载数据
+    if ((-110  >= (contentoffsetY))&&!(_mchatArray.count == _chatArray.count) ){
+        NSLog(@"下拉如果超过-110realoadata");
+        _page++;
+        NSLog(@"%d",_page);
+        [self subChatArray];
+       [self.userChatTableView reloadData];
+        
+    }
+    //默认一次10个 这是最后一次加载大于0小于10的个数
+    else if( _chatArray.count - _mchatArray.count > 0 && _chatArray.count - _mchatArray.count < 10  ){
+        _mchatArray = _chatArray;
+        
+        [self.userChatTableView reloadData];
+        
+    }else if( _mchatArray.count == _chatArray.count )
+    {
+        NSLog(@"数组已经加载结束 停止加载");
+    }
+    
+    NSLog(@"%d",_mchatArray.count);
+    NSLog(@"%d",_chatArray.count);
+
+}
+
+
+
+
+
+
+
 /*
  #pragma mark - Navigation
  

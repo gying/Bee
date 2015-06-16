@@ -43,9 +43,9 @@
     
     EMConversation *_conversation;
     
+
+    
      
-    
-    
     
 }
 
@@ -55,12 +55,14 @@
 
 @implementation GroupChatTableViewController
 
+
 - (void)loadChatData {
 
      
     
     if (!self.chatArray) {
         self.chatArray = [[NSMutableArray alloc] init];
+        
     }
     [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
 
@@ -72,7 +74,9 @@
     [sendGroup setPk_group:self.group.pk_group];
     [_netManager getAllRelationFromGroup:sendGroup];
     
-    
+
+ 
+
 }
 
 
@@ -151,9 +155,7 @@
 #pragma mark -- 消息显示最底层获取消息列表（条件）
 
 
-    
     return cell;
-    
     
  
 }
@@ -162,9 +164,6 @@
 
 #define mark 聊天信息的操作方法
 - (void)cellLongPress:(UIGestureRecognizer *)recognizer{
-    
-    
-    
     
     CGPoint location = [recognizer locationInView:self.chatTableView];
     NSIndexPath * indexPath = [self.chatTableView indexPathForRowAtPoint:location];
@@ -180,18 +179,11 @@
 
 
 
- 
-
-
-
-
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     EModel_Chat *message = [self.chatArray objectAtIndex:indexPath.row];
     return [self cellHeightFromMessage:message].floatValue;
 }
-
-
 
 
 //HeadView高度
@@ -230,6 +222,9 @@
                                                                      ext:nil]];
 }
 
+
+
+#pragma mark -- 发送消息结束
 - (void)sendMessageDone:(EMMessage *)message {
     Model_Group_User *relation = [[Model_Group_User alloc] init];
     relation.fk_user = [Model_User loadFromUserDefaults].pk_user;
@@ -238,6 +233,9 @@
     //将信息输入数组,并刷新
     EModel_Chat *chat = [EModel_Chat repackEmessage:message withRelation:relation];
     [self.chatArray addObject:chat];
+    
+//    [self subChatArray];
+//    _mchatArray = (NSMutableArray *)[_chatArray subarrayWithRange:NSMakeRange(0,_pageSize*_page)];
 
     [self reloadTableViewIsScrollToBottom:YES withAnimated:YES];
     
@@ -293,6 +291,7 @@
     for (EModel_Chat *message in _chatArray) {
         headHight += [self cellHeightFromMessage:message].floatValue;
     }
+    
     
     headHight = self.chatTableView.frame.size.height - headHight;
     if (headHight <= 0) {
@@ -378,12 +377,7 @@
     [_conversation markAllMessagesAsRead:YES];
     [self reloadTableViewIsScrollToBottom:YES withAnimated:YES];
     
-    
-//    //聊天信息切换到最底层显示`
-//    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:self.chatArray.count-1  inSection:0];
-//    [self reloadTableViewIsScrollToBottom:YES withAnimated:NO];
-//    
-//    [self.chatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -516,7 +510,7 @@
                     if (messages.count == 0) {
                         return;
                     }
-                        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:messages.count-1  inSection:0];
+                        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:_chatArray.count-1  inSection:0];
                         
                         [self reloadTableViewIsScrollToBottom:NO withAnimated:NO];
                         

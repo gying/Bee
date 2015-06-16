@@ -367,11 +367,9 @@
                             
                             NSLog(@"%@",_party.begin_time);
                             NSLog(@"%@",startTime);
-//                            添加提醒
-//                            [event addAlarm:[EKAlarm alarmWithRelativeOffset:60.0f * -60.0f * 24]];
-//                            [event addAlarm:[EKAlarm alarmWithRelativeOffset:60.0f * -15.0f]];
-                            
-                            [event addAlarm:[EKAlarm alarmWithRelativeOffset:1]];
+
+                            //在事件前多少秒开始提醒
+                           [event addAlarm:[EKAlarm alarmWithRelativeOffset:30 * 60]];
                             
                             
                             [event setCalendar:[eventStore defaultCalendarForNewEvents]];
