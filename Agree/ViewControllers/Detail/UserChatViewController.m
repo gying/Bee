@@ -74,7 +74,7 @@
     
     //初始加载消息页数以及条数
     _page = 1;
-    _pageSize = 10;
+    _pageSize = 15;
 
     
     //读取私信的消息列表
@@ -564,20 +564,22 @@
     float contentoffsetY = _userChatTableView.contentOffset.y;
 
     //判断如果下拉超过限定 就加载数据
-    if ((-110  >= (contentoffsetY))&&!(_mchatArray.count == _chatArray.count) ){
+    if ((-120  >= (contentoffsetY))&&!(_mchatArray.count == _chatArray.count) ){
         NSLog(@"下拉如果超过-110realoadata");
+        
         _page++;
         NSLog(@"%d",_page);
         [self subChatArray];
        [self.userChatTableView reloadData];
+    
         
     }
     //默认一次10个 这是最后一次加载大于0小于10的个数
-    else if( _chatArray.count - _mchatArray.count > 0 && _chatArray.count - _mchatArray.count < 10  ){
+    else if( _chatArray.count - _mchatArray.count > 0 && _chatArray.count - _mchatArray.count < 15  ){
+
         _mchatArray = _chatArray;
-        
         [self.userChatTableView reloadData];
-        
+
     }else if( _mchatArray.count == _chatArray.count )
     {
         NSLog(@"数组已经加载结束 停止加载");

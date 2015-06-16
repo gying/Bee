@@ -66,7 +66,7 @@
     if (!self.chatArray) {
         self.chatArray = [[NSMutableArray alloc] init];
         page = 1;
-        pageSize =10;
+        pageSize =15;
         
     }
     [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
@@ -587,7 +587,7 @@
     float contentoffsetY = _chatTableView.contentOffset.y;
 
     //判断如果下拉超过限定 就加载数据
-    if ((-110  >= (contentoffsetY))&&!(_mchatArray.count == _chatArray.count) ){
+    if ((-120  >= (contentoffsetY))&&!(_mchatArray.count == _chatArray.count) ){
         NSLog(@"下拉如果超过-110realoadata");
         page++;
         NSLog(@"%d",page);
@@ -598,7 +598,7 @@
 
     }
     //默认一次10个 这是最后一次加载大于0小于10的个数
-    else if( self.chatArray.count - self.mchatArray.count > 0 && self.chatArray.count - self.mchatArray.count < 10  ){
+    else if( self.chatArray.count - self.mchatArray.count > 0 && self.chatArray.count - self.mchatArray.count < 15  ){
         self.mchatArray = self.chatArray;
 
         [_chatTableView reloadData];
