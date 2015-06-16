@@ -72,17 +72,9 @@
    self.automaticallyAdjustsScrollViewInsets = false;
     
     
-    
-    
+    //初始加载消息页数以及条数
     _page = 1;
     _pageSize = 10;
-
-    
-
-    
-    
-    
-    
 
     
     //读取私信的消息列表
@@ -589,6 +581,7 @@
     }else if( _mchatArray.count == _chatArray.count )
     {
         NSLog(@"数组已经加载结束 停止加载");
+//        [self.userChatTableView reloadData];
     }
     
     NSLog(@"%d",_mchatArray.count);

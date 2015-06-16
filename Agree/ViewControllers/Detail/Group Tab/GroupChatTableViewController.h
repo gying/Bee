@@ -17,9 +17,9 @@
 @property (nonatomic, strong)NSMutableArray *chatArray;
 @property (nonatomic, strong)NSMutableArray *mchatArray;
 
-//
-//@property (nonatomic, assign)    int page;
-//@property (nonatomic , assign)     int pageSize;
+//初始加载消息页数以及条数
+@property (nonatomic, assign)    int page;
+@property (nonatomic , assign)     int pageSize;
 
 
 
@@ -37,7 +37,7 @@
 - (void)loadChatData;
 //- (void)loadChatFromNet;
 //- (void)setkeyBoard: (UIViewController *)viewController;
-//- (void)subChatArray;
+- (void)subChatArray;
 
 
 @end

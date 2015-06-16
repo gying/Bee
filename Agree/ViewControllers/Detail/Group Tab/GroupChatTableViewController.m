@@ -44,6 +44,10 @@
     EMConversation *_conversation;
     
 
+    //初始加载消息页数以及条数
+//    int page;
+//    int pageSize;
+    
     
      
     
@@ -58,14 +62,12 @@
 
 - (void)loadChatData {
 
-     
     
     if (!self.chatArray) {
         self.chatArray = [[NSMutableArray alloc] init];
         
     }
     [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
-
     
     if (!_netManager) {
         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
@@ -92,8 +94,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    if (self.chatArray) {
-        return self.chatArray.count;
+    if (self.mchatArray) {
+        return self.mchatArray.count;
     } else {
         return 0;
     }
@@ -107,10 +109,8 @@
    GroupChatTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
     
  
-     
     
-    
-    EModel_Chat *message = [self.chatArray objectAtIndex:indexPath.row];
+    EModel_Chat *message = [self.mchatArray objectAtIndex:indexPath.row];
     if (nil == cell) {
         cell = [[GroupChatTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifier];
     }
@@ -181,7 +181,7 @@
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    EModel_Chat *message = [self.chatArray objectAtIndex:indexPath.row];
+    EModel_Chat *message = [self.mchatArray objectAtIndex:indexPath.row];
     return [self cellHeightFromMessage:message].floatValue;
 }
 
@@ -191,7 +191,7 @@
 {
     
     float headHight = 0;
-    for (EModel_Chat *message in _chatArray) {
+    for (EModel_Chat *message in _mchatArray) {
         headHight += [self cellHeightFromMessage:message].floatValue;
     }
     
@@ -288,7 +288,7 @@
                            withAnimated: (BOOL)isAnimated {
     
     float headHight = 0;
-    for (EModel_Chat *message in _chatArray) {
+    for (EModel_Chat *message in _mchatArray) {
         headHight += [self cellHeightFromMessage:message].floatValue;
     }
     
@@ -496,8 +496,17 @@
                         }
                         if (chat) {
                             [self.chatArray addObject:chat];
+                            //加载消息的数组个数
+//                            [self subChatArray];
                         }
+                        
+                        //加载消息的数组个数
+//                        [self subChatArray]
+                        
                     }
+                    //加载消息的数组个数
+                    [self subChatArray];
+//                    _mchatArray = _chatArray;
 
                     
                     
@@ -510,7 +519,7 @@
                     if (messages.count == 0) {
                         return;
                     }
-                        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:_chatArray.count-1  inSection:0];
+                        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:_mchatArray.count-1  inSection:0];
                         
                         [self reloadTableViewIsScrollToBottom:NO withAnimated:NO];
                         
@@ -532,11 +541,20 @@
     [SVProgressHUD dismiss];
 }
 
+- (void)subChatArray {
+    
+    _pageSize = 10;
+    _page = 1;
+    
+    
+    _mchatArray = (NSMutableArray *)[_chatArray subarrayWithRange:NSMakeRange(_chatArray.count - (_pageSize*_page),_pageSize*_page)];
+}
+
 - (void)tableViewIsScrollToBottom: (BOOL) isScroll
                      withAnimated: (BOOL)isAnimated {
     
     float headHight = 0;
-    for (EModel_Chat *message in _chatArray) {
+    for (EModel_Chat *message in _mchatArray) {
         headHight += [self cellHeightFromMessage:message].floatValue;
     }
     
