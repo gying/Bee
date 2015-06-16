@@ -45,8 +45,8 @@
     
 
     //初始加载消息页数以及条数
-//    int page;
-//    int pageSize;
+    int page;
+    int pageSize;
     
     
      
@@ -65,6 +65,8 @@
     
     if (!self.chatArray) {
         self.chatArray = [[NSMutableArray alloc] init];
+        page = 1;
+        pageSize =10;
         
     }
     [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
@@ -77,6 +79,8 @@
     [_netManager getAllRelationFromGroup:sendGroup];
     
 
+
+    
  
 
 }
@@ -543,11 +547,10 @@
 
 - (void)subChatArray {
     
-    _pageSize = 10;
-    _page = 1;
+
     
     
-    _mchatArray = (NSMutableArray *)[_chatArray subarrayWithRange:NSMakeRange(_chatArray.count - (_pageSize*_page),_pageSize*_page)];
+    _mchatArray = (NSMutableArray *)[_chatArray subarrayWithRange:NSMakeRange(_chatArray.count - (pageSize*page),pageSize*page)];
 }
 
 - (void)tableViewIsScrollToBottom: (BOOL) isScroll
@@ -576,6 +579,42 @@
         });
     }
 }
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+#pragma mark -- 下拉加载数据
+
+    float contentoffsetY = _chatTableView.contentOffset.y;
+
+    //判断如果下拉超过限定 就加载数据
+    if ((-110  >= (contentoffsetY))&&!(_mchatArray.count == _chatArray.count) ){
+        NSLog(@"下拉如果超过-110realoadata");
+        page++;
+        NSLog(@"%d",page);
+        [self subChatArray];
+        [_chatTableView reloadData];
+        
+
+
+    }
+    //默认一次10个 这是最后一次加载大于0小于10的个数
+    else if( self.chatArray.count - self.mchatArray.count > 0 && self.chatArray.count - self.mchatArray.count < 10  ){
+        self.mchatArray = self.chatArray;
+
+        [_chatTableView reloadData];
+
+    }else if( self.mchatArray.count == self.chatArray.count )
+    {
+        NSLog(@"数组已经加载结束 停止加载");
+    }
+
+    NSLog(@"%d",self.mchatArray.count);
+    NSLog(@"%d",self.chatArray.count);
+    NSLog(@"%F",contentoffsetY);
+
+
+}
+
 
 
 - (void)interfaceReturnDataError:(int)interfaceType {

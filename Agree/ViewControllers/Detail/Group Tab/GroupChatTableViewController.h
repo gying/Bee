@@ -18,8 +18,8 @@
 @property (nonatomic, strong)NSMutableArray *mchatArray;
 
 //初始加载消息页数以及条数
-@property (nonatomic, assign)    int page;
-@property (nonatomic , assign)     int pageSize;
+//@property (nonatomic, assign)    int page;
+//@property (nonatomic , assign)     int pageSize;
 
 
 
