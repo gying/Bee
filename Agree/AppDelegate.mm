@@ -122,8 +122,22 @@
     }
 }
 
+#pragma <#arguments#>
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    return  [WXApi handleOpenURL:url delegate:_viewController];
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    return  [WXApi handleOpenURL:url delegate:_viewController];
+}
+
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    //
+    [WXApi registerApp:@"wx9be30a70fcb480ae"];
     
     //清理sdimage
 //    [[SDImageCache sharedImageCache] clearDisk];

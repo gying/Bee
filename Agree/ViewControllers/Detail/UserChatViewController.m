@@ -22,6 +22,10 @@
 
 
 
+
+
+
+
 #define kLoadChatData       1
 #define kSendMessage        2
 
@@ -53,6 +57,8 @@
     
     int _page;
     int _pageSize;
+    
+    
 
 }
 
@@ -65,6 +71,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+
+    
     self.accountView = [[SRAccountView alloc] init];
     
     self.accountView.rootController = self;
@@ -75,6 +83,10 @@
     //初始加载消息页数以及条数
     _page = 1;
     _pageSize = 10;
+    
+
+    
+    
 
     
     //读取私信的消息列表
@@ -567,10 +579,12 @@
 #pragma mark -- 下拉加载数据
 
     float contentoffsetY = _userChatTableView.contentOffset.y;
+    
+    float contentsizeH = self.userChatTableView.contentSize.height;
 
     //判断如果下拉超过限定 就加载数据
     if (( 0 == (contentoffsetY))&&!(_mchatArray.count == _chatArray.count) ){
-        NSLog(@"下拉如果超过-110realoadata");
+        NSLog(@"下拉到顶刷新");
         
         _page++;
         NSLog(@"%d",_page);
@@ -590,13 +604,21 @@
         NSLog(@"数组已经加载结束 停止加载");
 
     }
+    //上拉返回上一页
+    
+    
+    if (contentsizeH - contentoffsetY < 350 ) {
+        NSLog(@"上拉返回上一页");
+
+        [self.navigationController popViewControllerAnimated:YES];
+        
+    }
     
 
-    
     NSLog(@"%lu",(unsigned long)_mchatArray.count);
     NSLog(@"%lu",(unsigned long)_chatArray.count);
-
-    
+    NSLog(@"%f",contentoffsetY);
+    NSLog(@"%f",contentsizeH);
 
 }
 

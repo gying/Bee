@@ -586,6 +586,8 @@
 #pragma mark -- 下拉加载数据
 
     float contentoffsetY = _chatTableView.contentOffset.y;
+    
+        float contentsizeH = self.chatTableView.contentSize.height;
 
     //判断如果下拉超过限定 就加载数据
     if ((0 == (contentoffsetY))&&!(_mchatArray.count == _chatArray.count) ){
@@ -595,8 +597,6 @@
         [self subChatArray];
         [_chatTableView reloadData];
         
-
-
     }
     //默认一次10个 这是最后一次加载大于0小于10的个数
     else if( self.chatArray.count - self.mchatArray.count > 0 && self.chatArray.count - self.mchatArray.count < 10  ){
@@ -607,6 +607,12 @@
     }else if( self.mchatArray.count == self.chatArray.count )
     {
         NSLog(@"数组已经加载结束 停止加载");
+    }
+    //上拉返回上一页
+    
+    if (contentsizeH - contentoffsetY < 300 ) {
+        NSLog(@"上拉返回上一页");
+        [_rootController.navigationController popViewControllerAnimated:YES];
     }
 
     NSLog(@"%d",self.mchatArray.count);

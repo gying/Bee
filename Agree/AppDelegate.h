@@ -19,6 +19,11 @@
 
 
 
+#import "WXApi.h"
+
+
+#import "RootAccountLoginViewController.h"
+
 
 
 
@@ -46,6 +51,7 @@
 @property (nonatomic, strong)TXYUploadManager *uploadManager;
 
 
+@property (strong, nonatomic) RootAccountLoginViewController *viewController;
 
 
 - (void)logout;
