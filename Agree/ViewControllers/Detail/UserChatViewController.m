@@ -139,7 +139,11 @@
 
 - (void)subChatArray {
     
-    _mchatArray = (NSMutableArray *)[_chatArray subarrayWithRange:NSMakeRange(_chatArray.count - (_pageSize*_page),_pageSize*_page)];
+    _mchatArray = [NSMutableArray arrayWithArray:[_chatArray subarrayWithRange:NSMakeRange(_chatArray.count - (_mchatArray.count+_pageSize),_mchatArray.count+_pageSize)]];
+    
+    
+//    [_chatArray subarrayWithRange:NSMakeRange(_chatArray.count-(_pageSize * _page),_pageSize*_page)];
+    
 }
 
 
@@ -417,6 +421,7 @@
     //将信息输入数组,并刷新
     EModel_User_Chat *chat = [EModel_User_Chat repackEmessage:message withSender:user];
     [_chatArray addObject:chat];
+    [_mchatArray addObject:chat];
     [self.userChatTableView reloadData];
     [self tableViewIsScrollToBottom:YES withAnimated:YES];
 }
@@ -583,15 +588,19 @@
     }else if( _mchatArray.count == _chatArray.count )
     {
         NSLog(@"数组已经加载结束 停止加载");
-//        [self.userChatTableView reloadData];
+
     }
     
-//    [self.userChatTableView reloadData];
+
     
     NSLog(@"%lu",(unsigned long)_mchatArray.count);
     NSLog(@"%lu",(unsigned long)_chatArray.count);
 
+    
+
 }
+
+    
 
 
 

@@ -237,6 +237,7 @@
     //将信息输入数组,并刷新
     EModel_Chat *chat = [EModel_Chat repackEmessage:message withRelation:relation];
     [self.chatArray addObject:chat];
+    [self.mchatArray addObject:chat];  
     
 //    [self subChatArray];
 //    _mchatArray = (NSMutableArray *)[_chatArray subarrayWithRange:NSMakeRange(0,_pageSize*_page)];
@@ -550,7 +551,7 @@
 
     
     
-    _mchatArray = (NSMutableArray *)[_chatArray subarrayWithRange:NSMakeRange(_chatArray.count - (pageSize*page),pageSize*page)];
+        _mchatArray = [NSMutableArray arrayWithArray:[_chatArray subarrayWithRange:NSMakeRange(_chatArray.count - (_mchatArray.count+pageSize),_mchatArray.count+pageSize)]];
 }
 
 - (void)tableViewIsScrollToBottom: (BOOL) isScroll
