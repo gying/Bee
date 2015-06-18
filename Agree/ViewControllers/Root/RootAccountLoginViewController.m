@@ -122,9 +122,37 @@
 - (IBAction)tapWechatButton:(UIButton *)sender {
     
     NSLog(@"微信授权登陆");
-
+    /*! @brief 第三方程序向微信终端请求认证的消息结构
+     *
+     * 第三方程序要向微信申请认证，并请求某些权限，需要调用WXApi的sendReq成员函数，
+     * 向微信终端发送一个SendAuthReq消息结构。微信终端处理完后会向第三方程序发送一个处理结果。
+     * @see SendAuthResp
+     */
+    SendAuthReq * req = [[SendAuthReq alloc]init];
+    /** 第三方程序要向微信申请认证，并请求某些权限，需要调用WXApi的sendReq成员函数，向微信终端发送一个SendAuthReq消息结构。微信终端处理完后会向第三方程序发送一个处理结果。
+     * @see SendAuthResp
+     * @note scope字符串长度不能超过1K
+     */
+    req.scope = @"snsapi_message,snsapi_userinfo,snsapi_friend,snsapi_contact";
+    /** 第三方程序本身用来标识其请求的唯一性，最后跳转回第三方程序时，由微信终端回传。
+     * @note state字符串长度不能超过1K
+     */
+    req.state = @"授权后跳转回来";
+    /** 由用户微信号和AppID组成的唯一标识，发送请求时第三方程序必须填写，用于校验微信用户是否换号登录*/
+    req.openID = @"wx9be30a70fcb480ae";
+    
+    /*! @brief 发送Auth请求到微信，支持用户没安装微信，等待微信返回onResp
+     *
+     * 函数调用后，会切换到微信的界面。第三方应用程序等待微信返回onResp。微信在异步处理完成后一定会调用onResp。支持SendAuthReq类型。
+     * @param req 具体的发送请求，在调用函数后，请自己释放。
+     * @param viewController 当前界面对象。
+     * @param delegate  WXApiDelegate对象，用来接收微信触发的消息。
+     * @return 成功返回YES，失败返回NO。
+     */
+    [WXApi sendAuthReq:req viewController:self delegate:self];
     
 }
+
 
 
 
@@ -138,6 +166,16 @@
     RootAccountRegViewController *childController = segue.destinationViewController;
     [childController setUserInfo:self.userInfo];
     [childController setRootController:self];
+}
+
+
+#pragma mark -- 和微信终端交互，因此需要实现WXApiDelegate协议的两个方法
+-(void) onReq:(BaseReq*)req{
+    //onReq是微信终端向第三方程序发起请求，要求第三方程序响应。第三方程序响应完后必须调用sendRsp返回。在调用sendRsp返回时，会切回到微信终端程序界面。
+}
+
+-(void) onResp:(BaseResp*)resp{
+    //如果第三方程序向微信发送了sendReq的请求，那么onResp会被回调。sendReq请求调用后，会切到微信终端程序界面。
 }
 
 

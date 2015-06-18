@@ -12,6 +12,9 @@
 #import "SRAccountView.h"
 
 
+
+
+
 @interface UserChatViewController : UIViewController
 
 @property (nonatomic, strong)Model_User *user;

@@ -43,6 +43,12 @@
     NSArray *_relationship;
     
     EMConversation *_conversation;
+
+
+    //初始加载消息页数以及条数
+    int page;
+    int pageSize;
+    
 }
 
 @end
@@ -51,15 +57,20 @@
 
 @implementation GroupChatTableViewController
 
+
 - (void)loadChatData {
     if (!self.chatArray) {
         self.chatArray = [[NSMutableArray alloc] init];
+        page = 1;
+        pageSize =10;
+        
     }
-    
     _relationship = [CD_Group_User getGroupUserFromCDByGroup:self.group];
     [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
+    
     [self repackMessage:_relationship];
     [self.chatTableView reloadData];
+
     
     if (!_netManager) {
         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
@@ -82,8 +93,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    if (self.chatArray) {
-        return self.chatArray.count;
+    if (self.mchatArray) {
+        return self.mchatArray.count;
     } else {
         return 0;
     }
@@ -95,9 +106,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *kCellIdentifier = @"GroupChatCell";
    GroupChatTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
-
     
-    EModel_Chat *message = [self.chatArray objectAtIndex:indexPath.row];
+    EModel_Chat *message = [self.mchatArray objectAtIndex:indexPath.row];
     if (nil == cell) {
         cell = [[GroupChatTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifier];
     }
@@ -142,9 +152,7 @@
 #pragma mark -- 消息显示最底层获取消息列表（条件）
 
 
-    
-    return cell;
-}
+    return cell;}
 
 
 
@@ -162,13 +170,10 @@
     
 }
 
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    EModel_Chat *message = [self.chatArray objectAtIndex:indexPath.row];
+    EModel_Chat *message = [self.mchatArray objectAtIndex:indexPath.row];
     return [self cellHeightFromMessage:message].floatValue;
 }
-
-
 
 
 //HeadView高度
@@ -176,7 +181,7 @@
 {
     
     float headHight = 0;
-    for (EModel_Chat *message in _chatArray) {
+    for (EModel_Chat *message in _mchatArray) {
         headHight += [self cellHeightFromMessage:message].floatValue;
     }
     
@@ -207,6 +212,9 @@
                                                                      ext:nil]];
 }
 
+
+
+#pragma mark -- 发送消息结束
 - (void)sendMessageDone:(EMMessage *)message {
     Model_Group_User *relation = [[Model_Group_User alloc] init];
     relation.fk_user = [Model_User loadFromUserDefaults].pk_user;
@@ -215,6 +223,10 @@
     //将信息输入数组,并刷新
     EModel_Chat *chat = [EModel_Chat repackEmessage:message withRelation:relation];
     [self.chatArray addObject:chat];
+    [self.mchatArray addObject:chat];  
+    
+//    [self subChatArray];
+//    _mchatArray = (NSMutableArray *)[_chatArray subarrayWithRange:NSMakeRange(0,_pageSize*_page)];
 
     [self reloadTableViewIsScrollToBottom:YES withAnimated:YES];
     
@@ -267,9 +279,10 @@
                            withAnimated: (BOOL)isAnimated {
     
     float headHight = 0;
-    for (EModel_Chat *message in _chatArray) {
+    for (EModel_Chat *message in _mchatArray) {
         headHight += [self cellHeightFromMessage:message].floatValue;
     }
+    
     
     headHight = self.chatTableView.frame.size.height - headHight;
     if (headHight <= 0) {
@@ -355,12 +368,7 @@
     [_conversation markAllMessagesAsRead:YES];
     [self reloadTableViewIsScrollToBottom:YES withAnimated:YES];
     
-    
-//    //聊天信息切换到最底层显示`
-//    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:self.chatArray.count-1  inSection:0];
-//    [self reloadTableViewIsScrollToBottom:YES withAnimated:NO];
-//    
-//    [self.chatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -490,9 +498,12 @@
                     for (Model_Group_User *groupUser in _relationship) {
                         [CD_Group_User saveGroupUserToCD:groupUser];
                     }
+
                     
                     [self.chatArray removeAllObjects];
                     [self repackMessage:_relationship];
+                    
+                    [self subChatArray];
 
                     
                     //清空小组的提示
@@ -506,7 +517,7 @@
                     
                     NSIndexPath * indexPath = [NSIndexPath indexPathForRow:self.chatArray.count-1  inSection:0];
                     [self reloadTableViewIsScrollToBottom:NO withAnimated:NO];
-                        
+                    
                     if (!(0 >= indexPath.row)) {
                         [self.chatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
                     }
@@ -525,11 +536,19 @@
     [SVProgressHUD dismiss];
 }
 
+- (void)subChatArray {
+    
+
+    
+    
+        _mchatArray = [NSMutableArray arrayWithArray:[_chatArray subarrayWithRange:NSMakeRange(_chatArray.count - (_mchatArray.count+pageSize),_mchatArray.count+pageSize)]];
+}
+
 - (void)tableViewIsScrollToBottom: (BOOL) isScroll
                      withAnimated: (BOOL)isAnimated {
     
     float headHight = 0;
-    for (EModel_Chat *message in _chatArray) {
+    for (EModel_Chat *message in _mchatArray) {
         headHight += [self cellHeightFromMessage:message].floatValue;
     }
     
@@ -551,6 +570,48 @@
         });
     }
 }
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+#pragma mark -- 下拉加载数据
+
+    float contentoffsetY = _chatTableView.contentOffset.y;
+    
+        float contentsizeH = self.chatTableView.contentSize.height;
+
+    //判断如果下拉超过限定 就加载数据
+    if ((0 == (contentoffsetY))&&!(_mchatArray.count == _chatArray.count) ){
+        NSLog(@"下拉如果超过-110realoadata");
+        page++;
+        NSLog(@"%d",page);
+        [self subChatArray];
+        [_chatTableView reloadData];
+        
+    }
+    //默认一次10个 这是最后一次加载大于0小于10的个数
+    else if( self.chatArray.count - self.mchatArray.count > 0 && self.chatArray.count - self.mchatArray.count < 10  ){
+        self.mchatArray = self.chatArray;
+
+        [_chatTableView reloadData];
+
+    }else if( self.mchatArray.count == self.chatArray.count )
+    {
+        NSLog(@"数组已经加载结束 停止加载");
+    }
+    //上拉返回上一页
+    
+    if (contentsizeH - contentoffsetY < 300 ) {
+        NSLog(@"上拉返回上一页");
+        [_rootController.navigationController popViewControllerAnimated:YES];
+    }
+
+//    NSLog(@"%d",self.mchatArray.count);
+//    NSLog(@"%d",self.chatArray.count);
+//    NSLog(@"%F",contentoffsetY);
+
+
+}
+
 
 
 - (void)interfaceReturnDataError:(int)interfaceType {

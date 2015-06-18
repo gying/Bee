@@ -54,10 +54,7 @@
     [self setTitle:@"选择好友"];
     [self loadDataFromNet];
     
-//    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
-    
-    
-//    [self.choosefriendsTableview setEditing:YES];
+
 }
 
 - (void)loadDataFromNet
@@ -70,7 +67,7 @@
     [_netManager getFriendList:sendUser];
 }
 
-#pragma mark - ChooseFriendsTableView的代理
+#pragma mark - ChooseFriendsTableView的协议方法
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
