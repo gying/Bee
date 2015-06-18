@@ -111,4 +111,23 @@
     }
 }
 
++ (void)removeAllGroupFromCD {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"CD_Group"];
+    
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext *context = [delegate managedObjectContext];
+    NSArray *result = [context executeFetchRequest:request error:nil];
+    
+    for (CD_Group *groupCD in result) {
+        [context deleteObject:groupCD];
+    }
+    
+    // 5. 通知_context保存数据
+    if ([context save:nil]) {
+        NSLog(@"删除成功");
+    } else {
+        NSLog(@"删除失败");
+    }
+}
+
 @end

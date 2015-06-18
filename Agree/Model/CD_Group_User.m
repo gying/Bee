@@ -137,7 +137,26 @@
 
 + (void)removeGroupUserFromCDByGroup: (Model_Group *)group {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"CD_Group_User"];
-//    request.predicate = [NSPredicate predicateWithFormat:@"fk_group == %d", group.pk_group.intValue];
+    request.predicate = [NSPredicate predicateWithFormat:@"fk_group == %d", group.pk_group.intValue];
+    
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext *context = [delegate managedObjectContext];
+    NSArray *result = [context executeFetchRequest:request error:nil];
+    
+    for (CD_Group_User *groupUserCD in result) {
+        [context deleteObject:groupUserCD];
+    }
+    
+    // 5. 通知_context保存数据
+    if ([context save:nil]) {
+        NSLog(@"删除成功");
+    } else {
+        NSLog(@"删除失败");
+    }
+}
+
++ (void)removeAllGroupUserFromCD {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"CD_Group_User"];
     
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     NSManagedObjectContext *context = [delegate managedObjectContext];

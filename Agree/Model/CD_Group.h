@@ -30,4 +30,6 @@
 + (NSMutableArray *)getGroupFromCD;
 + (void)removeGroupFromCD: (Model_Group *)group;
 
++ (void)removeAllGroupFromCD;
+
 @end

@@ -218,6 +218,7 @@
             } else {
                 _friendArray = nil;
                 _friendArray = [[NSMutableArray alloc] init];
+                [SVProgressHUD showInfoWithStatus:@"您还没有任何日程"];
             }
         }
             break;
@@ -231,7 +232,6 @@
     [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"contact_update"];
     [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"relation_update"];
     self.navigationController.tabBarItem.badgeValue = nil;
-    [SVProgressHUD dismiss];
     [self.tableView.header endRefreshing];
     _isfirstLoad = FALSE;
     

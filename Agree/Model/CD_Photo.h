@@ -29,4 +29,6 @@
 + (void)removePhotoFromCD: (Model_Photo *)photo;
 + (void)removePhotoFromCDByGroup: (Model_Group *)group;
 
++ (void)removeAllPhotoFromCD;
+
 @end

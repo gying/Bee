@@ -160,7 +160,7 @@
                 [self.tableView reloadData];
                 
             } else {
-                [SVProgressHUD showErrorWithStatus:@"未找到相关数据"];
+                [SVProgressHUD showInfoWithStatus:@"您还没有任何日程"];
             }
             [self.tableView.header endRefreshing];
             //在成功读取了所有聚会后,将聚会提示设置为0

@@ -51,8 +51,8 @@
     _saveImageBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _saveImageBtn.frame = CGRectMake(20, 0, btnWidth, btnWidth);
     _saveImageBtn.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-    [_saveImageBtn setImage:[UIImage imageNamed:@"MJPhotoBrowser.bundle/save_icon.png"] forState:UIControlStateNormal];
-    [_saveImageBtn setImage:[UIImage imageNamed:@"MJPhotoBrowser.bundle/save_icon_highlighted.png"] forState:UIControlStateHighlighted];
+    [_saveImageBtn setImage:[UIImage imageNamed:@"agree_image_remove.pdf"] forState:UIControlStateNormal];
+    [_saveImageBtn setImage:[UIImage imageNamed:@"agree_image_remove.pdf"] forState:UIControlStateHighlighted];
     [_saveImageBtn addTarget:self action:@selector(saveImage) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_saveImageBtn];
     
@@ -61,8 +61,8 @@
     _delImageBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _delImageBtn.frame = CGRectMake([[UIScreen mainScreen] bounds].size.width - 60, 0, btnWidth, btnWidth);
     _delImageBtn.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-    [_delImageBtn setImage:[UIImage imageNamed:@"MJPhotoBrowser.bundle/save_icon.png"] forState:UIControlStateNormal];
-    [_delImageBtn setImage:[UIImage imageNamed:@"MJPhotoBrowser.bundle/save_icon_highlighted.png"] forState:UIControlStateHighlighted];
+    [_delImageBtn setImage:[UIImage imageNamed:@"agree_image_save.pdf"] forState:UIControlStateNormal];
+    [_delImageBtn setImage:[UIImage imageNamed:@"agree_image_save.pdf"] forState:UIControlStateHighlighted];
     [_delImageBtn addTarget:self action:@selector(delImage) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_delImageBtn];
 }

@@ -113,5 +113,24 @@
     }
 }
 
++ (void)removeAllUserFromCD {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"CD_User"];
+    
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext *context = [delegate managedObjectContext];
+    NSArray *result = [context executeFetchRequest:request error:nil];
+    
+    for (CD_User *userCD in result) {
+        [context deleteObject:userCD];
+    }
+    
+    // 5. 通知_context保存数据
+    if ([context save:nil]) {
+        NSLog(@"删除成功");
+    } else {
+        NSLog(@"删除失败");
+    }
+}
+
 
 @end

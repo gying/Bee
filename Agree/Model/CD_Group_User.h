@@ -33,4 +33,6 @@
 + (NSMutableArray *)getGroupUserFromCDByGroup: (Model_Group *)group;
 + (void)removeGroupUserFromCDByGroup: (Model_Group *)group;
 
++ (void)removeAllGroupUserFromCD;
+
 @end

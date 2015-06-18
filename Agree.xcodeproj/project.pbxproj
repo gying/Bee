@@ -69,7 +69,6 @@
 		F07F71251A72AB92006208A1 /* JTCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = F07F711A1A72AB92006208A1 /* JTCircleView.m */; };
 		F080742C1AB948510046EA0C /* ContactsDetailTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F080742B1AB948510046EA0C /* ContactsDetailTableViewController.m */; };
 		F080742F1AB948830046EA0C /* SelectFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F080742E1AB948830046EA0C /* SelectFriendViewController.m */; };
-		F083F5D71A91330900330EC5 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F083F5D61A91330900330EC5 /* Media.xcassets */; };
 		F08427801AA9910300B9CD28 /* GroupAlbumsCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F084277F1AA9910300B9CD28 /* GroupAlbumsCollectionViewCell.m */; };
 		F08B809D1A75F7110012E3D9 /* PartyDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F08B809C1A75F7110012E3D9 /* PartyDetailViewController.m */; };
 		F08B80A01A75FAB40012E3D9 /* GroupSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F08B809F1A75FAB40012E3D9 /* GroupSettingViewController.m */; };
@@ -102,6 +101,7 @@
 		F0CC83E11B2E7D0400B73652 /* CD_Group.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CC83E01B2E7D0400B73652 /* CD_Group.m */; };
 		F0CC83E41B2ECF4500B73652 /* CD_Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CC83E31B2ECF4500B73652 /* CD_Photo.m */; };
 		F0CF4EB21ACAEDF500BBD4AF /* EModel_User_Chat.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF4EB11ACAEDF500BBD4AF /* EModel_User_Chat.m */; };
+		F0D1A1181B32A677009A5B26 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0D1A1171B32A677009A5B26 /* Media.xcassets */; };
 		F0D519671B20921500AD24F9 /* Emoji.m in Sources */ = {isa = PBXBuildFile; fileRef = F0D519641B20921500AD24F9 /* Emoji.m */; };
 		F0D519681B20921500AD24F9 /* EmojiEmoticons.m in Sources */ = {isa = PBXBuildFile; fileRef = F0D519661B20921500AD24F9 /* EmojiEmoticons.m */; };
 		F0DA15141AC0192300FA6199 /* UserChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0DA15131AC0192300FA6199 /* UserChatTableViewCell.m */; };
@@ -283,7 +283,6 @@
 		F080742B1AB948510046EA0C /* ContactsDetailTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsDetailTableViewController.m; sourceTree = "<group>"; };
 		F080742D1AB948830046EA0C /* SelectFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectFriendViewController.h; sourceTree = "<group>"; };
 		F080742E1AB948830046EA0C /* SelectFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectFriendViewController.m; sourceTree = "<group>"; };
-		F083F5D61A91330900330EC5 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		F084277E1AA9910300B9CD28 /* GroupAlbumsCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupAlbumsCollectionViewCell.h; sourceTree = "<group>"; };
 		F084277F1AA9910300B9CD28 /* GroupAlbumsCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupAlbumsCollectionViewCell.m; sourceTree = "<group>"; };
 		F08B809B1A75F7110012E3D9 /* PartyDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PartyDetailViewController.h; sourceTree = "<group>"; };
@@ -401,6 +400,7 @@
 		F0CC83E31B2ECF4500B73652 /* CD_Photo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CD_Photo.m; sourceTree = "<group>"; };
 		F0CF4EB01ACAEDF500BBD4AF /* EModel_User_Chat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EModel_User_Chat.h; sourceTree = "<group>"; };
 		F0CF4EB11ACAEDF500BBD4AF /* EModel_User_Chat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EModel_User_Chat.m; sourceTree = "<group>"; };
+		F0D1A1171B32A677009A5B26 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		F0D519631B20921500AD24F9 /* Emoji.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Emoji.h; sourceTree = "<group>"; };
 		F0D519641B20921500AD24F9 /* Emoji.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Emoji.m; sourceTree = "<group>"; };
 		F0D519651B20921500AD24F9 /* EmojiEmoticons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmojiEmoticons.h; sourceTree = "<group>"; };
@@ -908,8 +908,8 @@
 		F0F5C1C71A66CEBE0029BF7A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F0D1A1171B32A677009A5B26 /* Media.xcassets */,
 				F02169F51A927F1500353879 /* LangTingGBK.TTF */,
-				F083F5D61A91330900330EC5 /* Media.xcassets */,
 				F01487EA1A8F88F300E41A63 /* Lantinghei.ttc */,
 				F0068C251A679E8700B9CB60 /* framework */,
 				F0F5C1C81A66CEBE0029BF7A /* Info.plist */,
@@ -1196,8 +1196,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				F0F5C1DB1A66CEBE0029BF7A /* LaunchScreen.xib in Resources */,
-				F083F5D71A91330900330EC5 /* Media.xcassets in Resources */,
 				F02169F61A927F1500353879 /* LangTingGBK.TTF in Resources */,
+				F0D1A1181B32A677009A5B26 /* Media.xcassets in Resources */,
 				F07642EE1AF1DDFC0075E0C2 /* MainStoryBoard.storyboard in Resources */,
 				F0B5F4AA1AAA97180013111F /* MJPhotoBrowser.bundle in Resources */,
 				F0BB7B3C1A727F3500A0E4A0 /* mapapi.bundle in Resources */,

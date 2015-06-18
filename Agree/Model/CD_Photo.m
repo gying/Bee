@@ -115,5 +115,23 @@
     }
 }
 
++ (void)removeAllPhotoFromCD {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"CD_Photo"];
+    
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext *context = [delegate managedObjectContext];
+    NSArray *result = [context executeFetchRequest:request error:nil];
+    
+    for (CD_Photo *photoCD in result) {
+        [context deleteObject:photoCD];
+    }
+    
+    if ([context save:nil]) {
+        NSLog(@"删除成功");
+    } else {
+        NSLog(@"删除失败");
+    }
+}
+
 
 @end

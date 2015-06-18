@@ -28,4 +28,6 @@
 @property (nonatomic, retain) NSNumber * chat_update;
 @property (nonatomic, retain) NSNumber * relationship_update;
 
++ (void)removeAllUserFromCD;
+
 @end

@@ -38,4 +38,6 @@
 + (NSMutableArray *)getPartyFromCDByGroup: (Model_Group *)group;
 + (void)removePartyFromCDByGroup: (Model_Group *)group;
 
++ (void)removeAllPartyFromCD;
+
 @end

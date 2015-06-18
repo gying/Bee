@@ -205,5 +205,24 @@
     }
 }
 
++ (void)removeAllPartyFromCD {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"CD_Party"];
+    
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    NSManagedObjectContext *context = [delegate managedObjectContext];
+    NSArray *result = [context executeFetchRequest:request error:nil];
+    
+    for (CD_Party *partyCD in result) {
+        [context deleteObject:partyCD];
+    }
+    
+    // 5. 通知_context保存数据
+    if ([context save:nil]) {
+        NSLog(@"删除成功");
+    } else {
+        NSLog(@"删除失败");
+    }
+}
+
 
 @end
