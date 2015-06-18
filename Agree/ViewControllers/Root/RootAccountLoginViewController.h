@@ -24,6 +24,7 @@
 
 @property (nonatomic, strong)Model_User *userInfo;
 
+@property (nonatomic , strong)NSString * codeStr;
 
 
 
