@@ -112,7 +112,7 @@
             [self.mHiddeView addSubview:hideBtn];
         }
         
-        [UIView animateWithDuration:0.3 animations:^{
+        [UIView animateWithDuration:0.2 animations:^{
             self.mHiddeView.alpha =0.1f;
             
             [self.mViewController.view bringSubviewToFront:self.mBackView];
@@ -128,7 +128,7 @@
 
 - (void)keyboardWillHide:(NSNotification *)notification //键盘下落
 {
-        [UIView animateWithDuration:0.3 animations:^{
+        [UIView animateWithDuration:0.2 animations:^{
             self.mHiddeView.alpha =0.0f;
             
             
@@ -157,9 +157,6 @@
 
 - (void)textDidChanged:(NSNotification *)notif //监听文字改变 换行时要更改输入框的位置
 {
-
-
-    
 
     [UIView animateWithDuration:0.3 animations:^{
 
@@ -190,6 +187,7 @@
 
 
 - (void)initTextViewFrame {
+    [UIView animateWithDuration:0.3 animations:^{
     CGRect textFrame=[[self.mTextView layoutManager]usedRectForTextContainer:[self.mTextView textContainer]];
     CGSize contentSize = textFrame.size;
     //如果超过最大空间则直接返回
@@ -214,7 +212,7 @@
 //    [self.mTextView setContentOffset:CGPointMake(self.mTextView.contentInset.left, self.mTextView.contentInset.bottom)];
 //    self.mTextView.scrollIndicatorInsets.bottom = self.mTextView.contentInset.bottom;
     [self.mTextView scrollRangeToVisible:self.mTextView.selectedRange];
-    
+    }];
 }
 
 - (void)dealloc //移除通知

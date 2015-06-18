@@ -19,6 +19,7 @@
     Model_User *_user;
     
     BOOL _addFriend;
+    int _relationStatus;
 }
 
 @end
@@ -34,7 +35,6 @@
     
     [self.avatarImage.layer setCornerRadius:self.avatarImage.frame.size.height/2];
     [self.avatarImage.layer setMasksToBounds:YES];
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -51,16 +51,22 @@
         //如果头像界面那隐藏,则为查找用户
         _user = [[Model_User alloc] init];
         [_user setPhone:self.accountTextField.text];
+        [_user setPk_user:[Model_User loadFromUserDefaults].pk_user];
         [_netManager getUserByPhone:_user];
     } else {
-        //添加用户
-        Model_user_user *userRelation = [[Model_user_user alloc] init];
-        [userRelation setFk_user_from:[Model_User loadFromUserDefaults].pk_user];
-        [userRelation setFk_user_to:_user.pk_user];
-        [userRelation setRelationship:@1];
-        [userRelation setStatus:@1];
-        _addFriend = TRUE;
-        [_netManager addFriend:userRelation];
+        if (0 == _relationStatus) {
+            //如果用户并不存在好友关系
+            //添加用户
+            Model_user_user *userRelation = [[Model_user_user alloc] init];
+            [userRelation setFk_user_from:[Model_User loadFromUserDefaults].pk_user];
+            [userRelation setFk_user_to:_user.pk_user];
+            [userRelation setRelationship:@1];
+            [userRelation setStatus:@1];
+            _addFriend = TRUE;
+            [_netManager addFriend:userRelation];
+            
+            [SVProgressHUD showWithStatus:@"正在发送好友请求"];
+        }
     }
 }
 - (IBAction)pressedTheReInputButton:(id)sender {
@@ -80,7 +86,8 @@
     
     switch (interfaceType) {
         case kAddFriend: {
-        
+            [SVProgressHUD showSuccessWithStatus:@"好友请求发送成功"];
+            [self.navigationController popViewControllerAnimated:YES];
         }
             break;
             
@@ -92,9 +99,25 @@
                 [self.accountTextField setHidden:YES];
                 [self.avatarImage sd_setImageWithURL:[SRImageManager avatarImageFromTXYFieldID:_user.avatar_path]];
                 [self.avatarImage setHidden:NO];
-                
                 [self.reInputButton setHidden:NO];
-                [self.addButton setTitle:@"发送好友请求" forState:UIControlStateNormal];
+                
+                _relationStatus = _user.relationship.intValue;
+                
+                switch (_relationStatus) {
+                    case 0: {
+                        [self.addButton setTitle:@"发送好友请求" forState:UIControlStateNormal];
+                    }
+                        break;
+                    case 1: {
+                        [self.addButton setTitle:@"已发送好友请求" forState:UIControlStateNormal];
+                    }
+                        break;
+                    default: {
+                        [self.addButton setTitle:@"已存在好友关系" forState:UIControlStateNormal];
+                    }
+                        break;
+                }
+                
                 
             } else {
                 //找不到该用户

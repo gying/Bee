@@ -24,6 +24,7 @@
 #import "EMCommandMessageBody.h"
 #import "EMSendMessageHepler.h"
 #import "GroupChatTableViewCell.h"
+#import "CD_Group_User.h"
 
 
 
@@ -42,11 +43,6 @@
     NSArray *_relationship;
     
     EMConversation *_conversation;
-    
-     
-    
-    
-    
 }
 
 @end
@@ -56,14 +52,14 @@
 @implementation GroupChatTableViewController
 
 - (void)loadChatData {
-
-     
-    
     if (!self.chatArray) {
         self.chatArray = [[NSMutableArray alloc] init];
     }
+    
+    _relationship = [CD_Group_User getGroupUserFromCDByGroup:self.group];
     [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
-
+    [self repackMessage:_relationship];
+    [self.chatTableView reloadData];
     
     if (!_netManager) {
         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
@@ -71,8 +67,6 @@
     Model_Group *sendGroup = [[Model_Group alloc] init];
     [sendGroup setPk_group:self.group.pk_group];
     [_netManager getAllRelationFromGroup:sendGroup];
-    
-    
 }
 
 
@@ -101,10 +95,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *kCellIdentifier = @"GroupChatCell";
    GroupChatTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
-    
- 
-     
-    
+
     
     EModel_Chat *message = [self.chatArray objectAtIndex:indexPath.row];
     if (nil == cell) {
@@ -153,19 +144,12 @@
 
     
     return cell;
-    
-    
- 
 }
 
 
 
 #define mark 聊天信息的操作方法
 - (void)cellLongPress:(UIGestureRecognizer *)recognizer{
-    
-    
-    
-    
     CGPoint location = [recognizer locationInView:self.chatTableView];
     NSIndexPath * indexPath = [self.chatTableView indexPathForRowAtPoint:location];
     //        UserChatTableViewCell *cell = (UserChatTableViewCell *)recognizer.view;
@@ -177,13 +161,6 @@
     [self.rootController longTapCell];
     
 }
-
-
-
- 
-
-
-
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -469,56 +446,66 @@
     }
     
 }
+
+- (void)repackMessage: (NSArray *)relationAry {
+    
+    //读取私信的消息列表
+    _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:self.group.em_id isGroup:YES];
+    NSArray *messages = [_conversation loadAllMessages];
+    
+    for (EMMessage *message in messages) {
+        EModel_Chat *chat;
+        
+        for (Model_Group_User *group_user in relationAry) {
+            //如果关系为2,则为群主
+            if ([group_user.role isEqualToNumber:@1]) {
+                self.rootController.group.creater = group_user.fk_user;
+            }
+            
+            if ([group_user.fk_user.stringValue isEqualToString:message.groupSenderName]) {
+                chat = [EModel_Chat repackEmessage:message withRelation:group_user];
+            }
+        }
+        if (chat) {
+            [self.chatArray addObject:chat];
+        }
+    }
+    
+    [_conversation markAllMessagesAsRead:YES];
+}
+
 - (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
     switch (interfaceType) {
         case kGetAllRelationFromGroup: {
             if (jsonDic) {
                 //读取信息
-                
-                [SVProgressHUD dismiss];
-                
                 if (!_relationship) {
                     _relationship = [[NSMutableArray alloc] init];
                 }
                 if (jsonDic) {
+                    
                     _relationship = [Model_Group_User objectArrayWithKeyValuesArray:jsonDic];
                     
-                    //读取私信的消息列表
-                    _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:self.group.em_id isGroup:YES];
-                    NSArray *messages = [_conversation loadAllMessages];
-                    
-                    for (EMMessage *message in messages) {
-                        EModel_Chat *chat;
-                        
-                        for (Model_Group_User *group_user in _relationship) {
-                            //如果关系为2,则为群主
-                            if ([group_user.role isEqualToNumber:@1]) {
-                                self.rootController.group.creater = group_user.fk_user;
-                            }
-                            
-                            if ([group_user.fk_user.stringValue isEqualToString:message.groupSenderName]) {
-                                chat = [EModel_Chat repackEmessage:message withRelation:group_user];
-                            }
-                        }
-                        if (chat) {
-                            [self.chatArray addObject:chat];
-                        }
+                    [CD_Group_User removeGroupUserFromCDByGroup:self.group];
+                    for (Model_Group_User *groupUser in _relationship) {
+                        [CD_Group_User saveGroupUserToCD:groupUser];
                     }
+                    
+                    [self.chatArray removeAllObjects];
+                    [self repackMessage:_relationship];
 
                     
-                    
-                    [_conversation markAllMessagesAsRead:YES];
                     //清空小组的提示
                     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
                     [delegate.groupDelegate setDataChange:TRUE];
                     
                     //聊天信息切换到最底层显示
-                    if (messages.count == 0) {
+                    if (self.chatArray.count == 0) {
                         return;
                     }
-                        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:messages.count-1  inSection:0];
-                        
-                        [self reloadTableViewIsScrollToBottom:NO withAnimated:NO];
+                    
+                    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:self.chatArray.count-1  inSection:0];
+                    [self reloadTableViewIsScrollToBottom:NO withAnimated:NO];
                         
                     if (!(0 >= indexPath.row)) {
                         [self.chatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];

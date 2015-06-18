@@ -23,9 +23,8 @@
 #import "AppDelegate.h"
 
 #import "EaseMob.h"
-
-
 #import "SRMoveArray.h"
+#import <MJRefresh.h>
 
 
 @interface ContactsTableViewController () <SRNetManagerDelegate> {
@@ -35,7 +34,6 @@
     NSInteger _selectIndex;
     BOOL _isfirstLoad;
     
-    UIRefreshControl *_refreshControl;
     BOOL _intoMessage;
     Model_User *_intoUser;
 }
@@ -63,14 +61,8 @@
     _isfirstLoad = TRUE;
     [self loadDataFromNet];
     
-    NSAttributedString *refString = [[NSAttributedString alloc] initWithString:@"松手刷新好友"];
-    
-    _refreshControl = [[UIRefreshControl alloc] init];
-    [_refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
-    [_refreshControl setAttributedTitle: refString];
-    
-    [_refreshControl setAlpha:0.3];
-    [self.tableView addSubview:_refreshControl];
+    // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
+    self.tableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh:)];
 }
 
 - (void)refresh:(id)sender {
@@ -240,7 +232,7 @@
     [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"relation_update"];
     self.navigationController.tabBarItem.badgeValue = nil;
     [SVProgressHUD dismiss];
-    [_refreshControl endRefreshing];
+    [self.tableView.header endRefreshing];
     _isfirstLoad = FALSE;
     
     if (_intoMessage) {

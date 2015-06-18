@@ -22,6 +22,7 @@
 #import "GroupChatTableViewCell.h"
 #import "MJPhotoBrowser.h"
 #import <EaseMob.h>
+#import <MJRefresh.h>
 
 #import "SRKeyboard.h"
 
@@ -126,13 +127,14 @@
     
     self.albumsCollectionView.delegate = _albumsDelegate;
     self.albumsCollectionView.dataSource = _albumsDelegate;
+    
+    _albumsDelegate.albumsCollectionView.alwaysBounceVertical = YES;
+    // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
+    self.albumsCollectionView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:_albumsDelegate refreshingAction:@selector(loadPhotoData)];
+    
     _albumsDelegate.rootController = self;
     
     [self setkeyBoard];
-    
-
-    
-    
 }
 
 
@@ -218,6 +220,9 @@
             _partyDelegate.delegate = self;
             [self.partyTableView setDelegate:_partyDelegate];
             [self.partyTableView setDataSource:_partyDelegate];
+            
+            // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
+            self.partyTableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:_partyDelegate refreshingAction:@selector(loadPartyData)];
             [_partyDelegate loadPartyData];
             //            [self.partyTableView reloadData];
         }

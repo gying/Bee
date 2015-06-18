@@ -48,7 +48,7 @@
 
 - (id)init;
 
-- (void)show;
+- (BOOL)show;
 - (void)loadWithUser:(Model_User *)user withGroup: (Model_Group *)group;
 
 

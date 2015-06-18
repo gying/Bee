@@ -40,8 +40,6 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer.timeoutInterval = 20;
     
-    NSLog(@"%@",sendDic);
-    
 //    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",nil];
 //    manager.responseSerializer = [AFHTTPResponseSerializer serializer];

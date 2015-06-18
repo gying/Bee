@@ -150,12 +150,14 @@
     
     Model_Group_User *relation = [_relationArray objectAtIndex:indexPath.row];
     
-    Model_User *chooseUser = [[Model_User alloc] init];
-    chooseUser.pk_user = relation.fk_user;
-    chooseUser.nickname = relation.nickname;
-    chooseUser.avatar_path = relation.avatar_path;
-    [_accountView loadWithUser:chooseUser withGroup:self.group];
-    [_accountView show];
+    if (![relation.fk_user isEqual:[Model_User loadFromUserDefaults].pk_user]) {
+        Model_User *chooseUser = [[Model_User alloc] init];
+        chooseUser.pk_user = relation.fk_user;
+        chooseUser.nickname = relation.nickname;
+        chooseUser.avatar_path = relation.avatar_path;
+        [_accountView loadWithUser:chooseUser withGroup:self.group];
+        [_accountView show];
+    }
 }
 
 - (IBAction)tapSaveButton:(id)sender {

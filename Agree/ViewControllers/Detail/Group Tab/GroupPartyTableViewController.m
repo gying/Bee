@@ -12,7 +12,8 @@
 #import <SVProgressHUD.h>
 #import "GroupPartyTableViewCell.h"
 #import "AppDelegate.h"
-
+#import "CD_Party.h"
+#import <MJRefresh.h>
 
 @interface GroupPartyTableViewController () <SRNetManagerDelegate> {
     SRNet_Manager *_netManager;
@@ -22,24 +23,27 @@
 
 @implementation GroupPartyTableViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
+//- (void)viewDidLoad {
+//    [super viewDidLoad];
+//    
+//    // Uncomment the following line to preserve selection between presentations.
+//    // self.clearsSelectionOnViewWillAppear = NO;
+//    
+//    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+//    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+//}
 
 - (void)reloadPartyData {
     [self.partyTableView reloadData];
 }
 
 - (void)loadPartyData {
+    self.partyArray = [CD_Party getPartyFromCDByGroup:self.group];
+    [self.partyTableView reloadData];
     if (!_netManager) {
         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
     }
+    
     [_netManager getScheduleByGroupID:self.group.pk_group withUserID:[Model_User loadFromUserDefaults].pk_user withRelID:self.group.pk_group_user];
     [self.group setParty_update:@0];
     
@@ -68,18 +72,24 @@
     switch (interfaceType) {
         case kGetScheduleByGroupID: {
             if (jsonDic) {
+//                [SVProgressHUD showSuccessWithStatus:@"读取数据成功"];
+                [CD_Party removePartyFromCDByGroup:self.group];
                 self.partyArray = (NSMutableArray *)[Model_Party objectArrayWithKeyValuesArray:jsonDic];
                 [self.partyTableView reloadData];
-                [SVProgressHUD showSuccessWithStatus:@"读取数据成功"];
+
+                for (Model_Party *party in self.partyArray) {
+                    [CD_Party savePartyToCD:party];
+                }
+                [self.partyTableView.header endRefreshing];
+                
             } else {
-                [SVProgressHUD showSuccessWithStatus:@"未找到相关数据"];
+//                [SVProgressHUD showSuccessWithStatus:@"未找到相关数据"];
             }
         }
             break;
         default:
             break;
     }
-    
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {

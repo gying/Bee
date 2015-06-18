@@ -13,6 +13,8 @@
 #import "PartyDetailViewController.h"
 #import "AllPartyTableViewCell.h"
 #import "AppDelegate.h"
+#import "CD_Party.h"
+#import <MJRefresh.h>
 
 @interface ScheduleTableViewController ()<SRNetManagerDelegate, SRPartyDetailDelegate> {
     NSMutableArray *_scheduleArray;
@@ -20,7 +22,6 @@
     NSIndexPath *_chooseIndexPath;
     //第一次读取的标识
     BOOL _firstLoadingDone;
-    UIRefreshControl *_refreshControl;
 }
 
 @end
@@ -30,17 +31,14 @@
 - (void)viewDidLoad {
     self.loadAgain = false;
     self.dataChange = false;
+    
+    _scheduleArray = [CD_Party getPartyFromCDByRelation:1];
+    
     [self loadAllScheduleData];
     [super viewDidLoad];
     
-    
-    NSAttributedString *refString = [[NSAttributedString alloc] initWithString:@"松手刷新日程"];
-    
-    _refreshControl = [[UIRefreshControl alloc] init];
-    [_refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
-    [_refreshControl setAttributedTitle: refString];
-    [_refreshControl setAlpha:0.3];
-    [self.tableView addSubview:_refreshControl];
+    // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
+    self.tableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh:)];
 }
 
 - (void)refresh: (id)sender {
@@ -151,13 +149,20 @@
             if (jsonDic) {
                 _scheduleArray = (NSMutableArray *)[Model_Party objectArrayWithKeyValuesArray:jsonDic];
                 
+                for (Model_Party *party in _scheduleArray) {
+                    [CD_Party removePartyFromCD:party];
+                }
+                
+                for (Model_Party *party in _scheduleArray) {
+                    [CD_Party savePartyToCD:party];
+                }
                 
                 [self.tableView reloadData];
-                [SVProgressHUD showSuccessWithStatus:@"读取数据成功"];
-                [_refreshControl endRefreshing];
+                
             } else {
                 [SVProgressHUD showErrorWithStatus:@"未找到相关数据"];
             }
+            [self.tableView.header endRefreshing];
             //在成功读取了所有聚会后,将聚会提示设置为0
             [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"party_update"];
         }
@@ -180,6 +185,8 @@
     // Pass the selected object to the new view controller.
     if ([@"PartyDetail"  isEqual: segue.identifier]) {
         //读取小组详情数据并赋值小组数据
+        
+        [self.tableView deselectRowAtIndexPath:_chooseIndexPath animated:YES];
         PartyDetailViewController *controller = (PartyDetailViewController *)segue.destinationViewController;
         controller.party = [_scheduleArray objectAtIndex:_chooseIndexPath.row];
 //        self.dataChange = TRUE;
