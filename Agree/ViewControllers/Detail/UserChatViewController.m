@@ -114,8 +114,13 @@
         [_chatArray addObject:chat];
     }
     
+    if (_chatArray.count > _pageSize) {
+        [self subChatArray];
+    } else {
+        _mchatArray = [NSMutableArray arrayWithArray: _chatArray];
+    }
 
-    [self subChatArray];
+    
     
 
     [self.navigationItem setTitle:self.user.nickname];
@@ -150,7 +155,6 @@
 }
 
 - (void)subChatArray {
-    
     _mchatArray = [NSMutableArray arrayWithArray:[_chatArray subarrayWithRange:NSMakeRange(_chatArray.count - (_mchatArray.count+_pageSize),_mchatArray.count+_pageSize)]];
     
     
@@ -468,8 +472,12 @@
 
 //详情BUTTON
 - (IBAction)tapDetailButton:(id)sender {
-    [self.accountView loadWithUser:self.user withGroup:nil];
-    [self.accountView show];
+    
+    if (![self.user.pk_user isEqual:[Model_User loadFromUserDefaults].pk_user]) {
+        [self.accountView loadWithUser:self.user withGroup:nil];
+        [self.accountView show];
+    }
+    
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {

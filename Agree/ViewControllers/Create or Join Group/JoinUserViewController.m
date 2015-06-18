@@ -88,6 +88,14 @@
         _groupMembers = [[NSMutableArray alloc] init];
         [_groupMembers addObject:group_user];
         
+        for (Model_User *joinUser in self.choosePeopleArray) {
+            Model_Group_User *groupUser = [[Model_Group_User alloc] init];
+            [groupUser setFk_user:joinUser.pk_user];
+            [groupUser setRole:[NSNumber numberWithInt:2]];
+
+            [_groupMembers addObject:groupUser];
+        }
+        
         if (self.groupCover) {
             if (!_imageManager) {
                 _imageManager = [[SRImageManager alloc] initWithDelegate:self];

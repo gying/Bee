@@ -69,7 +69,7 @@
         _photo.srcImageView.image = nil;
         
         // 不是gif，就马上开始下载
-        if (![_photo.url.absoluteString hasSuffix:@"gif"]) {
+        if (![_photo.url.absoluteString hasSuffix:@"gif"] && _photo.url) {
             __unsafe_unretained MJPhotoView *photoView = self;
             __unsafe_unretained MJPhoto *photo = _photo;
             [_imageView sd_setImageWithURL:_photo.url placeholderImage:_photo.placeholder options:SDWebImageRetryFailed|SDWebImageLowPriority completed: ^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageUrl) {
@@ -79,14 +79,6 @@
                 [photoView adjustFrame];
             }];
             
-            
-            
-//            [_imageView sd_setImageWithURL:_photo.url placeholderImage:_photo.placeholder options:SDWebImageRetryFailed|SDWebImageLowPriority completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
-//                photo.image = image;
-//                
-//                // 调整frame参数
-//                [photoView adjustFrame];
-//            }];
         }
         if (_photo.image) {
             self.scrollEnabled = YES;

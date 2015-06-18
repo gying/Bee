@@ -15,23 +15,14 @@
 #import "UIImageView+WebCache.h"
 #import "SRImageManager.h"
 
-
-
-
-
-
-
-
 #import "EaseMob.h"
+#import "CD_Group.h"
+#import <MJRefresh.h>
 
 @interface GroupViewController () <UICollectionViewDelegate, UICollectionViewDataSource, SRNetManagerDelegate, UITextFieldDelegate, IChatManagerDelegate> {
     SRNet_Manager *_netManager;
 //    NSArray *_groupAry;
     NSUInteger _chooseIndexPath;
-    
-    GroupChatTableViewController * GCTC;
-    
-    
 }
 
 
@@ -43,13 +34,14 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    //先读取缓存中的小组信息
+    self.groupAry = [CD_Group getGroupFromCD];
+    
+    
     if (!_netManager) {
         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
     }
     [self loadUserGroupRelationship];
-    
-//    CGRect wRect = [[UIScreen mainScreen] bounds];
-    [self.codeInputTextField setDelegate:self];
     
     //在程序的代理中进行注册
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -75,9 +67,20 @@
                                                               } onQueue:nil];
         }
     }
+    //    [[EaseMob sharedInstance].chatManager setIsAutoLoginEnabled:NO];
     
-//    [[EaseMob sharedInstance].chatManager setIsAutoLoginEnabled:NO];
+    
+    self.groupCollectionView.alwaysBounceVertical = YES;
+    // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
+    self.groupCollectionView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh:)];
+    
 }
+
+- (void)refresh: (id)sender {
+    //开始刷新
+    [self.groupCollectionView.header endRefreshing];
+}
+
 
 /*!
  @method
@@ -222,7 +225,6 @@
 }
 
 #pragma mark - Navigation
-
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
@@ -318,13 +320,6 @@
 //    [self.groupCoverButton setHidden:NO];
     [self.remarkLabel setHidden:NO];
     
-#pragma mark 小组图像点击BUTTON位置（稍后删除）
-    
-
-    NSLog(@"小组图像点击BUTTON");
-    NSLog(@"新建小组点击BUTTON");
-
-    
     if (sender) {
         [self.codeInputTextField becomeFirstResponder];
     }
@@ -373,14 +368,23 @@
             
         case kGetUserGroups: {  //读取用户的小组
             if (jsonDic) {
+                //将缓存的数组全部删除
+                for (Model_Group *group in self.groupAry) {
+                    [CD_Group removeGroupFromCD:group];
+                }
+                
+                //将网络读取的数组再次输入缓存
                 self.groupAry = [Model_Group objectArrayWithKeyValuesArray:jsonDic];
+                for (Model_Group *group in self.groupAry) {
+                    [CD_Group saveGroupToCD:group];
+                }
+                
                 [self.groupCollectionView reloadData];
-                [SVProgressHUD showSuccessWithStatus:@"读取数据成功"];
+//                [SVProgressHUD showSuccessWithStatus:@"读取数据成功"];
             } else {
                 //没有加入的小组信息
-                [SVProgressHUD showSuccessWithStatus:@"没有小组信息"];
+//                [SVProgressHUD showSuccessWithStatus:@"没有小组信息"];
             }
-            
         }
             break;
             

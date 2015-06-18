@@ -12,6 +12,10 @@
 #import "AppDelegate.h"
 #import "EaseMob.h"
 #import "SRImageManager.h"
+#import "CD_Group.h"
+#import "CD_Party.h"
+#import "CD_Group_User.h"
+#import "CD_Photo.h"
 
 @interface UserViewController () <UIAlertViewDelegate>{
     NSString *_imageName;
@@ -80,6 +84,11 @@
             if (!error && info) {
                 NSLog(@"退出成功");
             }
+            
+            [CD_Group removeAllGroupFromCD];
+            [CD_Party removeAllPartyFromCD];
+            [CD_Group_User removeAllGroupUserFromCD];
+            [CD_Photo removeAllPhotoFromCD];
             
             //设置代理,弹出视图控制器
             AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];

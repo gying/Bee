@@ -321,13 +321,18 @@
 
 
 - (IBAction)pressedTheAvatarButton:(id)sender {
-    [self.topViewController.accountView show];
-    Model_User *sendUser = [[Model_User alloc] init];
-
-    sendUser.pk_user = _chat.fk_user;
-    sendUser.nickname = _chat.nickname_from;
-    sendUser.avatar_path = _chat.avatar_path_from;
-    [self.topViewController.accountView loadWithUser:sendUser withGroup:self.topViewController.group];
+    
+    if (![_chat.fk_user isEqual:[Model_User loadFromUserDefaults].pk_user]) {
+        [self.topViewController.accountView show];
+        Model_User *sendUser = [[Model_User alloc] init];
+        
+        sendUser.pk_user = _chat.fk_user;
+        sendUser.nickname = _chat.nickname_from;
+        sendUser.avatar_path = _chat.avatar_path_from;
+        [self.topViewController.accountView loadWithUser:sendUser withGroup:self.topViewController.group];
+    }
+    
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

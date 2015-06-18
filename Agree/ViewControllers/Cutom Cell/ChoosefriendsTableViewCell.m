@@ -43,8 +43,12 @@
 
 - (void)tapAvatarButton: (UIButton *)sender {
     if (self.topViewController) {
-        [self.topViewController.accountView show];
-        [self.topViewController.accountView loadWithUser:_user withGroup:nil];
+        
+        if (![_user.pk_user isEqual:[Model_User loadFromUserDefaults].pk_user]) {
+            [self.topViewController.accountView show];
+            [self.topViewController.accountView loadWithUser:_user withGroup:nil];
+        }
+        
     }
 }
 

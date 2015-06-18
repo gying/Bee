@@ -133,9 +133,11 @@
         //取消选中状态
         _relation.relationship = @0;
         self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] - 1];
+        [SVProgressHUD showWithStatus:@"正在取消参与请求"];
     } else {
         _relation.relationship = @1;
         self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] + 1];
+        [SVProgressHUD showWithStatus:@"正在确认参与请求"];
     }
     
     [_netManager updateSchedule:_relation];
@@ -145,12 +147,14 @@
     if (2 == [_relation.relationship intValue]) {
         //取消选中状态
         _relation.relationship = @0;
+        [SVProgressHUD showWithStatus:@"正在取消拒绝请求"];
     } else {
         
         if (1 == _relation.relationship.intValue ) {
             self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] - 1];
         }
         _relation.relationship = @2;
+        [SVProgressHUD showWithStatus:@"正在确认拒绝请求"];
     }
     [_netManager updateSchedule:_relation];
 }
@@ -245,6 +249,8 @@
             break;
         case kUpdateSchedule: {
             if (jsonDic) {
+                [SVProgressHUD showSuccessWithStatus:@"参与信息发送成功"];
+                
                 //更新上级聚会数组的关系状态
                 self.party.relationship = _relation.relationship;
                 [self setParticipateStatus];
@@ -279,7 +285,6 @@
         default:
             break;
     }
-    [SVProgressHUD dismiss];
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {

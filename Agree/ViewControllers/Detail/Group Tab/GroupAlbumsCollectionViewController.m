@@ -16,8 +16,10 @@
 #import "MJExtension.h"
 #import "SRNet_Manager.h"
 #import "UIImageView+WebCache.h"
+#import "CD_Photo.h"
 
 #import <SVProgressHUD.h>
+#import <MJRefresh.h>
 
 @interface GroupAlbumsCollectionViewController () <SRImageManagerDelegate, UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRNetManagerDelegate, SRPhotoManagerDelegate> {
     
@@ -51,9 +53,13 @@
 */
 
 -(void)loadPhotoData {
+    
     if (!self.photoAry) {
         self.photoAry = [[NSMutableArray alloc] init];
     }
+    //先读取缓存中的图片信息
+    self.photoAry = [CD_Photo getPhotoFromCDByGroup:self.group];
+    [self.albumsCollectionView reloadData];
     
     if (!_netManager) {
         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
@@ -68,10 +74,9 @@
     if (self.photoAry) {
         return self.photoAry.count;
     } else {
-        return 1;
+        return 0;
     }
 }
-
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     GroupAlbumsCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ImageCollectionViewCell" forIndexPath:indexPath];
@@ -83,8 +88,6 @@
     }
     
     [cell.cellImageView setContentMode:UIViewContentModeScaleAspectFill];
-    
-    
     
     [cell.cellImageView sd_setImageWithURL:[SRImageManager albumThumbnailImageFromTXYFieldID:newPhoto.pk_photo]
                                  completed:^(UIImage *image,
@@ -263,24 +266,23 @@
         
         case kGetPhotoByGroup: {
             if (jsonDic) {
+                [CD_Photo removePhotoFromCDByGroup:self.group];
                 self.photoAry = (NSMutableArray *)[Model_Photo objectArrayWithKeyValuesArray:jsonDic];
+                
+                for (Model_Photo *photo in self.photoAry) {
+                    [CD_Photo savePhotoToCD:photo];
+                }
                 [self.albumsCollectionView reloadData];
             } else {
                 
             }
+            [self.albumsCollectionView.header endRefreshing];
         }
             break;
         
         case kAddImageToGroup: {
-//            [SVProgressHUD showProgress:1.0];
-            
             [SVProgressHUD showProgress:1.0];
-            
-            
-            
-            
-            
-            
+          
             if (jsonDic) {
                 //清除原先数组中的元素
                 [_imageViewAry removeAllObjects];
@@ -291,13 +293,13 @@
             } else {
                 
             }
+            [SVProgressHUD showSuccessWithStatus:@"成功"];
         }
             break;
             
         default:
             break;
     }
-    [SVProgressHUD showSuccessWithStatus:@"成功"];
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {

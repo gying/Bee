@@ -283,9 +283,14 @@
     NSLog(@"点击头像图片");
 }
 
-- (void)show {
-    [self.backButton setHidden:NO];
-    [self.msgView setHidden:NO];
+- (BOOL)show {
+    if (![_user.pk_user isEqual:[Model_User loadFromUserDefaults].pk_user]) {
+        [self.backButton setHidden:NO];
+        [self.msgView setHidden:NO];
+        
+        return false;
+    }
+    return TRUE;
 }
 
 - (void)phoneNumToShow {

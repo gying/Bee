@@ -530,6 +530,7 @@
             break;
         case kImageManagerSign: {
             if (jsonDic) {
+                //注册腾讯云的万象图片
                 [TXYUploadManager authorize:@"201139" userId:[Model_User loadFromUserDefaults].pk_user.stringValue sign:(NSString *)jsonDic];
                 self.uploadManager = [[TXYUploadManager alloc] initWithPersistenceId: @"persistenceId"];
             }

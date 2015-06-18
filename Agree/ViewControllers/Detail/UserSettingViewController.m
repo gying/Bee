@@ -52,6 +52,10 @@
     Model_User *account = [[Model_User alloc] init];
     account.pk_user = [Model_User loadFromUserDefaults].pk_user;
     [_netManager getUserInfo:account];
+    
+    if ([Model_User loadFromUserDefaults].avatar_path) {
+        [_backImageViwe sd_setImageWithURL:[SRImageManager avatarImageFromTXYFieldID:[Model_User loadFromUserDefaults].avatar_path]];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -249,7 +253,6 @@
 }
 
 - (IBAction)pressedTheWechatButton:(UIButton *)sender {
-    NSLog(@"i");
     if (!_netManager) {
         _netManager = [[SRNet_Manager alloc] init];
         [_netManager setDelegate:self];
