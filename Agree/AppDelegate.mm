@@ -19,9 +19,10 @@
 #import "EaseMob.h"
 
 
+#import "WXApi.h"
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface AppDelegate () <EMChatManagerDelegate, SRNetManagerDelegate>
+@interface AppDelegate () <EMChatManagerDelegate, SRNetManagerDelegate,WXApiDelegate>
 
 @end
 
@@ -122,16 +123,18 @@
     }
 }
 
-#pragma <#arguments#>
+
+
+#pragma mark -- 微信授权登陆注册
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
     return  [WXApi handleOpenURL:url delegate:_viewController];
 }
-
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     return  [WXApi handleOpenURL:url delegate:_viewController];
 }
+
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
