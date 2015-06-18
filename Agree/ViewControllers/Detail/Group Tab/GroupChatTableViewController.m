@@ -213,7 +213,6 @@
 }
 
 
-
 #pragma mark -- 发送消息结束
 - (void)sendMessageDone:(EMMessage *)message {
     Model_Group_User *relation = [[Model_Group_User alloc] init];
@@ -494,6 +493,7 @@
                     
                     _relationship = [Model_Group_User objectArrayWithKeyValuesArray:jsonDic];
                     
+                    //建立并清理缓存
                     [CD_Group_User removeGroupUserFromCDByGroup:self.group];
                     for (Model_Group_User *groupUser in _relationship) {
                         [CD_Group_User saveGroupUserToCD:groupUser];
@@ -515,7 +515,7 @@
                         return;
                     }
                     
-                    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:self.chatArray.count-1  inSection:0];
+                    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:_mchatArray.count-1  inSection:0];
                     [self reloadTableViewIsScrollToBottom:NO withAnimated:NO];
                     
                     if (!(0 >= indexPath.row)) {
@@ -538,10 +538,10 @@
 
 - (void)subChatArray {
     
-
-    
-    
+    if (self.chatArray.count) {
         _mchatArray = [NSMutableArray arrayWithArray:[_chatArray subarrayWithRange:NSMakeRange(_chatArray.count - (_mchatArray.count+pageSize),_mchatArray.count+pageSize)]];
+    }
+    
 }
 
 - (void)tableViewIsScrollToBottom: (BOOL) isScroll
