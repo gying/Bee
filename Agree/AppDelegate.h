@@ -20,14 +20,14 @@
 
 
 #import "WXApi.h"
-
-
 #import "RootAccountLoginViewController.h"
 
 
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
+
+
 
 @property (strong, nonatomic) UIWindow *window;
 
