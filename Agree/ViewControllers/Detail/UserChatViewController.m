@@ -3,7 +3,7 @@
 //  Agree
 //
 //  Created by G4ddle on 15/3/24.
-//  Copyright (c) 2015年 superRabbit. All rights reserved.
+//  Copyright (c) 2015 superRabbit. All rights reserved.
 //
 
 #import "UserChatViewController.h"
@@ -18,6 +18,8 @@
 #import "EModel_User_Chat.h"
 #import "EMSendMessageHepler.h"
 #import "SRKeyboard.h"
+
+#import <MJRefresh.h>
 
 
 
@@ -58,6 +60,7 @@
     int _page;
     int _pageSize;
     
+    UILabel * closelable;
     
 
 }
@@ -84,6 +87,33 @@
     _page = 1;
     _pageSize = 10;
     
+    
+    
+
+    
+#pragma mark -- 创建上拉关闭的LABLE
+    
+    //创建在VIEW上
+    closelable = [[UILabel alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height-90, self.view.frame.size.width, 50)];
+    closelable.backgroundColor = [UIColor clearColor];
+    [closelable setTextAlignment:NSTextAlignmentCenter];
+    closelable.text = @"上拉关闭当前页";
+    closelable.textColor = [UIColor colorWithWhite:0 alpha:0];
+    [self.view addSubview:closelable];
+    _userChatTableView.backgroundColor = [UIColor clearColor];
+    
+
+    //创建在TABLEVIEW上
+//    closelable = [[UILabel alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height+90, self.view.frame.size.width, 40)];
+//    closelable.backgroundColor = [UIColor redColor];
+//    closelable.text = @"上拉关闭当前页";
+//    [closelable setTextAlignment:NSTextAlignmentCenter];
+////    closelable.textColor = [UIColor colorWithWhite:0 alpha:0];
+//    [_userChatTableView addSubview:closelable];
+//    _userChatTableView.backgroundColor = [UIColor clearColor];
+    
+    
+
 
     
     
@@ -148,22 +178,18 @@
     [self.userChatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
 
     [_conversation markAllMessagesAsRead:YES];
-
-
+    
     
     
 }
+
+
 
 - (void)subChatArray {
+    
     _mchatArray = [NSMutableArray arrayWithArray:[_chatArray subarrayWithRange:NSMakeRange(_chatArray.count - (_mchatArray.count+_pageSize),_mchatArray.count+_pageSize)]];
     
-    
-//    [_chatArray subarrayWithRange:NSMakeRange(_chatArray.count-(_pageSize * _page),_pageSize*_page)];
-    
 }
-
-
-
 
 
 
@@ -597,8 +623,10 @@
         _page++;
         NSLog(@"%d",_page);
         [self subChatArray];
-       [self.userChatTableView reloadData];
-    
+        [self.userChatTableView reloadData];
+        
+        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:10  inSection:0];
+        [self.userChatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
         
     }
     //默认一次10个 这是最后一次加载大于0小于10的个数
@@ -612,22 +640,45 @@
         NSLog(@"数组已经加载结束 停止加载");
 
     }
-    //上拉返回上一页
     
     
-    if (contentsizeH - contentoffsetY < 350 ) {
-        NSLog(@"上拉返回上一页");
+    //上拉渐变 (LABLE创建在VIEW上）
+    float cha = contentsizeH - contentoffsetY;
+    NSLog(@"000000%f",cha);
+    
+    if (cha < 439) {
+        NSLog(@"开始出现上拉关闭当前页LABLE");
 
-        [self.navigationController popViewControllerAnimated:YES];
-        
+        if (contentsizeH == 655) {
+                                    closelable.textColor = [UIColor colorWithRed:(contentoffsetY-221)*0.03 green:0 blue:0 alpha:(contentoffsetY-221)*000.1];
+        }
+
     }
     
+    
+    
 
+    
     NSLog(@"%lu",(unsigned long)_mchatArray.count);
     NSLog(@"%lu",(unsigned long)_chatArray.count);
     NSLog(@"%f",contentoffsetY);
-    NSLog(@"%f",contentsizeH);
+    NSLog(@"%f",contentsizeH); 
+    
 
+
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    
+    float contentoffsetY = _userChatTableView.contentOffset.y;
+    
+    float contentsizeH = self.userChatTableView.contentSize.height;
+    if (contentsizeH - contentoffsetY < 370 ) {
+        NSLog(@"上拉返回上一页");
+        
+        [self.navigationController popViewControllerAnimated:YES];
+        
+    }
 }
 
     

@@ -156,7 +156,7 @@
      */
     [WXApi sendAuthReq:req viewController:self delegate:self];
     
-//    [WXApi sendReq:req];
+
     
     
     

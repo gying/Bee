@@ -600,20 +600,30 @@
     }
     //上拉返回上一页
     
-    if (contentsizeH - contentoffsetY < 300 ) {
-        NSLog(@"上拉返回上一页");
-        [_rootController.navigationController popViewControllerAnimated:YES];
-    }
+//    if (contentsizeH - contentoffsetY < 320 ) {
+//        NSLog(@"上拉返回上一页");
+//        [_rootController.navigationController popViewControllerAnimated:YES];
+//    }
 
-//    NSLog(@"%d",self.mchatArray.count);
-//    NSLog(@"%d",self.chatArray.count);
-//    NSLog(@"%F",contentoffsetY);
+    NSLog(@"%lu",(unsigned long)self.mchatArray.count);
+    NSLog(@"%lu",(unsigned long)self.chatArray.count);
+    NSLog(@"%f",contentoffsetY);
 
 
 }
 
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    
+    float contentoffsetY = _chatTableView.contentOffset.y;
+    
+    float contentsizeH = _chatTableView.contentSize.height;
+    if (contentsizeH - contentoffsetY < 320 ) {
+        NSLog(@"上拉返回上一页");
+        
+        [self.navigationController popViewControllerAnimated:YES];
+}
 
-
+}
 - (void)interfaceReturnDataError:(int)interfaceType {
     [SVProgressHUD dismiss];
 }
