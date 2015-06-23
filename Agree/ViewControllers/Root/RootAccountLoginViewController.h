@@ -10,7 +10,6 @@
 #import "Model_User.h"
 
 #import "WXApiObject.h"
-
 #import "WXApi.h"
 
 @protocol RootAccountRegViewController <NSObject>
@@ -23,7 +22,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 
 @property (nonatomic, strong)Model_User *userInfo;
-
 @property (nonatomic , strong)NSString * codeStr;
 
 
