@@ -110,7 +110,6 @@
     [_chatDelegate loadChatData];
 //    [self subChatArray];
     
-    
 
     
     

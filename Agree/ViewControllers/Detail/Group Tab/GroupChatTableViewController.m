@@ -49,6 +49,8 @@
     int page;
     int pageSize;
     
+    UILabel * closelable;
+    
 }
 
 @end
@@ -78,6 +80,18 @@
     Model_Group *sendGroup = [[Model_Group alloc] init];
     [sendGroup setPk_group:self.group.pk_group];
     [_netManager getAllRelationFromGroup:sendGroup];
+    
+    
+    
+#pragma mark -- 创建上拉关闭的LABLE
+    
+    //创建在TABLEVIEW上
+    closelable = [[UILabel alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 40)];
+    closelable.text = @"上拉关闭当前页";
+    [closelable setTextAlignment:NSTextAlignmentCenter];
+    closelable.textColor = [UIColor colorWithWhite:0 alpha:0];
+    [_chatTableView addSubview:closelable];
+//    _chatTableView.backgroundColor = [UIColor clearColor];
 }
 
 
@@ -599,15 +613,24 @@
         NSLog(@"数组已经加载结束 停止加载");
     }
     //上拉返回上一页
+    float cha = contentsizeH - contentoffsetY;
+    NSLog(@"000000%f",cha);
     
-//    if (contentsizeH - contentoffsetY < 320 ) {
-//        NSLog(@"上拉返回上一页");
-//        [_rootController.navigationController popViewControllerAnimated:YES];
-//    }
+    if (cha <= 433) {
+        NSLog(@"开始出现上拉关闭当前页LABLE");
+        
 
-    NSLog(@"%lu",(unsigned long)self.mchatArray.count);
-    NSLog(@"%lu",(unsigned long)self.chatArray.count);
-    NSLog(@"%f",contentoffsetY);
+        
+        closelable.textColor = [UIColor colorWithRed:(1-(cha*0.002))*3-0.64 green:0 blue:0 alpha:(1-(cha*0.002))*3-0.64];
+        [closelable setFrame:CGRectMake(0, _chatTableView.contentSize.height, self.view.frame.size.width, 40)];
+    }
+    
+    NSLog(@"%f",((1-(cha*0.002))*3)-0.64);
+    
+
+//    NSLog(@"%lu",(unsigned long)self.mchatArray.count);
+//    NSLog(@"%lu",(unsigned long)self.chatArray.count);
+//    NSLog(@"%f",contentoffsetY);
 
 
 }

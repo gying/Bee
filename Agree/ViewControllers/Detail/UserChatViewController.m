@@ -615,7 +615,6 @@
         
         NSIndexPath * indexPath = [NSIndexPath indexPathForRow:10  inSection:0];
         [self.userChatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
-        
     }
     //默认一次10个 这是最后一次加载大于0小于10的个数
     else if( _chatArray.count - _mchatArray.count > 0 && _chatArray.count - _mchatArray.count < 10  ){
@@ -641,19 +640,12 @@
     
     if (cha <= 433) {
         NSLog(@"开始出现上拉关闭当前页LABLE");
-
-//        if (contentsizeH == 655) {
-//                                    closelable.textColor = [UIColor colorWithRed:(contentoffsetY-221)*0.03 green:0 blue:0 alpha:(contentoffsetY-221)*000.1];
-//        }
         
-        closelable.textColor = [UIColor colorWithRed:(1-(cha*0.002)) * 3 green:0 blue:0 alpha:(1-(cha*0.002))* 3];
-        if (cha > 433) {
-            closelable.textColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0];
-        }
+        closelable.textColor = [UIColor colorWithRed:(1-(cha*0.002))*3-0.42 green:0 blue:0 alpha:(1-(cha*0.002))*3-0.42];
     
     }
     
-    NSLog(@"%f",((1-(cha*0.002))*3));
+    NSLog(@"%f",((1-(cha*0.002))*3)-0.42);
     
     
 
