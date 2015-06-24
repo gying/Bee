@@ -49,7 +49,7 @@
     int page;
     int pageSize;
     
-    UILabel * closelable;
+
     
 }
 
@@ -58,6 +58,8 @@
 
 
 @implementation GroupChatTableViewController
+
+
 
 
 - (void)loadChatData {
@@ -84,15 +86,22 @@
     
     
 #pragma mark -- 创建上拉关闭的LABLE
-    
     //创建在TABLEVIEW上
-    closelable = [[UILabel alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 40)];
-    closelable.text = @"上拉关闭当前页";
-    [closelable setTextAlignment:NSTextAlignmentCenter];
-    closelable.textColor = [UIColor colorWithWhite:0 alpha:0];
-    [_chatTableView addSubview:closelable];
+    _closelable = [[UILabel alloc]init];
+    _closelable.text = @"继续上拉当前页";
+    [_closelable setTextAlignment:NSTextAlignmentCenter];
+    _closelable.textColor = [UIColor darkGrayColor];
+    //缩小提示显示字号避免分散注意力
+    [_closelable setFont:[UIFont systemFontOfSize:14]];
+    [_closelable setAlpha:0.0];
+    [_chatTableView addSubview:_closelable];
+
 
 }
+
+
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -589,7 +598,7 @@
 
     float contentoffsetY = _chatTableView.contentOffset.y;
     
-        float contentsizeH = self.chatTableView.contentSize.height;
+    float contentsizeH = self.chatTableView.contentSize.height;
 
     //判断如果下拉超过限定 就加载数据
     if ((0 == (contentoffsetY))&&!(_mchatArray.count == _chatArray.count) ){
@@ -598,6 +607,11 @@
         NSLog(@"%d",page);
         [self subChatArray];
         [_chatTableView reloadData];
+
+        //在下拉加载时更改关闭提示的高度,以保持在列表最底端
+        [_closelable setFrame:CGRectMake(0, self.chatTableView.contentSize.height + self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, 50)];
+        
+
         
     }
     //默认一次10个 这是最后一次加载大于0小于10的个数
@@ -610,32 +624,50 @@
     {
         NSLog(@"数组已经加载结束 停止加载");
     }
-    //上拉返回上一页
-    float cha = contentsizeH - contentoffsetY;
-    NSLog(@"000000%f",cha);
+
     
-    if (cha <= 433) {
-        NSLog(@"开始出现上拉关闭当前页LABLE");
+    float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
+    
+    if ((contentsizeH - contentoffsetY) < self.chatTableView.frame.size.height) {
+        //超过了列表的最底端,关闭提示开始进行显示
         
-        closelable.textColor = [UIColor colorWithRed:(1-(cha*0.002))*3-0.64 green:0 blue:0 alpha:(1-(cha*0.002))*3-0.64];
-        [closelable setFrame:CGRectMake(0, _chatTableView.contentSize.height, self.view.frame.size.width, 40)];
+        //超出列表拖移的长度
+        float draggingLager = self.chatTableView.frame.size.height - (contentsizeH - contentoffsetY);
+        //根据拖移的位置来更改label透明度
+        _closelable.alpha = (draggingLager - self.navigationController.navigationBar.frame.size.height - 20)/(self.chatTableView.frame.size.height - draggingGetPoint - self.navigationController.navigationBar.frame.size.height - 20);
+        
+        
+    } else {
+        //如果没有超过最底端,则不进行提示展示
+        _closelable.alpha = 0.0;
+        
+        _closelable.text = @"继续上拉当前页";
+    }
+    
+    if ((self.chatTableView.contentSize.height - self.chatTableView.contentOffset.y) <  draggingGetPoint) {
+        //如果拖移位置超过预定点,更改提示文字
+        _closelable.text = @"释放关闭当前页";
+    } else {
+        _closelable.text = @"继续上拉当前页";
     }
     
 
 }
 
+
+
+
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     
-    float contentoffsetY = _chatTableView.contentOffset.y;
+    //根据屏幕的高度来自适应拖移关闭的高度
+    float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
     
-    float contentsizeH = _chatTableView.contentSize.height;
-    if (contentsizeH - contentoffsetY < 320 ) {
-        NSLog(@"上拉返回上一页");
-        
+    if ((self.chatTableView.contentSize.height - self.chatTableView.contentOffset.y) <  draggingGetPoint) {
+        //如果拖移位置超过预定点,则推出视图
         [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
-}
 - (void)interfaceReturnDataError:(int)interfaceType {
     [SVProgressHUD dismiss];
 }

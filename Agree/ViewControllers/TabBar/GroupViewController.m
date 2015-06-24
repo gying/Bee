@@ -69,11 +69,10 @@
     }
     //    [[EaseMob sharedInstance].chatManager setIsAutoLoginEnabled:NO];
     
-    
+    //设置初始可滚动,这样才能激活刷新的方法
     self.groupCollectionView.alwaysBounceVertical = YES;
     // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
     self.groupCollectionView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh:)];
-    
 }
 
 - (void)refresh: (id)sender {
@@ -168,8 +167,6 @@
         //添加聚会按钮
         [cell initAddView];
     } else {
-        
-        
         Model_Group *theGroup = [self.groupAry objectAtIndex:indexPath.row];
         
         EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:theGroup.em_id isGroup:YES];

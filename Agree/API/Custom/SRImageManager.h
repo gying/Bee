@@ -33,7 +33,6 @@
 
 + (UIImage *)getSubImage:(UIImage *)image withRect:(CGRect)rect;
 
-
 - (BOOL)updateImageToTXY: (UIImage *)image;
 
 @property (nonatomic, weak)id<SRImageManagerDelegate> delegate;

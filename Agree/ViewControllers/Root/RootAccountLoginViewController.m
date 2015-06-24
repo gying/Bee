@@ -155,15 +155,7 @@
      * @return 成功返回YES，失败返回NO。
      */
     [WXApi sendAuthReq:req viewController:self delegate:self];
-    
-
-    
-    
-    
 }
-
-
-
 
 
 #pragma mark - Navigation

@@ -16,6 +16,7 @@
 
 @property (nonatomic, strong)NSMutableArray *chatArray;
 @property (nonatomic, strong)NSMutableArray *mchatArray;
+@property ( nonatomic , strong)    UILabel * closelable;
 
 //初始加载消息页数以及条数
 //@property (nonatomic, assign)    int page;

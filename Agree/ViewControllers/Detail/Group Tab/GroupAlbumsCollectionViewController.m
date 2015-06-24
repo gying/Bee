@@ -79,6 +79,7 @@
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
     GroupAlbumsCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ImageCollectionViewCell" forIndexPath:indexPath];
     
     // Configure the cell
@@ -86,7 +87,6 @@
     if (!_imageViewDic) {
         _imageViewDic = [[NSMutableDictionary alloc] init];
     }
-    
     [cell.cellImageView setContentMode:UIViewContentModeScaleAspectFill];
     
     [cell.cellImageView sd_setImageWithURL:[SRImageManager albumThumbnailImageFromTXYFieldID:newPhoto.pk_photo]
@@ -190,6 +190,8 @@
     if (!_imageManager) {
         _imageManager = [[SRImageManager alloc] initWithDelegate:self];
     }
+    
+    _pickImage = [SRImageManager getSubImage:_pickImage withRect:CGRectMake(0, 0, 1280 , 1280)];
     [_imageManager updateImageToTXY:_pickImage];
 }
 
@@ -199,7 +201,11 @@
     if (!_imageManager) {
         _imageManager = [[SRImageManager alloc] initWithDelegate:self];
     }
-//    [_imageManager delImage:_removePhoto.pk_photo];
+    
+    if (!_netManager) {
+        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
+    }
+    [_netManager removePhoto:[self.photoAry objectAtIndex:index]];
 }
 
 
@@ -226,12 +232,8 @@
     [_netManager addImageToGroup:photo];
 }
 
--(void)imageUploading:(float)proFloat
-{
-
-    
-    [SVProgressHUD showProgress:proFloat*0.9];
-    
+-(void)imageUploading:(float)proFloat {
+    [SVProgressHUD showProgress:proFloat*0.9 status:@"正在上传图片"];
 }
 
 - (void)imageUpladError {
@@ -281,7 +283,7 @@
             break;
         
         case kAddImageToGroup: {
-            [SVProgressHUD showProgress:1.0];
+            [SVProgressHUD showProgress:1.0 status:@"上传图片数据"];
           
             if (jsonDic) {
                 //清除原先数组中的元素

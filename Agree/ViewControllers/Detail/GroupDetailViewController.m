@@ -53,6 +53,14 @@
 @implementation GroupDetailViewController
 
 
+- (void)viewDidLayoutSubviews {
+    NSLog(@"%f", self.chatTableView.contentSize.height);
+    [_chatDelegate.closelable setFrame:CGRectMake(0, self.chatTableView.contentSize.height + self.navigationController.navigationBar.frame.size.height-30, self.view.frame.size.width, 50)];
+}
+
+
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -107,8 +115,10 @@
     [self.chatTableView setDelegate:_chatDelegate];
     [self.chatTableView setDataSource:_chatDelegate];
     [_chatDelegate setRootController:self];
+
     [_chatDelegate loadChatData];
 //    [self subChatArray];
+    
     
 
     
@@ -372,6 +382,8 @@
 - (BOOL)canBecomeFirstResponder{
     return YES;
 }
+
+
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

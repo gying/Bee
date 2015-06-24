@@ -147,11 +147,11 @@
     switch (interfaceType) {
         case kGetAllScheduleByUser: {
             if (jsonDic) {
-                _scheduleArray = (NSMutableArray *)[Model_Party objectArrayWithKeyValuesArray:jsonDic];
-                
                 for (Model_Party *party in _scheduleArray) {
                     [CD_Party removePartyFromCD:party];
                 }
+                
+                _scheduleArray = (NSMutableArray *)[Model_Party objectArrayWithKeyValuesArray:jsonDic];
                 
                 for (Model_Party *party in _scheduleArray) {
                     [CD_Party savePartyToCD:party];
