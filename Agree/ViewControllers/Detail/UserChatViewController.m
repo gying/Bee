@@ -92,33 +92,21 @@
 
     
 #pragma mark -- 创建上拉关闭的LABLE
-    
-    //创建在VIEW上
-    closelable = [[UILabel alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height-90, self.view.frame.size.width, 50)];
-    closelable.backgroundColor = [UIColor clearColor];
-    [closelable setTextAlignment:NSTextAlignmentCenter];
-    closelable.text = @"上拉关闭当前页";
-    closelable.textColor = [UIColor colorWithWhite:0 alpha:0];
-    [self.view addSubview:closelable];
-    _userChatTableView.backgroundColor = [UIColor clearColor];
-    
 
     //创建在TABLEVIEW上
-//    closelable = [[UILabel alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height+90, self.view.frame.size.width, 40)];
+    closelable = [[UILabel alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 40)];
 //    closelable.backgroundColor = [UIColor redColor];
-//    closelable.text = @"上拉关闭当前页";
-//    [closelable setTextAlignment:NSTextAlignmentCenter];
-////    closelable.textColor = [UIColor colorWithWhite:0 alpha:0];
-//    [_userChatTableView addSubview:closelable];
-//    _userChatTableView.backgroundColor = [UIColor clearColor];
-    
-    
-
-
+    closelable.text = @"上拉关闭当前页";
+    [closelable setTextAlignment:NSTextAlignmentCenter];
+    closelable.textColor = [UIColor colorWithWhite:0 alpha:0];
+    [_userChatTableView addSubview:closelable];
+    _userChatTableView.backgroundColor = [UIColor clearColor];
     
     
 
     
+    
+
     //读取私信的消息列表
     _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:self.user.pk_user.stringValue isGroup:NO];
     
@@ -646,24 +634,35 @@
     float cha = contentsizeH - contentoffsetY;
     NSLog(@"000000%f",cha);
     
-    if (cha < 439) {
+
+    
+    [closelable setFrame:CGRectMake(0, _userChatTableView.contentSize.height, self.view.frame.size.width, 40)];
+    
+    
+    if (cha <= 433) {
         NSLog(@"开始出现上拉关闭当前页LABLE");
 
-        if (contentsizeH == 655) {
-                                    closelable.textColor = [UIColor colorWithRed:(contentoffsetY-221)*0.03 green:0 blue:0 alpha:(contentoffsetY-221)*000.1];
+//        if (contentsizeH == 655) {
+//                                    closelable.textColor = [UIColor colorWithRed:(contentoffsetY-221)*0.03 green:0 blue:0 alpha:(contentoffsetY-221)*000.1];
+//        }
+        
+        closelable.textColor = [UIColor colorWithRed:(1-(cha*0.002)) * 3 green:0 blue:0 alpha:(1-(cha*0.002))* 3];
+        if (cha > 433) {
+            closelable.textColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0];
         }
-
+    
     }
     
+    NSLog(@"%f",((1-(cha*0.002))*3));
     
     
 
     
-    NSLog(@"%lu",(unsigned long)_mchatArray.count);
-    NSLog(@"%lu",(unsigned long)_chatArray.count);
-    NSLog(@"%f",contentoffsetY);
-    NSLog(@"%f",contentsizeH); 
-    
+//    NSLog(@"%lu",(unsigned long)_mchatArray.count);
+//    NSLog(@"%lu",(unsigned long)_chatArray.count);
+//    NSLog(@"%f",contentoffsetY);
+//    NSLog(@"%f",contentsizeH);
+
 
 
 }
