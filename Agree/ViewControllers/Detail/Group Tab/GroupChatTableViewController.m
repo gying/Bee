@@ -91,10 +91,8 @@
     [closelable setTextAlignment:NSTextAlignmentCenter];
     closelable.textColor = [UIColor colorWithWhite:0 alpha:0];
     [_chatTableView addSubview:closelable];
-//    _chatTableView.backgroundColor = [UIColor clearColor];
+
 }
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -619,19 +617,10 @@
     if (cha <= 433) {
         NSLog(@"开始出现上拉关闭当前页LABLE");
         
-
-        
         closelable.textColor = [UIColor colorWithRed:(1-(cha*0.002))*3-0.64 green:0 blue:0 alpha:(1-(cha*0.002))*3-0.64];
         [closelable setFrame:CGRectMake(0, _chatTableView.contentSize.height, self.view.frame.size.width, 40)];
     }
     
-    NSLog(@"%f",((1-(cha*0.002))*3)-0.64);
-    
-
-//    NSLog(@"%lu",(unsigned long)self.mchatArray.count);
-//    NSLog(@"%lu",(unsigned long)self.chatArray.count);
-//    NSLog(@"%f",contentoffsetY);
-
 
 }
 

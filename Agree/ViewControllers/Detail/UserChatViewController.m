@@ -628,15 +628,10 @@
 
     }
     
-    
     //上拉渐变 (LABLE创建在VIEW上）
     float cha = contentsizeH - contentoffsetY;
     NSLog(@"000000%f",cha);
-    
-
-    
     [closelable setFrame:CGRectMake(0, _userChatTableView.contentSize.height, self.view.frame.size.width, 40)];
-    
     
     if (cha <= 433) {
         NSLog(@"开始出现上拉关闭当前页LABLE");
@@ -644,19 +639,8 @@
         closelable.textColor = [UIColor colorWithRed:(1-(cha*0.002))*3-0.42 green:0 blue:0 alpha:(1-(cha*0.002))*3-0.42];
     
     }
-    
     NSLog(@"%f",((1-(cha*0.002))*3)-0.42);
     
-    
-
-    
-//    NSLog(@"%lu",(unsigned long)_mchatArray.count);
-//    NSLog(@"%lu",(unsigned long)_chatArray.count);
-//    NSLog(@"%f",contentoffsetY);
-//    NSLog(@"%f",contentsizeH);
-
-
-
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
