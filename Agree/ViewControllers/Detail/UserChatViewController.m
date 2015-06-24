@@ -64,8 +64,14 @@
 
 @implementation UserChatViewController
 
+- (void)viewDidLayoutSubviews {
+//    NSLog(@"%f", self.userChatTableView.contentSize.height);
+    [_closelable setFrame:CGRectMake(0, self.userChatTableView.contentSize.height + self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, 50)];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+//    NSLog(@"%f", self.userChatTableView.contentSize.height);
     // Do any additional setup after loading the view.
     self.accountView = [[SRAccountView alloc] init];
     
@@ -81,7 +87,7 @@
     
 #pragma mark -- 创建上拉关闭的LABLE
     //创建在TABLEVIEW上
-    _closelable = [[UILabel alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 40)];
+    _closelable = [[UILabel alloc]init];
     _closelable.text = @"继续上拉当前页";
     [_closelable setTextAlignment:NSTextAlignmentCenter];
     _closelable.textColor = [UIColor darkGrayColor];
