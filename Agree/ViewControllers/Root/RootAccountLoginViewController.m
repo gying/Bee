@@ -142,7 +142,7 @@
     /** 第三方程序本身用来标识其请求的唯一性，最后跳转回第三方程序时，由微信终端回传。
      * @note state字符串长度不能超过1K
      */
-    req.state = @"come back";
+    req.state = @"xxxx";
     /** 由用户微信号和AppID组成的唯一标识，发送请求时第三方程序必须填写，用于校验微信用户是否换号登录*/
     req.openID = @"0c806938e2413ce73eef92cc3";
     
@@ -313,7 +313,11 @@
     NSDictionary * uidDataDic = [NSJSONSerialization JSONObjectWithData:uidData options:kNilOptions error:nil];
     NSLog(@"%@",uidDataDic);
     
+    //昵称
+    NSString * nickname = [uidDataDic objectForKey:@"nickname"];
+    NSLog(@"%@",nickname);
 
+    
     
 }
 
