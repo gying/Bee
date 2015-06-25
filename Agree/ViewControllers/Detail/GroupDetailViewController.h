@@ -47,6 +47,8 @@
 
 - (void)longTapCell;
 
+- (void)popController ;
+
 @property BOOL partyLoadingAgain;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *selectLineWidth;
