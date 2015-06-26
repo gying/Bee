@@ -15,7 +15,15 @@
 - (void)initWithGroupUser: (Model_Group_User *)group_user {
     [self.avatarImageView.layer setCornerRadius:self.avatarImageView.frame.size.width/2];
     [self.avatarImageView.layer setMasksToBounds:YES];
-    [self.avatarImageView sd_setImageWithURL:[SRImageManager avatarImageFromTXYFieldID:group_user.avatar_path]];
+//    [self.avatarImageView sd_setImageWithURL:[SRImageManager avatarImageFromTXYFieldID:group_user.avatar_path]];
+    
+    //下载图片
+    NSURL *imageUrl = [SRImageManager avatarImageFromTXYFieldID:group_user.avatar_path];
+    NSString * urlstr = [imageUrl absoluteString];
+    
+    [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.avatarImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+        [self.avatarImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
+    } failBlock:nil progressBlock:nil param:nil];
     [self.nicknameLabel setText:group_user.nickname];
     
 //    switch (group_user.role.intValue) {
