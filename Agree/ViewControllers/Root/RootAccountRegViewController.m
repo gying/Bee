@@ -14,21 +14,15 @@
 #import "AppDelegate.h"
 #import "EaseMob.h"
 
-#import "TXYUploadManager.h"
-
-
-
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
 @interface RootAccountRegViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate, SRImageManagerDelegate, SRNetManagerDelegate, UITextFieldDelegate>
-
 {
     UIImagePickerController *_imagePicker;
     UIImageView *_backImageViwe;
     SRImageManager *_imageManager;
     SRNet_Manager *_netManager;
     UIImage *_avatarImage;
-    TXYUploadManager *_uploadManager;
 }
 
 @end
@@ -48,12 +42,30 @@
     
     _backImageViwe = [[UIImageView alloc] initWithFrame:CGRectMake(4.5, 4.5, 90, 90)];
     [_backImageViwe.layer setMasksToBounds:YES];
+    [_backImageViwe setBackgroundColor:[UIColor redColor]];
     [_backImageViwe.layer setCornerRadius:_backImageViwe.frame.size.width/2];
     [self.avatarButton addSubview:_backImageViwe];
     
     //进入立即初始化图片代理
     _imageManager = [[SRImageManager alloc] initWithDelegate:self];
     
+    if (self.userInfo.wechat_id) {
+        [self.nicknameTextField setText:self.userInfo.nickname];
+        if (self.userInfo.nickname) {
+            [self.doneButton setBackgroundColor:AgreeBlue];
+        }
+        
+        [[TXYDownloader sharedInstanceWithPersistenceId:nil] download:self.userInfo.avatar_path
+                                                               target:self
+                                                            succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+
+                                                                //裁剪头像图片并展示
+                                                                _avatarImage = [SRImageManager getSubImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]
+                                                                                                  withRect:CGRectMake(0, 0, 360, 360)];
+                                                                [_backImageViwe setImage:_avatarImage];
+                                                                
+                                                            } failBlock:nil progressBlock:nil param:nil];
+    }
 }
 
 - (void)imageBtnClick {
@@ -73,8 +85,8 @@
         UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择图片来源" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"拍照" otherButtonTitles:@"图片库", nil];
         [sheet showInView:self.view];
     }
-    
 }
+
 - (IBAction)pressedTheAvatarButton:(id)sender {
     [self imageBtnClick];
 }
@@ -197,7 +209,6 @@
 }
 
 - (void)interfaceReturnDataSuccess:(NSMutableDictionary *)jsonDic with:(int)interfaceType {
-    
     switch (interfaceType) {
         case kRegUser: {    //注册用户
             if (jsonDic) {

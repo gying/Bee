@@ -24,9 +24,12 @@
 @property (nonatomic, retain) NSString * jpush_id;
 @property (nonatomic, retain) NSString * device_id;
 @property (nonatomic, retain) NSNumber * status;
+@property (nonatomic, retain) NSString * wechat_id;
+
 @property (nonatomic, retain) NSNumber * relationship;
 @property (nonatomic, retain) NSNumber * chat_update;
 @property (nonatomic, retain) NSNumber * relationship_update;
+
 
 + (void)removeAllUserFromCD;
 

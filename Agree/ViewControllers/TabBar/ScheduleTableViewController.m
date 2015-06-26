@@ -30,7 +30,6 @@
 
 - (void)viewDidLoad {
     self.loadAgain = false;
-    self.dataChange = false;
     
     _scheduleArray = [CD_Party getPartyFromCDByRelation:1];
     
@@ -44,7 +43,6 @@
 - (void)refresh: (id)sender {
     //开始刷新
     self.loadAgain = false;
-    self.dataChange = false;
     [self loadAllScheduleData];
 }
 
@@ -75,17 +73,12 @@
     }else {
         _firstLoadingDone = TRUE;
     }
-    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     if (self.loadAgain) {
         [self loadAllScheduleData];
         self.loadAgain = false;
-    }
-    
-    if (self.dataChange) {
-        [self.tableView reloadData];
     }
 }
 
@@ -160,6 +153,13 @@
                 [self.tableView reloadData];
                 
             } else {
+                if (_scheduleArray) {
+                    for (Model_Party *party in _scheduleArray) {
+                        [CD_Party removePartyFromCD:party];
+                    }
+                    
+                    [_scheduleArray removeAllObjects];
+                }
                 [SVProgressHUD showInfoWithStatus:@"您还没有任何日程"];
             }
             [self.tableView.header endRefreshing];

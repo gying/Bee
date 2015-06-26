@@ -20,7 +20,7 @@
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface GroupSettingViewController ()<SRNetManagerDelegate, UICollectionViewDelegate> {
+@interface GroupSettingViewController ()<SRNetManagerDelegate, UICollectionViewDelegate, UIActionSheetDelegate> {
     SRNet_Manager *_netManager;
     Model_Group_User *_relationship;
     UIImageView *_backImageViwe;
@@ -47,7 +47,6 @@
     
     _backImageViwe = [[UIImageView alloc] initWithFrame:CGRectMake(4.5, 4.5, 90, 90)];
     
-    [self.avatarImageView addSubview:_backImageViwe];
     [_backImageViwe.layer setMasksToBounds:YES];
     [_backImageViwe.layer setCornerRadius:_backImageViwe.frame.size.width/2];
     
@@ -86,6 +85,8 @@
         [self.phoneButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
         [self.phoneLabel setText:@"未公开"];
     }
+    
+    _saveForQuit = true;
 }
 
 - (IBAction)pressedTheCodeButton:(UIButton *)sender {
@@ -243,7 +244,31 @@
 }
 
 - (IBAction)tapBackButton:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (_saveForQuit) {
+        //资料已更改
+        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"小组信息已更改" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"保存退出" otherButtonTitles:@"不保存退出", nil];
+        [sheet showInView:self.view];
+    } else {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+  
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    //退出界面选择
+    if (0 == buttonIndex) {
+        //保存退出
+        _saveForQuit = NO;
+        [_netManager updateGroupRelationShip:_relationship];
+        [self.navigationController popViewControllerAnimated:YES];
+    } else if (1 == buttonIndex) {
+        //直接退出
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        return;
+    }
+    
 }
 
 #pragma mark - Navigation

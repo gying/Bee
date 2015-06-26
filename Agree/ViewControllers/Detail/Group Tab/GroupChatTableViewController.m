@@ -524,6 +524,8 @@
                     [self.chatArray removeAllObjects];
                     [self repackMessage:_relationship];
                     
+                    
+                    
                     [self subChatArray];
 
                     
@@ -559,10 +561,11 @@
 
 - (void)subChatArray {
     
-    if (self.chatArray.count) {
+    if (self.chatArray.count > 10) {
         _mchatArray = [NSMutableArray arrayWithArray:[_chatArray subarrayWithRange:NSMakeRange(_chatArray.count - (_mchatArray.count+pageSize),_mchatArray.count+pageSize)]];
+    } else {
+        _mchatArray = _chatArray;
     }
-    
 }
 
 - (void)tableViewIsScrollToBottom: (BOOL) isScroll
@@ -650,22 +653,15 @@
     } else {
         _closelable.text = @"继续上拉当前页";
     }
-    
-
 }
 
 
-
-
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    
-    
-    
     //根据屏幕的高度来自适应拖移关闭的高度
     float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
     
     if ((self.chatTableView.contentSize.height - self.chatTableView.contentOffset.y) <  draggingGetPoint) {
-        //如果拖移位置超过预定点,则推出视图
+        //如果拖移位置超过预定点,则推出视图 
         NSLog(@"上拉关闭");
         [self.rootController popController];
     }

@@ -23,6 +23,7 @@
 @dynamic jpush_id;
 @dynamic device_id;
 @dynamic status;
+@dynamic wechat_id;
 @dynamic relationship;
 @dynamic chat_update;
 @dynamic relationship_update;
@@ -46,6 +47,7 @@
     newUser.jpush_id = user.jpush_id;
     newUser.device_id = user.jpush_id;
     newUser.status = user.status;
+    newUser.wechat_id = user.wechat_id;
     newUser.relationship = user.relationship;
     newUser.chat_update = user.chat_update;
     newUser.relationship_update = user.relationship_update;
@@ -84,6 +86,7 @@
         newUser.jpush_id = user.jpush_id;
         newUser.device_id = user.jpush_id;
         newUser.status = user.status;
+        newUser.wechat_id = user.wechat_id;
         newUser.relationship = user.relationship;
         newUser.chat_update = user.chat_update;
         newUser.relationship_update = user.relationship_update;

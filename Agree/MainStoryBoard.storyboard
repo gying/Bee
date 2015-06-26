@@ -164,7 +164,7 @@
                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="cZm-l6-3sw" kind="show" id="qgH-Hj-qc4"/>
+                                    <segue destination="cZm-l6-3sw" kind="show" identifier="GoToReg" id="qgH-Hj-qc4"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rou-Mr-LsS">
@@ -310,7 +310,7 @@
             <objects>
                 <tabBarController storyboardIdentifier="rootTabbar" useStoryboardIdentifierAsRestorationIdentifier="YES" id="SPn-U9-Qfz" sceneMemberID="viewController">
                     <nil key="simulatedBottomBarMetrics"/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" shadowImage="test.png" id="QCW-Au-TaN">
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="QCW-Au-TaN">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </tabBar>
@@ -2429,6 +2429,7 @@
                         <outlet property="avatarButton" destination="Mx4-Su-Fya" id="3DN-c7-Yql"/>
                         <outlet property="backButton" destination="qkL-Tz-OYx" id="Esi-6a-Km7"/>
                         <outlet property="nicknameTextField" destination="T6N-pD-LGg" id="Kk4-QD-WR9"/>
+                        <outlet property="passwordButton" destination="B8g-rr-PTl" id="pOM-u2-pZc"/>
                         <outlet property="passwordRemarkLabel" destination="1jX-5S-BKf" id="YMc-An-Oxs"/>
                         <outlet property="passwordTextField" destination="kJz-Q3-hGs" id="Xvc-0l-ogx"/>
                         <outlet property="passwordView" destination="gr2-Su-8vj" id="1UL-OO-0eQ"/>
@@ -4193,11 +4194,10 @@
         <image name="agree_tabbar_party_icon" width="20" height="13"/>
         <image name="agree_tabbar_setting_icon" width="21" height="21"/>
         <image name="agree_user_setting_avatar_backgroup" width="99" height="99"/>
-        <image name="test.png" width="200" height="200"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="xWd-dq-8Ci"/>
-        <segue reference="yUl-vl-Sui"/>
+        <segue reference="NNN-op-p3r"/>
         <segue reference="7g0-Ma-cMP"/>
         <segue reference="Re4-1s-AtI"/>
     </inferredMetricsTieBreakers>

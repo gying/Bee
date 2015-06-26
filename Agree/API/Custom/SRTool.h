@@ -18,4 +18,6 @@
 //+ (NSURL *)imageUrlFromPath: (NSString *)path;
 //+ (NSURL *)miniImageUrlFromPath: (NSString *)path;
 + (int)dateJudgeWithDate: (NSDate *)date;
+
++ (void)addPartyUpdateTip: (int) addNum;
 @end

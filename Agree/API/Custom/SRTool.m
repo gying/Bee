@@ -79,6 +79,12 @@
     }
 }
 
++ (void)addPartyUpdateTip: (int) addNum {
+    NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"party_update"];
+    updateValue = [NSNumber numberWithInt: updateValue.intValue + addNum];
+    [[NSUserDefaults standardUserDefaults] setObject:updateValue forKey:@"party_update"];
+}
+
 
 
 @end

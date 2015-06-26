@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *nicknameTextField;
 @property (weak, nonatomic) IBOutlet UIButton *sexButton;
 
+@property (weak, nonatomic) IBOutlet UIButton *passwordButton;
 @property (nonatomic, strong)UserViewController *rootViewController;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIButton *phoneButton;

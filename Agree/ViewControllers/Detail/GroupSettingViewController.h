@@ -15,7 +15,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *codeButton;
 @property (weak, nonatomic) IBOutlet UILabel *codeRemarkLabel;
 
-@property (weak, nonatomic) IBOutlet UIImageView *avatarImageView;
+
 @property (weak, nonatomic) IBOutlet UIButton *partyTipButton;
 @property (weak, nonatomic) IBOutlet UILabel *partyTipLabel;
 

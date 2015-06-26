@@ -17,6 +17,7 @@
 #import "BMapKit.h"
 
 #import "Model_Party.h"
+#import "SRTool.h"
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
@@ -261,6 +262,8 @@
                 }
                 [self reloadPeopleNum];
                 [self.delegate DetailChange:self.party];
+                
+                [SRTool addPartyUpdateTip:1];
             }
         }
             break;
@@ -337,7 +340,7 @@
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if (error)
                         {
-                            //错误细心
+                            //错误信息
                             // display error message here
                         }
                         else if (!granted)
@@ -435,7 +438,6 @@
         default:
             break;
     }
-    
 }
 
 

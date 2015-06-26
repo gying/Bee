@@ -56,6 +56,10 @@
     if ([Model_User loadFromUserDefaults].avatar_path) {
         [_backImageViwe sd_setImageWithURL:[SRImageManager avatarImageFromTXYFieldID:[Model_User loadFromUserDefaults].avatar_path]];
     }
+    
+    if ([Model_User loadFromUserDefaults].password) {
+        [self.passwordButton setTitle:@"更改密码" forState:UIControlStateNormal];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -65,7 +69,6 @@
 
 - (void)reloadDataView {
     [_backImageViwe sd_setImageWithURL:[SRImageManager avatarImageFromTXYFieldID:[Model_User loadFromUserDefaults].avatar_path]];
-
     self.nicknameTextField.text = _userInfo.nickname;
     
     if (_userInfo.phone) {
@@ -223,8 +226,6 @@
     
 }
 
-
-
 - (IBAction)pressedThePasswordButton:(UIButton *)sender {
     self.passwordView.hidden = NO;
     [self.passwordTextField becomeFirstResponder];
@@ -367,9 +368,6 @@
 
 
 - (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    
-    
-    
     switch (interfaceType) {
         case kUpdateUserInfo: { //更新用户资料
             //更新用户资料

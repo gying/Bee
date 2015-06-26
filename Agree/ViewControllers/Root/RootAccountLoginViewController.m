@@ -14,13 +14,12 @@
 
 
 
-
-
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface RootAccountLoginViewController () <SRNetManagerDelegate> {
+@interface RootAccountLoginViewController () <SRNetManagerDelegate, UIAlertViewDelegate> {
     SRNet_Manager *_netManager;
-    
+    Model_User *_wechatUser;
+    BOOL _wechatLoginDone;
 }
 
 @end
@@ -28,25 +27,18 @@
 @implementation RootAccountLoginViewController
 
 
-
-
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    
-    
-    
-    
-    
     [self.doneButton.layer setCornerRadius:self.doneButton.frame.size.height/2];
     [self.doneButton setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
     [self.doneButton.layer setMasksToBounds:YES];
     [self.doneButton setEnabled:NO];
 }
 
-
+- (void)viewWillAppear:(BOOL)animated {
+    
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -79,8 +71,10 @@
 }
 
 - (void)popToRootController {
-    [self dismissViewControllerAnimated:YES completion:nil];
     
+//    [self dismissViewControllerAnimated:YES completion:^{
+//        NSLog(@"hi");
+//    }];
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
     UITabBarController *rootController = [sb instantiateViewControllerWithIdentifier:@"rootTabbar"];
     [self presentViewController:rootController animated:YES completion:nil];
@@ -109,16 +103,29 @@
             }
         }
             break;
-            
+        case kGetUserInfoByWechat: {
+            if (jsonDic) {
+                [super viewDidLoad];
+                //使用微信openid的账户存在
+                [SVProgressHUD showSuccessWithStatus:@"登录成功"];
+                //找到帐号
+                Model_User *user = [[Model_User objectArrayWithKeyValuesArray:jsonDic] objectAtIndex:0];
+                [user saveToUserDefaults];
+                [self popToRootController];
+                
+            } else {
+                //使用微信openid的账户不存在
+                [self performSegueWithIdentifier:@"GoToReg" sender:self];
+            }
+        }
         default:
             break;
     }
 }
 
+
 - (void)interfaceReturnDataError:(int)interfaceType {
     [SVProgressHUD showErrorWithStatus:@"网络错误"];
-    
-//    SVProgressHUD showProgress:<#(float)#> status:<#(NSString *)#> maskType:<#(SVProgressHUDMaskType)#>
 }
 
 
@@ -158,18 +165,6 @@
 }
 
 
-#pragma mark - Navigation
- 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-// Get the new view controller using [segue destinationViewController].
-// Pass the selected object to the new view controller.
-    RootAccountRegViewController *childController = segue.destinationViewController;
-    [childController setUserInfo:self.userInfo];
-    [childController setRootController:self];
-}
-
-
 #pragma mark -- 和微信终端交互，因此需要实现WXApiDelegate协议的两个方法
 -(void) onReq:(BaseReq*)req{
     //onReq是微信终端向第三方程序发起请求，要求第三方程序响应。第三方程序响应完后必须调用sendRsp返回。在调用sendRsp返回时，会切回到微信终端程序界面。
@@ -179,47 +174,45 @@
     
     if([req isKindOfClass:[GetMessageFromWXReq class]])
     {
-        GetMessageFromWXReq *temp = (GetMessageFromWXReq *)req;
-        
-        // 微信请求App提供内容， 需要app提供内容后使用sendRsp返回
-        NSString *strTitle = [NSString stringWithFormat:@"微信请求App提供内容"];
-        NSString *strMsg = [NSString stringWithFormat:@"openID: %@", temp.openID];
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        alert.tag = 1000;
-        [alert show];
+//        GetMessageFromWXReq *temp = (GetMessageFromWXReq *)req;
+//        
+//        // 微信请求App提供内容， 需要app提供内容后使用sendRsp返回
+//        NSString *strTitle = [NSString stringWithFormat:@"微信请求App提供内容"];
+//        NSString *strMsg = [NSString stringWithFormat:@"openID: %@", temp.openID];
+//        
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+//        alert.tag = 1000;
+//        [alert show];
 
     }
     else if([req isKindOfClass:[ShowMessageFromWXReq class]])
     {
-        ShowMessageFromWXReq* temp = (ShowMessageFromWXReq*)req;
-        WXMediaMessage *msg = temp.message;
-        
-        //显示微信传过来的内容
-        WXAppExtendObject *obj = msg.mediaObject;
-        
-        NSString *strTitle = [NSString stringWithFormat:@"微信请求App显示内容"];
-        NSString *strMsg = [NSString stringWithFormat:@"openID: %@, 标题：%@ \n内容：%@ \n附带信息：%@ \n缩略图:%u bytes\n附加消息:%@\n", temp.openID, msg.title, msg.description, obj.extInfo, msg.thumbData.length, msg.messageExt];
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
+//        ShowMessageFromWXReq* temp = (ShowMessageFromWXReq*)req;
+//        WXMediaMessage *msg = temp.message;
+//        
+//        //显示微信传过来的内容
+//        WXAppExtendObject *obj = msg.mediaObject;
+//        
+//        NSString *strTitle = [NSString stringWithFormat:@"微信请求App显示内容"];
+//        NSString *strMsg = [NSString stringWithFormat:@"openID: %@, 标题：%@ \n内容：%@ \n附带信息：%@ \n缩略图:%u bytes\n附加消息:%@\n", temp.openID, msg.title, msg.description, obj.extInfo, msg.thumbData.length, msg.messageExt];
+//        
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+//        [alert show];
 
     }
     else if([req isKindOfClass:[LaunchFromWXReq class]])
     {
-        LaunchFromWXReq *temp = (LaunchFromWXReq *)req;
-        WXMediaMessage *msg = temp.message;
-        
-        //从微信启动App
-        NSString *strTitle = [NSString stringWithFormat:@"从微信启动"];
-        NSString *strMsg = [NSString stringWithFormat:@"openID: %@, messageExt:%@", temp.openID, msg.messageExt];
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
+//        LaunchFromWXReq *temp = (LaunchFromWXReq *)req;
+//        WXMediaMessage *msg = temp.message;
+//        
+//        //从微信启动App
+//        NSString *strTitle = [NSString stringWithFormat:@"从微信启动"];
+//        NSString *strMsg = [NSString stringWithFormat:@"openID: %@, messageExt:%@", temp.openID, msg.messageExt];
+//        
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+//        [alert show];
 
     }
-
-    
 }
 
 -(void) onResp:(BaseResp*)resp{
@@ -229,38 +222,15 @@
 //    SendAuthResp *temp = (SendAuthResp*)resp;
     if([resp isKindOfClass:[SendMessageToWXResp class]])
     {
-        NSString *strTitle = [NSString stringWithFormat:@"发送媒体消息结果"];
-        NSString *strMsg = [NSString stringWithFormat:@"errcode:%d", resp.errCode];
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
 
     }
     else if([resp isKindOfClass:[SendAuthResp class]])
     {
         SendAuthResp *temp = (SendAuthResp*)resp;
-        
-        NSString *strTitle = [NSString stringWithFormat:@"Auth结果"];
-        NSString *strMsg = [NSString stringWithFormat:@"code:%@,state:%@,errcode:%d", temp.code, temp.state, temp.errCode];
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
-        
         _codeStr = temp.code;
-        NSLog(@"%@",_codeStr);
-        
-
     }
     else if ([resp isKindOfClass:[AddCardToWXCardPackageResp class]])
     {
-        AddCardToWXCardPackageResp* temp = (AddCardToWXCardPackageResp*)resp;
-        NSMutableString* cardStr = [[NSMutableString alloc] init];
-        for (WXCardItem* cardItem in temp.cardAry) {
-            [cardStr appendString:[NSString stringWithFormat:@"cardid:%@ cardext:%@ cardstate:%lu\n",cardItem.cardId,cardItem.extMsg,cardItem.cardState]];
-        }
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"add card resp" message:cardStr delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
-        
     }
     
     
@@ -313,12 +283,16 @@
     NSDictionary * uidDataDic = [NSJSONSerialization JSONObjectWithData:uidData options:kNilOptions error:nil];
     NSLog(@"%@",uidDataDic);
     
-    //昵称
-    NSString * nickname = [uidDataDic objectForKey:@"nickname"];
-    NSLog(@"%@",nickname);
-
+    //新建由微信创建的用户信息
+    _wechatUser = [[Model_User alloc] init];
+    _wechatUser.wechat_id = [uidDataDic objectForKey:@"openid"];
+    _wechatUser.nickname = [uidDataDic objectForKey:@"nickname"];
+    _wechatUser.avatar_path = [uidDataDic objectForKey:@"headimgurl"];
     
-    
+    if (!_netManager) {
+        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
+    }
+    [_netManager getUserInfoByWechat:_wechatUser];
 }
 
 
@@ -327,6 +301,25 @@
     [self.accountTextField resignFirstResponder];
     [self.passwordTextField resignFirstResponder];
     
+}
+
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    RootAccountRegViewController *childController = segue.destinationViewController;
+    if (_wechatUser) {
+        [childController setUserInfo:_wechatUser];
+    } else {
+        [childController setUserInfo:self.userInfo];
+    }
+    [childController setRootController:self];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    [self popToRootController];
 }
 
 

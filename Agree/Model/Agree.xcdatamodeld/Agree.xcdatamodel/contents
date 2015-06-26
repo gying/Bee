@@ -70,12 +70,13 @@
         <attribute name="setup_time" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="sex" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="wechat_id" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
         <element name="CD_Group" positionX="-20441" positionY="-8064" width="128" height="223"/>
-        <element name="CD_Photo" positionX="-20657" positionY="-8064" width="128" height="178"/>
-        <element name="CD_Party" positionX="-20873" positionY="-8064" width="128" height="268"/>
         <element name="CD_Group_User" positionX="-20637" positionY="-7938" width="128" height="210"/>
-        <element name="CD_User" positionX="-20646" positionY="-7893" width="128" height="255"/>
+        <element name="CD_Party" positionX="-20873" positionY="-8064" width="128" height="268"/>
+        <element name="CD_Photo" positionX="-20657" positionY="-8064" width="128" height="178"/>
+        <element name="CD_User" positionX="-20646" positionY="-7893" width="128" height="270"/>
     </elements>
 </model>
