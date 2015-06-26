@@ -14,6 +14,7 @@
 #import "UserChatViewController.h"
 #import "ScheduleTableViewController.h"
 #import "TXYUploadManager.h"
+#import "TXYDownloader.h"
 
 
 

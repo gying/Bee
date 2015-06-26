@@ -114,6 +114,8 @@
     return TRUE;
 }
 
+
+
 //原图
 + (NSURL *)originalImageFromTXYFieldID: (NSString *)fieldID {
     NSString *urlString = [[NSString alloc] initWithFormat:@"http://201139.image.myqcloud.com/201139/0/%@/original", fieldID];
