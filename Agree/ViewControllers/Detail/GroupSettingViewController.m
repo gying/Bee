@@ -37,6 +37,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.view.backgroundColor = [UIColor blackColor];
+    
     
     _accountView = [[SRAccountView alloc] init];
     _accountView.rootController = self;
@@ -46,6 +48,7 @@
     [group_user setFk_user:[Model_User loadFromUserDefaults].pk_user];
     
     _backImageViwe = [[UIImageView alloc] initWithFrame:CGRectMake(4.5, 4.5, 90, 90)];
+//    _backImageViwe.backgroundColor = [UIColor redColor];
     
     [_backImageViwe.layer setMasksToBounds:YES];
     [_backImageViwe.layer setCornerRadius:_backImageViwe.frame.size.width/2];

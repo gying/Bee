@@ -19,7 +19,7 @@
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-#define firstRow    430
+#define firstRow    390
 #define secondRow   490
 #define thirdRow    550
 
@@ -39,6 +39,8 @@
 
     UIView *backView = [[UIView alloc] initWithFrame:self.msgView.frame];
     [backView setAlpha:0.95];
+    
+
     [backView setBackgroundColor:[UIColor blackColor]];
     [self.msgView addSubview:backView];
     
@@ -102,6 +104,7 @@
     [self.callButton addTarget:self action:@selector(pressedTheButton:) forControlEvents:UIControlEventTouchUpInside];
 //    [self.callButton.layer setMasksToBounds:YES];
     [self.msgView addSubview:self.callButton];
+
     
     self.callLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 20)];
     [self.callLabel setTextAlignment:NSTextAlignmentCenter];
@@ -233,7 +236,15 @@
 - (void)loadWithUser:(Model_User *)user withGroup: (Model_Group *)group {
     self.nicknameLabel.text = user.nickname;
     
-    [self.avatarImageView sd_setImageWithURL:[SRImageManager avatarImageFromTXYFieldID:user.avatar_path]];
+//    [self.avatarImageView sd_setImageWithURL:[SRImageManager avatarImageFromTXYFieldID:user.avatar_path]];
+    
+    //下载图片
+    NSURL *imageUrl = [SRImageManager avatarImageFromTXYFieldID:user.avatar_path];
+    NSString * urlstr = [imageUrl absoluteString];
+    
+    [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.avatarImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+        [self.avatarImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
+    } failBlock:nil progressBlock:nil param:nil];
     
     
     [self.callButton setHidden:YES];
@@ -390,7 +401,7 @@
     if (hidden) {
         [self changeFriendHandleRow:secondRow];
     }else {
-        [self changeFriendHandleRow:thirdRow];
+        [self changeFriendHandleRow:secondRow];
     }
 }
 
@@ -413,6 +424,7 @@
     [self.delFriendLabel setCenter:CGPointMake(self.delFriendButton.center.x, self.delFriendButton.center.y + 48)];
     [self.talkFriendButton setCenter:CGPointMake(self.msgView.frame.size.width/2 + 60, row)];
     [self.talkFriendLabel setCenter:CGPointMake(self.talkFriendButton.center.x, self.talkFriendButton.center.y + 48)];
+
 }
 
 - (void)pressedTheButton:(UIButton *)sender {

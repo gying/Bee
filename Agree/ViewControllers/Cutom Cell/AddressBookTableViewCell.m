@@ -63,8 +63,6 @@
         } failBlock:nil progressBlock:nil param:nil];
 
 //        [self.avatarImageView sd_setImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path]];
-
-        
         if (adPeople.userInfo.relationship) {
             switch (adPeople.userInfo.relationship.intValue) {
                 case 1: {
