@@ -109,7 +109,14 @@ static NSString * const reuseIdentifier = @"GroupCollectionCell";
     // Pass the selected object to the new view controller.
     //读取小组详情数据并赋值小组数据
     ChooseLoctaionViewController *controller = (ChooseLoctaionViewController *)segue.destinationViewController;
-    controller.chooseGroup = [_groupAry objectAtIndex:_chooseIndexPath];
+    
+    if ([_groupAry objectAtIndex:0]) {
+        controller.chooseGroup = nil;
+    }else
+    {
+        controller.chooseGroup = [_groupAry objectAtIndex:_chooseIndexPath-1];
+    }
+
     controller.isGroupParty = FALSE;
 }
 

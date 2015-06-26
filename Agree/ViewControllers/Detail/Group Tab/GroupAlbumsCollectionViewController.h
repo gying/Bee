@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "GroupDetailViewController.h"
 
+#import "TXYDownloader.h"
+
 @interface GroupAlbumsCollectionViewController : UICollectionViewController <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong)UICollectionView *albumsCollectionView;

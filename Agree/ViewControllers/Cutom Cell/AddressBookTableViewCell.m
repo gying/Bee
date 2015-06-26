@@ -52,7 +52,17 @@
         [self.nicknameLabel setHidden:YES];
         [self.addressBookNameLabel setHidden:YES];
         [self.nameLabel setText:adPeople.userInfo.nickname];
-        [self.avatarImageView sd_setImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path]];
+        
+        
+        //下载图片
+        NSURL *imageUrl = [SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path];
+        NSString * urlstr = [imageUrl absoluteString];
+        
+        [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.avatarImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+            [self.avatarImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
+        } failBlock:nil progressBlock:nil param:nil];
+
+//        [self.avatarImageView sd_setImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path]];
 
         
         if (adPeople.userInfo.relationship) {

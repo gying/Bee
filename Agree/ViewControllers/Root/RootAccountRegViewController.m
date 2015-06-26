@@ -49,10 +49,23 @@
     //进入立即初始化图片代理
     _imageManager = [[SRImageManager alloc] initWithDelegate:self];
     
-    if (self.userInfo.avatar_path || self.userInfo.nickname) {
+    if (self.userInfo.wechat_id) {
         [self.nicknameTextField setText:self.userInfo.nickname];
+        if (self.userInfo.nickname) {
+            [self.doneButton setBackgroundColor:AgreeBlue];
+        }
+        
+        [[TXYDownloader sharedInstanceWithPersistenceId:nil] download:self.userInfo.avatar_path
+                                                               target:self
+                                                            succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+
+                                                                //裁剪头像图片并展示
+                                                                _avatarImage = [SRImageManager getSubImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]
+                                                                                                  withRect:CGRectMake(0, 0, 360, 360)];
+                                                                [_backImageViwe setImage:_avatarImage];
+                                                                
+                                                            } failBlock:nil progressBlock:nil param:nil];
     }
-    
 }
 
 - (void)imageBtnClick {
