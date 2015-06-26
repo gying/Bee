@@ -17,9 +17,9 @@
 #import "SDImageCache.h"
 
 #import "EaseMob.h"
-
-
 #import "WXApi.h"
+#import "SRTool.h"
+
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
 @interface AppDelegate () <EMChatManagerDelegate, SRNetManagerDelegate,WXApiDelegate>
@@ -52,10 +52,13 @@
     [regUser setDevice_id:_token];
     
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-    RootAccountLoginViewController *rootController = [sb instantiateViewControllerWithIdentifier:@"rootAccountLogin"];
-    rootController.userInfo = regUser;
+    self.rootLoginViewController = [sb instantiateViewControllerWithIdentifier:@"rootAccountLogin"];
+    self.rootLoginViewController.userInfo = regUser;
+    //微信授权登陆注册
+//    self.rootLoginViewController = [[RootAccountLoginViewController alloc]init];
+    [WXApi registerApp:@"wx9be30a70fcb480ae"];
     
-    [self.window setRootViewController:rootController];
+    [self.window setRootViewController:self.rootLoginViewController];
 }
 
 //环信接收到了离线的数据
@@ -128,27 +131,17 @@
 #pragma mark -- 微信授权登陆注册
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
-    return  [WXApi handleOpenURL:url delegate:_viewController];
+    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
 }
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
-    return  [WXApi handleOpenURL:url delegate:_viewController];
+    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
 }
 
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-
-    
-    
-    //微信授权登陆注册
-    self.viewController = [[RootAccountLoginViewController alloc]init];
-    [WXApi registerApp:@"wx9be30a70fcb480ae"];
-    
-    
-    
-    
     
     //清理sdimage
 //    [[SDImageCache sharedImageCache] clearDisk];
@@ -237,10 +230,14 @@
 //        [regUser setDevice_id:_token];
         
         UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-        RootAccountLoginViewController *rootController = [sb instantiateViewControllerWithIdentifier:@"rootAccountLogin"];
-        rootController.userInfo = regUser;
+        self.rootLoginViewController = [sb instantiateViewControllerWithIdentifier:@"rootAccountLogin"];
+        self.rootLoginViewController.userInfo = regUser;
         
-        [self.window setRootViewController:rootController];
+        //微信授权登陆注册
+//        self.rootLoginViewController = [[RootAccountLoginViewController alloc]init];
+        [WXApi registerApp:@"wx9be30a70fcb480ae"];
+        
+        [self.window setRootViewController:self.rootLoginViewController];
     }
 
     return YES;
@@ -367,19 +364,16 @@
                 }
                 
                 //标注主日程更新
-                NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"party_update"];
-                updateValue = [NSNumber numberWithInt: updateValue.intValue + 1];
-                [[NSUserDefaults standardUserDefaults] setObject:updateValue forKey:@"party_update"];
+                [SRTool addPartyUpdateTip:1];
+                
             } else if (self.scheduleDelegate) { //如果在主日程界面
                 //则在主日程进行刷新
                 [self.scheduleDelegate refresh:nil];
             } else {
                 [self.groupDelegate addGroupPartyUpdateStatus:pk_group];
-                //标注主日程更新
-                NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"party_update"];
-                updateValue = [NSNumber numberWithInt: updateValue.intValue + 1];
-                [[NSUserDefaults standardUserDefaults] setObject:updateValue forKey:@"party_update"];
                 
+                //标注主日程更新
+                [SRTool addPartyUpdateTip:1];
             }
         }
             break;

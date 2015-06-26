@@ -88,7 +88,7 @@
         _imageViewDic = [[NSMutableDictionary alloc] init];
     }
     [cell.cellImageView setContentMode:UIViewContentModeScaleAspectFill];
-    
+    [cell setBackgroundColor:[UIColor lightGrayColor]];
     [cell.cellImageView sd_setImageWithURL:[SRImageManager albumThumbnailImageFromTXYFieldID:newPhoto.pk_photo]
                                  completed:^(UIImage *image,
                                              NSError *error,
@@ -108,7 +108,6 @@
                                      //按照数序放入字典
                                      [_imageViewDic setObject:photo forKey:[NSNumber numberWithInteger:indexPath.row]];
                                  }];
-
     return cell;
 }
 

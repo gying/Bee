@@ -51,7 +51,8 @@
 @property (nonatomic, strong)TXYUploadManager *uploadManager;
 
 
-@property (strong, nonatomic) RootAccountLoginViewController *viewController;
+//@property (strong, nonatomic) RootAccountLoginViewController *viewController;
+@property (strong, nonatomic) RootAccountLoginViewController *rootLoginViewController;
 
 
 - (void)logout;

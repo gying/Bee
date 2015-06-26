@@ -74,6 +74,7 @@
 #define kImageManagerSign           101
 
 #define kTestInterface              1101
+#define kGetUserInfoByWechat        1102
 
 
 
@@ -129,4 +130,5 @@
 - (BOOL)cancelParty: (Model_Party *)party;
 - (BOOL)imageManagerSign;
 - (BOOL)testInterface;
+- (BOOL)getUserInfoByWechat: (Model_User *)user;
 @end

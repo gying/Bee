@@ -380,4 +380,9 @@
                                                   andRequestType:kTestInterface]];
 }
 
+- (BOOL)getUserInfoByWechat: (Model_User *)user {
+    return [self requestNetorkWithDic:[self toRequestDicWithData:user.keyValues
+                                                  andRequestType:kGetUserInfoByWechat]];
+}
+
 @end

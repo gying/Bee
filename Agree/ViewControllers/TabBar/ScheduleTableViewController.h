@@ -11,7 +11,6 @@
 @interface ScheduleTableViewController : UITableViewController
 
 @property BOOL loadAgain;
-@property BOOL dataChange;
 
 - (void)refresh: (id)sender;
 

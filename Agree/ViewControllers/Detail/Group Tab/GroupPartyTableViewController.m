@@ -80,11 +80,12 @@
                 for (Model_Party *party in self.partyArray) {
                     [CD_Party savePartyToCD:party];
                 }
-                [self.partyTableView.header endRefreshing];
+                
                 
             } else {
-//                [SVProgressHUD showSuccessWithStatus:@"未找到相关数据"];
+                
             }
+            [self.partyTableView.header endRefreshing];
         }
             break;
         default:
