@@ -8,6 +8,7 @@
 
 #import "RootAccountLoginViewController.h"
 #import "RootAccountRegViewController.h"
+#import "RootPhoneRegViewController.h"
 #import "SRNet_Manager.h"
 #import "MJExtension.h"
 #import <SVProgressHUD.h>
@@ -309,13 +310,22 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    RootAccountRegViewController *childController = segue.destinationViewController;
-    if (_wechatUser) {
-        [childController setUserInfo:_wechatUser];
-    } else {
-        [childController setUserInfo:self.userInfo];
-    }
-    [childController setRootController:self];
+//    RootAccountRegViewController *childController = segue.destinationViewController;
+//    if (_wechatUser) {
+//        [childController setUserInfo:_wechatUser];
+//    } else {
+//        [childController setUserInfo:self.userInfo];
+//    }
+//    [childController setRootController:self];
+//    
+
+    RootPhoneRegViewController * phoneController = segue.destinationViewController;
+    
+    [phoneController setRootController:self];
+    
+    
+
+    
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
