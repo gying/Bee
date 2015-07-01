@@ -53,6 +53,7 @@
     //启动LocationService
     [_locService startUserLocationService];
     
+
 }
 
 //实现相关delegate 处理位置信息更新

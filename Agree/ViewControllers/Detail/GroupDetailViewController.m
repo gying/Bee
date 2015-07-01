@@ -368,9 +368,7 @@
     
     //复制出的内容
     NSLog(@"%@",cell.chatMessageTextLabel_self.text);
-    
     NSLog(@"%@",cell.chatMessageTextLabel.text);
-    
     
 }
 

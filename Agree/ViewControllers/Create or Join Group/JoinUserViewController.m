@@ -50,15 +50,15 @@
 
 -(void)imageUploading:(float)proFloat
 {
-    [SVProgressHUD showProgress:proFloat*0.9];
+    
+    [SVProgressHUD showProgress:proFloat*0.9 maskType:SVProgressHUDMaskTypeGradient];
+//    [SVProgressHUD showProgress:proFloat*0.9];
     NSLog(@"小组正在创建");
 }
 
 - (void)createEMGroup {
-    
-    
 //    [SVProgressHUD showWithStatus:@"正在建立小组"];
-    [SVProgressHUD showProgress:1.0];
+//    [SVProgressHUD showProgress:1.0 maskType:SVProgressHUDMaskTypeGradient];
     
     EMError *error = nil;
     EMGroupStyleSetting *groupStyleSetting = [[EMGroupStyleSetting alloc] init];
@@ -106,19 +106,21 @@
             [_netManager addGroup:self.theGroup withMembers:_groupMembers];
         }
     }else {
+        NSLog(@"创建错误: %@", error);
     }
 }
 
 
 - (void)interfaceReturnDataSuccess:(NSMutableDictionary *)jsonDic with:(int)interfaceType {
     //群组创建成功
-    [SVProgressHUD showSuccessWithStatus:@"小组创建成功"];
+    
 //    [SVProgressHUD showProgress:1.0];
     
     
     switch (interfaceType) {
         case kAddGroup: {
             if (jsonDic) {
+                [SVProgressHUD showSuccessWithStatus:@"小组创建成功"];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     GroupViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
                     [rootController loadUserGroupRelationship];
@@ -150,8 +152,6 @@
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
-
-
 
 
 #pragma mark - Navigation

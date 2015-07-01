@@ -56,7 +56,6 @@
         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
     }
     [_netManager getGroupRelationship:group_user];
-    
     [_netManager getAllRelationFromGroup:self.group];
 }
 
@@ -85,8 +84,6 @@
         [self.phoneButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
         [self.phoneLabel setText:@"未公开"];
     }
-    
-    _saveForQuit = true;
 }
 
 - (IBAction)pressedTheCodeButton:(UIButton *)sender {
@@ -110,6 +107,8 @@
         [_relationship setParty_warn:[NSNumber numberWithInt:1]];
     }
     [self reloadButtonStatusSetting];
+    
+    _saveForQuit = true;
 }
 
 - (IBAction)pressedTheChatButton:(UIButton *)sender {
@@ -119,6 +118,8 @@
         [_relationship setMessage_warn:[NSNumber numberWithInt:1]];
     }
     [self reloadButtonStatusSetting];
+    
+    _saveForQuit = true;
 }
 
 - (IBAction)pressedThePhoneButton:(UIButton *)sender {
@@ -128,6 +129,8 @@
         [_relationship setPublic_phone:[NSNumber numberWithInt:1]];
     }
     [self reloadButtonStatusSetting];
+    
+    _saveForQuit = true;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {

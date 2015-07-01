@@ -42,7 +42,7 @@
     
     _backImageViwe = [[UIImageView alloc] initWithFrame:CGRectMake(4.5, 4.5, 90, 90)];
     [_backImageViwe.layer setMasksToBounds:YES];
-    [_backImageViwe setBackgroundColor:[UIColor redColor]];
+    [_backImageViwe setBackgroundColor:[UIColor lightGrayColor]];
     [_backImageViwe.layer setCornerRadius:_backImageViwe.frame.size.width/2];
     [self.avatarButton addSubview:_backImageViwe];
     
@@ -172,14 +172,13 @@
     }
     
 }
-- (void)imageUploading: (float)proFloat
-{
-    [SVProgressHUD showProgress:proFloat*0.9];
+- (void)imageUploading: (float)proFloat {
+    [SVProgressHUD showProgress:proFloat*0.9 status:@"正在上传头像图片" maskType:SVProgressHUDMaskTypeGradient];
 }
 
 - (void)imageUploadDoneWithFieldID:(NSString *)fieldID {
     //图片在保存完成之后开始保存默认的帐号信息
-    [SVProgressHUD showProgress:1.0];
+    [SVProgressHUD showProgress:1.0 status:@"正在上传用户信息" maskType:SVProgressHUDMaskTypeGradient];
     self.userInfo.avatar_path = fieldID;
 //    Model_User *userInfo = [Model_User loadFromUserDefaults];
 //    userInfo.avatar_path = fieldID;
@@ -218,21 +217,10 @@
                 if ([jsonDic isKindOfClass:[NSNumber class]]) {
                     self.userInfo.pk_user = (NSNumber *)jsonDic;
                 }
-                
                 [self.userInfo saveToUserDefaults];
-
-                EMError *error = nil;
-                [[EaseMob sharedInstance].chatManager registerNewAccount:self.userInfo.pk_user.stringValue password:@"paopian" error:&error];
-                if (!error) {
-                    NSLog(@"em注册成功");
-                }
-
-                [SVProgressHUD dismiss];
-                 
-                
                 [self dismissViewControllerAnimated:YES completion:nil];
                 [self.rootController popToRootController];
-                
+                [SVProgressHUD showSuccessWithStatus:@"注册成功"];
             } else {
                 //注册出现错误
             }

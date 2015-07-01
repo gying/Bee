@@ -38,7 +38,6 @@
     NSInteger _selectIndex;
     NSMutableArray *_friendArray;
     SRNet_Manager *_netManager;
-    
 //    ChoosefriendsTableViewCell *cell;
 }
 
@@ -53,8 +52,6 @@
     [super viewDidLoad];
     [self setTitle:@"选择好友"];
     [self loadDataFromNet];
-    
-
 }
 
 - (void)loadDataFromNet

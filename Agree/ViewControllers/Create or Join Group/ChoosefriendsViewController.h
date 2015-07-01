@@ -13,10 +13,6 @@
 
 
 
-
-
-
-
 @interface ChoosefriendsViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UITableView *choosefriendsTableview;
 

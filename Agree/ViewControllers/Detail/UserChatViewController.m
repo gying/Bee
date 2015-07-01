@@ -297,8 +297,7 @@
                 //自己发的信息
                 //自己发言
                 UILabel *chatLabel_self = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width - 185, MAXFLOAT)];
-                
-                
+
                 [chatLabel_self setFont:[UIFont systemFontOfSize:14]];
                 [chatLabel_self setLineBreakMode:NSLineBreakByWordWrapping];
                 [chatLabel_self setTextAlignment:NSTextAlignmentLeft];
@@ -320,8 +319,6 @@
             } else {
                 //他人发的信息
                 UILabel *chatLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width - 132, MAXFLOAT)];
-                
-                
                 
                 [chatLabel setFont:[UIFont systemFontOfSize:14]];
                 [chatLabel setLineBreakMode:NSLineBreakByWordWrapping];
