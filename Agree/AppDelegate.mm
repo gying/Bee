@@ -12,6 +12,8 @@
 #import "SRNet_Manager.h"
 #import <SVProgressHUD.h>
 #import "RootAccountLoginViewController.h"
+#import "UserSettingViewController.h"
+
 
 #import "BMapKit.h"
 #import "SDImageCache.h"
@@ -132,10 +134,17 @@
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
     return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
+    
+//    return [WXApi handleOpenURL:url delegate:self.userSettingViewcontroller];
+    
+    
+    
 }
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
+
+//    return  [WXApi handleOpenURL:url delegate:self.userSettingViewcontroller];
 }
 
 
@@ -238,6 +247,7 @@
         [WXApi registerApp:@"wx9be30a70fcb480ae"];
         
         [self.window setRootViewController:self.rootLoginViewController];
+
     }
 
     return YES;
