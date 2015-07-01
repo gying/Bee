@@ -9,7 +9,8 @@
 #import "RootPhoneRegViewController.h"
 #import "SRNet_Manager.h"
 #import <SVProgressHUD.h>
-#import "RootAccountLoginViewController.h"
+//#import "RootAccountLoginViewController.h"
+//#import "RootAccountRegViewController.h"
 
 
 
@@ -23,6 +24,8 @@
     BOOL _sendCodeDone;
     NSString *_phoneNum;
     NSString *_code;
+    
+    RootAccountRegViewController * regViewController;
 }
 @end
 
@@ -37,6 +40,7 @@
 //    self.view.backgroundColor = [UIColor whiteColor];
     [self.sendButton setAlpha:0.2];
     [self.sendButton setEnabled:NO];
+//    regViewController = [RootAccountRegViewController new];
 
     
 }
@@ -50,12 +54,24 @@
         [_netManager sendVerificationCode:self.numberTextfield.text];
     } else {
         //验证码确认
-        if ([_code isEqualToString:self.self.numberTextfield.text]) {
+        if ([_code isEqualToString:self.self.numberTextfield.text]&&(self.sendButton.titleLabel.text = @"完成验证")) {
             //确认验证码完毕,保存到帐号信息
-            Model_User *sendUser = [[Model_User alloc] init];
-            [sendUser setPhone:_phoneNum];
-            [sendUser setPk_user:[Model_User loadFromUserDefaults].pk_user];
-            [_netManager updateUserInfo:sendUser];
+//            Model_User *sendUser = [[Model_User alloc] init];
+//            [sendUser setPhone:_phoneNum];
+//            [sendUser setPk_user:[Model_User loadFromUserDefaults].pk_user];
+//            [_netManager updateUserInfo:sendUser];
+            
+                        [self showViewController:regViewController sender:nil];
+            
+//            [self.navigationController showViewController:self.regViewController sender:nil];
+            
+//            [self presentViewController:regViewController animated:YES completion:nil];
+//            
+            
+            
+            
+            
+            
         } else {
             [self.numberLable setText:@"验证码错误,请重新输入"];
         }
@@ -86,6 +102,8 @@
         case kUpdateUserInfo: {
             //保存用户信息成功
             [SVProgressHUD showSuccessWithStatus:@"验证码认证成功"];
+            
+
 //            RootAccountLoginViewController *rootController = [self.navigationController.viewControllers objectAtIndex:1];
 //            [rootController reloadDataView];
             //绑定手机已完成,推出到主视图

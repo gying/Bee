@@ -32,6 +32,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.view.backgroundColor = [UIColor yellowColor];
+    
+    
     [self.nicknameTextField setDelegate:self];
     _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
 

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "SRNet_Manager.h"
+#import "RootAccountRegViewController.h"
 
 #import "RootAccountLoginViewController.h"
 @interface RootPhoneRegViewController : UIViewController
@@ -18,4 +19,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *sendButton;
 
 @property (nonatomic, strong)RootAccountLoginViewController *rootController;
+
+
+
 @end
