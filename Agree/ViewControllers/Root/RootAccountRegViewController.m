@@ -32,10 +32,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
     [self.nicknameTextField setDelegate:self];
     _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
 
-    
     [self.doneButton.layer setCornerRadius:self.doneButton.frame.size.height/2];
     [self.doneButton setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
     [self.doneButton.layer setMasksToBounds:YES];
@@ -218,8 +218,11 @@
                     self.userInfo.pk_user = (NSNumber *)jsonDic;
                 }
                 [self.userInfo saveToUserDefaults];
-                [self dismissViewControllerAnimated:YES completion:nil];
-                [self.rootController popToRootController];
+//                [self dismissViewControllerAnimated:YES completion:nil];
+//                [self.rootController popToRootController];
+                UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+                UITabBarController *rootController = [sb instantiateViewControllerWithIdentifier:@"rootTabbar"];
+                [self presentViewController:rootController animated:YES completion:nil];
                 [SVProgressHUD showSuccessWithStatus:@"注册成功"];
             } else {
                 //注册出现错误

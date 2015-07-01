@@ -122,6 +122,13 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+
+//键盘回收
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self.phoneTextField resignFirstResponder];
+}
+
 /*
 #pragma mark - Navigation
 

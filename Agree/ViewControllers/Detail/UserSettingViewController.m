@@ -56,7 +56,13 @@
     [_netManager getUserInfo:account];
     
     if (defAccount.avatar_path) {
-        [_backImageViwe sd_setImageWithURL:[SRImageManager avatarImageFromTXYFieldID:defAccount.avatar_path]];
+        NSURL *imageUrl = [SRImageManager avatarImageFromTXYFieldID:defAccount.avatar_path];
+        NSString * urlstr = [imageUrl absoluteString];
+        
+        [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:_backImageViwe succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+            [_backImageViwe setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
+        } failBlock:nil progressBlock:nil param:nil];
+        
     }
     
     if (defAccount.password) {

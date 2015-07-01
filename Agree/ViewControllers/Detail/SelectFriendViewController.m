@@ -97,7 +97,15 @@
                 [self.remarkLabel setText:_user.nickname];
                 
                 [self.accountTextField setHidden:YES];
-                [self.avatarImage sd_setImageWithURL:[SRImageManager avatarImageFromTXYFieldID:_user.avatar_path]];
+//                [self.avatarImage sd_setImageWithURL:[SRImageManager avatarImageFromTXYFieldID:_user.avatar_path]];
+                //下载图片
+                NSURL *imageUrl = [SRImageManager avatarImageFromTXYFieldID:_user.avatar_path];
+                NSString * urlstr = [imageUrl absoluteString];
+                
+                [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.avatarImage succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+                    [self.avatarImage setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
+                } failBlock:nil progressBlock:nil param:nil];
+                
                 [self.avatarImage setHidden:NO];
                 [self.reInputButton setHidden:NO];
                 

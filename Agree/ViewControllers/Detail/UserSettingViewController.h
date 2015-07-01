@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "UserViewController.h"
 
+#import "TXYDownloader.h"
+
 @interface UserSettingViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UIButton *avatarButton;

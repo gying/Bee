@@ -63,8 +63,6 @@
         } failBlock:nil progressBlock:nil param:nil];
 
 //        [self.avatarImageView sd_setImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path]];
-
-        
         if (adPeople.userInfo.relationship) {
             switch (adPeople.userInfo.relationship.intValue) {
                 case 1: {
@@ -124,7 +122,14 @@
         [self.addressBookNameLabel setText:[NSString stringWithFormat:@"通讯录名称: %@",adPeople.name]];
         
         
-        [self.avatarImageView sd_setImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path]];
+//        [self.avatarImageView sd_setImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path]];
+        //下载图片
+        NSURL *imageUrl = [SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path];
+        NSString * urlstr = [imageUrl absoluteString];
+        
+        [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.avatarImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+            [self.avatarImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
+        } failBlock:nil progressBlock:nil param:nil];
     }
 }
 - (IBAction)pressedTheSendButton:(id)sender {

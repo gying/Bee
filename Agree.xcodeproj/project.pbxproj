@@ -10,6 +10,7 @@
 		38688464E2D960851E81912B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B124D697D5B1D9DCE5C3CE49 /* libPods.a */; };
 		C60A755F1B2825C500707D84 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C60A755B1B2825C500707D84 /* libWeChatSDK.a */; };
 		C60A75601B2825C500707D84 /* read_me.txt in Resources */ = {isa = PBXBuildFile; fileRef = C60A755C1B2825C500707D84 /* read_me.txt */; };
+		C60D3F241B4240E500E86E2D /* RootPhoneRegViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C60D3F231B4240E500E86E2D /* RootPhoneRegViewController.m */; };
 		C64F1D5E1B26881A0063C012 /* ChoosefriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C64F1D5D1B26881A0063C012 /* ChoosefriendsViewController.m */; };
 		C64F1D641B26CB9D0063C012 /* ChoosefriendsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C64F1D631B26CB9D0063C012 /* ChoosefriendsTableViewCell.m */; };
 		F0068C0D1A679E0600B9CB60 /* ChooseDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0068C001A679E0600B9CB60 /* ChooseDateViewController.m */; };
@@ -176,6 +177,8 @@
 		C60A755C1B2825C500707D84 /* read_me.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = read_me.txt; sourceTree = "<group>"; };
 		C60A755D1B2825C500707D84 /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
 		C60A755E1B2825C500707D84 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
+		C60D3F221B4240E500E86E2D /* RootPhoneRegViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootPhoneRegViewController.h; sourceTree = "<group>"; };
+		C60D3F231B4240E500E86E2D /* RootPhoneRegViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootPhoneRegViewController.m; sourceTree = "<group>"; };
 		C64F1D5C1B26881A0063C012 /* ChoosefriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosefriendsViewController.h; sourceTree = "<group>"; };
 		C64F1D5D1B26881A0063C012 /* ChoosefriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosefriendsViewController.m; sourceTree = "<group>"; };
 		C64F1D621B26CB9D0063C012 /* ChoosefriendsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosefriendsTableViewCell.h; sourceTree = "<group>"; };
@@ -813,6 +816,8 @@
 				F0BED4B51AA32E1000801ED2 /* RootAccountRegViewController.m */,
 				F0B4D74E1AD1195C00401359 /* RootAccountLoginViewController.h */,
 				F0B4D74F1AD1195C00401359 /* RootAccountLoginViewController.m */,
+				C60D3F221B4240E500E86E2D /* RootPhoneRegViewController.h */,
+				C60D3F231B4240E500E86E2D /* RootPhoneRegViewController.m */,
 			);
 			path = Root;
 			sourceTree = "<group>";
@@ -1255,6 +1260,7 @@
 			files = (
 				F06A62B21A7EA016005C6155 /* GroupAlbumsCollectionViewController.m in Sources */,
 				F024690B1AD1804900FED32D /* EMSendMessageHepler.m in Sources */,
+				C60D3F241B4240E500E86E2D /* RootPhoneRegViewController.m in Sources */,
 				F08E3B061A70CE970027625D /* SRImageManager.m in Sources */,
 				F0F5C2761A66F1490029BF7A /* MJIvar.m in Sources */,
 				F05EAC3D1AD13B1F006F505B /* AboutUsViewController.m in Sources */,
