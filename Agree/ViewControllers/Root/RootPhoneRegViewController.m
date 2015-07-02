@@ -26,6 +26,8 @@
     NSString *_code;
     
     RootAccountRegViewController * regViewController;
+    
+    BOOL _checkPhoneNumDone;
 }
 @end
 
@@ -41,6 +43,8 @@
     [self.sendButton setAlpha:0.2];
     [self.sendButton setEnabled:NO];
 //    regViewController = [RootAccountRegViewController new];
+    
+    _checkPhoneNumDone = FALSE;
 
     
 }
@@ -56,21 +60,11 @@
         //验证码确认
         if ([_code isEqualToString:self.self.numberTextfield.text]&&(self.sendButton.titleLabel.text = @"完成验证")) {
             //确认验证码完毕,保存到帐号信息
-//            Model_User *sendUser = [[Model_User alloc] init];
-//            [sendUser setPhone:_phoneNum];
-//            [sendUser setPk_user:[Model_User loadFromUserDefaults].pk_user];
-//            [_netManager updateUserInfo:sendUser];
+            //验证码确认完毕.
+            self.userInfo.phone = _phoneNum;
+            _checkPhoneNumDone = YES;
             
-                        [self showViewController:regViewController sender:nil];
-            
-//            [self.navigationController showViewController:self.regViewController sender:nil];
-            
-//            [self presentViewController:regViewController animated:YES completion:nil];
-//            
-            
-            
-            
-            
+            [self performSegueWithIdentifier:@"GoToReg" sender:self];
             
         } else {
             [self.numberLable setText:@"验证码错误,请重新输入"];
@@ -99,19 +93,6 @@
             }
         }
             break;
-        case kUpdateUserInfo: {
-            //保存用户信息成功
-            [SVProgressHUD showSuccessWithStatus:@"验证码认证成功"];
-            
-
-//            RootAccountLoginViewController *rootController = [self.navigationController.viewControllers objectAtIndex:1];
-//            [rootController reloadDataView];
-            //绑定手机已完成,推出到主视图
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.navigationController popViewControllerAnimated:YES];
-            });
-        }
-            break;
         default:
             break;
     }
@@ -119,16 +100,8 @@
 
 
 
-
-
-
-
-
-
-
 //文本框控件
 - (IBAction)phoneTextField:(UITextField *)sender {
-    
     if (!_sendCodeDone) {
         if (sender.text.length == 11) {
             [self.sendButton setAlpha:1.0];
@@ -148,15 +121,9 @@
     }
 }
 
-
-    
-
 - (void)interfaceReturnDataError:(int)interfaceType {
     
 }
-
-
-
 
 //键盘回收
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -170,17 +137,27 @@
 }
 - (IBAction)close:(id)sender {
     
-        [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-/*
+
 #pragma mark - Navigation
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    //在推入视图前检查用户手机是否认证完毕
+    return _checkPhoneNumDone;
+}
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if ([@"GoToReg" isEqualToString:segue.identifier]) {
+        RootAccountRegViewController *childController = segue.destinationViewController;
+        [childController setUserInfo:self.userInfo];
+        [childController setRootController:self.rootController];
+    }
+    
 }
-*/
+
 
 @end

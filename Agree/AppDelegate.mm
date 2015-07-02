@@ -131,8 +131,7 @@
 
 
 #pragma mark -- 微信授权登陆注册
-- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
-{
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
     return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
     
 //    return [WXApi handleOpenURL:url delegate:self.userSettingViewcontroller];
@@ -140,14 +139,12 @@
     
     
 }
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
-{
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
 
 //    return  [WXApi handleOpenURL:url delegate:self.userSettingViewcontroller];
 }
-
-
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.

@@ -30,6 +30,7 @@
 @property (nonatomic, strong)UserViewController *rootViewController;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIButton *phoneButton;
+@property (weak, nonatomic) IBOutlet UIButton *weChatButton;
 @property (weak, nonatomic) IBOutlet UIView *passwordView;
 @property (weak, nonatomic) IBOutlet UILabel *passwordRemarkLabel;
 

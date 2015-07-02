@@ -23,8 +23,7 @@
     // Do any additional setup after loading the view.
     
     self.calendar = [[JTCalendar alloc] init];
-    
-    
+
     self.calendarMenuView = [[JTCalendarMenuView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 44)];
     self.calendarContentView = [[JTCalendarContentView alloc] initWithFrame:CGRectMake(0, 108, self.view.frame.size.width, self.view.frame.size.height - 108 - 162 - 100)];
     [self.view addSubview:self.calendarContentView];
@@ -33,6 +32,8 @@
     [self.calendar setMenuMonthsView:self.calendarMenuView];
     [self.calendar setContentView:self.calendarContentView];
     [self.calendar setDataSource:self];
+    
+    [self.datePicker setDate:[NSDate dateWithTimeIntervalSinceNow:60*60*2] animated:TRUE];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -61,15 +62,25 @@
 
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-    
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     if (!_chooseDate) {
-        _chooseDate = [NSDate date];
+        _chooseDate = [NSDate dateWithTimeIntervalSinceNow:60*60*2];
     }
+    if ([[self buildDate] timeIntervalSinceDate:[NSDate date]] <= 60*60*2) {
+        //聚会未超过两个小时,显示警告
+        UIAlertView *timeAlert = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                            message:@"聚会的开始时间必须是在当前时间的两个小时后"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"确定"
+                                                  otherButtonTitles:nil];
+        [timeAlert show];
+        return NO;
+    }
+    return YES;
+}
+
+- (NSDate *)buildDate {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     
     [_chooseDate dateByAddingTimeInterval:24*60*60];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
@@ -81,7 +92,15 @@
     
     NSDateFormatter *dateTimeFormatter = [[NSDateFormatter alloc] init];
     [dateTimeFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
-    _chooseDate = [dateTimeFormatter dateFromString:dataTimeString];
+    return [dateTimeFormatter dateFromString:dataTimeString];
+
+}
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    _chooseDate = [self buildDate];
     self.party.begin_time = _chooseDate;
     
     ConfirmPartyDetailViewController *controller = (ConfirmPartyDetailViewController *)segue.destinationViewController;

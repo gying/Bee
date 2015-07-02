@@ -72,10 +72,6 @@
 }
 
 - (void)popToRootController {
-    
-//    [self dismissViewControllerAnimated:YES completion:^{
-//        NSLog(@"hi");
-//    }];
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
     UITabBarController *rootController = [sb instantiateViewControllerWithIdentifier:@"rootTabbar"];
     [self presentViewController:rootController animated:YES completion:nil];
@@ -89,7 +85,6 @@
                 //找到帐号
                 Model_User *user = [[Model_User objectArrayWithKeyValuesArray:jsonDic] objectAtIndex:0];
                 [user saveToUserDefaults];
-                
                 [self popToRootController];
             } else {
                 //没有找到帐号
@@ -290,10 +285,13 @@
     _wechatUser.nickname = [uidDataDic objectForKey:@"nickname"];
     _wechatUser.avatar_path = [uidDataDic objectForKey:@"headimgurl"];
     
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
+    
+    if (openid) {
+        if (!_netManager) {
+            _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
+        }
+        [_netManager getUserInfoByWechat:_wechatUser];
     }
-    [_netManager getUserInfoByWechat:_wechatUser];
 }
 
 
@@ -310,22 +308,21 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-//    RootAccountRegViewController *childController = segue.destinationViewController;
-//    if (_wechatUser) {
-//        [childController setUserInfo:_wechatUser];
-//    } else {
-//        [childController setUserInfo:self.userInfo];
-//    }
-//    [childController setRootController:self];
-//    
-
-    RootPhoneRegViewController * phoneController = segue.destinationViewController;
-    
-    [phoneController setRootController:self];
-    
-    
-
-    
+    if ([@"GoToBandPhone" isEqualToString:segue.identifier]) {
+        //登录或者注册手机帐号
+        RootPhoneRegViewController *childController = segue.destinationViewController;
+        childController.userInfo = self.userInfo;
+        childController.rootController = self;
+    } else {
+        //微信登录注册逻辑
+        RootAccountRegViewController *childController = segue.destinationViewController;
+        if (_wechatUser) {
+            [childController setUserInfo:_wechatUser];
+        } else {
+            [childController setUserInfo:self.userInfo];
+        }
+        [childController setRootController:self];
+    }
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {

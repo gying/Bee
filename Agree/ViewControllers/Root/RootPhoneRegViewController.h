@@ -9,14 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "SRNet_Manager.h"
 #import "RootAccountRegViewController.h"
-
 #import "RootAccountLoginViewController.h"
-@interface RootPhoneRegViewController : UIViewController
+#import "Model_User.h"
 
+@interface RootPhoneRegViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UILabel *numberLable;
 @property (weak, nonatomic) IBOutlet UITextField *numberTextfield;
 @property (weak, nonatomic) IBOutlet UIButton *sendButton;
+
+@property (nonatomic, strong)Model_User *userInfo;
 
 @property (nonatomic, strong)RootAccountLoginViewController *rootController;
 

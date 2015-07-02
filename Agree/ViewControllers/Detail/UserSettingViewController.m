@@ -49,23 +49,28 @@
         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
     }
     
+    Model_User *defAccount = [Model_User loadFromUserDefaults];
+    
     Model_User *account = [[Model_User alloc] init];
-    account.pk_user = [Model_User loadFromUserDefaults].pk_user;
+    account.pk_user = defAccount.pk_user;
     [_netManager getUserInfo:account];
     
-    if ([Model_User loadFromUserDefaults].avatar_path) {
-//        [_backImageViwe sd_setImageWithURL:[SRImageManager avatarImageFromTXYFieldID:[Model_User loadFromUserDefaults].avatar_path]];
-        //下载图片
-        NSURL *imageUrl = [SRImageManager avatarImageFromTXYFieldID:[Model_User loadFromUserDefaults].avatar_path];
+    if (defAccount.avatar_path) {
+        NSURL *imageUrl = [SRImageManager avatarImageFromTXYFieldID:defAccount.avatar_path];
         NSString * urlstr = [imageUrl absoluteString];
         
         [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:_backImageViwe succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
             [_backImageViwe setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
         } failBlock:nil progressBlock:nil param:nil];
+        
     }
     
-    if ([Model_User loadFromUserDefaults].password) {
+    if (defAccount.password) {
         [self.passwordButton setTitle:@"更改密码" forState:UIControlStateNormal];
+    }
+    
+    if (defAccount.wechat_id && [@"" isEqual:defAccount.wechat_id]) {
+        [self.weChatButton setTitle:@"重新绑定微信帐号" forState:UIControlStateNormal];
     }
 }
 
@@ -462,17 +467,13 @@
     return TRUE;
 }
 
--(void)imageUploading:(float)proFloat
-{
-    
+-(void)imageUploading:(float)proFloat {
     [SVProgressHUD showProgress:proFloat*0.9];
 }
 
 
 - (void)saveAccountData {
     //上传头像信息
-    
-    
     if (_isUpdateAvatar) {
         //更新头像信息
         if (!_imageManager) {
@@ -482,9 +483,6 @@
         [SVProgressHUD showProgress:1.0];
         [_imageManager updateImageToTXY:_avatarImage];
         [SVProgressHUD dismiss];
-        
-        
- 
     } else {
         if (_isUpdateData) {
             //查看是否需要更新数据
@@ -564,7 +562,6 @@
                 _isUpdateData = FALSE;
             }
         }
-            
             break;
         case kGetUserInfo: {
             //读取用户资料

@@ -130,7 +130,6 @@
 - (IBAction)pressedTheCodeBackButton:(id)sender {
     [self.codeInputTextField resignFirstResponder];
     [self.codeView setHidden:YES];
-    NSLog(@"收到邀请码");
 }
 
 - (IBAction)pressedTheJoinButton:(id)sender {
@@ -150,10 +149,6 @@
         GroupViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
         [rootController joinGroupRelation];
     });
-    
-    NSLog(@"222");
-    
-    
 }
 
 - (IBAction)pressedTheRecodeButton:(id)sender {
@@ -175,9 +170,6 @@
     
     
     [self.codeInputTextField becomeFirstResponder];
-    
-    NSLog(@"333");
-    
 }
 
 - (void)didReceiveMemoryWarning {

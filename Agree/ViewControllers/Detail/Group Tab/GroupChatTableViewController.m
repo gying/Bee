@@ -95,19 +95,11 @@
     [_closelable setFont:[UIFont systemFontOfSize:14]];
     [_closelable setAlpha:0.0];
     [_chatTableView addSubview:_closelable];
-
-
 }
-
-
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-    
-    
 }
 
 #pragma mark - Table view data source
@@ -171,9 +163,8 @@
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     
 #pragma mark -- 消息显示最底层获取消息列表（条件）
-
-
-    return cell;}
+    return cell;
+}
 
 
 
@@ -476,7 +467,6 @@
 }
 
 - (void)repackMessage: (NSArray *)relationAry {
-    
     //读取私信的消息列表
     _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:self.group.em_id isGroup:YES];
     NSArray *messages = [_conversation loadAllMessages];
@@ -519,13 +509,9 @@
                     for (Model_Group_User *groupUser in _relationship) {
                         [CD_Group_User saveGroupUserToCD:groupUser];
                     }
-
-                    
                     [self.chatArray removeAllObjects];
                     [self repackMessage:_relationship];
-                    
-                    
-                    
+
                     [self subChatArray];
 
                     
@@ -564,7 +550,7 @@
     if (self.chatArray.count > 10) {
         _mchatArray = [NSMutableArray arrayWithArray:[_chatArray subarrayWithRange:NSMakeRange(_chatArray.count - (_mchatArray.count+pageSize),_mchatArray.count+pageSize)]];
     } else {
-        _mchatArray = _chatArray;
+        _mchatArray = [[NSMutableArray alloc] initWithArray:_chatArray];
     }
 }
 
@@ -604,7 +590,7 @@
     float contentsizeH = self.chatTableView.contentSize.height;
 
     //判断如果下拉超过限定 就加载数据
-    if ((0 == (contentoffsetY))&&!(_mchatArray.count == _chatArray.count) ){
+    if ((0 == (contentoffsetY))&&!(_mchatArray.count == _chatArray.count)) {
         NSLog(@"下拉如果超过-110realoadata");
         page++;
         NSLog(@"%d",page);
@@ -613,9 +599,6 @@
 
         //在下拉加载时更改关闭提示的高度,以保持在列表最底端
         [_closelable setFrame:CGRectMake(0, self.chatTableView.contentSize.height + self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, 50)];
-        
-
-        
     }
     //默认一次10个 这是最后一次加载大于0小于10的个数
     else if( self.chatArray.count - self.mchatArray.count > 0 && self.chatArray.count - self.mchatArray.count < 10  ){
@@ -623,8 +606,7 @@
 
         [_chatTableView reloadData];
 
-    }else if( self.mchatArray.count == self.chatArray.count )
-    {
+    }else if( self.mchatArray.count == self.chatArray.count) {
         NSLog(@"数组已经加载结束 停止加载");
     }
 

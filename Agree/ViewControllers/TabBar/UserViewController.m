@@ -17,6 +17,8 @@
 #import "CD_Group_User.h"
 #import "CD_Photo.h"
 
+#import <SVProgressHUD.h>
+
 @interface UserViewController () <UIAlertViewDelegate>{
     NSString *_imageName;
     UIImageView *_backImageViwe;
@@ -60,8 +62,10 @@
 
 - (IBAction)pressedTheAccountSettingButton:(UIButton *)sender {
 }
+
 - (IBAction)pressedTheFeedbackButton:(UIButton *)sender {
 }
+
 - (IBAction)pressedTheAboutUsButton:(UIButton *)sender {
 }
 
@@ -75,13 +79,13 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
     switch (buttonIndex) {
         case 0: {   //取消
             
         }
             break;
         case 1: {   //确定
+            [SVProgressHUD showWithStatus:@"正在退出帐号"];
             //将用户资料清空
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:kDefUser];
             
@@ -89,7 +93,7 @@
             EMError *error = nil;
             NSDictionary *info = [[EaseMob sharedInstance].chatManager logoffWithUnbindDeviceToken:YES error:&error];
             if (!error && info) {
-                NSLog(@"退出成功");
+                NSLog(@"退出帐号成功");
             }
             
             [CD_Group removeAllGroupFromCD];
@@ -100,7 +104,7 @@
             //设置代理,弹出视图控制器
             AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
             [delegate logout];
-
+            [SVProgressHUD showSuccessWithStatus:@"退出成功"];
         }
             break;
         default:
