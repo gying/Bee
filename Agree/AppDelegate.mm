@@ -66,13 +66,10 @@
 - (void)didFinishedReceiveOfflineMessages:(NSArray *)offlineMessages {
     NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"contact_update"];
     for (EMMessage *message in offlineMessages) {
-        
-        
         if (message.isGroup) {
             //小组信息
         } else {
             //私聊信息
-            
             updateValue = [NSNumber numberWithInt: updateValue.intValue + 1];
             [[NSUserDefaults standardUserDefaults] setObject:updateValue forKey:@"contact_update"];
         }
@@ -213,6 +210,9 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
+    //微信注册帐号
+    [WXApi registerApp:@"wx9be30a70fcb480ae"];
+    
     //判断进入的界面
     //查找用户id
 //    NSNumber *user_id = [Model_User loadFromUserDefaults].pk_user;
@@ -239,10 +239,13 @@
         
         //微信授权登陆注册
 //        self.rootLoginViewController = [[RootAccountLoginViewController alloc]init];
+<<<<<<< HEAD
 //        self.userSettingViewcontroller = [[UserSettingViewController alloc]init];
         
         [WXApi registerApp:@"wx9be30a70fcb480ae"];
 
+=======
+>>>>>>> Gaddle
         
         [self.window setRootViewController:self.rootLoginViewController];
 

@@ -85,6 +85,7 @@
     switch (interfaceType) {
         case kLoginAccount: {
             if (jsonDic) {
+                _wechatLoginDone = NO;
                 [SVProgressHUD showSuccessWithStatus:@"登录成功"];
                 //找到帐号
                 Model_User *user = [[Model_User objectArrayWithKeyValuesArray:jsonDic] objectAtIndex:0];
@@ -115,6 +116,7 @@
                 
             } else {
                 //使用微信openid的账户不存在
+                _wechatLoginDone = YES;
                 [self performSegueWithIdentifier:@"GoToReg" sender:self];
             }
         }
@@ -247,11 +249,8 @@
     NSString * newUrlStr = [urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
     NSURL *url = [NSURL URLWithString:newUrlStr];
-    
     NSURLRequest * request = [NSURLRequest requestWithURL:url];
-    
     NSURLResponse *response = nil;
-    
     NSError *error = nil;
     
     NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
@@ -311,6 +310,13 @@
 }
 
 #pragma mark - Navigation
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    if ([@"GoToReg" isEqualToString:identifier]) {
+        return _wechatLoginDone;
+    }
+    return YES;
+}
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

@@ -45,7 +45,6 @@
 }
 
 - (void)resetAvatar {
-//    [_backImageViwe sd_setImageWithURL:[SRImageManager avatarImageFromTXYFieldID:[Model_User loadFromUserDefaults].avatar_path]];
     //下载图片
     NSURL *imageUrl = [SRImageManager avatarImageFromTXYFieldID:[Model_User loadFromUserDefaults].avatar_path];
     NSString * urlstr = [imageUrl absoluteString];
@@ -96,6 +95,7 @@
                 NSLog(@"退出帐号成功");
             }
             
+            //移除用户资料
             [CD_Group removeAllGroupFromCD];
             [CD_Party removeAllPartyFromCD];
             [CD_Group_User removeAllGroupUserFromCD];

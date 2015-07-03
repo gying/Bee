@@ -276,6 +276,7 @@
 
 //绑定微信按钮
 - (IBAction)pressedTheWechatButton:(UIButton *)sender {
+<<<<<<< HEAD
     if (!_netManager) {
         _netManager = [[SRNet_Manager alloc] init];
         [_netManager setDelegate:self];
@@ -283,14 +284,46 @@
     [_netManager testInterface];
 
     NSLog(@"绑定微信");    SendAuthReq* req = [[SendAuthReq alloc] init];
+=======
+//    if (!_netManager) {
+//        _netManager = [[SRNet_Manager alloc] init];
+//        [_netManager setDelegate:self];
+//    }
+//    [_netManager testInterface];
+    
+    
+    NSLog(@"绑定微信");
+    /*! @brief 第三方程序向微信终端请求认证的消息结构
+     *
+     * 第三方程序要向微信申请认证，并请求某些权限，需要调用WXApi的sendReq成员函数，
+     * 向微信终端发送一个SendAuthReq消息结构。微信终端处理完后会向第三方程序发送一个处理结果。
+     * @see SendAuthResp
+     */
+    SendAuthReq * req = [[SendAuthReq alloc]init];
+    /** 第三方程序要向微信申请认证，并请求某些权限，需要调用WXApi的sendReq成员函数，向微信终端发送一个SendAuthReq消息结构。微信终端处理完后会向第三方程序发送一个处理结果。
+     * @see SendAuthResp
+     * @note scope字符串长度不能超过1K
+     */
+>>>>>>> Gaddle
     req.scope = @"snsapi_message,snsapi_userinfo,snsapi_friend,snsapi_contact";
     // @"post_timeline,sns"
     req.state = @"xxxtiaozhuan";
     req.openID = @"0c806938e2413ce73eef92cc3";
 
     
+<<<<<<< HEAD
     [WXApi sendReq:req];
     
+=======
+    /*! @brief 发送Auth请求到微信，支持用户没安装微信，等待微信返回onResp
+     *
+     * 函数调用后，会切换到微信的界面。第三方应用程序等待微信返回onResp。微信在异步处理完成后一定会调用onResp。支持SendAuthReq类型。
+     * @param req 具体的发送请求，在调用函数后，请自己释放。
+     * @param viewController 当前界面对象。
+     * @param delegate  WXApiDelegate对象，用来接收微信触发的消息。
+     * @return 成功返回YES，失败返回NO。
+     */
+>>>>>>> Gaddle
     [WXApi sendAuthReq:req viewController:self delegate:self];
 }
 
@@ -412,26 +445,11 @@
     NSDictionary * uidDataDic = [NSJSONSerialization JSONObjectWithData:uidData options:kNilOptions error:nil];
     NSLog(@"%@",uidDataDic);
     
-    //新建由微信创建的用户信息
-//    _wechatUser = [[Model_User alloc] init];
-//    _wechatUser.wechat_id = [uidDataDic objectForKey:@"openid"];
-//    _wechatUser.nickname = [uidDataDic objectForKey:@"nickname"];
-//    _wechatUser.avatar_path = [uidDataDic objectForKey:@"headimgurl"];
-//    
-//    if (!_netManager) {
-//        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-//    }
-//    [_netManager getUserInfoByWechat:_wechatUser];
-    
-    _userInfo.wechat_id = openid;
-    _isUpdateData = YES;
+    if (openid) {
+        _userInfo.wechat_id = openid;
+        _isUpdateData = YES;
+    }
 }
-
-
-
-
-
-
 
 - (IBAction)nicknameEditingChanged:(UITextField *)sender {
     if (sender.text.length < 2) {
@@ -457,7 +475,6 @@
 -(void)imageUploading:(float)proFloat {
     [SVProgressHUD showProgress:proFloat*0.9];
 }
-
 
 - (void)saveAccountData {
     //上传头像信息

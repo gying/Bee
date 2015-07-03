@@ -369,6 +369,11 @@
                                                   andRequestType:kCancelParty]];
 }
 
+- (BOOL)shareParty: (Model_Party *)party {
+    return [self requestNetorkWithDic:[self toRequestDicWithData:party.keyValues
+                                                  andRequestType:kShareParty]];
+}
+
 - (BOOL)imageManagerSign {
     return [self requestNetorkWithDic:[self toRequestDicWithData:[NSDictionary dictionaryWithObjectsAndKeys:@"a",@"b",nil]
                                                   andRequestType:kImageManagerSign]];

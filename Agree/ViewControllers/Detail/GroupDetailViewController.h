@@ -31,14 +31,11 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *groupScrollView;
 
 @property (weak, nonatomic) IBOutlet UIView *groupTalkView;
-
 @property (weak, nonatomic) IBOutlet UITableView *chatTableView;
-
 @property (weak, nonatomic) IBOutlet UITableView *partyTableView;
-
 @property (weak, nonatomic) IBOutlet UICollectionView *albumsCollectionView;
-@property (nonatomic, strong)Model_Party *chooseParty;
 
+@property (nonatomic, strong)Model_Party *chooseParty;
 @property (nonatomic, strong)SRAccountView *accountView;
 
 

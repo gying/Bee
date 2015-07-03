@@ -88,7 +88,6 @@
 }
 
 #pragma mark - Table view data source
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     if (_scheduleArray) {
@@ -96,7 +95,6 @@
     }
     return 0;
 }
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     Model_Party *theParty = [_scheduleArray objectAtIndex:indexPath.row];
@@ -136,6 +134,7 @@
     [self.tableView reloadData];
 }
 
+#pragma mark - Net delegate
 - (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
     switch (interfaceType) {
         case kGetAllScheduleByUser: {
@@ -157,11 +156,8 @@
                     for (Model_Party *party in _scheduleArray) {
                         [CD_Party removePartyFromCD:party];
                     }
-                    
                     [_scheduleArray removeAllObjects];
-                }
-                [SVProgressHUD showInfoWithStatus:@"您还没有任何日程"];
-            }
+                }            }
             [self.tableView.header endRefreshing];
             //在成功读取了所有聚会后,将聚会提示设置为0
             [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"party_update"];
@@ -176,7 +172,6 @@
 - (void)interfaceReturnDataError:(int)interfaceType{
     [SVProgressHUD dismiss];
 }
-
 
 #pragma mark - Navigation
 // In a storyboard-based application, you will often want to do a little preparation before navigation

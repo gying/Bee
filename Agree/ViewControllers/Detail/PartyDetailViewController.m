@@ -285,6 +285,24 @@
                 [self.delegate cancelParty:self.party];
             }
         }
+            break;
+        case kShareParty: {
+            if (jsonDic) {
+                //聚会分享获取链接成功
+                //将聚会链接赋值到粘贴板
+                UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+                pboard.string = (NSString *)jsonDic;
+                
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                    message:@"聚会链接已复制到您的粘贴板"
+                                                                   delegate:self
+                                                          cancelButtonTitle:@"确定"
+                                                          otherButtonTitles:nil];
+                alertView.tag = 2;
+                [alertView show];
+            }
+        }
+            break;
         default:
             break;
     }
@@ -315,13 +333,10 @@
             break;
         case 1: {
             //分享聚会
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                                message:@"聚会链接已复制到您的粘贴板"
-                                                               delegate:self
-                                                      cancelButtonTitle:@"确定"
-                                                      otherButtonTitles:nil];
-            alertView.tag = 2;
-            [alertView show];
+            if (!_netManager) {
+                _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
+            }
+            [_netManager shareParty:self.party];
         }
             break;
             
