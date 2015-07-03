@@ -43,13 +43,10 @@ static NSString * const reuseIdentifier = @"GroupCollectionCell";
 
 //返回CELL个数
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    
-    int i = 1;
-    
     if (_groupAry) {
-        return _groupAry.count + i;
+        return _groupAry.count + 1;
     }
-    return i;
+    return 1;
     
 
 }
@@ -110,10 +107,9 @@ static NSString * const reuseIdentifier = @"GroupCollectionCell";
     //读取小组详情数据并赋值小组数据
     ChooseLoctaionViewController *controller = (ChooseLoctaionViewController *)segue.destinationViewController;
     
-    if ([_groupAry objectAtIndex:0]) {
+    if (0 == _chooseIndexPath) {
         controller.chooseGroup = nil;
-    }else
-    {
+    }else {
         controller.chooseGroup = [_groupAry objectAtIndex:_chooseIndexPath-1];
     }
 

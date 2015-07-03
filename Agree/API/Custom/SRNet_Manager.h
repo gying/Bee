@@ -69,6 +69,7 @@
 #define kRemovePhoto                63
 #define kCreateRelationForParty     49
 #define kCancelParty                46
+#define kShareParty                 411
 
 
 #define kImageManagerSign           101
@@ -128,6 +129,7 @@
 - (BOOL)removePhoto: (Model_Photo *)photo;
 - (BOOL)createRelationshipForParty: (Model_Party_User *)relation;
 - (BOOL)cancelParty: (Model_Party *)party;
+- (BOOL)shareParty: (Model_Party *)party;
 - (BOOL)imageManagerSign;
 - (BOOL)testInterface;
 - (BOOL)getUserInfoByWechat: (Model_User *)user;

@@ -12,10 +12,10 @@
 #import "WXApiObject.h"
 #import "WXApi.h"
 
-@protocol RootAccountRegViewController <NSObject>
-
-
-@end
+//@protocol RootAccountRegViewController <NSObject>
+//
+//
+//@end
 @interface RootAccountLoginViewController : UIViewController<WXApiDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *accountTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;

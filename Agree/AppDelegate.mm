@@ -12,6 +12,8 @@
 #import "SRNet_Manager.h"
 #import <SVProgressHUD.h>
 #import "RootAccountLoginViewController.h"
+#import "UserSettingViewController.h"
+
 
 #import "BMapKit.h"
 #import "SDImageCache.h"
@@ -128,10 +130,17 @@
 #pragma mark -- 微信授权登陆注册
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
     return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
+    
+//    return [WXApi handleOpenURL:url delegate:self.userSettingViewcontroller];
+    
+    
+    
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
+
+//    return  [WXApi handleOpenURL:url delegate:self.userSettingViewcontroller];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -203,6 +212,9 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
+    //微信注册帐号
+    [WXApi registerApp:@"wx9be30a70fcb480ae"];
+    
     //判断进入的界面
     //查找用户id
 //    NSNumber *user_id = [Model_User loadFromUserDefaults].pk_user;
@@ -229,9 +241,9 @@
         
         //微信授权登陆注册
 //        self.rootLoginViewController = [[RootAccountLoginViewController alloc]init];
-        [WXApi registerApp:@"wx9be30a70fcb480ae"];
         
         [self.window setRootViewController:self.rootLoginViewController];
+
     }
 
     return YES;

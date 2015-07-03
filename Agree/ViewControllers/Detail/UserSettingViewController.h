@@ -11,7 +11,15 @@
 
 #import "TXYDownloader.h"
 
-@interface UserSettingViewController : UIViewController
+#import "WXApiObject.h"
+#import "WXApi.h"
+
+//@protocol  UserSettingViewController<NSObject>
+//
+//
+//@end
+
+@interface UserSettingViewController : UIViewController<WXApiDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *avatarButton;
 
@@ -27,6 +35,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *passwordRemarkLabel;
 
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
+
+@property (nonatomic , strong)NSString * codeStr;
 - (void)reloadDataView;
 
 @end

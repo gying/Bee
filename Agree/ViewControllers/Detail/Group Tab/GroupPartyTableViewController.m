@@ -80,9 +80,10 @@
                 for (Model_Party *party in self.partyArray) {
                     [CD_Party savePartyToCD:party];
                 }
-                
-                
             } else {
+                [CD_Party removePartyFromCDByGroup:self.group];
+                [self.partyArray removeAllObjects];
+                [self.partyTableView reloadData];
                 
             }
             [self.partyTableView.header endRefreshing];

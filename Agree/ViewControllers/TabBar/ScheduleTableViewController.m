@@ -157,9 +157,7 @@
                         [CD_Party removePartyFromCD:party];
                     }
                     [_scheduleArray removeAllObjects];
-                }
-//                [SVProgressHUD showInfoWithStatus:@"您还没有任何日程"];
-            }
+                }            }
             [self.tableView.header endRefreshing];
             //在成功读取了所有聚会后,将聚会提示设置为0
             [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"party_update"];

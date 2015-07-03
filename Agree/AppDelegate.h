@@ -22,8 +22,7 @@
 
 #import "WXApi.h"
 #import "RootAccountLoginViewController.h"
-
-
+#import "UserSettingViewController.h"
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
@@ -52,8 +51,10 @@
 @property (nonatomic, strong)TXYUploadManager *uploadManager;
 
 
-//@property (strong, nonatomic) RootAccountLoginViewController *viewController;
+
 @property (strong, nonatomic) RootAccountLoginViewController *rootLoginViewController;
+@property (strong ,nonatomic) UserSettingViewController * userSettingViewcontroller;
+
 
 
 - (void)logout;
