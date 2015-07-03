@@ -59,7 +59,6 @@
     //微信授权登陆注册
 //    self.rootLoginViewController = [[RootAccountLoginViewController alloc]init];
     [WXApi registerApp:@"wx9be30a70fcb480ae"];
-    
     [self.window setRootViewController:self.rootLoginViewController];
 }
 
@@ -132,18 +131,17 @@
 
 #pragma mark -- 微信授权登陆注册
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
     
-//    return [WXApi handleOpenURL:url delegate:self.userSettingViewcontroller];
+//    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
     
-    
+    return [WXApi handleOpenURL:url delegate:self.rootLoginViewController]&&[WXApi handleOpenURL:url delegate:self.userSettingViewcontroller];
     
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
+//    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
 
-//    return  [WXApi handleOpenURL:url delegate:self.userSettingViewcontroller];
+    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController]&&[WXApi handleOpenURL:url delegate:self.userSettingViewcontroller];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -241,7 +239,10 @@
         
         //微信授权登陆注册
 //        self.rootLoginViewController = [[RootAccountLoginViewController alloc]init];
+//        self.userSettingViewcontroller = [[UserSettingViewController alloc]init];
+        
         [WXApi registerApp:@"wx9be30a70fcb480ae"];
+
         
         [self.window setRootViewController:self.rootLoginViewController];
 
