@@ -46,27 +46,20 @@
 
 
     //初始加载消息页数以及条数
-    int page;
-    int pageSize;
-    
-
-    
+    int _page;
+    int _pageSize;
 }
 
 @end
 
-
-
 @implementation GroupChatTableViewController
-
-
 
 
 - (void)loadChatData {
     if (!self.chatArray) {
         self.chatArray = [[NSMutableArray alloc] init];
-        page = 1;
-        pageSize =10;
+        _page = 1;
+        _pageSize = 20;
         
     }
     _relationship = [CD_Group_User getGroupUserFromCDByGroup:self.group];
@@ -82,8 +75,6 @@
     Model_Group *sendGroup = [[Model_Group alloc] init];
     [sendGroup setPk_group:self.group.pk_group];
     [_netManager getAllRelationFromGroup:sendGroup];
-    
-    
     
 #pragma mark -- 创建上拉关闭的LABLE
     //创建在TABLEVIEW上
@@ -103,7 +94,6 @@
 }
 
 #pragma mark - Table view data source
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     if (self.mchatArray) {
@@ -115,7 +105,6 @@
 
 
 #pragma mark -- 小组CELL内容
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *kCellIdentifier = @"GroupChatCell";
    GroupChatTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
@@ -149,11 +138,9 @@
         case eMessageBodyType_Image: {
             //图片
             if (message.sendFromSelf) {
-                
-                
+
             } else {
                 //他人发的图片
-                
             }
         }
         default:
@@ -161,7 +148,6 @@
     }
     
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    
 #pragma mark -- 消息显示最底层获取消息列表（条件）
     return cell;
 }
@@ -189,8 +175,7 @@
 
 
 //HeadView高度
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     
     float headHight = 0;
     for (EModel_Chat *message in _mchatArray) {
@@ -223,7 +208,6 @@
                                                        requireEncryption:NO
                                                                      ext:nil]];
 }
-
 
 #pragma mark -- 发送消息结束
 - (void)sendMessageDone:(EMMessage *)message {
@@ -279,7 +263,11 @@
     }
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择图片来源" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"拍照" otherButtonTitles:@"图片库", nil];
+        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择图片来源"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"取消"
+                                             destructiveButtonTitle:@"拍照"
+                                                  otherButtonTitles:@"图片库", nil];
         [sheet showInView:self.rootController.view];
     }
 }
@@ -500,8 +488,6 @@
                 if (!_relationship) {
                     _relationship = [[NSMutableArray alloc] init];
                 }
-                if (jsonDic) {
-                    
                     _relationship = [Model_Group_User objectArrayWithKeyValuesArray:jsonDic];
                     
                     //建立并清理缓存
@@ -530,7 +516,6 @@
                     if (!(0 >= indexPath.row)) {
                         [self.chatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
                     }
-                } 
             }
         }
             break;
@@ -546,15 +531,14 @@
 }
 
 - (void)subChatArray {
-    
-    if (self.chatArray.count > 10) {
-        _mchatArray = [NSMutableArray arrayWithArray:[_chatArray subarrayWithRange:NSMakeRange(_chatArray.count - (_mchatArray.count+pageSize),_mchatArray.count+pageSize)]];
+    if (self.chatArray.count > _pageSize) {
+        _mchatArray = [NSMutableArray arrayWithArray:[_chatArray subarrayWithRange:NSMakeRange(_chatArray.count - (_mchatArray.count+_pageSize),_mchatArray.count+_pageSize)]];
     } else {
         _mchatArray = [[NSMutableArray alloc] initWithArray:_chatArray];
     }
 }
 
-- (void)tableViewIsScrollToBottom: (BOOL) isScroll
+- (void)tableViewIsScrollToBottom: (BOOL)isScroll
                      withAnimated: (BOOL)isAnimated {
     
     float headHight = 0;
@@ -581,8 +565,7 @@
     }
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 #pragma mark -- 下拉加载数据
 
     float contentoffsetY = _chatTableView.contentOffset.y;
@@ -592,16 +575,19 @@
     //判断如果下拉超过限定 就加载数据
     if ((0 == (contentoffsetY))&&!(_mchatArray.count == _chatArray.count)) {
         NSLog(@"下拉如果超过-110realoadata");
-        page++;
-        NSLog(@"%d",page);
+        _page++;
+        NSLog(@"%d",_page);
         [self subChatArray];
         [_chatTableView reloadData];
+        
+        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:_pageSize  inSection:0];
+        [self.chatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
 
         //在下拉加载时更改关闭提示的高度,以保持在列表最底端
         [_closelable setFrame:CGRectMake(0, self.chatTableView.contentSize.height + self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, 50)];
     }
-    //默认一次10个 这是最后一次加载大于0小于10的个数
-    else if( self.chatArray.count - self.mchatArray.count > 0 && self.chatArray.count - self.mchatArray.count < 10  ){
+    //默认一次为pagesize的大小 这是最后一次加载大于0小于10的个数
+    else if( self.chatArray.count - self.mchatArray.count > 0 && self.chatArray.count - self.mchatArray.count < _pageSize  ){
         self.mchatArray = self.chatArray;
 
         [_chatTableView reloadData];
@@ -610,7 +596,6 @@
         NSLog(@"数组已经加载结束 停止加载");
     }
 
-    
     float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
     
     if ((contentsizeH - contentoffsetY) < self.chatTableView.frame.size.height) {
@@ -629,7 +614,7 @@
         _closelable.text = @"继续上拉当前页";
     }
     
-    if ((self.chatTableView.contentSize.height - self.chatTableView.contentOffset.y) <  draggingGetPoint) {
+    if ((self.chatTableView.contentSize.height - self.chatTableView.contentOffset.y) < draggingGetPoint) {
         //如果拖移位置超过预定点,更改提示文字
         _closelable.text = @"释放关闭当前页";
     } else {
@@ -642,7 +627,7 @@
     //根据屏幕的高度来自适应拖移关闭的高度
     float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
     
-    if ((self.chatTableView.contentSize.height - self.chatTableView.contentOffset.y) <  draggingGetPoint) {
+    if ((self.chatTableView.contentSize.height - self.chatTableView.contentOffset.y) < draggingGetPoint) {
         //如果拖移位置超过预定点,则推出视图 
         NSLog(@"上拉关闭");
         [self.rootController popController];

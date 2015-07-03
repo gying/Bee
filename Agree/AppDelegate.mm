@@ -65,13 +65,10 @@
 - (void)didFinishedReceiveOfflineMessages:(NSArray *)offlineMessages {
     NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"contact_update"];
     for (EMMessage *message in offlineMessages) {
-        
-        
         if (message.isGroup) {
             //小组信息
         } else {
             //私聊信息
-            
             updateValue = [NSNumber numberWithInt: updateValue.intValue + 1];
             [[NSUserDefaults standardUserDefaults] setObject:updateValue forKey:@"contact_update"];
         }

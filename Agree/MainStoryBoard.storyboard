@@ -5,7 +5,7 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <mutableArray key="Lantinghei.ttc">
+        <mutableArray key="LangTingGBK.TTF">
             <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHK--GBK1-0</string>
@@ -2073,29 +2073,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="0.0" id="OVv-ag-eKJ">
-                            <size key="itemSize" width="160" height="160"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="OVv-ag-eKJ">
+                            <size key="itemSize" width="200" height="200"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                            <inset key="sectionInset" minX="0.0" minY="15" maxX="0.0" maxY="0.0"/>
+                            <inset key="sectionInset" minX="1" minY="10" maxX="1" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="GroupCollectionCell" reuseIdentifier="GroupCollectionCell" id="8fk-Mg-FVi" customClass="GroupCollectionViewCell">
                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="0.0" y="0.0" width="160" height="160"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cnz-pg-b4u">
-                                            <rect key="frame" x="5" y="5" width="150" height="150"/>
+                                            <rect key="frame" x="25" y="25" width="150" height="150"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qn7-2E-Y8m">
                                                     <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nqo-mD-mgW">
-                                                            <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
-                                                        </imageView>
                                                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BiY-G6-6Bo">
                                                             <rect key="frame" x="0.0" y="110" width="150" height="40"/>
                                                             <subviews>
@@ -2112,6 +2109,9 @@
                                                             </subviews>
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         </view>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nqo-mD-mgW">
+                                                            <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+                                                        </imageView>
                                                     </subviews>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </view>
@@ -2123,7 +2123,7 @@
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Y2-Mt-CWK">
-                                            <rect key="frame" x="148" y="120" width="6" height="6"/>
+                                            <rect key="frame" x="168" y="140" width="6" height="6"/>
                                             <color key="backgroundColor" red="1" green="0.1836390101" blue="0.20834209840000001" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="6" id="GNv-xC-4eT"/>
@@ -2387,6 +2387,15 @@
                                     <action selector="pressedTheWechatButton:" destination="iCS-FZ-roa" eventType="touchUpInside" id="Wqe-Q4-Ntw"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mx4-Su-Fya">
+                                <rect key="frame" x="251" y="119" width="99" height="99"/>
+                                <state key="normal" backgroundImage="agree_user_setting_avatar_backgroup">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="pressedTheAvatarButton:" destination="iCS-FZ-roa" eventType="touchUpInside" id="zfy-Ax-Ql2"/>
+                                </connections>
+                            </button>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gr2-Su-8vj">
                                 <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <subviews>
@@ -2430,15 +2439,6 @@
                                     <constraint firstItem="1jX-5S-BKf" firstAttribute="leading" secondItem="gr2-Su-8vj" secondAttribute="leading" constant="8" id="id7-4L-4y0"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mx4-Su-Fya">
-                                <rect key="frame" x="251" y="119" width="99" height="99"/>
-                                <state key="normal" backgroundImage="agree_user_setting_avatar_backgroup">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="pressedTheAvatarButton:" destination="iCS-FZ-roa" eventType="touchUpInside" id="zfy-Ax-Ql2"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -2469,11 +2469,6 @@
                             <constraint firstAttribute="trailing" secondItem="B8g-rr-PTl" secondAttribute="trailing" constant="20" id="s2q-HS-3E0"/>
                             <constraint firstItem="gr2-Su-8vj" firstAttribute="leading" secondItem="kum-rW-j9Y" secondAttribute="leading" id="zbn-nI-u9D"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="subviews">
-                                <exclude reference="gr2-Su-8vj"/>
-                            </mask>
-                        </variation>
                     </view>
                     <navigationItem key="navigationItem" title="帐号设置" id="20P-No-BKP">
                         <barButtonItem key="leftBarButtonItem" style="done" id="xCM-a7-LId">
@@ -4278,11 +4273,11 @@
         <image name="agree_user_setting_avatar_backgroup" width="99" height="99"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="NNN-op-p3r"/>
-        <segue reference="7g0-Ma-cMP"/>
         <segue reference="Re4-1s-AtI"/>
+        <segue reference="yUl-vl-Sui"/>
         <segue reference="xWd-dq-8Ci"/>
-        <segue reference="u80-pL-doZ"/>
+        <segue reference="7g0-Ma-cMP"/>
+        <segue reference="brR-kr-yPI"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.34901960780000002" green="0.81960784310000001" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
 </document>

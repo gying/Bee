@@ -560,15 +560,11 @@
         pboard.string = _longTapCell.chatMessageTextLabel.text;
     }
     
-    
-    
     //复制出的内容
     NSLog(@"%@",_longTapCell.chatMessageTextLabel_self.text);
     
     NSLog(@"%@",_longTapCell.chatMessageTextLabel.text);
-    
-    
-    
+ 
 }
 
 - (void)handleResendCell:(id)sender {
