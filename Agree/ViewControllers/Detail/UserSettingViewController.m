@@ -276,22 +276,12 @@
 
 //绑定微信按钮
 - (IBAction)pressedTheWechatButton:(UIButton *)sender {
-<<<<<<< HEAD
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] init];
-        [_netManager setDelegate:self];
-    }
-    [_netManager testInterface];
 
-    NSLog(@"绑定微信");    SendAuthReq* req = [[SendAuthReq alloc] init];
-=======
 //    if (!_netManager) {
 //        _netManager = [[SRNet_Manager alloc] init];
 //        [_netManager setDelegate:self];
 //    }
 //    [_netManager testInterface];
-    
-    
     NSLog(@"绑定微信");
     /*! @brief 第三方程序向微信终端请求认证的消息结构
      *
@@ -304,17 +294,11 @@
      * @see SendAuthResp
      * @note scope字符串长度不能超过1K
      */
->>>>>>> Gaddle
     req.scope = @"snsapi_message,snsapi_userinfo,snsapi_friend,snsapi_contact";
     // @"post_timeline,sns"
     req.state = @"xxxtiaozhuan";
     req.openID = @"0c806938e2413ce73eef92cc3";
 
-    
-<<<<<<< HEAD
-    [WXApi sendReq:req];
-    
-=======
     /*! @brief 发送Auth请求到微信，支持用户没安装微信，等待微信返回onResp
      *
      * 函数调用后，会切换到微信的界面。第三方应用程序等待微信返回onResp。微信在异步处理完成后一定会调用onResp。支持SendAuthReq类型。
@@ -323,7 +307,6 @@
      * @param delegate  WXApiDelegate对象，用来接收微信触发的消息。
      * @return 成功返回YES，失败返回NO。
      */
->>>>>>> Gaddle
     [WXApi sendAuthReq:req viewController:self delegate:self];
 }
 

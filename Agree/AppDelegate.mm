@@ -237,15 +237,6 @@
         self.rootLoginViewController = [sb instantiateViewControllerWithIdentifier:@"rootAccountLogin"];
         self.rootLoginViewController.userInfo = regUser;
         
-        //微信授权登陆注册
-//        self.rootLoginViewController = [[RootAccountLoginViewController alloc]init];
-<<<<<<< HEAD
-//        self.userSettingViewcontroller = [[UserSettingViewController alloc]init];
-        
-        [WXApi registerApp:@"wx9be30a70fcb480ae"];
-
-=======
->>>>>>> Gaddle
         
         [self.window setRootViewController:self.rootLoginViewController];
 
