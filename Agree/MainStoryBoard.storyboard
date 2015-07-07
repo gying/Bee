@@ -202,7 +202,6 @@
                             <constraint firstAttribute="centerX" secondItem="kTe-pA-SMr" secondAttribute="centerX" id="doz-rg-pvh"/>
                             <constraint firstAttribute="centerX" secondItem="f9o-6e-QZR" secondAttribute="centerX" id="fOQ-jQ-Jhu"/>
                             <constraint firstItem="cNP-e4-2eI" firstAttribute="top" secondItem="3Bg-o2-avO" secondAttribute="bottom" constant="48" id="kwO-kt-bB6"/>
-                            <constraint firstItem="kTe-pA-SMr" firstAttribute="top" secondItem="f9o-6e-QZR" secondAttribute="bottom" constant="92" id="slL-XZ-vvu"/>
                             <constraint firstItem="aLe-bl-0cW" firstAttribute="top" secondItem="rou-Mr-LsS" secondAttribute="bottom" constant="37" id="wEa-NA-RG2"/>
                             <constraint firstItem="cNP-e4-2eI" firstAttribute="leading" secondItem="ZUV-VS-cKv" secondAttribute="leadingMargin" id="zoq-27-3wS"/>
                         </constraints>
