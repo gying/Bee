@@ -230,7 +230,7 @@
     [self.backButton setHidden:YES];
     [self.msgView setHidden:YES];
     
-    return self;
+    return [super init];
 }
 
 - (void)loadWithUser:(Model_User *)user withGroup: (Model_Group *)group {

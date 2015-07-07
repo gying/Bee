@@ -16,10 +16,6 @@
 #import "TXYUploadManager.h"
 #import "TXYDownloader.h"
 
-
-
-
-
 #import "WXApi.h"
 #import "RootAccountLoginViewController.h"
 #import "UserSettingViewController.h"

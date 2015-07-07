@@ -25,7 +25,7 @@
 #define kLoadChatData       1
 #define kSendMessage        2
 
-@interface UserChatViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIAlertViewDelegate, EMChatManagerDelegate,UITableViewDelegate,UIScrollViewDelegate> {
+@interface UserChatViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIAlertViewDelegate, EMChatManagerDelegate,UITableViewDelegate,UIScrollViewDelegate, SRNetManagerDelegate> {
     SRNet_Manager *_netManager;
     int _netStatus;
     
@@ -123,14 +123,7 @@
         [_chatArray addObject:chat];
     }
     
-    if (_chatArray.count > _pageSize) {
-        [self subChatArray];
-    } else {
-        _mchatArray = [NSMutableArray arrayWithArray: _chatArray];
-    }
-
-    
-    
+    [self subChatArray];
 
     [self.navigationItem setTitle:self.user.nickname];
     
@@ -151,20 +144,19 @@
         return;
     }
     NSIndexPath * indexPath = [NSIndexPath indexPathForRow:_mchatArray.count-1  inSection:0];
-    
     [self tableViewIsScrollToBottom:YES withAnimated:NO];
-    
     [self.userChatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-
     [_conversation markAllMessagesAsRead:YES];
 }
 
 
 
 - (void)subChatArray {
-    
-    _mchatArray = [NSMutableArray arrayWithArray:[_chatArray subarrayWithRange:NSMakeRange(_chatArray.count - (_mchatArray.count+_pageSize),_mchatArray.count+_pageSize)]];
-    
+    if (_chatArray.count > _pageSize) {
+        _mchatArray = [NSMutableArray arrayWithArray:[_chatArray subarrayWithRange:NSMakeRange(_chatArray.count - (_mchatArray.count+_pageSize),_mchatArray.count+_pageSize)]];
+    } else {
+        _mchatArray = [[NSMutableArray alloc] initWithArray:_chatArray];
+    }
 }
 
 
@@ -191,11 +183,15 @@
             //完成
         }
         EModel_User_Chat *chat = [EModel_User_Chat repackEmessage:message withSender:self.user];
-        [_chatArray addObject:chat];
+        
+        if (chat) {
+            [_mchatArray addObject:chat];
+        }
+//        [self subChatArray];
         [self.userChatTableView reloadData];
-        //聊天信息切换到最底层显示
-
     }
+    //聊天信息切换到最底层显示
+    [self tableViewIsScrollToBottom:YES withAnimated:YES];
 }
 
 - (IBAction)tapBackButton:(id)sender {
@@ -270,8 +266,6 @@
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
-
-
 
 
 //CELL自适应消息高度
@@ -363,11 +357,14 @@
 
 #pragma mark - key board
 - (void)talkBtnClick:(UITextView *)textViewGet {
-    [self sendMessageDone:[EMSendMessageHepler sendTextMessageWithString:textViewGet.text
-                                                              toUsername:self.user.pk_user.stringValue
-                                                             isChatGroup:NO
-                                                       requireEncryption:NO
-                                                                     ext:nil]];
+    
+    if (0 != textViewGet.text.length) {
+        [self sendMessageDone:[EMSendMessageHepler sendTextMessageWithString:textViewGet.text
+                                                                  toUsername:self.user.pk_user.stringValue
+                                                                 isChatGroup:NO
+                                                           requireEncryption:NO
+                                                                         ext:nil]];
+    }
 }
 
 
@@ -377,10 +374,10 @@
     if (!_imagePicker) {
         _imagePicker = [[UIImagePickerController alloc] init];
         [_imagePicker setDelegate:self];
-        UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
+        _imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
         //判断是否有摄像头
-        if(![UIImagePickerController isSourceTypeAvailable:sourceType]) {
-            sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        if(![UIImagePickerController isSourceTypeAvailable:_imagePicker.sourceType]) {
+            _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         }
     }
     
@@ -428,17 +425,44 @@
 
 - (void)sendMessageDone:(EMMessage *)message {
     //自己发的信息
-    Model_User *user = [[Model_User alloc] init];
-    user.pk_user = [Model_User loadFromUserDefaults].pk_user;
-    user.nickname = [Model_User loadFromUserDefaults].nickname;
-    user.avatar_path = [Model_User loadFromUserDefaults].avatar_path;
+//    Model_User *user = [[Model_User alloc] init];
+//    user.pk_user = [Model_User loadFromUserDefaults].pk_user;
+//    user.nickname = [Model_User loadFromUserDefaults].nickname;
+//    user.avatar_path = [Model_User loadFromUserDefaults].avatar_path;
+    
+    Model_User *selfAccount = [Model_User loadFromUserDefaults];
     
     //将信息输入数组,并刷新
-    EModel_User_Chat *chat = [EModel_User_Chat repackEmessage:message withSender:user];
+    EModel_User_Chat *chat = [EModel_User_Chat repackEmessage:message withSender:selfAccount];
     [_chatArray addObject:chat];
     [_mchatArray addObject:chat];
     [self.userChatTableView reloadData];
     [self tableViewIsScrollToBottom:YES withAnimated:YES];
+    
+    if (!_netManager) {
+        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
+    }
+    
+    Model_User_Chat *newChat = [[Model_User_Chat alloc] init];
+    [newChat setFk_user_from:selfAccount.pk_user];
+    [newChat setFk_user_to:self.user.pk_user];
+    [newChat setNickname_from:selfAccount.nickname];
+    [newChat setNickname_to:self.user.nickname];
+    
+    id<IEMMessageBody> msgBody = message.messageBodies.firstObject;
+    switch (msgBody.messageBodyType) {
+        case eMessageBodyType_Text: {
+            newChat.content = ((EMTextMessageBody *)msgBody).text;
+        }
+            break;
+        case eMessageBodyType_Image: {
+            newChat.content = @"[图片]";
+        }
+            break;
+        default:
+            break;
+    }
+    [_netManager addUserChat:newChat];
 }
 
 - (void)tableViewIsScrollToBottom: (BOOL) isScroll
@@ -648,6 +672,22 @@
         //如果拖移位置超过预定点,则推出视图
         [self.navigationController popViewControllerAnimated:YES];
     }
+}
+
+- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
+    switch (interfaceType) {
+        case kAddUserChat: {
+            
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (void)interfaceReturnDataError:(int)interfaceType {
+    
 }
 
 /*

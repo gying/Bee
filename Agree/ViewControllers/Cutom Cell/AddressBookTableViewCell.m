@@ -146,7 +146,7 @@
                 case 2: {
                     //收到请求,等待自己同意
                     //同意请求
-                    
+                    [self.sendButton setEnabled:NO];
                     if (!_netManager) {
                         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
                     }
@@ -155,13 +155,11 @@
                     userRelation.fk_user_from = [Model_User loadFromUserDefaults].pk_user;
                     userRelation.fk_user_to = _people.userInfo.pk_user;
                     [_netManager becomeFriend:userRelation];
-                    
                 }
                     break;
                 case 3: {
                     //已经成为好友
                     //打开私聊界面
-                    
                 }
                     break;
                 default:
@@ -169,6 +167,7 @@
             }
         } else {
             //添加为好友
+            [self.sendButton setEnabled:NO];
             if (!_netManager) {
                 _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
             }
@@ -179,6 +178,8 @@
             [userRelation setRelationship:@1];
             [userRelation setStatus:@1];
             [_netManager addFriend:userRelation];
+            
+            
         }
     } else {
         //通讯录,发短信邀请加入

@@ -202,11 +202,14 @@
 
 
 - (void)talkBtnClick:(UITextView *)textViewGet {
-    [self sendMessageDone:[EMSendMessageHepler sendTextMessageWithString:textViewGet.text
-                                                              toUsername:self.group.em_id
-                                                             isChatGroup:YES
-                                                       requireEncryption:NO
-                                                                     ext:nil]];
+    
+    if (0 != textViewGet.text.length) {
+        [self sendMessageDone:[EMSendMessageHepler sendTextMessageWithString:textViewGet.text
+                                                                  toUsername:self.group.em_id
+                                                                 isChatGroup:YES
+                                                           requireEncryption:NO
+                                                                         ext:nil]];
+    } 
 }
 
 #pragma mark -- 发送消息结束
@@ -255,10 +258,10 @@
     if (!_imagePicker) {
         _imagePicker = [[UIImagePickerController alloc] init];
         _imagePicker.delegate = self;
-        UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
+        _imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
         //判断是否有摄像头
-        if(![UIImagePickerController isSourceTypeAvailable:sourceType]) {
-            sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        if(![UIImagePickerController isSourceTypeAvailable:_imagePicker.sourceType]) {
+            _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         }
     }
     
