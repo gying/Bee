@@ -166,10 +166,10 @@
         _imagePicker = [[UIImagePickerController alloc] init];
         _imagePicker.delegate = self;
         _imagePicker.allowsEditing = YES;
-        UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
+        _imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
         //判断是否有摄像头
-        if(![UIImagePickerController isSourceTypeAvailable:sourceType]) {
-            sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        if(![UIImagePickerController isSourceTypeAvailable:_imagePicker.sourceType]) {
+            _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         }
     }
     
@@ -561,11 +561,10 @@
                 
             }
         }
-            
             break;
             
         case kTestInterface: {    //读取用户资料
-
+            
         }
             
             break;

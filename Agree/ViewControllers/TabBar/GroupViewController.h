@@ -31,7 +31,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *publicPhoneLabel;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *publicPhoneSeg;
 
-@property (nonatomic, strong)NSArray *groupAry;
+@property (nonatomic, strong)NSMutableArray *groupAry;
 
 
 - (void)joinGroupRelation;

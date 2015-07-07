@@ -32,8 +32,6 @@
 @implementation ContactsDetailTableViewController
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    
     [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"relation_update"];
     
     // Uncomment the following line to preserve selection between presentations.
@@ -45,6 +43,8 @@
     _accountView = [[SRAccountView alloc] init];
     [_accountView setHidden:YES];
     [self getAddressBook];
+    
+    [super viewDidLoad];
 }
 
 - (void)getAddressBook {

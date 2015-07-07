@@ -66,6 +66,7 @@ static NSString * const reuseIdentifier = @"GroupCollectionCell";
             //第一条信息
             //添加聚会按钮
             [cell initAddView];
+            cell.groupNameLabel.text = @"添加公共聚会";
         } else {
             Model_Group *theGroup = [_groupAry objectAtIndex:indexPath.row-1];
 
@@ -85,6 +86,11 @@ static NSString * const reuseIdentifier = @"GroupCollectionCell";
     return YES;
 }
 
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    float cellSize = ([UIScreen mainScreen].bounds.size.width - 3)/2;
+    return CGSizeMake(cellSize, cellSize);
+}
+
 
 #pragma mark - Navigation
 //- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
@@ -101,6 +107,20 @@ static NSString * const reuseIdentifier = @"GroupCollectionCell";
 }
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    if (0 == _chooseIndexPath) {
+        //添加公共聚会未开放
+        UIAlertView *warAlert = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                           message:@"添加公共聚会还未开放,敬请期待."
+                                                          delegate:self cancelButtonTitle:@"确定"
+                                                 otherButtonTitles: nil];
+        [warAlert show];
+        return NO;
+    }
+    return YES;
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
@@ -109,6 +129,7 @@ static NSString * const reuseIdentifier = @"GroupCollectionCell";
     
     if (0 == _chooseIndexPath) {
         controller.chooseGroup = nil;
+        
     }else {
         controller.chooseGroup = [_groupAry objectAtIndex:_chooseIndexPath-1];
     }

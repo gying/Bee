@@ -14,7 +14,6 @@
 #import "RootAccountLoginViewController.h"
 #import "UserSettingViewController.h"
 
-
 #import "BMapKit.h"
 #import "SDImageCache.h"
 
@@ -143,7 +142,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    
+
     //清理sdimage
 //    [[SDImageCache sharedImageCache] clearDisk];
 //    [[SDImageCache sharedImageCache] clearMemory];
@@ -295,7 +294,6 @@
     // Required
     //根据串号注册极光推送
     [APService registerDeviceToken:deviceToken];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jPushLoginDone) name:kJPFNetworkDidLoginNotification object:nil];
 }
 
@@ -529,8 +527,7 @@
                 //注册腾讯云的万象图片
                 [TXYUploadManager authorize:@"201139" userId:[Model_User loadFromUserDefaults].pk_user.stringValue sign:(NSString *)jsonDic];
                 [TXYDownloader authorize:@"201139" userId:[Model_User loadFromUserDefaults].pk_user.stringValue];
-                
-                
+
                 self.uploadManager = [[TXYUploadManager alloc] initWithPersistenceId: @"persistenceId"];
             }
             

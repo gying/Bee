@@ -52,6 +52,8 @@
     
 //    [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"contact_update"];
     
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    
     self.accountView = [[SRAccountView alloc] init];
     self.accountView.rootController = self;
     
@@ -81,9 +83,15 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    
+    [[NSUserDefaults standardUserDefaults] objectForKey:@"hello"];
+    
     if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"contact_update"] isEqualToNumber:@0]) {
         //信息有更新
-        [self.tableView reloadData];
+        
+        if (_friendArray) {
+            [self.tableView reloadData];
+        }
     }
     
     if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"relation_update"] isEqualToNumber:@0]) {
@@ -104,11 +112,13 @@
     
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate setContactsDelegate:self];
+    [super viewDidAppear:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate setContactsDelegate:nil];
+    [super viewWillDisappear:YES];
 }
 
 
@@ -201,7 +211,6 @@
                 //        NSMutableArray *tempArray = [[NSMutableArray alloc] init];
                 NSMutableArray *tempArray = (NSMutableArray *)[Model_User objectArrayWithKeyValuesArray:jsonDic];
                 
-                
                 _friendArray = nil;
                 _friendArray = [[NSMutableArray alloc] init];
                 
@@ -215,6 +224,7 @@
                         [_friendArray addObject:user];
                     }
                 }
+                
             } else {
                 _friendArray = nil;
                 _friendArray = [[NSMutableArray alloc] init];

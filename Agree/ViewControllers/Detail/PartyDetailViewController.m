@@ -387,12 +387,10 @@
      
                             event.startDate = startTime;
                             event.endDate = endTime;
-                            
-                            NSLog(@"%@",_party.begin_time);
-                            NSLog(@"%@",startTime);
 
                             //在事件前多少秒开始提醒
-                           [event addAlarm:[EKAlarm alarmWithRelativeOffset:30 * 60]];
+                            //提前一个小时提醒
+                           [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60.0 * 60.0]];
                             
                             
                             [event setCalendar:[eventStore defaultCalendarForNewEvents]];

@@ -9,6 +9,7 @@
 #import "RootPhoneRegViewController.h"
 #import "SRNet_Manager.h"
 #import <SVProgressHUD.h>
+#import "MJExtension.h"
 //#import "RootAccountLoginViewController.h"
 //#import "RootAccountRegViewController.h"
 
@@ -59,12 +60,20 @@
     } else {
         //验证码确认
         if ([_code isEqualToString:self.self.numberTextfield.text]&&(self.sendButton.titleLabel.text = @"完成验证")) {
+            [SVProgressHUD showWithStatus:@"正在查找手机帐号,请稍后" maskType:SVProgressHUDMaskTypeGradient];
+            
             //确认验证码完毕,保存到帐号信息
             //验证码确认完毕.
             self.userInfo.phone = _phoneNum;
-            _checkPhoneNumDone = YES;
             
-            [self performSegueWithIdentifier:@"GoToReg" sender:self];
+            if (!_netManager) {
+                _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
+            }
+            Model_User *phoneAccount = [[Model_User alloc] init];
+            phoneAccount.phone = _phoneNum;
+            [_netManager getUserByPhone:phoneAccount];
+            phoneAccount = nil;
+            
             
         } else {
             [self.numberLable setText:@"验证码错误,请重新输入"];
@@ -93,12 +102,28 @@
             }
         }
             break;
+            
+        case kGetUserByPhone: {
+            if (jsonDic) {
+                //查到用户
+                 Model_User *loadAccount = [[Model_User objectArrayWithKeyValuesArray:(NSArray *)jsonDic] firstObject];
+                [loadAccount saveToUserDefaults];
+                UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+                UITabBarController *rootController = [sb instantiateViewControllerWithIdentifier:@"rootTabbar"];
+                [self presentViewController:rootController animated:YES completion:nil];
+                [SVProgressHUD showSuccessWithStatus:@"查找到用户,正在进行登录" maskType:SVProgressHUDMaskTypeGradient];
+            } else {
+                //未查到用户
+                _checkPhoneNumDone = YES;
+                [self performSegueWithIdentifier:@"GoToReg" sender:self];
+                [SVProgressHUD showSuccessWithStatus:@"未查找到用户,进入注册" maskType:SVProgressHUDMaskTypeGradient];
+            }
+        }
+            break;
         default:
             break;
     }
 }
-
-
 
 //文本框控件
 - (IBAction)phoneTextField:(UITextField *)sender {
@@ -122,7 +147,7 @@
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    
+    [SVProgressHUD showErrorWithStatus:@"网络错误,请重试" maskType:SVProgressHUDMaskTypeGradient];
 }
 
 //键盘回收
@@ -156,7 +181,6 @@
         [childController setUserInfo:self.userInfo];
         [childController setRootController:self.rootController];
     }
-    
 }
 
 

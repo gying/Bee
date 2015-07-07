@@ -278,7 +278,6 @@
             } else {
                 [group_user setPublic_phone:@0];
             }
-            
             [_netManager joinGroup:group_user];
         }
     } onQueue:nil];
@@ -353,7 +352,6 @@
                 [self.remarkLabel setHidden:YES];
                 
                 [self.groupNameLabel setText:_joinGroup.name];
-//                [self.groupCoverImageView sd_setImageWithURL:[SRImageManager groupFrontCoverImageFromTXYFieldID:_joinGroup.avatar_path]];
                 
                 //下载图片
                 NSURL *imageUrl = [SRImageManager groupFrontCoverImageFromTXYFieldID:_joinGroup.avatar_path];
@@ -376,12 +374,10 @@
         case kGetUserGroups: {  //读取用户的小组
             if (jsonDic) {
                 //将缓存的数组全部删除
-                for (Model_Group *group in self.groupAry) {
-                    [CD_Group removeGroupFromCD:group];
-                }
+                [CD_Group removeAllGroupFromCD];
                 
                 //将网络读取的数组再次输入缓存
-                self.groupAry = [Model_Group objectArrayWithKeyValuesArray:jsonDic];
+                self.groupAry = (NSMutableArray *)[Model_Group objectArrayWithKeyValuesArray:jsonDic];
                 for (Model_Group *group in self.groupAry) {
                     [CD_Group saveGroupToCD:group];
                 }
@@ -391,6 +387,10 @@
             } else {
                 //没有加入的小组信息
 //                [SVProgressHUD showSuccessWithStatus:@"没有小组信息"];
+                //将缓存的数组全部删除
+                [self.groupAry removeAllObjects];
+                [CD_Group removeAllGroupFromCD];
+                [self.groupCollectionView reloadData];
             }
         }
             break;
