@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -418,7 +418,7 @@
             </objects>
             <point key="canvasLocation" x="-1524" y="228"/>
         </scene>
-        <!--Group Detail View Controller-->
+        <!--群组聊天界面-->
         <scene sceneID="2Xm-LF-3B6">
             <objects>
                 <viewController hidesBottomBarWhenPushed="YES" id="GEb-kv-JI7" customClass="GroupDetailViewController" sceneMemberID="viewController">
@@ -935,10 +935,10 @@
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
-                    <navigationItem key="navigationItem" id="fTN-K0-EZ2">
+                    <navigationItem key="navigationItem" title="群组聊天界面" id="fTN-K0-EZ2">
                         <barButtonItem key="leftBarButtonItem" style="done" id="2gG-4A-tI5">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="bNn-gj-MiX">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -952,7 +952,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" id="VYW-8K-wP9">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="CBy-2H-HKj">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="设置">
@@ -1801,7 +1801,7 @@
                     <navigationItem key="navigationItem" title="日程" id="1FI-VT-5pI">
                         <barButtonItem key="rightBarButtonItem" style="done" id="RnB-aK-mDx">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ndm-RI-9hL">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
                                 <state key="normal" title="新建"/>
@@ -2055,7 +2055,7 @@
                     <navigationItem key="navigationItem" title="设置" id="KkO-JQ-D0X">
                         <barButtonItem key="rightBarButtonItem" style="done" id="v0E-3p-ybZ">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7hy-2a-SyY">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="注销">
@@ -2243,7 +2243,7 @@
                     <navigationItem key="navigationItem" title="关于我们" id="2xq-9y-OSl">
                         <barButtonItem key="leftBarButtonItem" style="done" id="OdC-AQ-lb9">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="JzB-Az-wyR">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -2310,7 +2310,7 @@
                     <navigationItem key="navigationItem" title="用户反馈" id="7US-EV-wU2">
                         <barButtonItem key="leftBarButtonItem" style="done" id="RIi-qF-1el">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="rrh-GI-O3h">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -2324,7 +2324,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" id="J8C-PT-Pyx">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="hYD-g4-bRT">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="Lantinghei SC" pointSize="13"/>
                                 <state key="normal" title="发送">
@@ -2506,7 +2506,7 @@
                     <navigationItem key="navigationItem" title="帐号设置" id="20P-No-BKP">
                         <barButtonItem key="leftBarButtonItem" style="done" id="xCM-a7-LId">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="qkL-Tz-OYx">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -2520,7 +2520,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" id="99N-3C-jsc">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="TfJ-Zn-jOc">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="保存">
@@ -2551,7 +2551,7 @@
             </objects>
             <point key="canvasLocation" x="-578" y="2829"/>
         </scene>
-        <!--与XX聊天-->
+        <!--私信聊天界面私信聊天界面-->
         <scene sceneID="eX7-fh-Q2I">
             <objects>
                 <viewController restorationIdentifier="UserChatView" storyboardIdentifier="UserChatView" hidesBottomBarWhenPushed="YES" id="LKu-93-7sy" customClass="UserChatViewController" sceneMemberID="viewController">
@@ -2777,10 +2777,10 @@
                             <constraint firstItem="pU9-qX-OG8" firstAttribute="leading" secondItem="zwR-b7-s2y" secondAttribute="leading" id="PGQ-mt-RsC"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="与XX聊天" id="zIq-9y-skL">
+                    <navigationItem key="navigationItem" title="私信聊天界面私信聊天界面" id="zIq-9y-skL">
                         <barButtonItem key="leftBarButtonItem" style="done" id="tIH-mA-Whi">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="x7t-HK-puB">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -2794,7 +2794,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" id="d8F-hk-69u">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="NsH-dm-iGO">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="Lantinghei SC" pointSize="13"/>
                                 <state key="normal" title="详情">
@@ -2996,7 +2996,7 @@
                     <navigationItem key="navigationItem" title="通讯录" id="HJU-xV-6be">
                         <barButtonItem key="leftBarButtonItem" style="done" id="6Mp-YV-Jci">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Lgo-2n-DkW">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -3010,7 +3010,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" id="AY0-ER-rqd">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="FYe-bT-88n">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="FZLanTingHei-EL-GBK" pointSize="13"/>
                                 <state key="normal" title="查找好友">
@@ -3079,7 +3079,7 @@
                     <navigationItem key="navigationItem" title="选择地点" id="qe5-ji-Exa">
                         <barButtonItem key="leftBarButtonItem" style="done" id="7cA-0d-emt">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="KQV-oq-Vuf">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -3093,7 +3093,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" id="LJs-yB-dGS">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="yH1-Vt-HLZ">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="下一步">
@@ -3371,7 +3371,7 @@
                     <navigationItem key="navigationItem" title="聚会详情" id="lQw-iK-TK3">
                         <barButtonItem key="leftBarButtonItem" style="done" id="j2a-pJ-UT4">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="4Pc-F2-cpa">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -3385,7 +3385,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" id="odV-sd-Tgd">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="TU3-rG-oye">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="更多">
@@ -3605,6 +3605,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="backView" destination="fzv-j8-mmX" id="Vn4-jC-Mrr"/>
                         <outlet property="inButton" destination="C0R-aQ-p9V" id="QQ9-nD-RsY"/>
                         <outlet property="inLabel" destination="wk0-oG-iBp" id="PYp-73-h66"/>
                         <outlet property="outButton" destination="WEQ-Fm-eTF" id="Fts-v8-onI"/>
@@ -3663,7 +3664,7 @@
                     <navigationItem key="navigationItem" title="选择时间" id="b6h-cc-OMA">
                         <barButtonItem key="leftBarButtonItem" style="done" id="dAn-pf-KKH">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="qJq-z9-06c">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -3677,7 +3678,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" id="hyU-hb-hUP">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Grs-jq-uCp">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="下一步">
@@ -3783,7 +3784,7 @@
                     <navigationItem key="navigationItem" title="查找好友" id="XrI-r9-O0v">
                         <barButtonItem key="leftBarButtonItem" style="done" id="tok-t1-z9J">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="LcC-fK-MaP">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -3913,7 +3914,7 @@
                     <navigationItem key="navigationItem" title="确认聚会" id="Y3V-8l-Kc1">
                         <barButtonItem key="leftBarButtonItem" style="done" id="ffV-WB-m9c">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Mcn-Cf-PNc">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -3927,7 +3928,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" id="kLn-CZ-Ee1">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="mvf-ti-tGJ">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="完成">
@@ -4268,7 +4269,7 @@
                         <barButtonItem key="backBarButtonItem" title=" " id="mWV-Ih-53N"/>
                         <barButtonItem key="rightBarButtonItem" style="done" id="AeH-je-BZV">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="RGT-N6-bCG">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="新建">
@@ -4308,11 +4309,11 @@
         <image name="agree_user_setting_avatar_backgroup" width="99" height="99"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="xWd-dq-8Ci"/>
         <segue reference="yUl-vl-Sui"/>
         <segue reference="7g0-Ma-cMP"/>
-        <segue reference="c42-zg-aVC"/>
         <segue reference="Re4-1s-AtI"/>
-        <segue reference="brR-kr-yPI"/>
+        <segue reference="u80-pL-doZ"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.34901960780000002" green="0.81960784310000001" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
 </document>

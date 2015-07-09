@@ -12,7 +12,7 @@
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface PartyPeopleListViewController () <UITableViewDataSource, UITableViewDelegate> {
+@interface PartyPeopleListViewController () <UITableViewDataSource, UITableViewDelegate,UIScrollViewDelegate> {
     NSMutableArray *_inArray;
     NSMutableArray *_outArray;
     NSMutableArray *_unknowArray;
@@ -27,6 +27,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+//    
+//    self.backView.backgroundColor = [UIColor redColor];
+//    self.peoplesTableview.backgroundColor = [UIColor greenColor];
+//    
     
     [self setRelationData];
     
@@ -96,6 +101,14 @@
     }
 }
 
+
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    
+    
+}
+
 - (IBAction)pressedTheInButton:(id)sender {
     
     [self resetAllButton];
@@ -105,6 +118,8 @@
     
     _showArray = _inArray;
     [self.peoplesTableview reloadData];
+    
+    NSLog(@"参加");
     
 }
 - (IBAction)pressedTheUnknowButton:(id)sender {
@@ -117,6 +132,7 @@
     _showArray = _unknowArray;
     [self.peoplesTableview reloadData];
     
+    NSLog(@"不确定");
 }
 - (IBAction)pressedTheOutButton:(id)sender {
     
@@ -127,6 +143,10 @@
     
     _showArray = _outArray;
     [self.peoplesTableview reloadData];
+    
+    
+    
+    NSLog(@"拒绝");
 }
 
 - (void)resetAllButton {
@@ -144,6 +164,13 @@
     [self.unknowLabel setTextColor:AgreeBlue];
 }
 
+
+
+
+
+
+
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (_showArray) {
         return _showArray.count;
@@ -159,7 +186,7 @@
     if (nil == cell) {
         cell = [[PeopleListTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
-    
+//    cell.backgroundColor = [UIColor blackColor];
     [cell initWithUser:theUser];
     return cell;
 

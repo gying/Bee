@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *unknowLabel;
 @property (weak, nonatomic) IBOutlet UILabel *outLabel;
 @property (weak, nonatomic) IBOutlet UITableView *peoplesTableview;
+@property (weak, nonatomic) IBOutlet UIView *backView;
 
 @property int showStatus;
 

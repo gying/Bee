@@ -125,7 +125,22 @@
     
     [self subChatArray];
 
+    
+    
+#pragma mark -- 导航栏标题
     [self.navigationItem setTitle:self.user.nickname];
+//
+//    UIView * titleView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 100)];
+//    titleView.autoresizesSubviews = YES;
+//    titleView.backgroundColor = [UIColor redColor];
+//    
+//    
+//    self.navigationItem.titleView = titleView;
+//    
+    
+
+    
+    
     
     //初始化图片发送确认警告框
     _sendImageAlert = [[UIAlertView alloc] initWithTitle:@"确认信息"
