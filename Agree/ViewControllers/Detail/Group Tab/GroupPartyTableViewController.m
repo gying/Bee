@@ -116,7 +116,7 @@
     return indexPath;
 }
 
-- (void)DetailChange:(Model_Party *)party {
+- (void)detailChange:(Model_Party *)party {
     for (Model_Party *theParty in self.partyArray) {
         if ([theParty.pk_party isEqualToString:party.pk_party]) {
             theParty.relationship = party.relationship;
