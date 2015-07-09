@@ -22,15 +22,13 @@
 #import "Model_Feedback.h"
 
 //定义请求地址
-//#define kBaseUrlString  @"http://www.beagree.com/"
-//#define kBaseUrlString  @"http://superrabbit.aliapp.com/"
-//#define kBaseUrlString  @"http://192.168.2.138:138/webroot/"
-//#define kBaseUrlString  @"http://www.agreeinterface.com/webroot/"
-//#define kBaseUrlString  @"http://115.28.170.240/webroot/"
+#define kBaseUrlString  @"http://203.195.159.110/webroot/"
 
-//#define kBaseUrlString  @"http://203.195.159.110/webroot/"
 //#define kBaseUrlString  @"http://interface.beagree.com/webroot/"
-#define kBaseUrlString  @"http://120.25.218.3/webroot/"
+
+//#define kBaseUrlString @"http://interfacecdn.beagree.com/SR/interface/webroot/"
+
+//#define kBaseUrlString @"http://srinterfacecdn.beagree.com/webroot/"
 #define kInterfaceUrlString @"sr_interface.php"
 //#define kInterfaceUrlString @"srtext.php"
 
@@ -71,9 +69,13 @@
 #define kRemovePhoto                63
 #define kCreateRelationForParty     49
 #define kCancelParty                46
+#define kShareParty                 411
 
 
 #define kImageManagerSign           101
+
+#define kTestInterface              1101
+#define kGetUserInfoByWechat        1102
 
 
 
@@ -127,5 +129,8 @@
 - (BOOL)removePhoto: (Model_Photo *)photo;
 - (BOOL)createRelationshipForParty: (Model_Party_User *)relation;
 - (BOOL)cancelParty: (Model_Party *)party;
+- (BOOL)shareParty: (Model_Party *)party;
 - (BOOL)imageManagerSign;
+- (BOOL)testInterface;
+- (BOOL)getUserInfoByWechat: (Model_User *)user;
 @end

@@ -11,6 +11,10 @@
 #import "Model_Party.h"
 #import "Model_Photo.h"
 #import "SRAccountView.h"
+//#import "GroupChatTableViewCell.h"
+
+
+
 
 
 @interface GroupDetailViewController : UIViewController <UIScrollViewDelegate>
@@ -27,19 +31,20 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *groupScrollView;
 
 @property (weak, nonatomic) IBOutlet UIView *groupTalkView;
-
 @property (weak, nonatomic) IBOutlet UITableView *chatTableView;
-
 @property (weak, nonatomic) IBOutlet UITableView *partyTableView;
-
 @property (weak, nonatomic) IBOutlet UICollectionView *albumsCollectionView;
-@property (nonatomic, strong)Model_Party *chooseParty;
 
+@property (nonatomic, strong)Model_Party *chooseParty;
 @property (nonatomic, strong)SRAccountView *accountView;
 
 
 - (void)receiveParty;
 - (void)showImageAtIndexPath:(int)indexPath withImageArray: (NSMutableArray *)imageViewArray;
+
+- (void)longTapCell;
+
+- (void)popController ;
 
 @property BOOL partyLoadingAgain;
 

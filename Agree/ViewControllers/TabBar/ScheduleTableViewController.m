@@ -7,12 +7,14 @@
 //
 
 #import "ScheduleTableViewController.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "SRNet_Manager.h"
 #import "MJExtension.h"
 #import "PartyDetailViewController.h"
 #import "AllPartyTableViewCell.h"
 #import "AppDelegate.h"
+#import "CD_Party.h"
+#import <MJRefresh.h>
 
 @interface ScheduleTableViewController ()<SRNetManagerDelegate, SRPartyDetailDelegate> {
     NSMutableArray *_scheduleArray;
@@ -20,7 +22,6 @@
     NSIndexPath *_chooseIndexPath;
     //第一次读取的标识
     BOOL _firstLoadingDone;
-    UIRefreshControl *_refreshControl;
 }
 
 @end
@@ -29,24 +30,19 @@
 
 - (void)viewDidLoad {
     self.loadAgain = false;
-    self.dataChange = false;
+    
+    _scheduleArray = [CD_Party getPartyFromCDByRelation:1];
+    
     [self loadAllScheduleData];
     [super viewDidLoad];
     
-    
-    NSAttributedString *refString = [[NSAttributedString alloc] initWithString:@"松手刷新日程"];
-    
-    _refreshControl = [[UIRefreshControl alloc] init];
-    [_refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
-    [_refreshControl setAttributedTitle: refString];
-    [_refreshControl setAlpha:0.3];
-    [self.tableView addSubview:_refreshControl];
+    // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
+    self.tableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh:)];
 }
 
 - (void)refresh: (id)sender {
     //开始刷新
     self.loadAgain = false;
-    self.dataChange = false;
     [self loadAllScheduleData];
 }
 
@@ -77,6 +73,7 @@
     }else {
         _firstLoadingDone = TRUE;
     }
+    [super viewWillAppear:YES];
     
 }
 
@@ -85,10 +82,7 @@
         [self loadAllScheduleData];
         self.loadAgain = false;
     }
-    
-    if (self.dataChange) {
-        [self.tableView reloadData];
-    }
+    [super viewDidAppear:YES];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -97,7 +91,6 @@
 }
 
 #pragma mark - Table view data source
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     if (_scheduleArray) {
@@ -105,7 +98,6 @@
     }
     return 0;
 }
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     Model_Party *theParty = [_scheduleArray objectAtIndex:indexPath.row];
@@ -145,19 +137,33 @@
     [self.tableView reloadData];
 }
 
+#pragma mark - Net delegate
 - (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
     switch (interfaceType) {
         case kGetAllScheduleByUser: {
             if (jsonDic) {
+                for (Model_Party *party in _scheduleArray) {
+                    [CD_Party removePartyFromCD:party];
+                }
+                
                 _scheduleArray = (NSMutableArray *)[Model_Party objectArrayWithKeyValuesArray:jsonDic];
                 
+                for (Model_Party *party in _scheduleArray) {
+                    [CD_Party savePartyToCD:party];
+                }
                 
                 [self.tableView reloadData];
-                [ProgressHUD showSuccess:@"读取数据成功"];
-                [_refreshControl endRefreshing];
+                
             } else {
-                [ProgressHUD showSuccess:@"未找到相关数据"];
+                if (_scheduleArray) {
+                    for (Model_Party *party in _scheduleArray) {
+                        [CD_Party removePartyFromCD:party];
+                    }
+                    [_scheduleArray removeAllObjects];
+                }
             }
+            [self.tableView reloadData];
+            [self.tableView.header endRefreshing];
             //在成功读取了所有聚会后,将聚会提示设置为0
             [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"party_update"];
         }
@@ -169,9 +175,8 @@
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType{
-    [ProgressHUD showError:@"网络错误"];
+    [SVProgressHUD dismiss];
 }
-
 
 #pragma mark - Navigation
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -180,6 +185,8 @@
     // Pass the selected object to the new view controller.
     if ([@"PartyDetail"  isEqual: segue.identifier]) {
         //读取小组详情数据并赋值小组数据
+        
+        [self.tableView deselectRowAtIndexPath:_chooseIndexPath animated:YES];
         PartyDetailViewController *controller = (PartyDetailViewController *)segue.destinationViewController;
         controller.party = [_scheduleArray objectAtIndex:_chooseIndexPath.row];
 //        self.dataChange = TRUE;

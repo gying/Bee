@@ -9,9 +9,15 @@
 #import "UserViewController.h"
 #import "UserSettingViewController.h"
 #import "UIImageView+WebCache.h"
-#import "SRTool.h"
 #import "AppDelegate.h"
 #import "EaseMob.h"
+#import "SRImageManager.h"
+#import "CD_Group.h"
+#import "CD_Party.h"
+#import "CD_Group_User.h"
+#import "CD_Photo.h"
+
+#import <SVProgressHUD.h>
 
 @interface UserViewController () <UIAlertViewDelegate>{
     NSString *_imageName;
@@ -26,19 +32,26 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    
+    //头像区
     _backImageViwe = [[UIImageView alloc] initWithFrame:CGRectMake(4.5, 4.5, 90, 90)];
     
     [self.avatarButton addSubview:_backImageViwe];
     [_backImageViwe.layer setMasksToBounds:YES];
     [_backImageViwe.layer setCornerRadius:_backImageViwe.frame.size.width/2];
+    [self resetAvatar];
     
-    [_backImageViwe setImageWithURL:[SRTool imageUrlFromPath:[Model_User loadFromUserDefaults].avatar_path]];
-    [self.accountLabel setText:[NSString stringWithFormat:@"比聚号:  %@",[Model_User loadFromUserDefaults].pk_user.stringValue]];
+    //BB号
+    [self.accountLabel setText:[NSString stringWithFormat:@"BB号:  %@",[Model_User loadFromUserDefaults].pk_user.stringValue]];
 }
 
 - (void)resetAvatar {
-    [_backImageViwe setImageWithURL:[SRTool imageUrlFromPath:[Model_User loadFromUserDefaults].avatar_path]];
+    //下载图片
+    NSURL *imageUrl = [SRImageManager avatarImageFromTXYFieldID:[Model_User loadFromUserDefaults].avatar_path];
+    NSString * urlstr = [imageUrl absoluteString];
+    
+    [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:_backImageViwe succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+        [_backImageViwe setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
+    } failBlock:nil progressBlock:nil param:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -48,8 +61,10 @@
 
 - (IBAction)pressedTheAccountSettingButton:(UIButton *)sender {
 }
+
 - (IBAction)pressedTheFeedbackButton:(UIButton *)sender {
 }
+
 - (IBAction)pressedTheAboutUsButton:(UIButton *)sender {
 }
 
@@ -63,13 +78,13 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
     switch (buttonIndex) {
         case 0: {   //取消
             
         }
             break;
         case 1: {   //确定
+            [SVProgressHUD showWithStatus:@"正在退出帐号"];
             //将用户资料清空
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:kDefUser];
             
@@ -77,13 +92,19 @@
             EMError *error = nil;
             NSDictionary *info = [[EaseMob sharedInstance].chatManager logoffWithUnbindDeviceToken:YES error:&error];
             if (!error && info) {
-                NSLog(@"退出成功");
+                NSLog(@"退出帐号成功");
             }
+            
+            //移除用户资料
+            [CD_Group removeAllGroupFromCD];
+            [CD_Party removeAllPartyFromCD];
+            [CD_Group_User removeAllGroupUserFromCD];
+            [CD_Photo removeAllPhotoFromCD];
             
             //设置代理,弹出视图控制器
             AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
             [delegate logout];
-
+            [SVProgressHUD showSuccessWithStatus:@"退出成功"];
         }
             break;
         default:

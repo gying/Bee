@@ -8,7 +8,7 @@
 
 #import "GroupCollectionViewCell.h"
 #import "UIImageView+WebCache.h"
-#import "SRTool.h"
+#import "SRImageManager.h"
 
 
 @implementation GroupCollectionViewCell {
@@ -40,7 +40,18 @@
     [self.group2ndView.layer setMasksToBounds:YES];
     [self.group2ndView.layer setCornerRadius:3];
 
-    [self.groupImageView setImageWithURL:[SRTool imageUrlFromPath:group.avatar_path]];
+    ;
+//    [self.groupImageView sd_setImageWithURL:[SRImageManager groupFrontCoverImageFromTXYFieldID:group.avatar_path]];
+    
+    
+    //下载图片
+    NSURL *imageUrl = [SRImageManager groupFrontCoverImageFromTXYFieldID:group.avatar_path];
+    NSString * urlstr = [imageUrl absoluteString];
+    
+    [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.groupImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+        [self.groupImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
+    } failBlock:nil progressBlock:nil param:nil];
+    
     
 }
 

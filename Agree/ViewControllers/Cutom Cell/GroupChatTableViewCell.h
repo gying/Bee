@@ -38,6 +38,7 @@
 - (void)initWithChat: (EModel_Chat *)message;
 
 @property (nonatomic, strong)GroupDetailViewController *topViewController;
+
 @property (weak, nonatomic) IBOutlet UIButton *imageButton;
 @property (weak, nonatomic) IBOutlet UIButton *imageButton_self;
 

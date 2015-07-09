@@ -7,10 +7,10 @@
 //
 
 #import "AddressBookTableViewCell.h"
-#import "SRTool.h"
 #import "UIImageView+WebCache.h"
 #import "People.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
+#import "SRImageManager.h"
 
 
 @implementation AddressBookTableViewCell {
@@ -52,7 +52,17 @@
         [self.nicknameLabel setHidden:YES];
         [self.addressBookNameLabel setHidden:YES];
         [self.nameLabel setText:adPeople.userInfo.nickname];
-        [self.avatarImageView setImageWithURL:[SRTool miniImageUrlFromPath:adPeople.userInfo.avatar_path]];
+        
+        
+        //下载图片
+        NSURL *imageUrl = [SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path];
+        NSString * urlstr = [imageUrl absoluteString];
+        
+        [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.avatarImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+            [self.avatarImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
+        } failBlock:nil progressBlock:nil param:nil];
+
+//        [self.avatarImageView sd_setImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path]];
         if (adPeople.userInfo.relationship) {
             switch (adPeople.userInfo.relationship.intValue) {
                 case 1: {
@@ -110,7 +120,16 @@
         
         [self.nicknameLabel setText:adPeople.userInfo.nickname];
         [self.addressBookNameLabel setText:[NSString stringWithFormat:@"通讯录名称: %@",adPeople.name]];
-        [self.avatarImageView setImageWithURL:[SRTool miniImageUrlFromPath:adPeople.userInfo.avatar_path]];
+        
+        
+//        [self.avatarImageView sd_setImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path]];
+        //下载图片
+        NSURL *imageUrl = [SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path];
+        NSString * urlstr = [imageUrl absoluteString];
+        
+        [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.avatarImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+            [self.avatarImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
+        } failBlock:nil progressBlock:nil param:nil];
     }
 }
 - (IBAction)pressedTheSendButton:(id)sender {
@@ -127,7 +146,7 @@
                 case 2: {
                     //收到请求,等待自己同意
                     //同意请求
-                    
+                    [self.sendButton setEnabled:NO];
                     if (!_netManager) {
                         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
                     }
@@ -136,13 +155,11 @@
                     userRelation.fk_user_from = [Model_User loadFromUserDefaults].pk_user;
                     userRelation.fk_user_to = _people.userInfo.pk_user;
                     [_netManager becomeFriend:userRelation];
-                    
                 }
                     break;
                 case 3: {
                     //已经成为好友
                     //打开私聊界面
-                    
                 }
                     break;
                 default:
@@ -150,6 +167,7 @@
             }
         } else {
             //添加为好友
+            [self.sendButton setEnabled:NO];
             if (!_netManager) {
                 _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
             }
@@ -160,6 +178,8 @@
             [userRelation setRelationship:@1];
             [userRelation setStatus:@1];
             [_netManager addFriend:userRelation];
+            
+            
         }
     } else {
         //通讯录,发短信邀请加入
@@ -214,11 +234,11 @@
         default:
             break;
     }
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD showError:@"网络错误"];
+    [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
 @end

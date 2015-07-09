@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "Model_User.h"
 #import "SRNet_Manager.h"
+
+#import "TXYDownloader.h"
 @protocol SRAccountViewDelegate <NSObject>
 
 @end
@@ -48,7 +50,7 @@
 
 - (id)init;
 
-- (void)show;
+- (BOOL)show;
 - (void)loadWithUser:(Model_User *)user withGroup: (Model_Group *)group;
 
 

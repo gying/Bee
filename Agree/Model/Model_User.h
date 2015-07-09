@@ -23,6 +23,7 @@
 @property (nonatomic, strong)NSString *jpush_id;
 @property (nonatomic, strong)NSString *device_id;
 @property (nonatomic, strong)NSNumber *status;
+@property (nonatomic, strong)NSString *wechat_id;
 
 @property (nonatomic, strong)NSNumber *relationship;
 

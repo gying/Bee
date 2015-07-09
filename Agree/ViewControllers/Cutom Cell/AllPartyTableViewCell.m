@@ -7,7 +7,6 @@
 //
 
 #import "AllPartyTableViewCell.h"
-#import "SRTool.h"
 
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
@@ -22,55 +21,70 @@
 }
 
 - (void)initRelationship: (NSNumber *)relationship {
-    switch ([relationship intValue]) {
-        case 0: {
-            //未表态
-            [self.statusView setHidden:NO];
-            
-            [self.dateView setBackgroundColor:[UIColor clearColor]];
-            [self.dateLabel setTextColor:AgreeBlue];
-            [self.timeLabel setTextColor:AgreeBlue];
-            
-            [self.partyNameLabel setTextColor:[UIColor grayColor]];
-            [self.partyAdreessLabel setTextColor:[UIColor lightGrayColor]];
-            
-            [self.inLabel setTextColor:[UIColor grayColor]];
+    
+    if (nil == relationship) {
+        //未表态 - 还未进入
+        [self.statusView setHidden:NO];
+        
+        [self.dateView setBackgroundColor:[UIColor clearColor]];
+        [self.dateLabel setTextColor:AgreeBlue];
+        [self.timeLabel setTextColor:AgreeBlue];
+        
+        [self.partyNameLabel setTextColor:[UIColor grayColor]];
+        [self.partyAdreessLabel setTextColor:[UIColor lightGrayColor]];
+        
+        [self.inLabel setTextColor:[UIColor grayColor]];
+    } else {
+        switch ([relationship intValue]) {
+            case 0: {
+                //未表态
+                [self.statusView setHidden:YES];
+                
+                [self.dateView setBackgroundColor:[UIColor clearColor]];
+                [self.dateLabel setTextColor:AgreeBlue];
+                [self.timeLabel setTextColor:AgreeBlue];
+                
+                [self.partyNameLabel setTextColor:[UIColor grayColor]];
+                [self.partyAdreessLabel setTextColor:[UIColor lightGrayColor]];
+                
+                [self.inLabel setTextColor:[UIColor grayColor]];
+            }
+                break;
+                
+            case 1: {
+                //同意
+                [self.statusView setHidden:YES];
+                
+                [self.dateView setBackgroundColor:AgreeBlue];
+                [self.dateLabel setTextColor:[UIColor whiteColor]];
+                [self.timeLabel setTextColor:[UIColor whiteColor]];
+                
+                [self.partyNameLabel setTextColor:[UIColor darkGrayColor]];
+                [self.partyAdreessLabel setTextColor:[UIColor darkGrayColor]];
+                
+                [self.inLabel setTextColor:AgreeBlue];
+                
+            }
+                break;
+                
+            case 2: {
+                //拒绝
+                [self.statusView setHidden:YES];
+                
+                [self.dateView setBackgroundColor:[UIColor clearColor]];
+                [self.dateLabel setTextColor:AgreeBlue];
+                [self.timeLabel setTextColor:AgreeBlue];
+                
+                [self.partyNameLabel setTextColor:[UIColor grayColor]];
+                [self.partyAdreessLabel setTextColor:[UIColor lightGrayColor]];
+                
+                [self.inLabel setTextColor:[UIColor grayColor]];
+            }
+                break;
+                
+            default:
+                break;
         }
-            break;
-            
-        case 1: {
-            //同意
-            [self.statusView setHidden:YES];
-            
-            [self.dateView setBackgroundColor:AgreeBlue];
-            [self.dateLabel setTextColor:[UIColor whiteColor]];
-            [self.timeLabel setTextColor:[UIColor whiteColor]];
-             
-            [self.partyNameLabel setTextColor:[UIColor darkGrayColor]];
-            [self.partyAdreessLabel setTextColor:[UIColor darkGrayColor]];
-             
-            [self.inLabel setTextColor:AgreeBlue];
-            
-        }
-            break;
-            
-        case 2: {
-            //拒绝
-            [self.statusView setHidden:YES];
-            
-            [self.dateView setBackgroundColor:[UIColor clearColor]];
-            [self.dateLabel setTextColor:AgreeBlue];
-            [self.timeLabel setTextColor:AgreeBlue];
-            
-            [self.partyNameLabel setTextColor:[UIColor grayColor]];
-            [self.partyAdreessLabel setTextColor:[UIColor lightGrayColor]];
-            
-            [self.inLabel setTextColor:[UIColor grayColor]];
-        }
-            break;
-            
-        default:
-            break;
     }
 }
 

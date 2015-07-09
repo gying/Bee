@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "Model_User.h"
 
+
+#import "TXYDownloader.h"
+
 @interface PeopleListTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *avatarImageView;
 @property (weak, nonatomic) IBOutlet UILabel *nicknameLabel;

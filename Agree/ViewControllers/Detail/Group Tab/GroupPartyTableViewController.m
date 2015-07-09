@@ -9,10 +9,11 @@
 #import "GroupPartyTableViewController.h"
 #import "SRNet_Manager.h"
 #import "MJExtension.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "GroupPartyTableViewCell.h"
 #import "AppDelegate.h"
-
+#import "CD_Party.h"
+#import <MJRefresh.h>
 
 @interface GroupPartyTableViewController () <SRNetManagerDelegate> {
     SRNet_Manager *_netManager;
@@ -22,24 +23,27 @@
 
 @implementation GroupPartyTableViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
+//- (void)viewDidLoad {
+//    [super viewDidLoad];
+//    
+//    // Uncomment the following line to preserve selection between presentations.
+//    // self.clearsSelectionOnViewWillAppear = NO;
+//    
+//    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+//    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+//}
 
 - (void)reloadPartyData {
     [self.partyTableView reloadData];
 }
 
 - (void)loadPartyData {
+    self.partyArray = [CD_Party getPartyFromCDByGroup:self.group];
+    [self.partyTableView reloadData];
     if (!_netManager) {
         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
     }
+    
     [_netManager getScheduleByGroupID:self.group.pk_group withUserID:[Model_User loadFromUserDefaults].pk_user withRelID:self.group.pk_group_user];
     [self.group setParty_update:@0];
     
@@ -68,22 +72,30 @@
     switch (interfaceType) {
         case kGetScheduleByGroupID: {
             if (jsonDic) {
+//                [SVProgressHUD showSuccessWithStatus:@"读取数据成功"];
+                [CD_Party removePartyFromCDByGroup:self.group];
                 self.partyArray = (NSMutableArray *)[Model_Party objectArrayWithKeyValuesArray:jsonDic];
                 [self.partyTableView reloadData];
-                [ProgressHUD showSuccess:@"读取数据成功"];
+
+                for (Model_Party *party in self.partyArray) {
+                    [CD_Party savePartyToCD:party];
+                }
             } else {
-                [ProgressHUD showSuccess:@"未找到相关数据"];
+                [CD_Party removePartyFromCDByGroup:self.group];
+                [self.partyArray removeAllObjects];
+                [self.partyTableView reloadData];
+                
             }
+            [self.partyTableView.header endRefreshing];
         }
             break;
         default:
             break;
     }
-    
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD showError:@"网络错误"];
+    [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
 

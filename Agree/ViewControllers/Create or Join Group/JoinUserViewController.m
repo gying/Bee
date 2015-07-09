@@ -7,16 +7,21 @@
 //
 
 #import "JoinUserViewController.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "SRImageManager.h"
 #import "GroupViewController.h"
 #import "EaseMob.h"
+
+#import "ChoosefriendsViewController.h"
 
 
 @interface JoinUserViewController () <SRImageManagerDelegate> {
     SRNet_Manager *_netManager;
     SRImageManager *_imageManager;
     NSMutableArray *_groupMembers;
+    
+    ChoosefriendsViewController * choosefriendsVC;
+    
 }
 
 @end
@@ -43,10 +48,18 @@
     [self createEMGroup];
 }
 
+-(void)imageUploading:(float)proFloat
+{
+    
+    [SVProgressHUD showProgress:proFloat*0.9 maskType:SVProgressHUDMaskTypeGradient];
+//    [SVProgressHUD showProgress:proFloat*0.9];
+    NSLog(@"小组正在创建");
+}
+
 - (void)createEMGroup {
+//    [SVProgressHUD showWithStatus:@"正在建立小组"];
+//    [SVProgressHUD showProgress:1.0 maskType:SVProgressHUDMaskTypeGradient];
     
-    
-    [ProgressHUD show:@"正在建立小组"];
     EMError *error = nil;
     EMGroupStyleSetting *groupStyleSetting = [[EMGroupStyleSetting alloc] init];
     //    groupStyleSetting.groupMaxUsersCount = 500; // 创建500人的群，如果不设置，默认是200人。
@@ -75,26 +88,39 @@
         _groupMembers = [[NSMutableArray alloc] init];
         [_groupMembers addObject:group_user];
         
+        for (Model_User *joinUser in self.choosePeopleArray) {
+            Model_Group_User *groupUser = [[Model_Group_User alloc] init];
+            [groupUser setFk_user:joinUser.pk_user];
+            [groupUser setRole:[NSNumber numberWithInt:2]];
+
+            [_groupMembers addObject:groupUser];
+        }
+        
         if (self.groupCover) {
             if (!_imageManager) {
                 _imageManager = [[SRImageManager alloc] initWithDelegate:self];
             }
-            self.theGroup.avatar_path =  [_imageManager updateGroupCoverToBucket:self.groupCover];
+            [_imageManager updateImageToTXY:self.groupCover];
             self.groupCover = nil;
         } else {
             [_netManager addGroup:self.theGroup withMembers:_groupMembers];
         }
     }else {
+        NSLog(@"创建错误: %@", error);
     }
 }
 
+
 - (void)interfaceReturnDataSuccess:(NSMutableDictionary *)jsonDic with:(int)interfaceType {
     //群组创建成功
-    [ProgressHUD showSuccess:@"小组创建成功"];
+    
+//    [SVProgressHUD showProgress:1.0];
+    
     
     switch (interfaceType) {
         case kAddGroup: {
             if (jsonDic) {
+                [SVProgressHUD showSuccessWithStatus:@"小组创建成功"];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     GroupViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
                     [rootController loadUserGroupRelationship];
@@ -109,11 +135,14 @@
     }
 }
 
+
+
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD showError:@"网络错误"];
+    [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
-- (void)imageUpladDone {
+- (void)imageUploadDoneWithFieldID:(NSString *)fieldID {
+    self.theGroup.avatar_path = fieldID;
     [_netManager addGroup:self.theGroup withMembers:_groupMembers];
 }
 
@@ -124,14 +153,22 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
+#pragma mark - Navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"gotoChooseFriend"]) {
+        //进入多选加入好友界面时,将原本的备选数组置入
+        if (!self.choosePeopleArray) {
+            self.choosePeopleArray = [[NSMutableArray alloc] init];
+        }
+        
+        ChoosefriendsViewController *childController = (ChoosefriendsViewController *)segue.destinationViewController;
+        childController.rootController = self;
+        childController.choosePeopleArray = self.choosePeopleArray;
+    }
 }
-*/
+
 
 @end

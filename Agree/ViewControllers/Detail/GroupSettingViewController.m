@@ -8,20 +8,19 @@
 
 #import "GroupSettingViewController.h"
 #import "SRNet_Manager.h"
-#import "ProgressHUD.h"
-#import "SRTool.h"
+#import <SVProgressHUD.h>
 #import "Model_Group_Code.h"
 #import "MJExtension.h"
-#import "SRTool.h"
 #import "GroupViewController.h"
 #import "UIImageView+WebCache.h"
 #import "GroupPeopleCollectionViewCell.h"
 #import "SRAccountView.h"
 #import "Model_User.h"
+#import "SRImageManager.h"
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface GroupSettingViewController ()<SRNetManagerDelegate, UICollectionViewDelegate> {
+@interface GroupSettingViewController ()<SRNetManagerDelegate, UICollectionViewDelegate, UIActionSheetDelegate> {
     SRNet_Manager *_netManager;
     Model_Group_User *_relationship;
     UIImageView *_backImageViwe;
@@ -38,7 +37,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
     _accountView = [[SRAccountView alloc] init];
     _accountView.rootController = self;
     
@@ -47,18 +45,17 @@
     [group_user setFk_user:[Model_User loadFromUserDefaults].pk_user];
     
     _backImageViwe = [[UIImageView alloc] initWithFrame:CGRectMake(4.5, 4.5, 90, 90)];
+//    _backImageViwe.backgroundColor = [UIColor redColor];
     
-    [self.avatarImageView addSubview:_backImageViwe];
     [_backImageViwe.layer setMasksToBounds:YES];
     [_backImageViwe.layer setCornerRadius:_backImageViwe.frame.size.width/2];
     
-    [_backImageViwe setImageWithURL:[SRTool imageUrlFromPath:[Model_User loadFromUserDefaults].avatar_path]];
+    [SRImageManager avatarImageFromTXYFieldID:[Model_User loadFromUserDefaults].avatar_path];
     
     if (!_netManager) {
         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
     }
     [_netManager getGroupRelationship:group_user];
-    
     [_netManager getAllRelationFromGroup:self.group];
 }
 
@@ -110,6 +107,8 @@
         [_relationship setParty_warn:[NSNumber numberWithInt:1]];
     }
     [self reloadButtonStatusSetting];
+    
+    _saveForQuit = true;
 }
 
 - (IBAction)pressedTheChatButton:(UIButton *)sender {
@@ -119,6 +118,8 @@
         [_relationship setMessage_warn:[NSNumber numberWithInt:1]];
     }
     [self reloadButtonStatusSetting];
+    
+    _saveForQuit = true;
 }
 
 - (IBAction)pressedThePhoneButton:(UIButton *)sender {
@@ -128,6 +129,8 @@
         [_relationship setPublic_phone:[NSNumber numberWithInt:1]];
     }
     [self reloadButtonStatusSetting];
+    
+    _saveForQuit = true;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -151,12 +154,14 @@
     
     Model_Group_User *relation = [_relationArray objectAtIndex:indexPath.row];
     
-    Model_User *chooseUser = [[Model_User alloc] init];
-    chooseUser.pk_user = relation.fk_user;
-    chooseUser.nickname = relation.nickname;
-    chooseUser.avatar_path = relation.avatar_path;
-    [_accountView loadWithUser:chooseUser withGroup:self.group];
-    [_accountView show];
+    if (![relation.fk_user isEqual:[Model_User loadFromUserDefaults].pk_user]) {
+        Model_User *chooseUser = [[Model_User alloc] init];
+        chooseUser.pk_user = relation.fk_user;
+        chooseUser.nickname = relation.nickname;
+        chooseUser.avatar_path = relation.avatar_path;
+        [_accountView loadWithUser:chooseUser withGroup:self.group];
+        [_accountView show];
+    }
 }
 
 - (IBAction)tapSaveButton:(id)sender {
@@ -181,7 +186,7 @@
 }
 
 - (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
     switch (interfaceType) {
         case kGetGroupRelationship: {
             NSArray *relAry = jsonDic;
@@ -225,9 +230,9 @@
             if (jsonDic) {
                 _relationArray = (NSMutableArray *)[Model_Group_User objectArrayWithKeyValuesArray:jsonDic];
                 [self.peopleCollectionView reloadData];
-                [ProgressHUD showSuccess:@"读取数据成功"];
+                [SVProgressHUD showSuccessWithStatus:@"读取数据成功"];
             } else {
-                [ProgressHUD showSuccess:@"未找到相关数据"];
+                [SVProgressHUD showSuccessWithStatus:@"未找到相关数据"];
             }
         }
             break;
@@ -238,11 +243,35 @@
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD showError:@"网络错误"];
+    [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
 - (IBAction)tapBackButton:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (_saveForQuit) {
+        //资料已更改
+        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"小组信息已更改" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"保存退出" otherButtonTitles:@"不保存退出", nil];
+        [sheet showInView:self.view];
+    } else {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+  
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    //退出界面选择
+    if (0 == buttonIndex) {
+        //保存退出
+        _saveForQuit = NO;
+        [_netManager updateGroupRelationShip:_relationship];
+        [self.navigationController popViewControllerAnimated:YES];
+    } else if (1 == buttonIndex) {
+        //直接退出
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        return;
+    }
+    
 }
 
 #pragma mark - Navigation

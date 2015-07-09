@@ -41,29 +41,42 @@ static NSString * const reuseIdentifier = @"GroupCollectionCell";
 
 #pragma mark <UICollectionViewDataSource>
 
-
+//返回CELL个数
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     if (_groupAry) {
-        return _groupAry.count;
+        return _groupAry.count + 1;
     }
-    return 0;
-}
+    return 1;
+    
 
+}
+//CELL内容
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     GroupCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     
     // Configure the cell
-    if (indexPath.row == _groupAry.count) {
-        //最后一条信息
-        //添加聚会按钮
-        [cell initAddView];
-    } else {
-        Model_Group *theGroup = [_groupAry objectAtIndex:indexPath.row];
+//    if (indexPath.row == _groupAry.count) {
+//        //最后一条信息
+//        //添加聚会按钮
+//        [cell initAddView];
+//    } else {
+//        Model_Group *theGroup = [_groupAry objectAtIndex:indexPath.row];
+//
+        if (indexPath.row == 0) {
+            //第一条信息
+            //添加聚会按钮
+            [cell initAddView];
+            cell.groupNameLabel.text = @"添加公共聚会";
+        } else {
+            Model_Group *theGroup = [_groupAry objectAtIndex:indexPath.row-1];
+
         
 //        EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:theGroup.em_id isGroup:YES];
         [theGroup setChat_update:[NSNumber numberWithInteger:0]];
         [cell initCellWithGroup:theGroup];
+            
     }
+
     return cell;
 }
 
@@ -71,6 +84,11 @@ static NSString * const reuseIdentifier = @"GroupCollectionCell";
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     _chooseIndexPath = indexPath.row;
     return YES;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    float cellSize = ([UIScreen mainScreen].bounds.size.width - 3)/2;
+    return CGSizeMake(cellSize, cellSize);
 }
 
 
@@ -89,12 +107,33 @@ static NSString * const reuseIdentifier = @"GroupCollectionCell";
 }
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    if (0 == _chooseIndexPath) {
+        //添加公共聚会未开放
+        UIAlertView *warAlert = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                           message:@"添加公共聚会还未开放,敬请期待."
+                                                          delegate:self cancelButtonTitle:@"确定"
+                                                 otherButtonTitles: nil];
+        [warAlert show];
+        return NO;
+    }
+    return YES;
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     //读取小组详情数据并赋值小组数据
     ChooseLoctaionViewController *controller = (ChooseLoctaionViewController *)segue.destinationViewController;
-    controller.chooseGroup = [_groupAry objectAtIndex:_chooseIndexPath];
+    
+    if (0 == _chooseIndexPath) {
+        controller.chooseGroup = nil;
+        
+    }else {
+        controller.chooseGroup = [_groupAry objectAtIndex:_chooseIndexPath-1];
+    }
+
     controller.isGroupParty = FALSE;
 }
 

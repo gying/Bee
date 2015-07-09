@@ -8,7 +8,7 @@
 
 #import "BandingPhoneViewController.h"
 #import "SRNet_Manager.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "UserSettingViewController.h"
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
@@ -93,15 +93,15 @@
                 //        [self.sendButton setTintColor:AgreeBlue];
                 [self.sendButton setTitleColor:AgreeBlue forState:UIControlStateNormal];
                 [self.sendButton setEnabled:NO];
-                [ProgressHUD showSuccess:@"验证码发送成功"];
+                [SVProgressHUD showSuccessWithStatus:@"验证码发送成功"];
             } else {
-                [ProgressHUD dismiss];
+                [SVProgressHUD dismiss];
             }
         }
             break;
         case kUpdateUserInfo: {
             //保存用户信息成功
-            [ProgressHUD showSuccess:@"验证码认证成功"];
+            [SVProgressHUD showSuccessWithStatus:@"验证码认证成功"];
             UserSettingViewController *rootController = [self.navigationController.viewControllers objectAtIndex:1];
             [rootController reloadDataView];
             //绑定手机已完成,推出到主视图
@@ -120,6 +120,13 @@
 }
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+//键盘回收
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self.phoneTextField resignFirstResponder];
 }
 
 /*

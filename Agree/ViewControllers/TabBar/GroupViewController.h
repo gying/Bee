@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "SRNet_Manager.h"
+#import "TXYDownloader.h"
 
 @interface GroupViewController : UIViewController
 
@@ -30,7 +31,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *publicPhoneLabel;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *publicPhoneSeg;
 
-@property (nonatomic, strong)NSArray *groupAry;
+@property (nonatomic, strong)NSMutableArray *groupAry;
 
 
 - (void)joinGroupRelation;

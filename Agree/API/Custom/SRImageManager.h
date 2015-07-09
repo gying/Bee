@@ -14,13 +14,15 @@
 
 @optional
 
-- (void)imageUpladDone;
+//- (void)imageUpladDone;
 - (void)imageUpladError;
 
 - (void)imageDelDone;
 - (void)imageDelError;
 
 - (void)imageUploadDoneWithFieldID: (NSString *)fieldID;
+
+- (void)imageUploading: (float)proFloat;
 
 @end
 
@@ -29,15 +31,7 @@
 //以建立代理协议的模式初始化
 - (id)initWithDelegate: (id<SRImageManagerDelegate>)delegate;
 
-//上传头像信息
-- (NSString *)updateAvatarImageToBucket: (UIImage *)image;
-- (NSString *)updateImageToBucket: (UIImage *)image;
-
 + (UIImage *)getSubImage:(UIImage *)image withRect:(CGRect)rect;
-
-- (NSString *)updateGroupCoverToBucket: (UIImage *)image;
-- (void)delImage:(NSString *)imageName;
-
 
 - (BOOL)updateImageToTXY: (UIImage *)image;
 
@@ -45,6 +39,13 @@
 
 
 //获取原始图片
-+ (NSString *)originalImageFromTXYFieldID: (NSString *)fieldID;
-
++ (NSURL *)originalImageFromTXYFieldID: (NSString *)fieldID;
+//小组封面
++ (NSURL *)groupFrontCoverImageFromTXYFieldID: (NSString *)fieldID;
+//相册缩略图
++ (NSURL *)albumThumbnailImageFromTXYFieldID: (NSString *)fieldID;
+//头像
++ (NSURL *)avatarImageFromTXYFieldID: (NSString *)fieldID;
+//头像小图
++ (NSURL *)miniAvatarImageFromTXYFieldID: (NSString *)fieldID;
 @end

@@ -8,14 +8,16 @@
 
 #import "GroupViewController.h"
 #import "GroupCollectionViewCell.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "MJExtension.h"
 #import "GroupDetailViewController.h"
-#import "SRTool.h"
 #import "AppDelegate.h"
 #import "UIImageView+WebCache.h"
+#import "SRImageManager.h"
 
 #import "EaseMob.h"
+#import "CD_Group.h"
+#import <MJRefresh.h>
 
 @interface GroupViewController () <UICollectionViewDelegate, UICollectionViewDataSource, SRNetManagerDelegate, UITextFieldDelegate, IChatManagerDelegate> {
     SRNet_Manager *_netManager;
@@ -32,13 +34,14 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    //先读取缓存中的小组信息
+    self.groupAry = [CD_Group getGroupFromCD];
+    
+    
     if (!_netManager) {
         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
     }
     [self loadUserGroupRelationship];
-    
-//    CGRect wRect = [[UIScreen mainScreen] bounds];
-    [self.codeInputTextField setDelegate:self];
     
     //在程序的代理中进行注册
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -64,9 +67,19 @@
                                                               } onQueue:nil];
         }
     }
+    //    [[EaseMob sharedInstance].chatManager setIsAutoLoginEnabled:NO];
     
-//    [[EaseMob sharedInstance].chatManager setIsAutoLoginEnabled:NO];
+    //设置初始可滚动,这样才能激活刷新的方法
+    self.groupCollectionView.alwaysBounceVertical = YES;
+    // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
+    self.groupCollectionView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh:)];
 }
+
+- (void)refresh: (id)sender {
+    //开始刷新
+    [self.groupCollectionView.header endRefreshing];
+}
+
 
 /*!
  @method
@@ -154,8 +167,6 @@
         //添加聚会按钮
         [cell initAddView];
     } else {
-        
-        
         Model_Group *theGroup = [self.groupAry objectAtIndex:indexPath.row];
         
         EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:theGroup.em_id isGroup:YES];
@@ -211,7 +222,6 @@
 }
 
 #pragma mark - Navigation
-
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
@@ -268,7 +278,6 @@
             } else {
                 [group_user setPublic_phone:@0];
             }
-            
             [_netManager joinGroup:group_user];
         }
     } onQueue:nil];
@@ -289,6 +298,8 @@
     [self joinGroupRelation];
 }
 
+
+//新建小组BUTTON
 - (IBAction)pressedTheRecodeButton:(id)sender {
     //重新输入验证码
     [self.groupNameLabel setText:@""];
@@ -312,7 +323,7 @@
 
 #pragma mark - Net Manager Delegate
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD showError:@"网络错误"];
+    [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
 - (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
@@ -325,7 +336,7 @@
             
         case kJoinTheGroupByCode: { //输入小组验证码
             if (jsonDic) {
-                [ProgressHUD showSuccess:@"找到小组"];
+                [SVProgressHUD showSuccessWithStatus:@"找到小组"];
                 self.joinGroup = [[Model_Group objectArrayWithKeyValuesArray:jsonDic] firstObject];
                 
                 //显示要加入的小组
@@ -341,9 +352,18 @@
                 [self.remarkLabel setHidden:YES];
                 
                 [self.groupNameLabel setText:_joinGroup.name];
-                [self.groupCoverImageView setImageWithURL:[SRTool imageUrlFromPath:_joinGroup.avatar_path]];
+                
+                //下载图片
+                NSURL *imageUrl = [SRImageManager groupFrontCoverImageFromTXYFieldID:_joinGroup.avatar_path];
+                NSString * urlstr = [imageUrl absoluteString];
+                
+                [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.groupCoverImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+                    [self.groupCoverImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
+                } failBlock:nil progressBlock:nil param:nil];
+                
+                
             } else {
-                [ProgressHUD showSuccess:@"未找到相关数据"];
+                [SVProgressHUD showSuccessWithStatus:@"未找到相关数据"];
                 //未找到小组的相关数据
                 [self.remarkLabel setText:@"未找到小组信息,请再次确认输入"];
                 [self.codeInputTextField becomeFirstResponder];
@@ -353,14 +373,25 @@
             
         case kGetUserGroups: {  //读取用户的小组
             if (jsonDic) {
-                self.groupAry = [Model_Group objectArrayWithKeyValuesArray:jsonDic];
+                //将缓存的数组全部删除
+                [CD_Group removeAllGroupFromCD];
+                
+                //将网络读取的数组再次输入缓存
+                self.groupAry = (NSMutableArray *)[Model_Group objectArrayWithKeyValuesArray:jsonDic];
+                for (Model_Group *group in self.groupAry) {
+                    [CD_Group saveGroupToCD:group];
+                }
+                
                 [self.groupCollectionView reloadData];
-                [ProgressHUD showSuccess:@"读取数据成功"];
+//                [SVProgressHUD showSuccessWithStatus:@"读取数据成功"];
             } else {
                 //没有加入的小组信息
-                [ProgressHUD showSuccess:@"没有小组信息"];
+//                [SVProgressHUD showSuccessWithStatus:@"没有小组信息"];
+                //将缓存的数组全部删除
+                [self.groupAry removeAllObjects];
+                [CD_Group removeAllGroupFromCD];
+                [self.groupCollectionView reloadData];
             }
-            
         }
             break;
             

@@ -14,10 +14,19 @@
 #import "UserChatViewController.h"
 #import "ScheduleTableViewController.h"
 #import "TXYUploadManager.h"
+#import "TXYDownloader.h"
+
+#import "WXApi.h"
+#import "RootAccountLoginViewController.h"
+#import "UserSettingViewController.h"
+
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
+
+
 @property (strong, nonatomic) UIWindow *window;
+
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
@@ -36,6 +45,13 @@
 @property (nonatomic, strong)NSString *deviceToken;
 
 @property (nonatomic, strong)TXYUploadManager *uploadManager;
+
+
+
+@property (strong, nonatomic) RootAccountLoginViewController *rootLoginViewController;
+@property (strong ,nonatomic) UserSettingViewController * userSettingViewcontroller;
+
+
 
 - (void)logout;
 

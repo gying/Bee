@@ -10,21 +10,20 @@
 #import "ScheduleTableViewController.h"
 #import "APService.h"
 #import "SRNet_Manager.h"
-#import "ProgressHUD.h"
-#import "OSSClient.h"
-#import "OSSTool.h"
+#import <SVProgressHUD.h>
 #import "RootAccountLoginViewController.h"
+#import "UserSettingViewController.h"
 
 #import "BMapKit.h"
 #import "SDImageCache.h"
 
 #import "EaseMob.h"
-
-
+#import "WXApi.h"
+#import "SRTool.h"
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface AppDelegate () <EMChatManagerDelegate, SRNetManagerDelegate>
+@interface AppDelegate () <EMChatManagerDelegate, SRNetManagerDelegate,WXApiDelegate>
 
 @end
 
@@ -54,10 +53,13 @@
     [regUser setDevice_id:_token];
     
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-    RootAccountLoginViewController *rootController = [sb instantiateViewControllerWithIdentifier:@"rootAccountLogin"];
-    rootController.userInfo = regUser;
+    self.rootLoginViewController = [sb instantiateViewControllerWithIdentifier:@"rootAccountLogin"];
+    self.rootLoginViewController.userInfo = regUser;
+    //微信授权登陆注册
+//    self.rootLoginViewController = [[RootAccountLoginViewController alloc]init];
+    [WXApi registerApp:@"wx9be30a70fcb480ae"];
     
-    [self.window setRootViewController:rootController];
+    [self.window setRootViewController:self.rootLoginViewController];
 }
 
 //环信接收到了离线的数据
@@ -68,7 +70,6 @@
             //小组信息
         } else {
             //私聊信息
-            
             updateValue = [NSNumber numberWithInt: updateValue.intValue + 1];
             [[NSUserDefaults standardUserDefaults] setObject:updateValue forKey:@"contact_update"];
         }
@@ -123,9 +124,27 @@
     }
 }
 
+
+
+#pragma mark -- 微信授权登陆注册
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
+    
+//    return [WXApi handleOpenURL:url delegate:self.userSettingViewcontroller];
+    
+    
+    
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
+
+//    return  [WXApi handleOpenURL:url delegate:self.userSettingViewcontroller];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    
+
     //清理sdimage
 //    [[SDImageCache sharedImageCache] clearDisk];
 //    [[SDImageCache sharedImageCache] clearMemory];
@@ -149,22 +168,6 @@
     if (!ret) {
         NSLog(@"manager start failed!");
     }
-    
-    //注册阿里云OSS
-    
-    OSSClient *ossclient = [OSSClient sharedInstanceManage];
-    NSString *accessKey = @"HyDprHu2BQHp7edn"; // 实际使用中,AK/SK不应明文保存在代码中
-    NSString *secretKey = @"loWKqemVvcWH7u2RSn4EncVCkRuQcJ";
-    [ossclient setGenerateToken:^(NSString *method, NSString *md5, NSString *type, NSString *date, NSString *xoss, NSString *resource){
-        NSString *signature = nil;
-        NSString *content = [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@%@", method, md5, type, date, xoss, resource];
-        signature = [OSSTool calBase64Sha1WithData:content withKey:secretKey];
-        signature = [NSString stringWithFormat:@"OSS %@:%@", accessKey, signature];
-        NSLog(@"signature:%@", signature);
-        return signature;
-    }];
-    [ossclient setGlobalDefaultBucketAcl:PUBLIC_READ_WRITE];
-    [ossclient setGlobalDefaultBucketHostId:@"oss-cn-qingdao.aliyuncs.com"];
     
     //清除推送的消息
     [APService clearAllLocalNotifications];
@@ -208,6 +211,9 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
+    //微信注册帐号
+    [WXApi registerApp:@"wx9be30a70fcb480ae"];
+    
     //判断进入的界面
     //查找用户id
 //    NSNumber *user_id = [Model_User loadFromUserDefaults].pk_user;
@@ -229,10 +235,14 @@
 //        [regUser setDevice_id:_token];
         
         UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-        RootAccountLoginViewController *rootController = [sb instantiateViewControllerWithIdentifier:@"rootAccountLogin"];
-        rootController.userInfo = regUser;
+        self.rootLoginViewController = [sb instantiateViewControllerWithIdentifier:@"rootAccountLogin"];
+        self.rootLoginViewController.userInfo = regUser;
         
-        [self.window setRootViewController:rootController];
+        //微信授权登陆注册
+//        self.rootLoginViewController = [[RootAccountLoginViewController alloc]init];
+        
+        [self.window setRootViewController:self.rootLoginViewController];
+
     }
 
     return YES;
@@ -288,7 +298,6 @@
     // Required
     //根据串号注册极光推送
     [APService registerDeviceToken:deviceToken];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jPushLoginDone) name:kJPFNetworkDidLoginNotification object:nil];
 }
 
@@ -359,19 +368,16 @@
                 }
                 
                 //标注主日程更新
-                NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"party_update"];
-                updateValue = [NSNumber numberWithInt: updateValue.intValue + 1];
-                [[NSUserDefaults standardUserDefaults] setObject:updateValue forKey:@"party_update"];
+                [SRTool addPartyUpdateTip:1];
+                
             } else if (self.scheduleDelegate) { //如果在主日程界面
                 //则在主日程进行刷新
                 [self.scheduleDelegate refresh:nil];
             } else {
                 [self.groupDelegate addGroupPartyUpdateStatus:pk_group];
-                //标注主日程更新
-                NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"party_update"];
-                updateValue = [NSNumber numberWithInt: updateValue.intValue + 1];
-                [[NSUserDefaults standardUserDefaults] setObject:updateValue forKey:@"party_update"];
                 
+                //标注主日程更新
+                [SRTool addPartyUpdateTip:1];
             }
         }
             break;
@@ -514,7 +520,7 @@
 }
 
 - (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
     switch (interfaceType) {
         case kUpdateUserInfo: {
         
@@ -522,7 +528,10 @@
             break;
         case kImageManagerSign: {
             if (jsonDic) {
+                //注册腾讯云的万象图片
                 [TXYUploadManager authorize:@"201139" userId:[Model_User loadFromUserDefaults].pk_user.stringValue sign:(NSString *)jsonDic];
+                [TXYDownloader authorize:@"201139" userId:[Model_User loadFromUserDefaults].pk_user.stringValue];
+
                 self.uploadManager = [[TXYUploadManager alloc] initWithPersistenceId: @"persistenceId"];
             }
             
@@ -532,8 +541,12 @@
     }
 }
 
+
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
 }
+
+
+
 
 @end

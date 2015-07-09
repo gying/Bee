@@ -7,7 +7,6 @@
 //
 
 #import "SRTool.h"
-#import "ProgressHUD.h"
 #import "Model_User.h"
 
 @implementation SRTool
@@ -71,17 +70,19 @@
     NSString *yesterdayString = [[yesterday description] substringToIndex:10];
     NSString *refDateString = [[refDate description] substringToIndex:10];
     
-    if ([refDateString isEqualToString:todayString])
-    {
+    if ([refDateString isEqualToString:todayString]) {
         return 1;
-        
     } else if ([refDateString isEqualToString:yesterdayString]) {
         return 2;
-        
     } else {
         return 3;
-        
     }
+}
+
++ (void)addPartyUpdateTip: (int) addNum {
+    NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"party_update"];
+    updateValue = [NSNumber numberWithInt: updateValue.intValue + addNum];
+    [[NSUserDefaults standardUserDefaults] setObject:updateValue forKey:@"party_update"];
 }
 
 

@@ -14,10 +14,12 @@
 #import "MJPhoto.h"
 #import "SRTool.h"
 #import "MJExtension.h"
-#import "ProgressHUD.h"
-
 #import "SRNet_Manager.h"
 #import "UIImageView+WebCache.h"
+#import "CD_Photo.h"
+
+#import <SVProgressHUD.h>
+#import <MJRefresh.h>
 
 @interface GroupAlbumsCollectionViewController () <SRImageManagerDelegate, UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRNetManagerDelegate, SRPhotoManagerDelegate> {
     
@@ -25,7 +27,6 @@
     UIImage *_pickImage;
     SRImageManager *_imageManager;
     
-    NSString *_imageName;
     NSMutableArray *_imageViewAry;
     NSMutableDictionary *_imageViewDic;
     SRNet_Manager *_netManager;
@@ -52,9 +53,13 @@
 */
 
 -(void)loadPhotoData {
+    
     if (!self.photoAry) {
         self.photoAry = [[NSMutableArray alloc] init];
     }
+    //先读取缓存中的图片信息
+    self.photoAry = [CD_Photo getPhotoFromCDByGroup:self.group];
+    [self.albumsCollectionView reloadData];
     
     if (!_netManager) {
         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
@@ -69,12 +74,12 @@
     if (self.photoAry) {
         return self.photoAry.count;
     } else {
-        return 1;
+        return 0;
     }
 }
 
-
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
     GroupAlbumsCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ImageCollectionViewCell" forIndexPath:indexPath];
     
     // Configure the cell
@@ -82,22 +87,33 @@
     if (!_imageViewDic) {
         _imageViewDic = [[NSMutableDictionary alloc] init];
     }
-    
     [cell.cellImageView setContentMode:UIViewContentModeScaleAspectFill];
-    [cell.cellImageView setImageWithURL:[SRTool miniImageUrlFromPath:newPhoto.pk_photo] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+    [cell setBackgroundColor:[UIColor lightGrayColor]];
+    
+    //下载图片
+    NSURL *imageUrl = [SRImageManager albumThumbnailImageFromTXYFieldID:newPhoto.pk_photo];
+    NSString * urlstr = [imageUrl absoluteString];
+
+    [[TXYDownloader sharedInstanceWithPersistenceId:nil] download:urlstr
+                                                           target:cell.cellImageView
+                                                        succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+        UIImage *testImage = [UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]];
+        [cell.cellImageView setImage:testImage];
         
         //将图片转化成MJPhoto并加入数组
         MJPhoto *photo = [[MJPhoto alloc] init];
-        photo.url = [SRTool imageUrlFromPath:newPhoto.pk_photo]; // 图片路径
+        photo.url = [SRImageManager originalImageFromTXYFieldID:newPhoto.pk_photo]; // 图片路径
         photo.srcImageView = cell.cellImageView; // 来源于哪个UIImageView
         if ([newPhoto.fk_user isEqual:[Model_User loadFromUserDefaults].pk_user] || [self.rootController.group.creater isEqual:[Model_User loadFromUserDefaults].pk_user] ) {
             //如果为群主或者为图片的上传者,则可以设置删除图片代理
             photo.delegate = self;
         }
-            
         //按照数序放入字典
         [_imageViewDic setObject:photo forKey:[NSNumber numberWithInteger:indexPath.row]];
-    }];
+        
+    } failBlock:nil progressBlock:nil param:nil];
+    
+
 
     return cell;
 }
@@ -180,41 +196,39 @@
     if (!_imageManager) {
         _imageManager = [[SRImageManager alloc] initWithDelegate:self];
     }
-    _imageName = [_imageManager updateImageToBucket:_pickImage];
+    
+    _pickImage = [SRImageManager getSubImage:_pickImage withRect:CGRectMake(0, 0, 1280 , 1280)];
+    [_imageManager updateImageToTXY:_pickImage];
 }
+
 
 - (void)deletePhoto:(NSUInteger)index {
     _removePhoto = [self.photoAry objectAtIndex:index];
     if (!_imageManager) {
         _imageManager = [[SRImageManager alloc] initWithDelegate:self];
     }
-    [_imageManager delImage:_removePhoto.pk_photo];
-}
-
-- (void)imageDelDone {
+    
     if (!_netManager) {
         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
     }
-    [_netManager removePhoto:_removePhoto];
-    
+    [_netManager removePhoto:[self.photoAry objectAtIndex:index]];
 }
+
 
 - (void)imageDelError {
     //图片删除错误
 }
 
-
-- (void)imageUpladDone {
+- (void)imageUploadDoneWithFieldID:(NSString *)fieldID {
     Model_Photo *newPhoto = [[Model_Photo alloc] init];
     [newPhoto setCreate_time:[NSDate date]];
     [newPhoto setFk_group:self.rootController.group.pk_group];
     [newPhoto setFk_user:[Model_User loadFromUserDefaults].pk_user];
-    [newPhoto setPk_photo:_imageName];
+    [newPhoto setPk_photo:fieldID];
     [newPhoto setStatus:@1];
-
+    
     [self.photoAry insertObject:newPhoto atIndex:0];
     [self saveImageData:newPhoto];
-    
 }
 
 - (void)saveImageData: (Model_Photo *)photo {
@@ -224,6 +238,9 @@
     [_netManager addImageToGroup:photo];
 }
 
+-(void)imageUploading:(float)proFloat {
+    [SVProgressHUD showProgress:proFloat*0.9 status:@"正在上传图片"];
+}
 
 - (void)imageUpladError {
     
@@ -257,15 +274,23 @@
         
         case kGetPhotoByGroup: {
             if (jsonDic) {
+                [CD_Photo removePhotoFromCDByGroup:self.group];
                 self.photoAry = (NSMutableArray *)[Model_Photo objectArrayWithKeyValuesArray:jsonDic];
+                
+                for (Model_Photo *photo in self.photoAry) {
+                    [CD_Photo savePhotoToCD:photo];
+                }
                 [self.albumsCollectionView reloadData];
             } else {
                 
             }
+            [self.albumsCollectionView.header endRefreshing];
         }
             break;
         
         case kAddImageToGroup: {
+            [SVProgressHUD showProgress:1.0 status:@"上传图片数据"];
+          
             if (jsonDic) {
                 //清除原先数组中的元素
                 [_imageViewAry removeAllObjects];
@@ -276,18 +301,17 @@
             } else {
                 
             }
+            [SVProgressHUD showSuccessWithStatus:@"成功"];
         }
             break;
             
         default:
             break;
     }
-    
-    [ProgressHUD dismiss];
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD dismiss];
+    [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
 

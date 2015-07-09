@@ -9,22 +9,26 @@
 #import "PartyDetailViewController.h"
 #import "SRNet_Manager.h"
 #import "Model_Party_User.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "MJExtension.h"
-#import "SRTool.h"
 #import "PartyPeopleListViewController.h"
 #import "PartyMapViewController.h"
 
 #import "BMapKit.h"
 
+#import "Model_Party.h"
+#import "SRTool.h"
+
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface PartyDetailViewController () <SRNetManagerDelegate> {
+@interface PartyDetailViewController () <SRNetManagerDelegate, UIActionSheetDelegate> {
     SRNet_Manager *_netManager;
     Model_Party_User *_relation;
     NSArray *_relArray;
     int _showStatus;
     BMKMapView *_bdMapView;
+    
+    
 }
 
 @end
@@ -130,9 +134,11 @@
         //取消选中状态
         _relation.relationship = @0;
         self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] - 1];
+        [SVProgressHUD showWithStatus:@"正在取消参与请求"];
     } else {
         _relation.relationship = @1;
         self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] + 1];
+        [SVProgressHUD showWithStatus:@"正在确认参与请求"];
     }
     
     [_netManager updateSchedule:_relation];
@@ -142,12 +148,14 @@
     if (2 == [_relation.relationship intValue]) {
         //取消选中状态
         _relation.relationship = @0;
+        [SVProgressHUD showWithStatus:@"正在取消拒绝请求"];
     } else {
         
         if (1 == _relation.relationship.intValue ) {
             self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] - 1];
         }
         _relation.relationship = @2;
+        [SVProgressHUD showWithStatus:@"正在确认拒绝请求"];
     }
     [_netManager updateSchedule:_relation];
 }
@@ -221,8 +229,12 @@
 }
 
 - (IBAction)pressedTheCanelButton:(id)sender {
-    //取消聚会
-    [_netManager cancelParty:self.party];
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择操作类型"
+                                                       delegate:self
+                                              cancelButtonTitle:@"取消"
+                                         destructiveButtonTitle:@"取消聚会"
+                                              otherButtonTitles:@"分享",@"添加到系统日历",nil];
+    [sheet showInView:self.view];
 }
 
 - (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
@@ -238,6 +250,8 @@
             break;
         case kUpdateSchedule: {
             if (jsonDic) {
+                [SVProgressHUD showSuccessWithStatus:@"参与信息发送成功"];
+                
                 //更新上级聚会数组的关系状态
                 self.party.relationship = _relation.relationship;
                 [self setParticipateStatus];
@@ -248,6 +262,8 @@
                 }
                 [self reloadPeopleNum];
                 [self.delegate DetailChange:self.party];
+                
+                [SRTool addPartyUpdateTip:1];
             }
         }
             break;
@@ -269,18 +285,172 @@
                 [self.delegate cancelParty:self.party];
             }
         }
+            break;
+        case kShareParty: {
+            if (jsonDic) {
+                //聚会分享获取链接成功
+                //将聚会链接赋值到粘贴板
+                UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+                pboard.string = (NSString *)jsonDic;
+                
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                    message:@"聚会链接已复制到您的粘贴板"
+                                                                   delegate:self
+                                                          cancelButtonTitle:@"确定"
+                                                          otherButtonTitles:nil];
+                alertView.tag = 2;
+                [alertView show];
+            }
+        }
+            break;
         default:
             break;
     }
-    [ProgressHUD dismiss];
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD showError:@"网络错误"];
+    [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    switch (buttonIndex) {
+        case 0: {
+            //取消聚会
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                message:@"确定要取消该聚会吗?"
+                                                               delegate:self
+                                                      cancelButtonTitle:@"取消"
+                                                      otherButtonTitles:@"确定", nil];
+            alertView.tag = 1;
+            [alertView show];
+            
+        }
+            break;
+        case 1: {
+            //分享聚会
+            if (!_netManager) {
+                _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
+            }
+            [_netManager shareParty:self.party];
+        }
+            break;
+            
+#pragma mark -- 将日程添加到系统日历
+        case 2: {
+            //添加到日程
+            NSLog(@"添加到日程");
+            //事件市场
+            EKEventStore *eventStore = [[EKEventStore alloc] init];
+            
+            //6.0及以上通过下面方式写入事件
+            if ([eventStore respondsToSelector:@selector(requestAccessToEntityType:completion:)])
+            {
+                // the selector is available, so we must be on iOS 6 or newer
+                [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (error)
+                        {
+                            //错误信息
+                            // display error message here
+                        }
+                        else if (!granted)
+                        {
+                            //被用户拒绝，不允许访问日历
+                            // display access denied error message here
+                        }
+                        else
+                        {
+                            // access granted
+                            // ***** do the important stuff here *****
+                            
+                            //事件保存到日历
+                            
+                            
+                            //创建事件
+                            EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
+                            event.title     = self.party.name;
+                            event.location = self.party.location;
+                            
+                            NSDateFormatter *tempFormatter = [[NSDateFormatter alloc]init];
+
+                            [tempFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
+               
+                            event.allDay = NO;
+      
+                            NSDate * startTime = _party.begin_time;
+                            NSDate * endTime = [NSDate dateWithTimeInterval:3600 sinceDate:startTime];
+     
+                            event.startDate = startTime;
+                            event.endDate = endTime;
+
+                            //在事件前多少秒开始提醒
+                            //提前一个小时提醒
+                           [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60.0 * 60.0]];
+                            
+                            
+                            [event setCalendar:[eventStore defaultCalendarForNewEvents]];
+                            NSError *err;
+                            [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
+                            
+                            
+                            if (err) {
+                                
+                            }
+                            UIAlertView *alert = [[UIAlertView alloc]
+                                                  initWithTitle:@"添加成功"
+                                                  message:@" "
+                                                  delegate:nil
+                                                  cancelButtonTitle:@"完成"
+                                                  otherButtonTitles:nil];
+                            [alert show];
+                            
+                            
+                        }
+                    });
+                }];
+            }
+            
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    switch (alertView.tag) {
+        case 1: {
+            //取消聚会
+            switch (buttonIndex) {
+                case 0: {   //取消
+                }
+                    break;
+                case 1: {   //确定
+                    //取消聚会
+                    [_netManager cancelParty:self.party];
+                }
+                    break;
+                default:
+                    break;
+            }
+        }
+            
+            break;
+            
+        case 2: {
+            //分享聚会
+        }
+            break;
+            
+        default:
+            break;
+    }
 }
 
 

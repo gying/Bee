@@ -11,11 +11,12 @@
 
 #import "SRNet_Manager.h"
 #import "People.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "MJExtension.h"
 
 #import "AddressBookTableViewCell.h"
 #import "SRAccountView.h"
+#import "SelectFriendViewController.h"
 
 
 @interface ContactsDetailTableViewController () <SRNetManagerDelegate> {
@@ -31,8 +32,6 @@
 @implementation ContactsDetailTableViewController
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    
     [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"relation_update"];
     
     // Uncomment the following line to preserve selection between presentations.
@@ -44,6 +43,8 @@
     _accountView = [[SRAccountView alloc] init];
     [_accountView setHidden:YES];
     [self getAddressBook];
+    
+    [super viewDidLoad];
 }
 
 - (void)getAddressBook {
@@ -158,13 +159,16 @@
     People *adPeople = [_contactArray objectAtIndex:indexPath.row];
     if (adPeople.userInfo.relationship) {
         if ([adPeople.userInfo.relationship isEqualToNumber:@3]) {
-            [_accountView show];
-            Model_User *sendUser = [[Model_User alloc] init];
             
-            sendUser.pk_user = adPeople.userInfo.pk_user;
-            sendUser.nickname = adPeople.userInfo.nickname;
-            sendUser.avatar_path = adPeople.userInfo.avatar_path;
-            [_accountView loadWithUser:sendUser withGroup:nil];
+            if (![adPeople.userInfo.pk_user isEqual:[Model_User loadFromUserDefaults].pk_user]) {
+                [_accountView show];
+                Model_User *sendUser = [[Model_User alloc] init];
+                
+                sendUser.pk_user = adPeople.userInfo.pk_user;
+                sendUser.nickname = adPeople.userInfo.nickname;
+                sendUser.avatar_path = adPeople.userInfo.avatar_path;
+                [_accountView loadWithUser:sendUser withGroup:nil];
+            }
         }
     }
 }
@@ -215,24 +219,26 @@
             break;
     }
     
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD showError:@"网络错误"];
+    [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-/*
-#pragma mark - Navigation
 
+#pragma mark - Navigation
 // In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+//    // Get the new view controller using [segue destinationViewController].
+//    // Pass the selected object to the new view controller.
+//    if ([@"GoToSelectFriend" isEqualToString:segue.identifier]) {
+//        SelectFriendViewController *childController = segue.destinationViewController;
+//    }
+//}
+
 
 @end

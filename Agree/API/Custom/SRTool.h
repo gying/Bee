@@ -15,7 +15,9 @@
 + (NSString *)dateStringForPartyListCell: (NSDate *)date;
 + (BOOL)isSelfID: (NSNumber *)pk_user;
 
-+ (NSURL *)imageUrlFromPath: (NSString *)path;
-+ (NSURL *)miniImageUrlFromPath: (NSString *)path;
+//+ (NSURL *)imageUrlFromPath: (NSString *)path;
+//+ (NSURL *)miniImageUrlFromPath: (NSString *)path;
 + (int)dateJudgeWithDate: (NSDate *)date;
+
++ (void)addPartyUpdateTip: (int) addNum;
 @end

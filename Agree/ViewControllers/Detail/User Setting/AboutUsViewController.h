@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface AboutUsViewController : UIViewController
+@property (weak, nonatomic) IBOutlet UIImageView *appIconImageView;
 
 @end

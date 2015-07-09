@@ -17,6 +17,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    
+    [self.appIconImageView.layer setCornerRadius:5.0];
+    
 }
 
 - (void)didReceiveMemoryWarning {

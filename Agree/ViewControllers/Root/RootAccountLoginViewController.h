@@ -9,13 +9,27 @@
 #import <UIKit/UIKit.h>
 #import "Model_User.h"
 
-@interface RootAccountLoginViewController : UIViewController
+#import "WXApiObject.h"
+#import "WXApi.h"
+
+//@protocol RootAccountRegViewController <NSObject>
+//
+//
+//@end
+@interface RootAccountLoginViewController : UIViewController<WXApiDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *accountTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 
 @property (nonatomic, strong)Model_User *userInfo;
+@property (nonatomic , strong)NSString * codeStr;
+
+
 
 - (void)popToRootController;
+
+
+
+
 
 @end

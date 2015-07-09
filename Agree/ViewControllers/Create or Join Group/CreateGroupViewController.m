@@ -10,12 +10,11 @@
 #import "Model_Group.h"
 #import "JoinUserViewController.h"
 #import "SRNet_Manager.h"
-#import "ProgressHUD.h"
+#import <SVProgressHUD.h>
 #import "MJExtension.h"
 #import "GroupViewController.h"
 #import "SRImageManager.h"
 #import "UIImageView+WebCache.h"
-#import "SRTool.h"
 
 @interface CreateGroupViewController () <UITextFieldDelegate, SRNetManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, SRImageManagerDelegate> {
     Model_Group *_newGroup;
@@ -49,6 +48,8 @@
 - (IBAction)pressedTheCoverButton:(id)sender {
     //点击小组封面按钮
     [self imageBtnClick];
+    NSLog(@"现在操作小组封面按钮");
+    
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -75,10 +76,10 @@
         _imagePicker = [[UIImagePickerController alloc] init];
         _imagePicker.delegate = self;
         _imagePicker.allowsEditing = YES;
-        UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
+        _imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
         //判断是否有摄像头
-        if(![UIImagePickerController isSourceTypeAvailable:sourceType]) {
-            sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        if(![UIImagePickerController isSourceTypeAvailable:_imagePicker.sourceType]) {
+            _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         }
     }
     
@@ -86,6 +87,8 @@
         UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择图片来源" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"拍照" otherButtonTitles:@"图片库", nil];
         [sheet showInView:self.view];
     }
+    
+    NSLog(@"现在操作图片按钮");
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -190,7 +193,7 @@
     switch (interfaceType) {
         case kJoinTheGroupByCode: {
             if (jsonDic) {
-                [ProgressHUD showSuccess:@"找到小组"];
+                [SVProgressHUD showSuccessWithStatus:@"找到小组"];
                 _joinGroup = [[Model_Group objectArrayWithKeyValuesArray:jsonDic] firstObject];
                 
                 //显示要加入的小组
@@ -206,9 +209,17 @@
                 [self.remarkLabel setHidden:YES];
                 
                 [self.groupNameLabel setText:_joinGroup.name];
-                [self.groupCoverImageView setImageWithURL:[SRTool imageUrlFromPath:_joinGroup.avatar_path]];
+//                [self.groupCoverImageView sd_setImageWithURL:[SRImageManager groupFrontCoverImageFromTXYFieldID:_joinGroup.avatar_path]];
+                
+                //下载图片
+                NSURL *imageUrl = [SRImageManager groupFrontCoverImageFromTXYFieldID:_joinGroup.avatar_path];
+                NSString * urlstr = [imageUrl absoluteString];
+                
+                [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.groupCoverImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+                    [self.groupCoverImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
+                } failBlock:nil progressBlock:nil param:nil];
             } else {
-                [ProgressHUD showSuccess:@"未找到相关数据"];
+                [SVProgressHUD showErrorWithStatus:@"未找到相关数据"];
                 //未找到小组的相关数据
                 [self.remarkLabel setText:@"未找到小组信息,请再次确认输入"];
                 [self.codeInputTextField becomeFirstResponder];
@@ -219,11 +230,11 @@
         default:
             break;
     }
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
 }
 
 - (void)interfaceReturnDataError:(int)interfaceType {
-    [ProgressHUD dismiss];
+    [SVProgressHUD dismiss];
 }
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
@@ -240,7 +251,6 @@
         childController.theGroup.name = self.groupNameTextField.text;
         childController.groupCover = _groupCoverImage;
     }
-    
 }
 
 @end

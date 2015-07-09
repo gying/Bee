@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "Model_Party.h"
 
+#import <EventKit/EventKit.h>
+
 @protocol SRPartyDetailDelegate <NSObject>
 
 @required
