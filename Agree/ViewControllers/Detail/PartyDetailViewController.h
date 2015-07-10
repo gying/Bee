@@ -14,7 +14,7 @@
 @protocol SRPartyDetailDelegate <NSObject>
 
 @required
-- (void)DetailChange: (Model_Party *)party;
+- (void)detailChange: (Model_Party *)party;
 - (void)cancelParty: (Model_Party *)party;
 
 @end

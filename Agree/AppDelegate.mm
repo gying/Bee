@@ -35,7 +35,8 @@
     BOOL _viewForLogin;
 }
 
-
+#pragma mark - 业务逻辑
+#pragma mark 登出操作
 - (void)logout {
     for(UIViewController *viewController in self.rootController.viewControllers)
     {
@@ -61,25 +62,28 @@
     [self.window setRootViewController:self.rootLoginViewController];
 }
 
-//环信接收到了离线的数据
-- (void)didFinishedReceiveOfflineMessages:(NSArray *)offlineMessages {
-    NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"contact_update"];
-    for (EMMessage *message in offlineMessages) {
-        if (message.isGroup) {
-            //小组信息
-        } else {
-            //私聊信息
-            updateValue = [NSNumber numberWithInt: updateValue.intValue + 1];
-            [[NSUserDefaults standardUserDefaults] setObject:updateValue forKey:@"contact_update"];
-        }
-    }
+#pragma mark 极光推动帐号获取成功
+- (void)jPushLoginDone {
+    //jpush的串号获取成功
+    self.jPushString = [APService registrationID];
     
-    if (updateValue) {
-        //更新小组标识
-        [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = updateValue.stringValue;
+    if (_viewForLogin) {    //登录流程
+        
+    } else {    //直接进入流程,更新用户资料
+        Model_User *updateUser = [[Model_User alloc] init];
+        updateUser.pk_user = [Model_User loadFromUserDefaults].pk_user;
+        updateUser.device_id = self.deviceToken;
+        updateUser.jpush_id = self.jPushString;
+        
+        if (!_netManager) {
+            _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
+        }
+        [_netManager updateUserInfo:updateUser];
     }
 }
 
+#pragma mark - 通知
+#pragma mark 收到聊天信息
 - (void)didReceiveMessage:(EMMessage *)message {
     //这里收到了信息
     if (message.isGroup) {
@@ -123,6 +127,7 @@
     }
 }
 
+<<<<<<< HEAD
 
 
 #pragma mark -- 微信授权登陆注册
@@ -138,6 +143,133 @@
 //    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
 
     return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController]&&[WXApi handleOpenURL:url delegate:self.userSettingViewcontroller];
+=======
+#pragma mark 应用内收取推送信息
+- (void)networkDidReceiveMessage:(NSNotification *)notification {
+    
+    NSDictionary * userInfo = [notification userInfo];
+    NSDictionary *extras = [userInfo valueForKey:@"extras"];
+    
+    //    NSString *content = [userInfo valueForKey:@"content"];
+    //    NSString *customizeField1 = [extras valueForKey:@"customizeField1"]; //自定义参数，key是自己定义的
+    
+    /*
+     typeTag 的定义:
+     
+     1.聊天推送     (已经取消,被环信所替代)
+     2.聚会信息推送
+     3.相册图片推送
+     
+     5.关系更新推送
+     */
+    NSNumber *typeTag = [extras objectForKey:@"type_tag"];
+    
+    switch (typeTag.intValue) {
+        case 2: {   //聚会信息推送消息
+            NSNumber *pk_group = [extras objectForKey:@"pk_group"];
+            if (self.chatDelegate) {
+                if ([pk_group isEqualToNumber:self.chatDelegate.group.pk_group]) {
+                    //处于同一小组的界面中,进行刷新
+                    [self.chatDelegate receiveParty];
+                    
+                } else {
+                    //处于不同小组
+                    [self.groupDelegate addGroupPartyUpdateStatus:pk_group];
+                }
+                
+                //标注主日程更新
+                [SRTool addPartyUpdateTip:1];
+                
+            } else if (self.scheduleDelegate) {
+                //如果在主日程界面
+                //则在主日程进行刷新操作
+                [self.scheduleDelegate refresh:nil];
+            } else {
+                [self.groupDelegate addGroupPartyUpdateStatus:pk_group];
+                
+                //标注主日程更新
+                [SRTool addPartyUpdateTip:1];
+            }
+        }
+            break;
+        case 3: {   //小组相册更新
+            
+        }
+            break;
+            
+        case 5: {   //用户关系更新
+            if (self.contactsDelegate) {
+                [self.contactsDelegate loadDataFromNet];
+            } else {
+                NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"relation_update"];
+                updateValue = [NSNumber numberWithInt: updateValue.intValue + 1];
+                [[NSUserDefaults standardUserDefaults] setObject:updateValue forKey:@"relation_update"];
+                
+                //                if (updateValue) {
+                //                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = updateValue.stringValue;
+                //                }
+                
+                int badgeNum = [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue.intValue;
+                if (badgeNum) {
+                    badgeNum += 1;
+                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = [NSNumber numberWithInt:badgeNum].stringValue;
+                } else {
+                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = @"1";
+                }
+            }
+        }
+            break;
+        case 6: {   //好友请求获得通过,只需要刷新好友列表
+            if (self.contactsDelegate) {
+                [self.contactsDelegate loadDataFromNet];
+            } else {
+                int badgeNum = [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue.intValue;
+                if (badgeNum) {
+                    badgeNum += 1;
+                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = [NSNumber numberWithInt:badgeNum].stringValue;
+                } else {
+                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = @"1";
+                }
+            }
+        }
+            break;
+        default:
+            break;
+    }
+    
+}
+
+#pragma mark 环信登录收取离线信息
+- (void)didFinishedReceiveOfflineMessages:(NSArray *)offlineMessages {
+    NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"contact_update"];
+    for (EMMessage *message in offlineMessages) {
+        if (message.isGroup) {
+            //小组信息
+        } else {
+            //私聊信息
+            updateValue = [NSNumber numberWithInt: updateValue.intValue + 1];
+            [[NSUserDefaults standardUserDefaults] setObject:updateValue forKey:@"contact_update"];
+        }
+    }
+    
+    if (updateValue) {
+        //更新小组标识
+        [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = updateValue.stringValue;
+    }
+}
+
+
+
+#pragma mark - 系统运行
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+    //微信授权登陆注册
+    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
+}
+
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
+>>>>>>> Gaddle
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -297,24 +429,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jPushLoginDone) name:kJPFNetworkDidLoginNotification object:nil];
 }
 
-- (void)jPushLoginDone {
-    //jpush的串号获取成功
-    self.jPushString = [APService registrationID];
-    
-    if (_viewForLogin) {    //登录流程
-        
-    } else {    //直接进入流程,更新用户资料
-        Model_User *updateUser = [[Model_User alloc] init];
-        updateUser.pk_user = [Model_User loadFromUserDefaults].pk_user;
-        updateUser.device_id = self.deviceToken;
-        updateUser.jpush_id = self.jPushString;
-        
-        if (!_netManager) {
-            _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-        }
-        [_netManager updateUserInfo:updateUser];
-    }
-}
+
 
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
@@ -330,99 +445,6 @@
     
 }
 
-//自定义消息的回调方法
-//应用内
-- (void)networkDidReceiveMessage:(NSNotification *)notification {
-    NSDictionary * userInfo = [notification userInfo];
-//    NSString *content = [userInfo valueForKey:@"content"];
-    
-    /*
-     1.聊天推送
-     2.聚会信息推送
-     3.相册图片推送
-     
-     5.关系更新推送
-     */
-    
-    
-    NSDictionary *extras = [userInfo valueForKey:@"extras"];
-    //    NSString *customizeField1 = [extras valueForKey:@"customizeField1"]; //自定义参数，key是自己定义的
-    
-    NSNumber *typeTag = [extras objectForKey:@"type_tag"];
-    
-    switch (typeTag.intValue) {
-        case 2: {   //聚会信息推送消息
-            NSNumber *pk_group = [extras objectForKey:@"pk_group"];
-            if (self.chatDelegate) {
-                if ([pk_group isEqualToNumber:self.chatDelegate.group.pk_group]) {
-                    //处于同一小组的界面中,进行刷新
-                    [self.chatDelegate receiveParty];
-                    
-                } else {
-                    //处于不同小组
-                    [self.groupDelegate addGroupPartyUpdateStatus:pk_group];
-                }
-                
-                //标注主日程更新
-                [SRTool addPartyUpdateTip:1];
-                
-            } else if (self.scheduleDelegate) { //如果在主日程界面
-                //则在主日程进行刷新
-                [self.scheduleDelegate refresh:nil];
-            } else {
-                [self.groupDelegate addGroupPartyUpdateStatus:pk_group];
-                
-                //标注主日程更新
-                [SRTool addPartyUpdateTip:1];
-            }
-        }
-            break;
-        case 3: {   //小组相册更新
-            
-        }
-            break;
-            
-        case 5: {   //用户关系更新
-            if (self.contactsDelegate) {
-                [self.contactsDelegate loadDataFromNet];
-            } else {
-                NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"relation_update"];
-                updateValue = [NSNumber numberWithInt: updateValue.intValue + 1];
-                [[NSUserDefaults standardUserDefaults] setObject:updateValue forKey:@"relation_update"];
-                
-//                if (updateValue) {
-//                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = updateValue.stringValue;
-//                }
-                
-                int badgeNum = [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue.intValue;
-                if (badgeNum) {
-                    badgeNum += 1;
-                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = [NSNumber numberWithInt:badgeNum].stringValue;
-                } else {
-                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = @"1";
-                }
-            }
-        }
-            break;
-        case 6: {   //好友请求获得通过,只需要刷新好友列表
-            if (self.contactsDelegate) {
-                [self.contactsDelegate loadDataFromNet];
-            } else {
-                int badgeNum = [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue.intValue;
-                if (badgeNum) {
-                    badgeNum += 1;
-                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = [NSNumber numberWithInt:badgeNum].stringValue;
-                } else {
-                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = @"1";
-                }
-            }
-        }
-            break;
-        default:
-            break;
-    }
-    
-}
 
 //应用外的推送信息
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
@@ -515,6 +537,7 @@
     }
 }
 
+#pragma mark - 网络代理
 - (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
     [SVProgressHUD dismiss];
     switch (interfaceType) {

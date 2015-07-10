@@ -28,39 +28,17 @@
 
 @implementation ScheduleTableViewController
 
+#pragma mark - 界面操作
 - (void)viewDidLoad {
     self.loadAgain = false;
     
-    _scheduleArray = [CD_Party getPartyFromCDByRelation:1];
+    _scheduleArray = [CD_Party getPartyFromCDForSchedule];
     
     [self loadAllScheduleData];
     [super viewDidLoad];
     
     // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
     self.tableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh:)];
-}
-
-- (void)refresh: (id)sender {
-    //开始刷新
-    self.loadAgain = false;
-    [self loadAllScheduleData];
-}
-
-- (void)loadAllScheduleData {
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
-    [self clearUpdate];
-    
-    Model_User *user = [[Model_User alloc] init];
-    user.pk_user = [Model_User loadFromUserDefaults].pk_user;
-    [_netManager getAllScheduleByUser:user];
-
-}
-
-- (void)clearUpdate {
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [delegate.groupDelegate cleanAllPartyUpdate];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -74,7 +52,6 @@
         _firstLoadingDone = TRUE;
     }
     [super viewWillAppear:YES];
-    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -117,7 +94,8 @@
     return indexPath;
 }
 
-- (void)DetailChange:(Model_Party *)party {
+#pragma mark - 聚会详情代理
+- (void)detailChange:(Model_Party *)party {
     for (Model_Party *theParty in _scheduleArray) {
         if ([theParty.pk_party isEqualToString:party.pk_party]) {
             theParty.relationship = party.relationship;
@@ -137,7 +115,32 @@
     [self.tableView reloadData];
 }
 
-#pragma mark - Net delegate
+
+#pragma mark - 业务逻辑
+- (void)loadAllScheduleData {
+    if (!_netManager) {
+        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
+    }
+    [self clearUpdate];
+    
+    Model_User *user = [[Model_User alloc] init];
+    user.pk_user = [Model_User loadFromUserDefaults].pk_user;
+    [_netManager getAllScheduleByUser:user];
+    
+}
+
+- (void)clearUpdate {
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate.groupDelegate cleanAllPartyUpdate];
+}
+
+- (void)refresh: (id)sender {
+    //开始刷新
+    self.loadAgain = false;
+    [self loadAllScheduleData];
+}
+
+#pragma mark - 网络代理
 - (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
     switch (interfaceType) {
         case kGetAllScheduleByUser: {

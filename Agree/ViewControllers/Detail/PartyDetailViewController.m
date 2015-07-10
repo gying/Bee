@@ -24,7 +24,7 @@
 @interface PartyDetailViewController () <SRNetManagerDelegate, UIActionSheetDelegate> {
     SRNet_Manager *_netManager;
     Model_Party_User *_relation;
-    NSArray *_relArray;
+    NSMutableArray *_relArray;
     int _showStatus;
     BMKMapView *_bdMapView;
     
@@ -63,7 +63,6 @@
         [_bdMapView setZoomLevel:15];
         [_bdMapView setCenterCoordinate:partyCoor];
     }
-    
     
     //判断是否是创建者本身.
     if ([[Model_User loadFromUserDefaults].pk_user isEqualToNumber:self.party.fk_user]) {
@@ -198,6 +197,7 @@
         
     }
     
+    
     //更新参与人数的标签
     self.inNumLabel.text = [NSString stringWithFormat:@"%d", inNum];
     NSLog(@"%@",self.inNumLabel.text);
@@ -250,12 +250,14 @@
     [sheet showInView:self.view];
 }
 
+#pragma mark - 网络代理
+
 - (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
     switch (interfaceType) {
         case kGetPartyRelationship: {
             //进入 读取关系与详情
             if (jsonDic) {
-                _relArray = [Model_User objectArrayWithKeyValuesArray:[jsonDic objectForKey:@"relation"]];
+                _relArray = (NSMutableArray *)[Model_User objectArrayWithKeyValuesArray:[jsonDic objectForKey:@"relation"]];
                 self.party = [[Model_Party objectArrayWithKeyValuesArray:[jsonDic objectForKey:@"party"]] objectAtIndex:0];
                 [self reloadPeopleNum];
             }
@@ -268,13 +270,23 @@
                 //更新上级聚会数组的关系状态
                 self.party.relationship = _relation.relationship;
                 [self setParticipateStatus];
+                BOOL userInAry = NO;
+                
                 for (Model_User *user in _relArray) {
                     if ([user.pk_user isEqualToNumber:[Model_User loadFromUserDefaults].pk_user]) {
                         user.relationship = _relation.relationship;
+                        userInAry = YES;
                     }
                 }
+                
+                if (!userInAry) {
+                    //用户并不在数组中,是初次加入的关系
+                    Model_User *newUser = [Model_User loadFromUserDefaults];
+                    newUser.relationship = _relation.relationship;
+                    [_relArray addObject:newUser];
+                }
                 [self reloadPeopleNum];
-                [self.delegate DetailChange:self.party];
+                [self.delegate detailChange:self.party];
                 
                 [SRTool addPartyUpdateTip:1];
             }
@@ -286,7 +298,7 @@
                 _relation.pk_party_user = (NSNumber *)jsonDic;
                 self.party.relationship = @0;
                 [self reloadPeopleNum];
-                [self.delegate DetailChange:self.party];
+                [self.delegate detailChange:self.party];
             }
         }
             break;
@@ -421,13 +433,10 @@
                                                   cancelButtonTitle:@"完成"
                                                   otherButtonTitles:nil];
                             [alert show];
-                            
-                            
                         }
                     });
                 }];
             }
-            
         }
             break;
         default:
@@ -453,7 +462,6 @@
                     break;
             }
         }
-            
             break;
             
         case 2: {
@@ -468,7 +476,6 @@
 
 
 #pragma mark - Navigation
-
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].

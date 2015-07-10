@@ -34,6 +34,7 @@
 + (NSMutableArray *)getPartyFromCD;
 + (void)removePartyFromCD: (Model_Party *)party;
 + (NSMutableArray *)getPartyFromCDByRelation: (int)relation;
++ (NSMutableArray *)getPartyFromCDForSchedule;
 
 + (NSMutableArray *)getPartyFromCDByGroup: (Model_Group *)group;
 + (void)removePartyFromCDByGroup: (Model_Group *)group;
