@@ -39,6 +39,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 //    [self.navigationItem setTitle:self.party.name];
+
+
+    
+    
     
     if (self.party.longitude && self.party.latitude) {
         //如果存在经纬度数据
@@ -165,6 +169,10 @@
     int outNum = 0;
     int unNum = 0;
     
+
+
+
+    
     for (Model_User *user in _relArray) {
         switch ([user.relationship intValue]) {
             case 0: {
@@ -185,13 +193,18 @@
             default:
                 break;
         }
+        
+        
     }
     
     
     //更新参与人数的标签
     self.inNumLabel.text = [NSString stringWithFormat:@"%d", inNum];
+    NSLog(@"%@",self.inNumLabel.text);
     self.outNumLabel.text = [NSString stringWithFormat:@"%d", outNum];
+    NSLog(@"%@",self.outNumLabel.text);
     self.unkownLabel.text = [NSString stringWithFormat:@"%d", unNum];
+    NSLog(@"%@",self.unkownLabel.text);
 }
 
 - (void)setParticipateStatus {

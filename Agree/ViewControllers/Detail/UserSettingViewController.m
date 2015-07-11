@@ -15,7 +15,7 @@
 #import "UIImageView+WebCache.h"
 #import "SRImageManager.h"
 
-#import "AppDelegate.h"
+
 
 @interface UserSettingViewController () <SRNetManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UITextFieldDelegate, SRImageManagerDelegate, UIAlertViewDelegate> {
     Model_User *_userInfo;
@@ -31,6 +31,8 @@
     BOOL _isUpdateAvatar;
     BOOL _isQuit;
     BOOL _isUpdateData;
+    
+    
 }
 
 @end
@@ -40,6 +42,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    
+    
+  
+    
     _backImageViwe = [[UIImageView alloc] initWithFrame:CGRectMake(4.5, 4.5, 90, 90)];
     [_backImageViwe.layer setMasksToBounds:YES];
     [_backImageViwe.layer setCornerRadius:_backImageViwe.frame.size.width/2];
@@ -266,15 +273,15 @@
 }
 
 
+
 //绑定微信按钮
 - (IBAction)pressedTheWechatButton:(UIButton *)sender {
+
 //    if (!_netManager) {
 //        _netManager = [[SRNet_Manager alloc] init];
 //        [_netManager setDelegate:self];
 //    }
 //    [_netManager testInterface];
-    
-    
     NSLog(@"绑定微信");
     /*! @brief 第三方程序向微信终端请求认证的消息结构
      *
@@ -288,13 +295,10 @@
      * @note scope字符串长度不能超过1K
      */
     req.scope = @"snsapi_message,snsapi_userinfo,snsapi_friend,snsapi_contact";
-    /** 第三方程序本身用来标识其请求的唯一性，最后跳转回第三方程序时，由微信终端回传。
-     * @note state字符串长度不能超过1K
-     */
-    req.state = @"xxxx";
-    /** 由用户微信号和AppID组成的唯一标识，发送请求时第三方程序必须填写，用于校验微信用户是否换号登录*/
+    // @"post_timeline,sns"
+    req.state = @"xxxtiaozhuan";
     req.openID = @"0c806938e2413ce73eef92cc3";
-    
+
     /*! @brief 发送Auth请求到微信，支持用户没安装微信，等待微信返回onResp
      *
      * 函数调用后，会切换到微信的界面。第三方应用程序等待微信返回onResp。微信在异步处理完成后一定会调用onResp。支持SendAuthReq类型。

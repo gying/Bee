@@ -35,6 +35,10 @@
     [self.doneButton setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
     [self.doneButton.layer setMasksToBounds:YES];
     [self.doneButton setEnabled:NO];
+    
+    
+
+    
 }
 
 
@@ -119,9 +123,12 @@
 }
 
 
+
+
 - (void)interfaceReturnDataError:(int)interfaceType {
     [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
+
 
 
 
@@ -147,6 +154,7 @@
     req.state = @"xxxx";
     /** 由用户微信号和AppID组成的唯一标识，发送请求时第三方程序必须填写，用于校验微信用户是否换号登录*/
     req.openID = @"0c806938e2413ce73eef92cc3";
+
     
     /*! @brief 发送Auth请求到微信，支持用户没安装微信，等待微信返回onResp
      *
@@ -161,14 +169,14 @@
 
 
 #pragma mark -- 和微信终端交互，因此需要实现WXApiDelegate协议的两个方法
--(void) onReq:(BaseReq*)req{
-    //onReq是微信终端向第三方程序发起请求，要求第三方程序响应。第三方程序响应完后必须调用sendRsp返回。在调用sendRsp返回时，会切回到微信终端程序界面。
-    
-    //发送消息到客户端执行的方法
-    NSLog(@"发送消息到客户端！！！！！！！！！！！！！！！！！！！！！");
-    
-    if([req isKindOfClass:[GetMessageFromWXReq class]])
-    {
+//-(void) onReq:(BaseReq*)req{
+//    //onReq是微信终端向第三方程序发起请求，要求第三方程序响应。第三方程序响应完后必须调用sendRsp返回。在调用sendRsp返回时，会切回到微信终端程序界面。
+//    
+//    //发送消息到客户端执行的方法
+//    NSLog(@"发送消息到客户端！！！！！！！！！！！！！！！！！！！！！");
+//    
+//    if([req isKindOfClass:[GetMessageFromWXReq class]])
+//    {
 //        GetMessageFromWXReq *temp = (GetMessageFromWXReq *)req;
 //        
 //        // 微信请求App提供内容， 需要app提供内容后使用sendRsp返回
@@ -178,10 +186,10 @@
 //        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
 //        alert.tag = 1000;
 //        [alert show];
-
-    }
-    else if([req isKindOfClass:[ShowMessageFromWXReq class]])
-    {
+//
+//    }
+//    else if([req isKindOfClass:[ShowMessageFromWXReq class]])
+//    {
 //        ShowMessageFromWXReq* temp = (ShowMessageFromWXReq*)req;
 //        WXMediaMessage *msg = temp.message;
 //        
@@ -193,10 +201,10 @@
 //        
 //        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
 //        [alert show];
-
-    }
-    else if([req isKindOfClass:[LaunchFromWXReq class]])
-    {
+//
+//    }
+//    else if([req isKindOfClass:[LaunchFromWXReq class]])
+//    {
 //        LaunchFromWXReq *temp = (LaunchFromWXReq *)req;
 //        WXMediaMessage *msg = temp.message;
 //        
@@ -206,9 +214,9 @@
 //        
 //        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
 //        [alert show];
-
-    }
-}
+//
+//    }
+//}
 
 -(void) onResp:(BaseResp*)resp{
     //如果第三方程序向微信发送了sendReq的请求，那么onResp会被回调。sendReq请求调用后，会切到微信终端程序界面。

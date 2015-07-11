@@ -112,6 +112,30 @@
     NSDateFormatter *timeFormatter = [[NSDateFormatter alloc]init];
     [timeFormatter setDateFormat:@"k:ss"];
     [self.timeLabel setText:[timeFormatter stringFromDate:beginDate]];
+    
+    switch (party.pay_type.integerValue) {
+        case 0: {
+            //未指定
+        }
+            break;
+        case 1: {
+            self.inLabel.text = @"请客";
+            
+        }
+            break;
+        case 2: {
+            self.inLabel.text = @"AA制";
+            
+        }
+            break;
+        case 3: {
+            self.inLabel.text = @"预付款";
+            
+        }
+            break;
+        default:
+            break;
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

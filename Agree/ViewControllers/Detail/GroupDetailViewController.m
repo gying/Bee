@@ -64,7 +64,9 @@
     [self.groupTabBar setSelectedItem:self.groupTalk];
   
     [self.navigationItem setTitle:self.group.name];
+    
     [self.selectLineWidth setConstant:[[UIScreen mainScreen] bounds].size.width/3];
+    
     
     norDic = [NSDictionary dictionaryWithObjectsAndKeys:
               [UIColor grayColor],

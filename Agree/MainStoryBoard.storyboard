@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -418,7 +418,7 @@
             </objects>
             <point key="canvasLocation" x="-1524" y="228"/>
         </scene>
-        <!--Group Detail View Controller-->
+        <!--群组聊天界面-->
         <scene sceneID="2Xm-LF-3B6">
             <objects>
                 <viewController hidesBottomBarWhenPushed="YES" id="GEb-kv-JI7" customClass="GroupDetailViewController" sceneMemberID="viewController">
@@ -935,10 +935,10 @@
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
-                    <navigationItem key="navigationItem" id="fTN-K0-EZ2">
+                    <navigationItem key="navigationItem" title="群组聊天界面" id="fTN-K0-EZ2">
                         <barButtonItem key="leftBarButtonItem" style="done" id="2gG-4A-tI5">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="bNn-gj-MiX">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -952,7 +952,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" id="VYW-8K-wP9">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="CBy-2H-HKj">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="设置">
@@ -1712,16 +1712,6 @@
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="IN" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sX4-hp-xzm">
-                                            <rect key="frame" x="539" y="20" width="42" height="20"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="20" id="4NC-dv-YV0"/>
-                                                <constraint firstAttribute="width" constant="42" id="ixV-Dg-G9w"/>
-                                            </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                            <color key="textColor" red="0.34901960780000002" green="0.81960784310000001" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QJt-bJ-tgG">
                                             <rect key="frame" x="19" y="15" width="72" height="45"/>
                                             <subviews>
@@ -1744,6 +1734,24 @@
                                                 <constraint firstAttribute="height" constant="45" id="s8l-XN-nSE"/>
                                             </constraints>
                                         </view>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nue-Lt-j7a">
+                                            <rect key="frame" x="84" y="17" width="10" height="10"/>
+                                            <color key="backgroundColor" red="1" green="0.1836390101" blue="0.20834209840000001" alpha="1" colorSpace="calibratedRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="10" id="QEl-vw-7M6"/>
+                                                <constraint firstAttribute="width" constant="10" id="mwb-Ne-qhb"/>
+                                            </constraints>
+                                        </view>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="IN" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sX4-hp-xzm">
+                                            <rect key="frame" x="539" y="20" width="42" height="20"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="20" id="4NC-dv-YV0"/>
+                                                <constraint firstAttribute="width" constant="42" id="ixV-Dg-G9w"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                            <color key="textColor" red="0.34901960780000002" green="0.81960784310000001" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="18" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SeT-vf-zHO">
                                             <rect key="frame" x="539" y="36" width="42" height="21"/>
                                             <constraints>
@@ -1754,14 +1762,6 @@
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nue-Lt-j7a">
-                                            <rect key="frame" x="84" y="17" width="10" height="10"/>
-                                            <color key="backgroundColor" red="1" green="0.1836390101" blue="0.20834209840000001" alpha="1" colorSpace="calibratedRGB"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="10" id="QEl-vw-7M6"/>
-                                                <constraint firstAttribute="width" constant="10" id="mwb-Ne-qhb"/>
-                                            </constraints>
-                                        </view>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="QJt-bJ-tgG" firstAttribute="top" secondItem="Llt-5b-Ap7" secondAttribute="topMargin" constant="7" id="2QC-zV-jue"/>
@@ -1801,7 +1801,7 @@
                     <navigationItem key="navigationItem" title="日程" id="1FI-VT-5pI">
                         <barButtonItem key="rightBarButtonItem" style="done" id="RnB-aK-mDx">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ndm-RI-9hL">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
                                 <state key="normal" title="新建"/>
@@ -2055,7 +2055,7 @@
                     <navigationItem key="navigationItem" title="设置" id="KkO-JQ-D0X">
                         <barButtonItem key="rightBarButtonItem" style="done" id="v0E-3p-ybZ">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7hy-2a-SyY">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="注销">
@@ -2243,7 +2243,7 @@
                     <navigationItem key="navigationItem" title="关于我们" id="2xq-9y-OSl">
                         <barButtonItem key="leftBarButtonItem" style="done" id="OdC-AQ-lb9">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="JzB-Az-wyR">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -2310,7 +2310,7 @@
                     <navigationItem key="navigationItem" title="用户反馈" id="7US-EV-wU2">
                         <barButtonItem key="leftBarButtonItem" style="done" id="RIi-qF-1el">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="rrh-GI-O3h">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -2324,7 +2324,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" id="J8C-PT-Pyx">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="hYD-g4-bRT">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="Lantinghei SC" pointSize="13"/>
                                 <state key="normal" title="发送">
@@ -2506,7 +2506,7 @@
                     <navigationItem key="navigationItem" title="帐号设置" id="20P-No-BKP">
                         <barButtonItem key="leftBarButtonItem" style="done" id="xCM-a7-LId">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="qkL-Tz-OYx">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -2520,7 +2520,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" id="99N-3C-jsc">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="TfJ-Zn-jOc">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="保存">
@@ -2551,7 +2551,7 @@
             </objects>
             <point key="canvasLocation" x="-578" y="2829"/>
         </scene>
-        <!--与XX聊天-->
+        <!--私信聊天界面私信聊天界面-->
         <scene sceneID="eX7-fh-Q2I">
             <objects>
                 <viewController restorationIdentifier="UserChatView" storyboardIdentifier="UserChatView" hidesBottomBarWhenPushed="YES" id="LKu-93-7sy" customClass="UserChatViewController" sceneMemberID="viewController">
@@ -2777,10 +2777,10 @@
                             <constraint firstItem="pU9-qX-OG8" firstAttribute="leading" secondItem="zwR-b7-s2y" secondAttribute="leading" id="PGQ-mt-RsC"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="与XX聊天" id="zIq-9y-skL">
+                    <navigationItem key="navigationItem" title="私信聊天界面私信聊天界面" id="zIq-9y-skL">
                         <barButtonItem key="leftBarButtonItem" style="done" id="tIH-mA-Whi">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="x7t-HK-puB">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -2794,7 +2794,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" id="d8F-hk-69u">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="NsH-dm-iGO">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="Lantinghei SC" pointSize="13"/>
                                 <state key="normal" title="详情">
@@ -2996,7 +2996,7 @@
                     <navigationItem key="navigationItem" title="通讯录" id="HJU-xV-6be">
                         <barButtonItem key="leftBarButtonItem" style="done" id="6Mp-YV-Jci">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Lgo-2n-DkW">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -3010,7 +3010,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" id="AY0-ER-rqd">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="FYe-bT-88n">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="FZLanTingHei-EL-GBK" pointSize="13"/>
                                 <state key="normal" title="查找好友">
@@ -3079,7 +3079,7 @@
                     <navigationItem key="navigationItem" title="选择地点" id="qe5-ji-Exa">
                         <barButtonItem key="leftBarButtonItem" style="done" id="7cA-0d-emt">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="KQV-oq-Vuf">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -3093,7 +3093,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" id="LJs-yB-dGS">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="yH1-Vt-HLZ">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="下一步">
@@ -3371,7 +3371,7 @@
                     <navigationItem key="navigationItem" title="聚会详情" id="lQw-iK-TK3">
                         <barButtonItem key="leftBarButtonItem" style="done" id="j2a-pJ-UT4">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="4Pc-F2-cpa">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -3385,7 +3385,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" id="odV-sd-Tgd">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="TU3-rG-oye">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="更多">
@@ -3605,6 +3605,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="backView" destination="fzv-j8-mmX" id="Vn4-jC-Mrr"/>
                         <outlet property="inButton" destination="C0R-aQ-p9V" id="QQ9-nD-RsY"/>
                         <outlet property="inLabel" destination="wk0-oG-iBp" id="PYp-73-h66"/>
                         <outlet property="outButton" destination="WEQ-Fm-eTF" id="Fts-v8-onI"/>
@@ -3663,7 +3664,7 @@
                     <navigationItem key="navigationItem" title="选择时间" id="b6h-cc-OMA">
                         <barButtonItem key="leftBarButtonItem" style="done" id="dAn-pf-KKH">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="qJq-z9-06c">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -3677,7 +3678,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" id="hyU-hb-hUP">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Grs-jq-uCp">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="下一步">
@@ -3783,7 +3784,7 @@
                     <navigationItem key="navigationItem" title="查找好友" id="XrI-r9-O0v">
                         <barButtonItem key="leftBarButtonItem" style="done" id="tok-t1-z9J">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="LcC-fK-MaP">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -3821,29 +3822,19 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dz9-pL-HRd">
-                                <rect key="frame" x="183" y="493" width="188" height="45"/>
+                                <rect key="frame" x="171" y="491" width="188" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="188" id="Fcy-Ab-6QX"/>
                                     <constraint firstAttribute="height" constant="45" id="LBZ-7c-Gpv"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="FZLanTingHei-EL-GBK" pointSize="18"/>
-                                <state key="normal" title="反馈设置">
+                                <state key="normal" title="支付类型设置">
                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="pressedTheFeedbackButton:" destination="zEc-iu-1xD" eventType="touchUpInside" id="5DW-cT-U71"/>
+                                    <action selector="tapPayButton:" destination="zEc-iu-1xD" eventType="touchUpInside" id="J4p-u9-zeE"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="开启" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W7b-7Z-QRN">
-                                <rect key="frame" x="342" y="503" width="39" height="25"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="39" id="E4m-xH-g0z"/>
-                                    <constraint firstAttribute="height" constant="25" id="FoV-ud-V8k"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="textColor" red="0.78568892050000005" green="0.78568892050000005" blue="0.78568892050000005" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="聚会的备注信息" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="JBJ-yn-c7H">
                                 <rect key="frame" x="55" y="201" width="490" height="128"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -3889,31 +3880,41 @@
                                     <outlet property="delegate" destination="zEc-iu-1xD" id="GY8-eY-aqJ"/>
                                 </connections>
                             </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="你猜" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W7b-7Z-QRN">
+                                <rect key="frame" x="339" y="501" width="100" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="E4m-xH-g0z"/>
+                                    <constraint firstAttribute="height" constant="25" id="FoV-ud-V8k"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" red="0.78568892050000005" green="0.78568892050000005" blue="0.78568892050000005" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="940-T7-Zx8" firstAttribute="leading" secondItem="PyV-ns-LAW" secondAttribute="leadingMargin" id="0rn-Uv-dSk"/>
                             <constraint firstItem="940-T7-Zx8" firstAttribute="trailing" secondItem="PyV-ns-LAW" secondAttribute="trailingMargin" id="4Wb-la-tzf"/>
                             <constraint firstItem="940-T7-Zx8" firstAttribute="top" secondItem="rK6-jV-dbf" secondAttribute="bottom" constant="30" id="7OM-MP-Li0"/>
-                            <constraint firstItem="dEY-WS-Lfg" firstAttribute="top" secondItem="dz9-pL-HRd" secondAttribute="bottom" constant="62" id="7dD-fm-R2y"/>
+                            <constraint firstItem="dEY-WS-Lfg" firstAttribute="top" secondItem="dz9-pL-HRd" secondAttribute="bottom" constant="64" id="7dD-fm-R2y"/>
                             <constraint firstItem="JiX-RI-2xV" firstAttribute="top" secondItem="bca-NU-GQ9" secondAttribute="bottom" constant="83" id="Ij6-Nw-zFH"/>
-                            <constraint firstItem="dEY-WS-Lfg" firstAttribute="top" secondItem="W7b-7Z-QRN" secondAttribute="bottom" constant="72" id="K4I-uS-Jx9"/>
+                            <constraint firstItem="dEY-WS-Lfg" firstAttribute="top" secondItem="W7b-7Z-QRN" secondAttribute="bottom" constant="74" id="K4I-uS-Jx9"/>
                             <constraint firstAttribute="trailingMargin" secondItem="JBJ-yn-c7H" secondAttribute="trailing" constant="39" id="Uuh-x0-NTM"/>
                             <constraint firstItem="rK6-jV-dbf" firstAttribute="trailing" secondItem="PyV-ns-LAW" secondAttribute="trailingMargin" id="Z4w-OR-pcz"/>
                             <constraint firstItem="JBJ-yn-c7H" firstAttribute="leading" secondItem="PyV-ns-LAW" secondAttribute="leadingMargin" constant="39" id="aTQ-YJ-4q7"/>
-                            <constraint firstAttribute="centerX" secondItem="dz9-pL-HRd" secondAttribute="centerX" constant="23" id="bYz-vk-mCz"/>
+                            <constraint firstAttribute="centerX" secondItem="dz9-pL-HRd" secondAttribute="centerX" constant="35" id="bYz-vk-mCz"/>
                             <constraint firstItem="rK6-jV-dbf" firstAttribute="top" secondItem="JBJ-yn-c7H" secondAttribute="bottom" constant="27" id="dTt-rU-a9c"/>
                             <constraint firstItem="JiX-RI-2xV" firstAttribute="leading" secondItem="PyV-ns-LAW" secondAttribute="leadingMargin" constant="39" id="iYp-mn-4wk"/>
                             <constraint firstItem="rK6-jV-dbf" firstAttribute="leading" secondItem="PyV-ns-LAW" secondAttribute="leadingMargin" id="jFq-FB-VwE"/>
                             <constraint firstItem="JBJ-yn-c7H" firstAttribute="top" secondItem="JiX-RI-2xV" secondAttribute="bottom" constant="15" id="ont-VC-ijO"/>
-                            <constraint firstAttribute="centerX" secondItem="W7b-7Z-QRN" secondAttribute="centerX" constant="-61.5" id="tsN-zd-CDM"/>
+                            <constraint firstAttribute="centerX" secondItem="W7b-7Z-QRN" secondAttribute="centerX" constant="-89" id="tsN-zd-CDM"/>
                             <constraint firstAttribute="trailingMargin" secondItem="JiX-RI-2xV" secondAttribute="trailing" constant="39" id="uPj-HV-YUc"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="确认聚会" id="Y3V-8l-Kc1">
                         <barButtonItem key="leftBarButtonItem" style="done" id="ffV-WB-m9c">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Mcn-Cf-PNc">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -3927,7 +3928,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" id="kLn-CZ-Ee1">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="mvf-ti-tGJ">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="完成">
@@ -3943,9 +3944,9 @@
                         <outlet property="addressButton" destination="rK6-jV-dbf" id="bdk-0I-Kk9"/>
                         <outlet property="dateButton" destination="940-T7-Zx8" id="yUg-Jt-1La"/>
                         <outlet property="doneButton" destination="mvf-ti-tGJ" id="KwR-df-qgz"/>
-                        <outlet property="feedBackButton" destination="dz9-pL-HRd" id="k1Z-z3-qnP"/>
-                        <outlet property="feedBackLabel" destination="W7b-7Z-QRN" id="MNk-lX-CZ8"/>
                         <outlet property="partyNameTextField" destination="JiX-RI-2xV" id="x34-89-xlc"/>
+                        <outlet property="payButton" destination="dz9-pL-HRd" id="xBN-3S-t6x"/>
+                        <outlet property="payLabel" destination="W7b-7Z-QRN" id="5wH-Y2-zfB"/>
                         <outlet property="remarkTextView" destination="JBJ-yn-c7H" id="Qhb-FI-Slz"/>
                     </connections>
                 </viewController>
@@ -4268,7 +4269,7 @@
                         <barButtonItem key="backBarButtonItem" title=" " id="mWV-Ih-53N"/>
                         <barButtonItem key="rightBarButtonItem" style="done" id="AeH-je-BZV">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="RGT-N6-bCG">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="新建">
@@ -4308,11 +4309,11 @@
         <image name="agree_user_setting_avatar_backgroup" width="99" height="99"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Re4-1s-AtI"/>
-        <segue reference="yUl-vl-Sui"/>
         <segue reference="xWd-dq-8Ci"/>
+        <segue reference="Re4-1s-AtI"/>
+        <segue reference="NNN-op-p3r"/>
         <segue reference="7g0-Ma-cMP"/>
-        <segue reference="brR-kr-yPI"/>
+        <segue reference="u80-pL-doZ"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.34901960780000002" green="0.81960784310000001" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
 </document>
