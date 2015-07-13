@@ -14,48 +14,73 @@
 @implementation GroupCollectionViewCell {
 }
 
-- (void)initCellWithGroup: (Model_Group *)group {
-    
-    [self.groupImageView setContentMode:UIViewContentModeScaleToFill];
-    self.lineView.hidden = NO;
-    [self.statusView.layer setCornerRadius:self.statusView.frame.size.height/2];
-    [self.statusView.layer setMasksToBounds:YES];
-    
-    if (0 != group.party_update.intValue || 0 != group.chat_update.intValue || 0 != group.photo_update.intValue) {
-        [self.statusView setHidden:NO];
-    } else {
+- (void)initCellWithGroup: (Model_Group *)group isAddView: (BOOL)isAddView {
+    self.groupImageView.image = nil;
+    if (isAddView) {
+        self.lineView.hidden = YES;
+        self.groupImageView.image = [UIImage imageNamed:@"agree_add_icon"];
+        [self.groupImageView setContentMode:UIViewContentModeCenter];
         [self.statusView setHidden:YES];
+        
+        self.groupNameLabel.text = @"添加新的小组";
+        
+        self.groupView.layer.shadowColor = [UIColor grayColor].CGColor;
+        self.groupView.layer.shadowOffset = CGSizeMake(0, 0);
+        self.groupView.layer.shadowOpacity = 0.5;
+        self.groupView.layer.cornerRadius = 3;
+        self.groupView.layer.shadowRadius = 1.5;
+
+        [self.groupView setAlpha:0.3];
+        
+        [self.group2ndView.layer setMasksToBounds:YES];
+        [self.group2ndView.layer setCornerRadius:3];
+        
+        [self.groupImageView setBackgroundColor:[UIColor whiteColor]];
+        
+    } else {
+        [self.groupImageView setContentMode:UIViewContentModeScaleToFill];
+        self.lineView.hidden = NO;
+        [self.statusView.layer setCornerRadius:self.statusView.frame.size.height/2];
+        [self.statusView.layer setMasksToBounds:YES];
+        
+        if (0 != group.party_update.intValue || 0 != group.chat_update.intValue || 0 != group.photo_update.intValue) {
+            [self.statusView setHidden:NO];
+        } else {
+            [self.statusView setHidden:YES];
+        }
+        
+        self.groupNameLabel.text = group.name;
+        
+        self.groupView.layer.shadowColor = [UIColor grayColor].CGColor;
+        self.groupView.layer.shadowOffset = CGSizeMake(0, 0);
+        self.groupView.layer.shadowOpacity = 0.5;
+        self.groupView.layer.cornerRadius = 3;
+        self.groupView.layer.shadowRadius = 1.5;
+        
+        [self.groupView setAlpha:1.0];
+        
+        [self.group2ndView.layer setMasksToBounds:YES];
+        [self.group2ndView.layer setCornerRadius:3];
+        
+        ;
+        //    [self.groupImageView sd_setImageWithURL:[SRImageManager groupFrontCoverImageFromTXYFieldID:group.avatar_path]];
+        
+        
+//        //下载图片
+//        NSURL *imageUrl = [SRImageManager groupFrontCoverImageFromTXYFieldID:group.avatar_path];
+//        NSString *urlstr = [imageUrl absoluteString];
+//        [[TXYDownloader sharedInstanceWithPersistenceId:nil] download:urlstr
+//                                                               target:self
+//                                                            succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+//                                                                [self.groupImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]]; }
+//                                                            failBlock:nil
+//                                                        progressBlock:nil
+//                                                                param:nil];
     }
-
-    self.groupNameLabel.text = group.name;
-    
-    self.groupView.layer.shadowColor = [UIColor grayColor].CGColor;
-    self.groupView.layer.shadowOffset = CGSizeMake(0, 0);
-    self.groupView.layer.shadowOpacity = 0.5;
-    self.groupView.layer.cornerRadius = 3;
-    self.groupView.layer.shadowRadius = 1.5;
-    
-    [self.groupView setAlpha:1.0];
-    
-    [self.group2ndView.layer setMasksToBounds:YES];
-    [self.group2ndView.layer setCornerRadius:3];
-
-    ;
-//    [self.groupImageView sd_setImageWithURL:[SRImageManager groupFrontCoverImageFromTXYFieldID:group.avatar_path]];
-    
-    
-    //下载图片
-    NSURL *imageUrl = [SRImageManager groupFrontCoverImageFromTXYFieldID:group.avatar_path];
-    NSString * urlstr = [imageUrl absoluteString];
-    
-    [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.groupImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-        [self.groupImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
-    } failBlock:nil progressBlock:nil param:nil];
-    
-    
 }
 
 - (void)initAddView {
+    
     self.lineView.hidden = YES;
     self.groupImageView.image = [UIImage imageNamed:@"agree_add_icon"];
     [self.groupImageView setContentMode:UIViewContentModeCenter];

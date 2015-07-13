@@ -43,10 +43,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    
-    
-  
-    
     _backImageViwe = [[UIImageView alloc] initWithFrame:CGRectMake(4.5, 4.5, 90, 90)];
     [_backImageViwe.layer setMasksToBounds:YES];
     [_backImageViwe.layer setCornerRadius:_backImageViwe.frame.size.width/2];
@@ -64,9 +60,11 @@
     
     if (defAccount.avatar_path) {
         NSURL *imageUrl = [SRImageManager avatarImageFromTXYFieldID:defAccount.avatar_path];
-        NSString * urlstr = [imageUrl absoluteString];
+        NSString *urlstr = [imageUrl absoluteString];
         
-        [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:_backImageViwe succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+        bool avatarData = [[TXYDownloader sharedInstanceWithPersistenceId:@"user_avatar"] hasCache:urlstr];
+        
+        [[TXYDownloader sharedInstanceWithPersistenceId:@"user_avatar"]download:urlstr target:_backImageViwe succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
             [_backImageViwe setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
         } failBlock:nil progressBlock:nil param:nil];
         

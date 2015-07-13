@@ -30,8 +30,6 @@
 		F0068C241A679E6C00B9CB60 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0068C231A679E6C00B9CB60 /* CFNetwork.framework */; };
 		F01487E91A8F827800E41A63 /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F01487E81A8F827800E41A63 /* UserViewController.m */; };
 		F0158B5E1ACE1F0900FB69F9 /* SRMoveArray.m in Sources */ = {isa = PBXBuildFile; fileRef = F0158B5D1ACE1F0900FB69F9 /* SRMoveArray.m */; };
-		F01B4A5F1B0C7A4B0097144E /* libTXYDownloader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F01B4A591B0C7A4B0097144E /* libTXYDownloader.a */; };
-		F01B4A601B0C7A4C0097144E /* libTXYUploader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F01B4A5E1B0C7A4B0097144E /* libTXYUploader.a */; };
 		F01B4A621B0C7B1E0097144E /* libstdc++.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F01B4A611B0C7B1E0097144E /* libstdc++.6.dylib */; };
 		F02169F41A927CFC00353879 /* GroupPartyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F02169F31A927CFC00353879 /* GroupPartyTableViewCell.m */; };
 		F02169F61A927F1500353879 /* LangTingGBK.TTF in Resources */ = {isa = PBXBuildFile; fileRef = F02169F51A927F1500353879 /* LangTingGBK.TTF */; };
@@ -43,6 +41,8 @@
 		F050EE871AAD34C5002DD2C2 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F050EE861AAD34C5002DD2C2 /* CoreData.framework */; };
 		F050EED11AAD3C78002DD2C2 /* Model_Chat.m in Sources */ = {isa = PBXBuildFile; fileRef = F050EECF1AAD3C78002DD2C2 /* Model_Chat.m */; };
 		F05AC3C51A9B24E500CABD01 /* AllPartyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F05AC3C41A9B24E500CABD01 /* AllPartyTableViewCell.m */; };
+		F05D49B51B53554F0059788B /* libTXYDownloader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F05D49AF1B53554F0059788B /* libTXYDownloader.a */; };
+		F05D49B61B53554F0059788B /* libTXYUploader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F05D49B41B53554F0059788B /* libTXYUploader.a */; };
 		F05EAC3D1AD13B1F006F505B /* AboutUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F05EAC3C1AD13B1F006F505B /* AboutUsViewController.m */; };
 		F05EAC401AD13B42006F505B /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F05EAC3F1AD13B42006F505B /* FeedBackViewController.m */; };
 		F05F30001AFBD50300AA6BE8 /* SRKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = F05F2FFF1AFBD50300AA6BE8 /* SRKeyboard.m */; };
@@ -209,11 +209,6 @@
 		F01487EA1A8F88F300E41A63 /* Lantinghei.ttc */ = {isa = PBXFileReference; lastKnownFileType = file; path = Lantinghei.ttc; sourceTree = "<group>"; };
 		F0158B5C1ACE1F0900FB69F9 /* SRMoveArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRMoveArray.h; sourceTree = "<group>"; };
 		F0158B5D1ACE1F0900FB69F9 /* SRMoveArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRMoveArray.m; sourceTree = "<group>"; };
-		F01B4A581B0C7A4B0097144E /* TXYDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXYDownloader.h; sourceTree = "<group>"; };
-		F01B4A591B0C7A4B0097144E /* libTXYDownloader.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTXYDownloader.a; sourceTree = "<group>"; };
-		F01B4A5C1B0C7A4B0097144E /* TXYBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXYBase.h; sourceTree = "<group>"; };
-		F01B4A5D1B0C7A4B0097144E /* TXYUploadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXYUploadManager.h; sourceTree = "<group>"; };
-		F01B4A5E1B0C7A4B0097144E /* libTXYUploader.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTXYUploader.a; sourceTree = "<group>"; };
 		F01B4A611B0C7B1E0097144E /* libstdc++.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.dylib"; path = "usr/lib/libstdc++.6.dylib"; sourceTree = SDKROOT; };
 		F02169F21A927CFC00353879 /* GroupPartyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupPartyTableViewCell.h; sourceTree = "<group>"; };
 		F02169F31A927CFC00353879 /* GroupPartyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupPartyTableViewCell.m; sourceTree = "<group>"; };
@@ -233,6 +228,11 @@
 		F050EED01AAD3C78002DD2C2 /* Model_Chat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model_Chat.h; sourceTree = "<group>"; };
 		F05AC3C31A9B24E500CABD01 /* AllPartyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllPartyTableViewCell.h; sourceTree = "<group>"; };
 		F05AC3C41A9B24E500CABD01 /* AllPartyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllPartyTableViewCell.m; sourceTree = "<group>"; };
+		F05D49AE1B53554F0059788B /* TXYDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXYDownloader.h; sourceTree = "<group>"; };
+		F05D49AF1B53554F0059788B /* libTXYDownloader.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTXYDownloader.a; sourceTree = "<group>"; };
+		F05D49B21B53554F0059788B /* TXYBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXYBase.h; sourceTree = "<group>"; };
+		F05D49B31B53554F0059788B /* TXYUploadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TXYUploadManager.h; sourceTree = "<group>"; };
+		F05D49B41B53554F0059788B /* libTXYUploader.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTXYUploader.a; sourceTree = "<group>"; };
 		F05EAC3B1AD13B1F006F505B /* AboutUsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutUsViewController.h; sourceTree = "<group>"; };
 		F05EAC3C1AD13B1F006F505B /* AboutUsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutUsViewController.m; sourceTree = "<group>"; };
 		F05EAC3E1AD13B42006F505B /* FeedBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedBackViewController.h; sourceTree = "<group>"; };
@@ -490,6 +490,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F01B4A621B0C7B1E0097144E /* libstdc++.6.dylib in Frameworks */,
+				F05D49B51B53554F0059788B /* libTXYDownloader.a in Frameworks */,
 				F0068C141A679E2F00B9CB60 /* libz.dylib in Frameworks */,
 				F0FC6A221ACA6D9100A512B7 /* libxml2.dylib in Frameworks */,
 				F0FC6A1A1ACA6D1600A512B7 /* MobileCoreServices.framework in Frameworks */,
@@ -499,6 +500,7 @@
 				F0FC6A1E1ACA6D7E00A512B7 /* libiconv.dylib in Frameworks */,
 				C60A755F1B2825C500707D84 /* libWeChatSDK.a in Frameworks */,
 				F0FC6A1C1ACA6D6B00A512B7 /* libstdc++.6.0.9.dylib in Frameworks */,
+				F05D49B61B53554F0059788B /* libTXYUploader.a in Frameworks */,
 				F050EE821AAD31B7002DD2C2 /* libsqlite3.dylib in Frameworks */,
 				F0068C241A679E6C00B9CB60 /* CFNetwork.framework in Frameworks */,
 				F0A9712A1ABAEF9300829942 /* AddressBookUI.framework in Frameworks */,
@@ -508,11 +510,9 @@
 				F0068C1C1A679E4B00B9CB60 /* CoreGraphics.framework in Frameworks */,
 				F0BB7B441A72802900A0E4A0 /* OpenGLES.framework in Frameworks */,
 				F0BB7B421A72801D00A0E4A0 /* QuartzCore.framework in Frameworks */,
-				F01B4A5F1B0C7A4B0097144E /* libTXYDownloader.a in Frameworks */,
 				F0BB7B401A72801300A0E4A0 /* CoreLocation.framework in Frameworks */,
 				F0068C221A679E6100B9CB60 /* CoreFoundation.framework in Frameworks */,
 				F0068C1A1A679E4200B9CB60 /* Foundation.framework in Frameworks */,
-				F01B4A601B0C7A4C0097144E /* libTXYUploader.a in Frameworks */,
 				F0BB7B3E1A727FF200A0E4A0 /* libbaidumapapi.a in Frameworks */,
 				F0068C181A679E3C00B9CB60 /* UIKit.framework in Frameworks */,
 				F0F5C2741A66F1490029BF7A /* libPushSDK-1.8.2.a in Frameworks */,
@@ -631,41 +631,6 @@
 			name = framework;
 			sourceTree = "<group>";
 		};
-		F01B4A561B0C7A4B0097144E /* QCloudDownloadSDK */ = {
-			isa = PBXGroup;
-			children = (
-				F01B4A571B0C7A4B0097144E /* Headers */,
-				F01B4A591B0C7A4B0097144E /* libTXYDownloader.a */,
-			);
-			path = QCloudDownloadSDK;
-			sourceTree = "<group>";
-		};
-		F01B4A571B0C7A4B0097144E /* Headers */ = {
-			isa = PBXGroup;
-			children = (
-				F01B4A581B0C7A4B0097144E /* TXYDownloader.h */,
-			);
-			path = Headers;
-			sourceTree = "<group>";
-		};
-		F01B4A5A1B0C7A4B0097144E /* QCloudUploadSDK */ = {
-			isa = PBXGroup;
-			children = (
-				F01B4A5B1B0C7A4B0097144E /* Headers */,
-				F01B4A5E1B0C7A4B0097144E /* libTXYUploader.a */,
-			);
-			path = QCloudUploadSDK;
-			sourceTree = "<group>";
-		};
-		F01B4A5B1B0C7A4B0097144E /* Headers */ = {
-			isa = PBXGroup;
-			children = (
-				F01B4A5C1B0C7A4B0097144E /* TXYBase.h */,
-				F01B4A5D1B0C7A4B0097144E /* TXYUploadManager.h */,
-			);
-			path = Headers;
-			sourceTree = "<group>";
-		};
 		F036D26F1AB492AC002C3B81 /* User Setting */ = {
 			isa = PBXGroup;
 			children = (
@@ -679,6 +644,41 @@
 				F05EAC3F1AD13B42006F505B /* FeedBackViewController.m */,
 			);
 			path = "User Setting";
+			sourceTree = "<group>";
+		};
+		F05D49AC1B53554F0059788B /* QCloudDownloadSDK */ = {
+			isa = PBXGroup;
+			children = (
+				F05D49AD1B53554F0059788B /* Headers */,
+				F05D49AF1B53554F0059788B /* libTXYDownloader.a */,
+			);
+			path = QCloudDownloadSDK;
+			sourceTree = "<group>";
+		};
+		F05D49AD1B53554F0059788B /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				F05D49AE1B53554F0059788B /* TXYDownloader.h */,
+			);
+			path = Headers;
+			sourceTree = "<group>";
+		};
+		F05D49B01B53554F0059788B /* QCloudUploadSDK */ = {
+			isa = PBXGroup;
+			children = (
+				F05D49B11B53554F0059788B /* Headers */,
+				F05D49B41B53554F0059788B /* libTXYUploader.a */,
+			);
+			path = QCloudUploadSDK;
+			sourceTree = "<group>";
+		};
+		F05D49B11B53554F0059788B /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				F05D49B21B53554F0059788B /* TXYBase.h */,
+				F05D49B31B53554F0059788B /* TXYUploadManager.h */,
+			);
+			path = Headers;
 			sourceTree = "<group>";
 		};
 		F07F71031A72AB92006208A1 /* JTCalendar */ = {
@@ -971,10 +971,10 @@
 		F0F5C2341A66F1490029BF7A /* API */ = {
 			isa = PBXGroup;
 			children = (
+				F05D49AC1B53554F0059788B /* QCloudDownloadSDK */,
+				F05D49B01B53554F0059788B /* QCloudUploadSDK */,
 				C60A755A1B2825C500707D84 /* WeChatSDK_1.5 */,
 				F0D519621B20921500AD24F9 /* Emoji */,
-				F01B4A561B0C7A4B0097144E /* QCloudDownloadSDK */,
-				F01B4A5A1B0C7A4B0097144E /* QCloudUploadSDK */,
 				F0B5F4981AAA97180013111F /* MJPhotoBrowser */,
 				F07F71031A72AB92006208A1 /* JTCalendar */,
 				F0BB7AFC1A727F3500A0E4A0 /* BMMap */,

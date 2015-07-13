@@ -93,10 +93,10 @@
     //下载图片
     NSURL *imageUrl = [SRImageManager albumThumbnailImageFromTXYFieldID:newPhoto.pk_photo];
     NSString * urlstr = [imageUrl absoluteString];
-
-    [[TXYDownloader sharedInstanceWithPersistenceId:nil] download:urlstr
-                                                           target:cell.cellImageView
-                                                        succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+//    bool avatarData = [[TXYDownloader sharedInstanceWithPersistenceId:@"group_albums"] hasCache:urlstr];
+    [[TXYDownloader sharedInstanceWithPersistenceId:@"group_albums"] download:urlstr
+                                                                       target:cell.cellImageView
+                                                                    succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
         UIImage *testImage = [UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]];
         [cell.cellImageView setImage:testImage];
         
@@ -111,7 +111,10 @@
         //按照数序放入字典
         [_imageViewDic setObject:photo forKey:[NSNumber numberWithInteger:indexPath.row]];
         
-    } failBlock:nil progressBlock:nil param:nil];
+    }
+                                                                    failBlock:nil
+                                                                progressBlock:nil
+                                                                        param:nil];
     
 
 

@@ -2,7 +2,9 @@
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="14E46" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="CD_Group" representedClassName="CD_Group" syncable="YES">
         <attribute name="avatar_path" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="chat_last_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="chat_update" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="creater" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="em_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="last_post_message" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="last_post_time" optional="YES" attributeType="Date" syncable="YES"/>
@@ -10,7 +12,9 @@
         <attribute name="party_update" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="photo_update" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="pk_group" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="pk_group_user" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="remark" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="role" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="setup_time" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
     </entity>
@@ -77,7 +81,7 @@
         <attribute name="wechat_id" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="CD_Group" positionX="-20441" positionY="-8064" width="128" height="223"/>
+        <element name="CD_Group" positionX="-20441" positionY="-8064" width="128" height="285"/>
         <element name="CD_Group_User" positionX="-20637" positionY="-7938" width="128" height="210"/>
         <element name="CD_Party" positionX="-20873" positionY="-8064" width="128" height="330"/>
         <element name="CD_Photo" positionX="-20657" positionY="-8064" width="128" height="178"/>

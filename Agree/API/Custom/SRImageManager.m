@@ -72,19 +72,13 @@
 //         NSLog(@"field ID = %@", photoResp.photoURL);
          [self.delegate imageUploadDoneWithFieldID:photoResp.photoFileId];
      } progress:^(int64_t totalSize, int64_t sendSize, NSDictionary *context) {
-         
-         
-         [self.delegate imageUploading:(float)sendSize/(float)totalSize];
-         
 
-         
+         [self.delegate imageUploading:(float)sendSize/(float)totalSize];
+
 //         float stfloat = sendSize/totalSize;
 ////         [SVProgressHUD showProgress:stfloat status:@"上传中" maskType:SVProgressHUDMaskTypeBlack];
 //         [SVProgressHUD showProgress:stfloat maskType:SVProgressHUDMaskTypeGradient];
-         
-         
-      
-         
+
      }
                stateChange:^(TXYUploadTaskState state, NSDictionary *context) {
                    switch (state) {

@@ -35,10 +35,6 @@
     [self.doneButton setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
     [self.doneButton.layer setMasksToBounds:YES];
     [self.doneButton setEnabled:NO];
-    
-    
-
-    
 }
 
 
@@ -61,7 +57,7 @@
 }
 
 - (IBAction)tapDoneButton:(id)sender {
-    
+    [SVProgressHUD showWithStatus:@"账户登录中..." maskType:SVProgressHUDMaskTypeGradient];
     if (!_netManager) {
         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
     }

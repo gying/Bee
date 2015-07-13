@@ -33,6 +33,20 @@ typedef NS_ENUM(NSInteger, TXYUploadTaskState)
     TXYUploadTaskStateSuccess,
 };
 
+/**
+ *  签名校验的返回码
+ */
+typedef NS_ENUM(NSInteger, TXYSignatureRetCode){
+    /** 有效签名 */
+    TXYSignatureRetCodeValid = 0,
+    /** 签名字符串的格式有问题 */
+     TXYSignatureRetCodeInvalidFormat,
+    /** 签名已经过期 */
+    TXYSignatureRetCodeExpired,
+    /** 签名中的appid与注册是的appid不匹配 */
+    TXYSignatureRetCodeAppidMismatch,
+};
+
 
 /*!
  * @brief 文件上传完成回调
@@ -90,6 +104,13 @@ typedef void (^TXYUpCommandCompletionHandler)(TXYTaskRsp *resp);
  * @return 成功返回YES，失败返回NO
  */
 + (BOOL)authorize:(NSString *)appId userId:(NSString *)userId sign:(NSString *)sign;
+
+/**
+ *  检验签名的合法性
+ *  @param sign 待检验的签名
+ *  @return 签名验证的返回码
+ */
++ (TXYSignatureRetCode)validateSignature:(NSString *)sign;
 
 /*!
  * @brief 得到用户设备号的一个唯一ID,向腾讯云反馈问题的时候，提供这个id
@@ -190,6 +211,8 @@ typedef void (^TXYUpCommandCompletionHandler)(TXYTaskRsp *resp);
 - (BOOL)sendCommand:(TXYCommandTask *)command
                sign:(NSString *)sign
            complete:(TXYUpCommandCompletionHandler)complete;
+
+
 
 
 @end

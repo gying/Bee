@@ -19,7 +19,7 @@
 @property (weak, nonatomic) IBOutlet UIView *statusView;
 @property (weak, nonatomic) IBOutlet UIView *lineView;
 
-- (void)initCellWithGroup: (Model_Group *)group;
+- (void)initCellWithGroup: (Model_Group *)group isAddView: (BOOL)isAddView;
 - (void)initAddView;
 
 @end

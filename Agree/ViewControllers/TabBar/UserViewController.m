@@ -42,16 +42,22 @@
     
     //BB号
     [self.accountLabel setText:[NSString stringWithFormat:@"BB号:  %@",[Model_User loadFromUserDefaults].pk_user.stringValue]];
+    
 }
 
 - (void)resetAvatar {
     //下载图片
     NSURL *imageUrl = [SRImageManager avatarImageFromTXYFieldID:[Model_User loadFromUserDefaults].avatar_path];
-    NSString * urlstr = [imageUrl absoluteString];
-    
-    [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:_backImageViwe succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-        [_backImageViwe setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
-    } failBlock:nil progressBlock:nil param:nil];
+    NSString *urlstr = [imageUrl absoluteString];
+
+    [[TXYDownloader sharedInstanceWithPersistenceId:@"user_avatar"] download:urlstr
+                                                                    target:self
+                                                                    succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+            [_backImageViwe setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
+        }
+                                                                    failBlock:nil
+                                                                progressBlock:nil
+                                                                        param:nil];
 }
 
 - (void)didReceiveMemoryWarning {

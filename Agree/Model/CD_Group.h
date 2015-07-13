@@ -26,6 +26,12 @@
 @property (nonatomic, retain) NSNumber * photo_update;
 @property (nonatomic, retain) NSNumber * status;
 
+//用户角色 - 外表
+@property (nonatomic, strong)NSNumber *role;
+@property (nonatomic, strong)NSNumber *chat_last_id;
+@property (nonatomic, strong)NSNumber *pk_group_user;
+@property (nonatomic, strong)NSNumber *creater;
+
 + (void)saveGroupToCD: (Model_Group *)group;
 + (NSMutableArray *)getGroupFromCD;
 + (void)removeGroupFromCD: (Model_Group *)group;

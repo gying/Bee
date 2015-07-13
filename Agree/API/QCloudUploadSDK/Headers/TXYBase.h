@@ -22,14 +22,14 @@
  */
 typedef NS_ENUM(NSInteger, TXYFileType)
 {
+    /** 未知 */
+    TXYFileTypeUnkown,
     /** 图片文件 */
-    TXYFileTypePhoto = 1,
+    TXYFileTypePhoto,
     /** 音频文件 */
     TXYFileTypeAudio,
     /** 视频文件 */
-    TXYFileTypeVideo,
-    /** 其他类型文件 */
-    TXYFileTypeOther,
+    TXYFileTypeVideo
 };
 
 /**
@@ -51,6 +51,11 @@ typedef NS_ENUM(NSInteger, TXYFileType)
 /** 图片过期的时间，单位为相对发送时间的天数，用户选填 */
 @property (nonatomic, assign, readonly)    unsigned int        expiredDate;
 
+/** 图片将要上传的空间 */
+@property (nonatomic, strong, readonly)    NSString            *bucket;
+
+/** 通过这个字段自定义url：domain + fileId*/
+@property (nonatomic, strong, readonly)   NSString             *fileId;
 /*!
  * @brief 图片上传任务初始化函数
  * @param filePath 图片路径，必填
@@ -63,11 +68,15 @@ typedef NS_ENUM(NSInteger, TXYFileType)
  * @param filePath 图片路径，必填
  * @param expiredDate 过期时间，选填
  * @param msgContext  通知用户业务后台的信息，选填
+ * @param bucket 上传空间的名字
+ * @param fileId 通过这个字段可以自定义url
  * @return TXYPhotoUploadTask实例
  */
 - (instancetype)initWithPath:(NSString *)filePath
                  expiredDate:(unsigned int)expiredDate
-                  msgContext:(NSString *)msgContext;
+                  msgContext:(NSString *)msgContext
+                      bucket:(NSString *)bucket
+                      fileId:(NSString *)fileId;
 @end
 
 
@@ -114,12 +123,33 @@ typedef NS_ENUM(NSInteger, TXYFileType)
 /** 操作URL，必填  */
 @property (nonatomic, readonly)    NSString            *commandURL;
 
+/** 如果文件url是自定义的，那么查询 */
+@property (nonatomic, readonly)    NSString            *fileId;
+
+/** 文件所在的空间 */
+@property (nonatomic, readonly)    NSString            *bucket;
+
+/** 文件的类型 */
+@property (nonatomic, readonly, assign)    TXYFileType          fileType;
 /*!
  * @brief 初始化方法
  * @param commandURL 要操作的URL
  * @return TXYCommandTask实例
  */
 - (instancetype)initWithURL:(NSString *)commandURL;
+
+
+/**
+ *  初始化方法
+ *  如果文件的url是自定义的，那么查询必须使用fileId+bucket+fileType
+ *
+ *  @param fileId   文件ID
+ *  @param bucket   文件所在的空间
+ *  @param fileType 文件的类型
+ */
+- (instancetype)initWithFileId:(NSString *)fileId
+                        bucket:(NSString *)bucket
+                      fileType:(TXYFileType)fileType;
 
 @end
 
@@ -128,6 +158,23 @@ typedef NS_ENUM(NSInteger, TXYFileType)
  *  文件复制命令
  */
 @interface TXYFileCopyCommand : TXYCommandTask
+
+
+@property (nonatomic, strong, readonly) NSString *destFileid;
+
+/**
+ *  初始化方法
+ *  如果文件的url是自定义的，那么查询必须使用fileId+bucket+fileType
+ *
+ *  @param fileId       文件Id
+ *  @param destFileId   复制文件的文件Id
+ *  @param bucket       文件所在的空间
+ *  @param fileType     文件的类型
+ */
+- (instancetype)initWithFileId:(NSString *)fileId
+                    descFileId:(NSString *)destFileId
+                        bucket:(NSString *)bucket
+                      fileType:(TXYFileType)fileType;
 @end
 
 
@@ -186,7 +233,9 @@ typedef NS_ENUM(NSInteger, TXYFileType)
  */
 @interface TXYFileCopyCommandRsp : TXYTaskRsp
 /** 复制图片的URL */
-@property (nonatomic, strong)    NSString               *copiedURL;
+@property (nonatomic, strong)    NSString                *copiedURL;
+/** 文件id */
+@property (nonatomic, strong)    NSString                *fileId;
 @end
 
 

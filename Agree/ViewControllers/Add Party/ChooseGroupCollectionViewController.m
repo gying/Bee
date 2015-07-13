@@ -53,29 +53,21 @@ static NSString * const reuseIdentifier = @"GroupCollectionCell";
 //CELL内容
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     GroupCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    
     // Configure the cell
-//    if (indexPath.row == _groupAry.count) {
-//        //最后一条信息
-//        //添加聚会按钮
-//        [cell initAddView];
-//    } else {
-//        Model_Group *theGroup = [_groupAry objectAtIndex:indexPath.row];
-//
         if (indexPath.row == 0) {
             //第一条信息
             //添加聚会按钮
-            [cell initAddView];
+            [cell initCellWithGroup:nil isAddView:YES];
             cell.groupNameLabel.text = @"添加公共聚会";
+            
         } else {
             Model_Group *theGroup = [_groupAry objectAtIndex:indexPath.row-1];
 
-        
 //        EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:theGroup.em_id isGroup:YES];
         [theGroup setChat_update:[NSNumber numberWithInteger:0]];
-        [cell initCellWithGroup:theGroup];
+        [cell initCellWithGroup:theGroup isAddView:NO];
             
-    }
+        }
 
     return cell;
 }

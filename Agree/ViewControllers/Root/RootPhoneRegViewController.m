@@ -57,6 +57,7 @@
     if (!_sendCodeDone) {
         _phoneNum = self.numberTextfield.text;
         [_netManager sendVerificationCode:self.numberTextfield.text];
+        [SVProgressHUD showWithStatus:@"码发送中..." maskType:SVProgressHUDMaskTypeGradient];
     } else {
         //验证码确认
         if ([_code isEqualToString:self.self.numberTextfield.text]&&(self.sendButton.titleLabel.text = @"完成验证")) {
