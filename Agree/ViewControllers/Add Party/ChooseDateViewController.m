@@ -9,6 +9,9 @@
 #import "ChooseDateViewController.h"
 #import "ConfirmPartyDetailViewController.h"
 
+#import "ChooseLoctaionViewController.h"
+
+
 @interface ChooseDateViewController () {
     NSDate *_chooseDate;
     NSString *_dateString;
@@ -22,6 +25,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    
+    
     self.calendar = [[JTCalendar alloc] init];
 
     self.calendarMenuView = [[JTCalendarMenuView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 44)];
@@ -33,7 +38,16 @@
     [self.calendar setContentView:self.calendarContentView];
     [self.calendar setDataSource:self];
     
-    [self.datePicker setDate:[NSDate dateWithTimeIntervalSinceNow:60*60*2] animated:TRUE];
+    
+    
+    
+    //设置从选择时间返回来得默认时间
+    if (self.party.begin_time) {
+        [self.datePicker setDate:self.party.begin_time];
+        [self.calendar setCurrentDateSelected:self.party.begin_time];
+    } else {
+        [self.datePicker setDate:[NSDate dateWithTimeIntervalSinceNow:60*60*2] animated:TRUE];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -76,7 +90,22 @@
         [timeAlert show];
         return NO;
     }
+    
+
+    if (self.fromRoot) {
+        ConfirmPartyDetailViewController *rootController = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
+        
+        rootController.party.begin_time = _chooseDate;
+        [rootController reloadView];
+        
+        [self.navigationController popViewControllerAnimated:YES];
+
+        return NO;
+    }
+    
+    
     return YES;
+    
 }
 
 - (NSDate *)buildDate {
@@ -106,6 +135,13 @@
     ConfirmPartyDetailViewController *controller = (ConfirmPartyDetailViewController *)segue.destinationViewController;
     controller.party = self.party;
     controller.isGroupParty = self.isGroupParty;
+    
+    
+    
+
+    
+    
+    NSLog(@"更新选择时间后跳转页面!");
 }
 
 

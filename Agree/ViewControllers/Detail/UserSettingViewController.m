@@ -64,11 +64,17 @@
     
     if (defAccount.avatar_path) {
         NSURL *imageUrl = [SRImageManager avatarImageFromTXYFieldID:defAccount.avatar_path];
-        NSString * urlstr = [imageUrl absoluteString];
+//        NSString * urlstr = [imageUrl absoluteString];
         
-        [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:_backImageViwe succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-            [_backImageViwe setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
-        } failBlock:nil progressBlock:nil param:nil];
+//        [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:_backImageViwe succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+//            [_backImageViwe setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
+//        } failBlock:nil progressBlock:nil param:nil];
+        
+        
+        
+        [_backImageViwe sd_setImageWithURL:imageUrl];
+        
+        
         
     }
     

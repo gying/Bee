@@ -5,7 +5,7 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <mutableArray key="Lantinghei.ttc">
+        <mutableArray key="LangTingGBK.TTF">
             <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHK--GBK1-0</string>
@@ -3031,7 +3031,7 @@
         <!--选择地点-->
         <scene sceneID="Uxt-yP-vVa">
             <objects>
-                <viewController id="CQ2-bQ-Fgi" customClass="ChooseLoctaionViewController" sceneMemberID="viewController">
+                <viewController restorationIdentifier="chooseLocation" storyboardIdentifier="chooseLocation" id="CQ2-bQ-Fgi" customClass="ChooseLoctaionViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="dwO-lh-KJy"/>
                         <viewControllerLayoutGuide type="bottom" id="tj9-SA-fTg"/>
@@ -3100,7 +3100,7 @@
                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="XnN-As-Vbo" kind="show" id="XVB-vy-eal"/>
+                                    <segue destination="XnN-As-Vbo" kind="show" identifier="" id="XVB-vy-eal"/>
                                 </connections>
                             </button>
                         </barButtonItem>
@@ -3622,7 +3622,7 @@
         <!--选择时间-->
         <scene sceneID="3sV-BH-LdE">
             <objects>
-                <viewController id="XnN-As-Vbo" customClass="ChooseDateViewController" sceneMemberID="viewController">
+                <viewController restorationIdentifier="chooseDate" storyboardIdentifier="chooseDate" id="XnN-As-Vbo" customClass="ChooseDateViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Y8b-gK-ksn"/>
                         <viewControllerLayoutGuide type="bottom" id="izM-gM-HoD"/>
@@ -3685,7 +3685,7 @@
                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="zEc-iu-1xD" kind="show" id="fEX-IH-eNz"/>
+                                    <segue destination="zEc-iu-1xD" kind="show" identifier="changeAddress" id="fEX-IH-eNz"/>
                                 </connections>
                             </button>
                         </barButtonItem>
@@ -3697,7 +3697,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kmM-Qw-Mcw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1949" y="943"/>
+            <point key="canvasLocation" x="1986" y="943"/>
         </scene>
         <!--查找好友-->
         <scene sceneID="DTO-CA-rbg">
@@ -3855,17 +3855,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="940-T7-Zx8">
-                                <rect key="frame" x="16" y="430" width="568" height="44"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="dbO-AB-N4V"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="FZLanTingHei-EL-GBK" pointSize="18"/>
-                                <state key="normal" title="时间: 2015年 3月 15日 18:45 星期三">
-                                    <color key="titleColor" red="0.1215686275" green="0.12941176469999999" blue="0.14117647059999999" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rK6-jV-dbf">
                                 <rect key="frame" x="16" y="356" width="568" height="44"/>
                                 <constraints>
@@ -3876,6 +3865,9 @@
                                     <color key="titleColor" red="0.1215686275" green="0.12941176469999999" blue="0.14117647059999999" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="changeAddress:" destination="zEc-iu-1xD" eventType="touchUpInside" id="03d-RB-Ptc"/>
+                                </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="聚会名称" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JiX-RI-2xV">
                                 <rect key="frame" x="55" y="147" width="490" height="39"/>
@@ -3890,6 +3882,20 @@
                                     <outlet property="delegate" destination="zEc-iu-1xD" id="GY8-eY-aqJ"/>
                                 </connections>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="940-T7-Zx8">
+                                <rect key="frame" x="16" y="430" width="568" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="dbO-AB-N4V"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="FZLanTingHei-EL-GBK" pointSize="18"/>
+                                <state key="normal" title="时间: 2015年 3月 15日 18:45 星期三">
+                                    <color key="titleColor" red="0.1215686275" green="0.12941176469999999" blue="0.14117647059999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="changeDate:" destination="zEc-iu-1xD" eventType="touchUpInside" id="ODq-on-38K"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -4309,11 +4315,11 @@
         <image name="agree_user_setting_avatar_backgroup" width="99" height="99"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="xWd-dq-8Ci"/>
         <segue reference="yUl-vl-Sui"/>
+        <segue reference="xWd-dq-8Ci"/>
         <segue reference="7g0-Ma-cMP"/>
         <segue reference="Re4-1s-AtI"/>
-        <segue reference="u80-pL-doZ"/>
+        <segue reference="brR-kr-yPI"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.34901960780000002" green="0.81960784310000001" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
 </document>

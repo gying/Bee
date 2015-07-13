@@ -127,23 +127,7 @@
     }
 }
 
-<<<<<<< HEAD
 
-
-#pragma mark -- 微信授权登陆注册
-- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-    
-//    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
-    
-    return [WXApi handleOpenURL:url delegate:self.rootLoginViewController]&&[WXApi handleOpenURL:url delegate:self.userSettingViewcontroller];
-    
-}
-
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-//    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
-
-    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController]&&[WXApi handleOpenURL:url delegate:self.userSettingViewcontroller];
-=======
 #pragma mark 应用内收取推送信息
 - (void)networkDidReceiveMessage:(NSNotification *)notification {
     
@@ -269,7 +253,7 @@
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
->>>>>>> Gaddle
+
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {

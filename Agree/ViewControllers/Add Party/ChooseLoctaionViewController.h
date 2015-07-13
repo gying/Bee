@@ -16,5 +16,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *addressTextField;
 @property BOOL isGroupParty;
 @property (weak, nonatomic) IBOutlet UIView *mapView;
+@property BOOL fromRoot;
+
 
 @end

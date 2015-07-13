@@ -357,9 +357,14 @@
                 NSURL *imageUrl = [SRImageManager groupFrontCoverImageFromTXYFieldID:_joinGroup.avatar_path];
                 NSString * urlstr = [imageUrl absoluteString];
                 
-                [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.groupCoverImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-                    [self.groupCoverImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
-                } failBlock:nil progressBlock:nil param:nil];
+                
+                
+                [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr
+                                                                          target:self.groupCoverImageView
+                                                                       succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+                                                                           [self.groupCoverImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
+                                                                       } failBlock:nil progressBlock:nil param:nil];
+                
                 
                 
             } else {

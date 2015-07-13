@@ -22,4 +22,6 @@
 
 @property BOOL isGroupParty;
 
+@property BOOL fromRoot;
+
 @end
