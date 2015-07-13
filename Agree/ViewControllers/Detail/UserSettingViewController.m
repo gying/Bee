@@ -60,7 +60,6 @@
     
     if (defAccount.avatar_path) {
         NSURL *imageUrl = [SRImageManager avatarImageFromTXYFieldID:defAccount.avatar_path];
-<<<<<<< HEAD
 //        NSString * urlstr = [imageUrl absoluteString];
         
 //        [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:_backImageViwe succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
@@ -71,16 +70,6 @@
         
         [_backImageViwe sd_setImageWithURL:imageUrl];
         
-        
-=======
-        NSString *urlstr = [imageUrl absoluteString];
-        
-        bool avatarData = [[TXYDownloader sharedInstanceWithPersistenceId:@"user_avatar"] hasCache:urlstr];
-        
-        [[TXYDownloader sharedInstanceWithPersistenceId:@"user_avatar"]download:urlstr target:_backImageViwe succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-            [_backImageViwe setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
-        } failBlock:nil progressBlock:nil param:nil];
->>>>>>> Gaddle
         
     }
     

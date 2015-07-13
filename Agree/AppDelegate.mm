@@ -127,10 +127,6 @@
     }
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> Gaddle
 #pragma mark 应用内收取推送信息
 - (void)networkDidReceiveMessage:(NSNotification *)notification {
     
@@ -256,10 +252,6 @@
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
-<<<<<<< HEAD
-
-=======
->>>>>>> Gaddle
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {

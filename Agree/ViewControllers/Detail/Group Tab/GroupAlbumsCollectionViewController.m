@@ -92,15 +92,31 @@
     
     //下载图片
     NSURL *imageUrl = [SRImageManager albumThumbnailImageFromTXYFieldID:newPhoto.pk_photo];
-    NSString * urlstr = [imageUrl absoluteString];
-//    bool avatarData = [[TXYDownloader sharedInstanceWithPersistenceId:@"group_albums"] hasCache:urlstr];
-    [[TXYDownloader sharedInstanceWithPersistenceId:@"group_albums"] download:urlstr
-                                                                       target:cell.cellImageView
-                                                                    succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-        UIImage *testImage = [UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]];
-        [cell.cellImageView setImage:testImage];
-        
-        //将图片转化成MJPhoto并加入数组
+//    NSString * urlstr = [imageUrl absoluteString];
+////    bool avatarData = [[TXYDownloader sharedInstanceWithPersistenceId:@"group_albums"] hasCache:urlstr];
+//    [[TXYDownloader sharedInstanceWithPersistenceId:@"group_albums"] download:urlstr
+//                                                                       target:cell.cellImageView
+//                                                                    succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+//        UIImage *testImage = [UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]];
+//        [cell.cellImageView setImage:testImage];
+//        
+//        //将图片转化成MJPhoto并加入数组
+//        MJPhoto *photo = [[MJPhoto alloc] init];
+//        photo.url = [SRImageManager originalImageFromTXYFieldID:newPhoto.pk_photo]; // 图片路径
+//        photo.srcImageView = cell.cellImageView; // 来源于哪个UIImageView
+//        if ([newPhoto.fk_user isEqual:[Model_User loadFromUserDefaults].pk_user] || [self.rootController.group.creater isEqual:[Model_User loadFromUserDefaults].pk_user] ) {
+//            //如果为群主或者为图片的上传者,则可以设置删除图片代理
+//            photo.delegate = self;
+//        }
+//        //按照数序放入字典
+//        [_imageViewDic setObject:photo forKey:[NSNumber numberWithInteger:indexPath.row]];
+//        
+//    }
+//                                                                    failBlock:nil
+//                                                                progressBlock:nil
+//                                                                        param:nil];
+    
+    [cell.cellImageView sd_setImageWithURL:imageUrl completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         MJPhoto *photo = [[MJPhoto alloc] init];
         photo.url = [SRImageManager originalImageFromTXYFieldID:newPhoto.pk_photo]; // 图片路径
         photo.srcImageView = cell.cellImageView; // 来源于哪个UIImageView
@@ -110,11 +126,7 @@
         }
         //按照数序放入字典
         [_imageViewDic setObject:photo forKey:[NSNumber numberWithInteger:indexPath.row]];
-        
-    }
-                                                                    failBlock:nil
-                                                                progressBlock:nil
-                                                                        param:nil];
+    }];
     
 
 

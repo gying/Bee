@@ -19,11 +19,18 @@
     
     //下载图片
     NSURL *imageUrl = [SRImageManager avatarImageFromTXYFieldID:group_user.avatar_path];
-    NSString * urlstr = [imageUrl absoluteString];
-    
-    [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.avatarImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-        [self.avatarImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
-    } failBlock:nil progressBlock:nil param:nil];
+//    NSString * urlstr = [imageUrl absoluteString];
+//    
+//    NSData *imageData = [[TXYDownloader sharedInstanceWithPersistenceId:nil] getCacheData:urlstr];
+//    if (imageData) {
+//        [self.avatarImageView setImage:[UIImage imageWithData:imageData]];
+//    }else{
+//    
+//    [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.avatarImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+//        [self.avatarImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
+//    } failBlock:nil progressBlock:nil param:nil];
+//    }
+    [self.avatarImageView sd_setImageWithURL:imageUrl];
     [self.nicknameLabel setText:group_user.nickname];
     
 //    switch (group_user.role.intValue) {

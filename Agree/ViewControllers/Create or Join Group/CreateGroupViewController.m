@@ -213,12 +213,21 @@
                 
                 //下载图片
                 NSURL *imageUrl = [SRImageManager groupFrontCoverImageFromTXYFieldID:_joinGroup.avatar_path];
-                NSString * urlstr = [imageUrl absoluteString];
+//                NSString * urlstr = [imageUrl absoluteString];
+//                NSData *imageData = [[TXYDownloader sharedInstanceWithPersistenceId:nil] getCacheData:urlstr];
+//                if (imageData) {
+//                    [self.groupCoverImageView setImage:[UIImage imageWithData:imageData]];
+//                }else{
+//                
+//                
+//                [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.groupCoverImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+//                    [self.groupCoverImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
+//                } failBlock:nil progressBlock:nil param:nil];
+//            }
+                [self.groupCoverImageView sd_setImageWithURL:imageUrl];
                 
-                [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.groupCoverImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-                    [self.groupCoverImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
-                } failBlock:nil progressBlock:nil param:nil];
-            } else {
+            }
+            else {
                 [SVProgressHUD showErrorWithStatus:@"未找到相关数据"];
                 //未找到小组的相关数据
                 [self.remarkLabel setText:@"未找到小组信息,请再次确认输入"];

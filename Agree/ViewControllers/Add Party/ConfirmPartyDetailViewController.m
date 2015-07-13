@@ -28,13 +28,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-<<<<<<< HEAD
-    
-    
-    _feedBack = TRUE;
-=======
+
     _payType = 0;
->>>>>>> Gaddle
     //设置地址文本
     if (self.party.location) {
         [self.addressButton setTitle:[NSString stringWithFormat:@"地址: %@", self.party.location] forState:UIControlStateNormal];
