@@ -127,7 +127,10 @@
     }
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> Gaddle
 #pragma mark 应用内收取推送信息
 - (void)networkDidReceiveMessage:(NSNotification *)notification {
     
@@ -253,7 +256,10 @@
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
+<<<<<<< HEAD
 
+=======
+>>>>>>> Gaddle
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -534,8 +540,7 @@
                 //注册腾讯云的万象图片
                 [TXYUploadManager authorize:@"201139" userId:[Model_User loadFromUserDefaults].pk_user.stringValue sign:(NSString *)jsonDic];
                 [TXYDownloader authorize:@"201139" userId:[Model_User loadFromUserDefaults].pk_user.stringValue];
-
-                self.uploadManager = [[TXYUploadManager alloc] initWithPersistenceId: @"persistenceId"];
+//                self.uploadManager = [[TXYUploadManager alloc] initWithPersistenceId: @"persistenceId"];
             }
             
         }

@@ -22,8 +22,8 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *partyNameTextField;
 @property (weak, nonatomic) IBOutlet UITextView *remarkTextView;
-@property (weak, nonatomic) IBOutlet UIButton *feedBackButton;
-@property (weak, nonatomic) IBOutlet UILabel *feedBackLabel;
+@property (weak, nonatomic) IBOutlet UIButton *payButton;
+@property (weak, nonatomic) IBOutlet UILabel *payLabel;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 
 - (void)reloadView;

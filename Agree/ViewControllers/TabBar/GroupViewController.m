@@ -165,13 +165,29 @@
     if (indexPath.row == self.groupAry.count) {
         //最后一条信息
         //添加聚会按钮
-        [cell initAddView];
+        [cell initCellWithGroup:nil isAddView:YES];
     } else {
-        Model_Group *theGroup = [self.groupAry objectAtIndex:indexPath.row];
         
+        Model_Group *theGroup = [self.groupAry objectAtIndex:indexPath.row];
         EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:theGroup.em_id isGroup:YES];
         [theGroup setChat_update:[NSNumber numberWithInteger:conversation.unreadMessagesCount]];
-        [cell initCellWithGroup:theGroup];
+        [cell initCellWithGroup:theGroup isAddView:NO];
+        
+        
+        
+        
+        //下载图片
+        NSURL *imageUrl = [SRImageManager groupFrontCoverImageFromTXYFieldID:theGroup.avatar_path];
+        NSString *urlstr = [imageUrl absoluteString];
+        [[TXYDownloader sharedInstanceWithPersistenceId:@"group_avatar"] download:urlstr
+                                                                           target:self
+                                                                        succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+                                                                
+                                                                [self setGroupAvatar:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]] atIndex:indexPath];
+                                                                 }
+                                                                        failBlock:nil
+                                                                    progressBlock:nil
+                                                                            param:nil];
     }
     
     return cell;
@@ -321,7 +337,7 @@
     }
 }
 
-#pragma mark - Net Manager Delegate
+#pragma mark - 网络代理
 - (void)interfaceReturnDataError:(int)interfaceType {
     [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
@@ -378,20 +394,41 @@
             
         case kGetUserGroups: {  //读取用户的小组
             if (jsonDic) {
+                
+                
+                //判断小组数据是否有更新,是否需要刷新列表
+                NSMutableArray *tempAry = [NSMutableArray arrayWithArray:[Model_Group objectArrayWithKeyValuesArray:jsonDic]];
+
+                BOOL isSave = YES;
+                if (tempAry.count == self.groupAry.count) {
+                    //小组数据的数量一样,开始进行数据比对
+                    for (Model_Group *theGroup in tempAry) {
+                        //这里暂时只对小组的id进行比对
+                        Model_Group *otherGroup = [self.groupAry objectAtIndex:[tempAry indexOfObject:theGroup]];
+                        if (![theGroup.pk_group isEqual:otherGroup.pk_group]) {
+                            isSave = NO;
+                        }
+                    }
+                } else {
+                    //小组数据的数量不一样
+                    isSave = NO;
+                }
+                
+                //小组有更新,开始更新步骤
                 //将缓存的数组全部删除
                 [CD_Group removeAllGroupFromCD];
-                
-                //将网络读取的数组再次输入缓存
-                self.groupAry = (NSMutableArray *)[Model_Group objectArrayWithKeyValuesArray:jsonDic];
                 for (Model_Group *group in self.groupAry) {
                     [CD_Group saveGroupToCD:group];
                 }
                 
-                [self.groupCollectionView reloadData];
-//                [SVProgressHUD showSuccessWithStatus:@"读取数据成功"];
+                if (!isSave) {
+                    //小组数据有更新的情况下在进行界面上的刷新
+                    self.groupAry = nil;
+                    self.groupAry = tempAry;
+                    [self.groupCollectionView reloadData];
+                }
             } else {
                 //没有加入的小组信息
-//                [SVProgressHUD showSuccessWithStatus:@"没有小组信息"];
                 //将缓存的数组全部删除
                 [self.groupAry removeAllObjects];
                 [CD_Group removeAllGroupFromCD];
@@ -409,5 +446,9 @@
     [self.navigationController.tabBarController setSelectedIndex:2];
 }
 
+- (void)setGroupAvatar: (UIImage *)image atIndex: (NSIndexPath *)indexPath {
+    GroupCollectionViewCell *cell = (GroupCollectionViewCell *)[self.groupCollectionView cellForItemAtIndexPath:indexPath];
+    [cell.groupImageView setImage:image];
+}
 
 @end

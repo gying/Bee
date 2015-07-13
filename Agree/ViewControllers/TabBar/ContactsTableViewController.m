@@ -25,6 +25,7 @@
 #import "EaseMob.h"
 #import "SRMoveArray.h"
 #import <MJRefresh.h>
+#import "SRImageManager.h"
 
 
 @interface ContactsTableViewController () <SRNetManagerDelegate> {
@@ -83,9 +84,6 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    
-    [[NSUserDefaults standardUserDefaults] objectForKey:@"hello"];
-    
     if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"contact_update"] isEqualToNumber:@0]) {
         //信息有更新
         

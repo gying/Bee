@@ -17,7 +17,7 @@
 
 @interface ConfirmPartyDetailViewController ()<SRNetManagerDelegate, UITextFieldDelegate, UITextViewDelegate> {
     SRNet_Manager *_netManager;
-    BOOL _feedBack;
+    int _payType;
 }
 
 @end
@@ -28,9 +28,13 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+<<<<<<< HEAD
     
     
     _feedBack = TRUE;
+=======
+    _payType = 0;
+>>>>>>> Gaddle
     //设置地址文本
     if (self.party.location) {
         [self.addressButton setTitle:[NSString stringWithFormat:@"地址: %@", self.party.location] forState:UIControlStateNormal];
@@ -80,7 +84,7 @@
     self.party.fk_user = [Model_User loadFromUserDefaults].pk_user;
     self.party.name = self.partyNameTextField.text;
     self.party.remark = self.remarkTextView.text;
-    
+    self.party.pay_type = [NSNumber numberWithInt:_payType];
     if (!_netManager) {
         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
     }
@@ -114,13 +118,34 @@
     return YES;
 }
 
-- (IBAction)pressedTheFeedbackButton:(id)sender {
-    if (_feedBack) {
-        self.feedBackLabel.text = @"关闭";
-        _feedBack = FALSE;
-    } else {
-        self.feedBackLabel.text = @"开启";
-        _feedBack = TRUE;
+- (IBAction)tapPayButton:(UIButton *)sender {
+    switch (_payType) {
+        case 0: {
+            //未指定
+            _payType = 1;
+            self.payLabel.text = @"我请客";
+        }
+            break;
+        case 1: {
+            //请客
+            _payType = 2;
+            self.payLabel.text = @"AA制";
+        }
+            break;
+        case 2: {
+            //AA后付
+            _payType = 3;
+            self.payLabel.text = @"预先支付";
+        }
+            break;
+        case 3: {
+            //预支付
+            _payType = 0;
+            self.payLabel.text = @"你猜";
+        }
+            break;
+        default:
+            break;
     }
 }
 

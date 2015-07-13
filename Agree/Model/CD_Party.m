@@ -27,6 +27,12 @@
 @dynamic pk_party_user;
 @dynamic inNum;
 
+#pragma mark V2
+@dynamic pay_type;
+@dynamic pay_amount;
+@dynamic pay_fk_user;
+@dynamic interval;
+
 + (Model_Party *)packedCDPartyToModel:(CD_Party *)party {
     
     Model_Party *newParty = [[Model_Party alloc] init];
@@ -45,6 +51,12 @@
     newParty.relationship = party.relationship;
     newParty.pk_party_user = party.pk_party_user;
     newParty.inNum = party.inNum;
+    
+    newParty.pay_type = party.pay_type;
+    newParty.pay_amount = party.pay_amount;
+    newParty.pay_fk_user = party.pay_fk_user;
+    newParty.interval = party.interval;
+    
     return newParty;
 }
 
@@ -65,6 +77,11 @@
     cd_party.relationship = party.relationship;
     cd_party.pk_party_user = party.pk_party_user;
     cd_party.inNum = party.inNum;
+    
+    cd_party.pay_type = party.pay_type;
+    cd_party.pay_amount = party.pay_amount;
+    cd_party.pay_fk_user = party.pay_fk_user;
+    cd_party.interval = party.interval;
 
     return cd_party;
 }

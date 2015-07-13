@@ -42,7 +42,7 @@
     
     _backImageViwe = [[UIImageView alloc] initWithFrame:CGRectMake(4.5, 4.5, 90, 90)];
     [_backImageViwe.layer setMasksToBounds:YES];
-    [_backImageViwe setBackgroundColor:[UIColor lightGrayColor]];
+    [_backImageViwe setBackgroundColor:[UIColor whiteColor]];
     [_backImageViwe.layer setCornerRadius:_backImageViwe.frame.size.width/2];
     [self.avatarButton addSubview:_backImageViwe];
     
@@ -140,7 +140,6 @@
 
 - (IBAction)nicknameValueChange:(UITextField *)sender {
     if (2 < sender.text.length) {
-        
     }
 }
 
@@ -164,6 +163,7 @@
     }
     
     if (isDone) {
+        [SVProgressHUD showWithStatus:@"帐号创建中..." maskType:SVProgressHUDMaskTypeGradient];
         //设置账户创建时间
         [self.userInfo setSetup_time:[NSDate date]];
         //保存头像信息

@@ -9,6 +9,7 @@
 #import "ContactsTableViewCell.h"
 #import "UIButton+WebCache.h"
 #import "SRImageManager.h"
+#import <SDWebImageManager.h>
 
 @implementation ContactsTableViewCell {
     Model_User *_user;
@@ -31,7 +32,18 @@
     
     [self.avatarButton addTarget:self action:@selector(tapAvatarButton:) forControlEvents:UIControlEventTouchUpInside];
     
-    [self.avatarButton sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:user.avatar_path] forState:UIControlStateNormal];
+    //下载图片
+    NSURL *imageUrl = [SRImageManager miniAvatarImageFromTXYFieldID:user.avatar_path];
+    NSString *urlstr = [imageUrl absoluteString];
+    [[TXYDownloader sharedInstanceWithPersistenceId:@"user_avatar_small"] download:urlstr
+                                                                            target:self
+                                                                         succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+                                                                        UIImage *testImage = [UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]];
+                                                                        [self.avatarButton setBackgroundImage:testImage forState:UIControlStateNormal];
+                                                                    }
+                                                                         failBlock:nil
+                                                                     progressBlock:nil
+                                                                             param:nil];
     [self.nicknameLabel setText:user.nickname];
     
     
@@ -45,13 +57,10 @@
 
 - (void)tapAvatarButton: (UIButton *)sender {
     if (self.topViewController) {
-        
         if (![_user.pk_user isEqual:[Model_User loadFromUserDefaults].pk_user]) {
             [self.topViewController.accountView show];
             [self.topViewController.accountView loadWithUser:_user withGroup:nil];
         }
-        
-        
     }
 }
 
