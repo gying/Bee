@@ -178,18 +178,28 @@
         
         //下载图片
         NSURL *imageUrl = [SRImageManager groupFrontCoverImageFromTXYFieldID:theGroup.avatar_path];
-        NSString *urlstr = [imageUrl absoluteString];
-        [[TXYDownloader sharedInstanceWithPersistenceId:@"group_avatar"] download:urlstr
-                                                                           target:self
-                                                                        succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-                                                                
-                                                                [self setGroupAvatar:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]] atIndex:indexPath];
-                                                                 }
-                                                                        failBlock:nil
-                                                                    progressBlock:nil
-                                                                            param:nil];
+//        NSString *urlstr = [imageUrl absoluteString];
+//        NSData *imageData = [[TXYDownloader sharedInstanceWithPersistenceId:nil] getCacheData:urlstr];
+//        if (imageData) {
+//            [self setGroupAvatar:[UIImage imageWithData:imageData] atIndex:indexPath];
+//        } else {
+//            [[TXYDownloader sharedInstanceWithPersistenceId:@"group_avatar"] download:urlstr
+//                                                                               target:self
+//                                                                            succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+//                                                                                
+//                                                                                [self setGroupAvatar:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]] atIndex:indexPath];
+//                                                                            }
+//                                                                            failBlock:nil
+//                                                                        progressBlock:nil
+//                                                                                param:nil];
+//        }
+        
+        [cell.groupImageView sd_setImageWithURL:imageUrl
+                                      completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                                          [self setGroupAvatar:image atIndex:indexPath];
+                                      }];
+        
     }
-    
     return cell;
 }
 
@@ -371,11 +381,22 @@
                 
                 //下载图片
                 NSURL *imageUrl = [SRImageManager groupFrontCoverImageFromTXYFieldID:_joinGroup.avatar_path];
-                NSString * urlstr = [imageUrl absoluteString];
+//                NSString * urlstr = [imageUrl absoluteString];
+//                
+//                NSData *imageData = [[TXYDownloader sharedInstanceWithPersistenceId:nil] getCacheData:urlstr];
+//                if (imageData) {
+//                    [self.groupCoverImageView setImage:[UIImage imageWithData:imageData]];
+//                }else{
+//                
+//                [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr
+//                                                                          target:self.groupCoverImageView
+//                                                                       succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+//                                                                           [self.groupCoverImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
+//                                                                       } failBlock:nil progressBlock:nil param:nil];
+//                }
                 
-                [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.groupCoverImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-                    [self.groupCoverImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
-                } failBlock:nil progressBlock:nil param:nil];
+                [self.groupCoverImageView sd_setImageWithURL:imageUrl];
+                
                 
                 
             } else {

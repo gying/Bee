@@ -56,11 +56,28 @@
         
         //下载图片
         NSURL *imageUrl = [SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path];
-        NSString * urlstr = [imageUrl absoluteString];
+//        NSString * urlstr = [imageUrl absoluteString];
+//        
+////        [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.avatarImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+////            [self.avatarImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
+////        } failBlock:nil progressBlock:nil param:nil];
+//        
+//        NSData *imageData = [[TXYDownloader sharedInstanceWithPersistenceId:nil] getCacheData:urlstr];
+//        if (imageData) {
+//            [self.avatarImageView setImage:[UIImage imageWithData:imageData]];
+//        } else {
+//            [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.avatarImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+//                [self.avatarImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
+//            } failBlock:nil progressBlock:nil param:nil];
+//
+//    }
         
-        [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.avatarImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-            [self.avatarImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
-        } failBlock:nil progressBlock:nil param:nil];
+        [self.avatarImageView sd_setImageWithURL:imageUrl];
+        
+
+        
+        
+        
 
 //        [self.avatarImageView sd_setImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path]];
         if (adPeople.userInfo.relationship) {
@@ -125,13 +142,27 @@
 //        [self.avatarImageView sd_setImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path]];
         //下载图片
         NSURL *imageUrl = [SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path];
-        NSString * urlstr = [imageUrl absoluteString];
-        
-        [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.avatarImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-            [self.avatarImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
-        } failBlock:nil progressBlock:nil param:nil];
+//        NSString * urlstr = [imageUrl absoluteString];
+//        
+//        
+//        NSData *imageData = [[TXYDownloader sharedInstanceWithPersistenceId:nil] getCacheData:urlstr];
+//        if (imageData) {
+//            [self.avatarImageView setImage:[UIImage imageWithData:imageData]];
+//        }else{
+//        
+//        [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.avatarImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
+//            [self.avatarImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
+//        } failBlock:nil progressBlock:nil param:nil];
+//   
+//        }
+                [self.avatarImageView sd_setImageWithURL:imageUrl];
     }
 }
+
+
+
+
+
 - (IBAction)pressedTheSendButton:(id)sender {
     if (_people.userInfo) {
         //必聚用户

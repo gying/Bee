@@ -11,6 +11,8 @@
 #import "Model_Party.h"
 #import "BMapKit.h"
 
+#import "ConfirmPartyDetailViewController.h"
+
 @interface ChooseLoctaionViewController () <BMKLocationServiceDelegate, BMKMapViewDelegate, BMKGeoCodeSearchDelegate, UITextFieldDelegate> {
     BMKMapView *_bdMapView;
     BMKLocationService *_locService;
@@ -18,6 +20,9 @@
     BMKGeoCodeSearch *_searcher;
     BMKPinAnnotationView *_choosePin;
     BOOL _mapViewSetCenter;
+    
+    ConfirmPartyDetailViewController * cfpdVC;
+    
 }
 
 @end
@@ -176,6 +181,25 @@ errorCode:(BMKSearchErrorCode)error{
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    if (self.fromRoot) {
+        ConfirmPartyDetailViewController *rootController = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
+        
+        
+        rootController.party.longitude = [NSNumber numberWithDouble:_chooseAnnotation.coordinate.longitude];
+        rootController.party.latitude = [NSNumber numberWithDouble:_chooseAnnotation.coordinate.latitude];
+        rootController.party.location = self.addressTextField.text;
+        [rootController reloadView];
+        [self.navigationController popViewControllerAnimated:YES];
+        return NO;
+    }
+    
+
+    
+    return YES;
+}
+
 
 #pragma mark - Navigation
 // In a storyboard-based application, you will often want to do a little preparation before navigation

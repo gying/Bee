@@ -12,6 +12,8 @@
 #import <SVProgressHUD.h>
 #import "ScheduleTableViewController.h"
 #import "GroupDetailViewController.h"
+#import "ChooseLoctaionViewController.h"
+#import "ChooseDateViewController.h"
 
 @interface ConfirmPartyDetailViewController ()<SRNetManagerDelegate, UITextFieldDelegate, UITextViewDelegate> {
     SRNet_Manager *_netManager;
@@ -26,6 +28,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+
     _payType = 0;
     //设置地址文本
     if (self.party.location) {
@@ -45,6 +48,25 @@
     [self.remarkTextView setDelegate:self];
     
     [self.navigationItem.rightBarButtonItem setEnabled:NO];
+}
+
+- (void)reloadView {
+    //设置地址文本
+    if (self.party.location) {
+        [self.addressButton setTitle:[NSString stringWithFormat:@"地址: %@", self.party.location] forState:UIControlStateNormal];
+    } else {
+        [self.addressButton setTitle:@"未选择地址" forState:UIControlStateNormal];
+        self.party.location = @"未选择地址";
+    }
+    
+    
+    //设置时间文本
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    [dateFormatter setDateFormat:@"yyyy年M月d日 EEEE aa hh:mm"];
+    [self.dateButton setTitle:[dateFormatter stringFromDate:self.party.begin_time] forState:UIControlStateNormal];
+    
+
+ 
 }
 
 - (void)didReceiveMemoryWarning {
@@ -151,8 +173,33 @@
 - (void)interfaceReturnDataError:(int)interfaceType {
     [SVProgressHUD dismiss];
 }
+//返回上一页
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
+}
+//改变时间
+- (IBAction)changeDate:(id)sender {
+    
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+    ChooseDateViewController *childController = [sb instantiateViewControllerWithIdentifier:@"chooseDate"];
+    childController.fromRoot = YES;
+    childController.party = self.party;
+    [self.navigationController showViewController:childController sender:self];
+    
+
+    NSLog(@"返回到选择时间界面");
+}
+//改变地址
+- (IBAction)changeAddress:(id)sender {
+
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+    ChooseLoctaionViewController *childController = [sb instantiateViewControllerWithIdentifier:@"chooseLocation"];
+    childController.fromRoot = YES;
+    [self.navigationController showViewController:childController sender:self];
+        NSLog(@"返回到选择地址界面");
+    
+    
+    
 }
 
 /*
