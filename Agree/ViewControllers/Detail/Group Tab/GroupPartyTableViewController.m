@@ -116,6 +116,10 @@
     return indexPath;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.partyTableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
 - (void)detailChange:(Model_Party *)party {
     for (Model_Party *theParty in self.partyArray) {
         if ([theParty.pk_party isEqualToString:party.pk_party]) {

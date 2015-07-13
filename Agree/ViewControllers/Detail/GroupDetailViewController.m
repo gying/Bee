@@ -51,12 +51,8 @@
 
 
 - (void)viewDidLayoutSubviews {
-    NSLog(@"%f", self.chatTableView.contentSize.height);
     [_chatDelegate.closelable setFrame:CGRectMake(0, self.chatTableView.contentSize.height + self.navigationController.navigationBar.frame.size.height-30, self.view.frame.size.width, 50)];
 }
-
-
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];

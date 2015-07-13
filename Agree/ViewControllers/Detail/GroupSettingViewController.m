@@ -36,6 +36,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [SVProgressHUD showWithStatus:@"小组信息读取中..." maskType:SVProgressHUDMaskTypeGradient];
+    
     // Do any additional setup after loading the view.
     _accountView = [[SRAccountView alloc] init];
     _accountView.rootController = self;
@@ -186,7 +189,6 @@
 }
 
 - (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    [SVProgressHUD dismiss];
     switch (interfaceType) {
         case kGetGroupRelationship: {
             NSArray *relAry = jsonDic;
@@ -196,6 +198,7 @@
             [self reloadButtonStatusSetting];
         }
             break;
+            
         case kGenerationCodeByGroup: {
             if (jsonDic) {
                 if ([jsonDic isKindOfClass:[NSString class]]) {

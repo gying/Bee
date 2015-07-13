@@ -577,9 +577,7 @@
 
     //判断如果下拉超过限定 就加载数据
     if ((0 == (contentoffsetY))&&!(_mchatArray.count == _chatArray.count)) {
-        NSLog(@"下拉如果超过-110realoadata");
         _page++;
-        NSLog(@"%d",_page);
         [self subChatArray];
         [_chatTableView reloadData];
         
@@ -596,7 +594,7 @@
         [_chatTableView reloadData];
 
     }else if( self.mchatArray.count == self.chatArray.count) {
-        NSLog(@"数组已经加载结束 停止加载");
+        
     }
 
     float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
@@ -631,8 +629,7 @@
     float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
     
     if ((self.chatTableView.contentSize.height - self.chatTableView.contentOffset.y) < draggingGetPoint) {
-        //如果拖移位置超过预定点,则推出视图 
-        NSLog(@"上拉关闭");
+        //如果拖移位置超过预定点,则推出视图
         [self.rootController popController];
     }
 }
