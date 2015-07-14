@@ -36,6 +36,25 @@
     _bdMapView = [[BMKMapView alloc]initWithFrame:self.view.frame];
 //    [self.mapView addSubview:_bdMapView];
     [self.mapView addSubview:_bdMapView];
+    
+    
+    if (self.party.longitude && self.party.latitude) {
+        CLLocationCoordinate2D pointCoor;
+        pointCoor.longitude = self.party.longitude.floatValue;
+        pointCoor.latitude = self.party.latitude.floatValue;
+        
+        if (!_chooseAnnotation) {
+            _chooseAnnotation = [[BMKPointAnnotation alloc]init];
+        }
+        
+        
+        _chooseAnnotation.coordinate = pointCoor;
+        _chooseAnnotation.title = @"点选位置";
+        [_bdMapView addAnnotation:_chooseAnnotation];
+        
+        self.addressTextField.text = self.party.location;
+        
+    }
     //如果有默认位置,则指定默认位置
     CLLocationCoordinate2D userCoor;
     userCoor.longitude = [[[NSUserDefaults standardUserDefaults] objectForKey:@"user_location_long"] doubleValue];
@@ -57,8 +76,6 @@
     _locService.delegate = self;
     //启动LocationService
     [_locService startUserLocationService];
-    
-
 }
 
 //实现相关delegate 处理位置信息更新
@@ -70,7 +87,7 @@
 //处理位置坐标更新
 - (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation
 {
-//    NSLog(@"didUpdateUserLocation lat %f,long %f",userLocation.location.coordinate.latitude,userLocation.location.coordinate.longitude);
+    NSLog(@"didUpdateUserLocation lat %f,long %f",userLocation.location.coordinate.latitude,userLocation.location.coordinate.longitude);
     
     _bdMapView.showsUserLocation = YES;//显示定位图层
     [_bdMapView updateLocationData:userLocation];
@@ -81,6 +98,8 @@
                    withObject:@15
                    afterDelay:0.5];
         [_bdMapView setCenterCoordinate:CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude) animated:YES];
+        [_locService stopUserLocationService];
+        
     }
     
     //设置用户默认位置
@@ -155,7 +174,7 @@ errorCode:(BMKSearchErrorCode)error{
 - (void)viewWillAppear:(BOOL)animated {
     [_bdMapView viewWillAppear];
     _bdMapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
-    
+    _locService.delegate = self;
     _searcher.delegate = self;
 }
 
@@ -163,7 +182,7 @@ errorCode:(BMKSearchErrorCode)error{
     //在推出时候清空
     [_bdMapView viewWillDisappear];
     _bdMapView.delegate = nil; // 不用时，置nil
-    
+    _locService.delegate = nil;
     _searcher.delegate = nil;
 }
 

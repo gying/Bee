@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Model_Group.h"
+#import "Model_Party.h"
 
 
 @interface ChooseLoctaionViewController : UIViewController
@@ -17,6 +18,7 @@
 @property BOOL isGroupParty;
 @property (weak, nonatomic) IBOutlet UIView *mapView;
 @property BOOL fromRoot;
+@property (nonatomic, strong)Model_Party *party;
 
 
 @end
