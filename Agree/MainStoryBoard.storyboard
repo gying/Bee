@@ -102,6 +102,10 @@
             <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -169,7 +173,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7LE-xM-5a7">
                                 <rect key="frame" x="16" y="311" width="568" height="82"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="输入帐号" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="O7U-3V-OwQ">
@@ -2195,7 +2199,7 @@
                                     <constraint firstAttribute="height" constant="40" id="hMW-3a-9dd"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="Lantinghei SC" pointSize="16"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="agree_icon" translatesAutoresizingMaskIntoConstraints="NO" id="0DX-tK-Iqd">
@@ -3820,33 +3824,20 @@
                         <rect key="frame" x="0.0" y="64" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dz9-pL-HRd">
-                                <rect key="frame" x="171" y="491" width="188" height="45"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="188" id="HZn-8v-3d7"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="FZLanTingHei-EL-GBK" pointSize="18"/>
-                                <state key="normal" title="支付类型设置">
-                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="tapPayButton:" destination="zEc-iu-1xD" eventType="touchUpInside" id="J4p-u9-zeE"/>
-                                </connections>
-                            </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="聚会的备注信息" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="JBJ-yn-c7H">
-                                <rect key="frame" x="55" y="201" width="490" height="128"/>
+                                <rect key="frame" x="55" y="193" width="490" height="130"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="textColor" red="0.78568892050000005" green="0.78568892050000005" blue="0.78568892050000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rK6-jV-dbf">
-                                <rect key="frame" x="16" y="356" width="568" height="44"/>
+                                <rect key="frame" x="16" y="447" width="568" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="hdm-41-Fdo"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="FZLanTingHei-EL-GBK" pointSize="18"/>
-                                <state key="normal" title="地址: 厦门市思明区国际会展中心">
+                                <state key="normal" title="地址">
                                     <color key="titleColor" red="0.1215686275" green="0.12941176469999999" blue="0.14117647059999999" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </state>
@@ -3854,8 +3845,22 @@
                                     <action selector="changeAddress:" destination="zEc-iu-1xD" eventType="touchUpInside" id="03d-RB-Ptc"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RFl-9L-6Xs">
+                                <rect key="frame" x="16" y="521" width="568" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="I7T-sd-hi4"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="FZLanTingHei-EL-GBK" pointSize="18"/>
+                                <state key="normal" title="时间">
+                                    <color key="titleColor" red="0.1215686275" green="0.12941176469999999" blue="0.14117647059999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="changeDate:" destination="zEc-iu-1xD" eventType="touchUpInside" id="Zqo-hs-PI6"/>
+                                </connections>
+                            </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="聚会名称" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JiX-RI-2xV">
-                                <rect key="frame" x="55" y="147" width="490" height="39"/>
+                                <rect key="frame" x="55" y="139" width="490" height="39"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="39" id="817-ZE-fdo"/>
                                 </constraints>
@@ -3867,34 +3872,92 @@
                                     <outlet property="delegate" destination="zEc-iu-1xD" id="GY8-eY-aqJ"/>
                                 </connections>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="你猜" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W7b-7Z-QRN">
-                                <rect key="frame" x="339" y="501" width="100" height="25"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="25" id="9Si-em-Ldo"/>
-                                    <constraint firstAttribute="width" constant="100" id="bFo-FL-AMH"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="textColor" red="0.78568892050000005" green="0.78568892050000005" blue="0.78568892050000005" alpha="1" colorSpace="calibratedRGB"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="支付类型" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kou-iH-f5p">
+                                <rect key="frame" x="16" y="338" width="568" height="20"/>
+                                <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="FZLanTingHei-EL-GBK" pointSize="17"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nb0-Cw-kiq">
+                                <rect key="frame" x="205" y="367" width="190" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="S5e-xO-EeR"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="FZLanTingHei-EL-GBK" pointSize="14"/>
+                                <state key="normal" title="AA制">
+                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="selected">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="tapPayButton:" destination="zEc-iu-1xD" eventType="touchUpInside" id="WA9-t2-vL3"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oLz-Ti-aKB">
+                                <rect key="frame" x="395" y="367" width="189" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="vMC-61-kAY"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="FZLanTingHei-EL-GBK" pointSize="14"/>
+                                <state key="normal" title="预付款">
+                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="selected">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="tapPayButton:" destination="zEc-iu-1xD" eventType="touchUpInside" id="eBX-3n-dAt"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4cv-AT-6Go">
+                                <rect key="frame" x="16" y="367" width="189" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="9Cd-2A-O73"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="FZLanTingHei-EL-GBK" pointSize="14"/>
+                                <state key="normal" title="请客">
+                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="selected">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="tapPayButton:" destination="zEc-iu-1xD" eventType="touchUpInside" id="S5q-rA-L7s"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="dEY-WS-Lfg" firstAttribute="top" secondItem="dz9-pL-HRd" secondAttribute="bottom" constant="64" id="6kE-5p-a6S"/>
                             <constraint firstItem="JiX-RI-2xV" firstAttribute="leading" secondItem="PyV-ns-LAW" secondAttribute="leadingMargin" constant="39" id="8wR-Rl-Dlc"/>
-                            <constraint firstItem="rK6-jV-dbf" firstAttribute="centerX" secondItem="JBJ-yn-c7H" secondAttribute="centerX" id="9hB-eK-cyO"/>
-                            <constraint firstItem="dEY-WS-Lfg" firstAttribute="top" secondItem="W7b-7Z-QRN" secondAttribute="bottom" constant="74" id="Ddd-G9-eDb"/>
-                            <constraint firstItem="dz9-pL-HRd" firstAttribute="top" secondItem="rK6-jV-dbf" secondAttribute="bottom" constant="91" id="FUN-0C-2mc"/>
-                            <constraint firstAttribute="trailing" secondItem="W7b-7Z-QRN" secondAttribute="trailing" constant="161" id="P6J-kv-OhJ"/>
+                            <constraint firstAttribute="trailing" secondItem="RFl-9L-6Xs" secondAttribute="trailing" constant="16" id="A8e-CW-ZLa"/>
+                            <constraint firstItem="Kou-iH-f5p" firstAttribute="top" secondItem="JBJ-yn-c7H" secondAttribute="bottom" constant="15" id="FWA-fF-RO2"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="oLz-Ti-aKB" secondAttribute="trailing" id="Ha2-yh-yil"/>
+                            <constraint firstItem="oLz-Ti-aKB" firstAttribute="width" secondItem="Nb0-Cw-kiq" secondAttribute="width" id="Qcd-h0-WCh"/>
+                            <constraint firstItem="Nb0-Cw-kiq" firstAttribute="leading" secondItem="4cv-AT-6Go" secondAttribute="trailing" id="Sax-kx-dnt"/>
+                            <constraint firstAttribute="centerX" secondItem="JiX-RI-2xV" secondAttribute="centerX" id="Swk-Le-PFP"/>
+                            <constraint firstItem="oLz-Ti-aKB" firstAttribute="leading" secondItem="Nb0-Cw-kiq" secondAttribute="trailing" id="T63-Ti-ciR"/>
                             <constraint firstItem="JiX-RI-2xV" firstAttribute="trailing" secondItem="JBJ-yn-c7H" secondAttribute="trailing" id="X1j-4H-niR"/>
-                            <constraint firstItem="rK6-jV-dbf" firstAttribute="top" secondItem="JBJ-yn-c7H" secondAttribute="bottom" constant="27" id="gJq-YO-1Pg"/>
-                            <constraint firstItem="dz9-pL-HRd" firstAttribute="leading" secondItem="PyV-ns-LAW" secondAttribute="leading" constant="171" id="n6x-pO-6XL"/>
+                            <constraint firstItem="oLz-Ti-aKB" firstAttribute="width" secondItem="4cv-AT-6Go" secondAttribute="width" id="ech-xU-4PI"/>
+                            <constraint firstItem="dEY-WS-Lfg" firstAttribute="top" secondItem="RFl-9L-6Xs" secondAttribute="bottom" constant="35" id="ek3-cG-SoO"/>
                             <constraint firstItem="rK6-jV-dbf" firstAttribute="trailing" secondItem="PyV-ns-LAW" secondAttribute="trailingMargin" id="onc-Q9-Zgx"/>
                             <constraint firstItem="JBJ-yn-c7H" firstAttribute="top" secondItem="JiX-RI-2xV" secondAttribute="bottom" constant="15" id="pwc-ou-lLd"/>
+                            <constraint firstItem="Kou-iH-f5p" firstAttribute="leading" secondItem="PyV-ns-LAW" secondAttribute="leading" constant="16" id="qGa-Fh-VN3"/>
+                            <constraint firstItem="RFl-9L-6Xs" firstAttribute="top" secondItem="rK6-jV-dbf" secondAttribute="bottom" constant="30" id="sTd-kx-2zj"/>
+                            <constraint firstItem="RFl-9L-6Xs" firstAttribute="leading" secondItem="PyV-ns-LAW" secondAttribute="leading" constant="16" id="szo-fI-zEG"/>
                             <constraint firstItem="JiX-RI-2xV" firstAttribute="leading" secondItem="JBJ-yn-c7H" secondAttribute="leading" id="thU-0y-fkp"/>
-                            <constraint firstItem="W7b-7Z-QRN" firstAttribute="centerY" secondItem="dz9-pL-HRd" secondAttribute="centerY" id="u3I-38-w6w"/>
                             <constraint firstItem="rK6-jV-dbf" firstAttribute="leading" secondItem="PyV-ns-LAW" secondAttribute="leadingMargin" id="uBl-tz-dga"/>
-                            <constraint firstItem="JiX-RI-2xV" firstAttribute="top" secondItem="bca-NU-GQ9" secondAttribute="bottom" constant="83" id="z3f-ae-hZK"/>
+                            <constraint firstAttribute="centerX" secondItem="JBJ-yn-c7H" secondAttribute="centerX" id="uNn-sV-EE4"/>
+                            <constraint firstItem="rK6-jV-dbf" firstAttribute="top" secondItem="oLz-Ti-aKB" secondAttribute="bottom" priority="750" constant="30" id="wfY-df-SB7"/>
+                            <constraint firstItem="4cv-AT-6Go" firstAttribute="leading" secondItem="PyV-ns-LAW" secondAttribute="leadingMargin" id="xiS-4p-f25"/>
+                            <constraint firstAttribute="trailing" secondItem="Kou-iH-f5p" secondAttribute="trailing" constant="16" id="xkZ-G1-dyf"/>
+                            <constraint firstItem="rK6-jV-dbf" firstAttribute="top" secondItem="Nb0-Cw-kiq" secondAttribute="bottom" priority="750" constant="30" id="ycA-hY-fN0"/>
+                            <constraint firstItem="JiX-RI-2xV" firstAttribute="top" secondItem="bca-NU-GQ9" secondAttribute="bottom" constant="75" id="z3f-ae-hZK"/>
+                            <constraint firstItem="4cv-AT-6Go" firstAttribute="top" secondItem="Kou-iH-f5p" secondAttribute="bottom" constant="9" id="za2-h9-YwJ"/>
+                            <constraint firstItem="rK6-jV-dbf" firstAttribute="top" secondItem="4cv-AT-6Go" secondAttribute="bottom" priority="750" constant="30" id="zq3-9V-RP3"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="确认聚会" id="Y3V-8l-Kc1">
@@ -3927,11 +3990,13 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="aaButton" destination="Nb0-Cw-kiq" id="MO8-68-GDy"/>
                         <outlet property="addressButton" destination="rK6-jV-dbf" id="bdk-0I-Kk9"/>
+                        <outlet property="dateButton" destination="RFl-9L-6Xs" id="68A-2W-fo4"/>
                         <outlet property="doneButton" destination="mvf-ti-tGJ" id="KwR-df-qgz"/>
+                        <outlet property="imRichButton" destination="4cv-AT-6Go" id="XFF-98-VVZ"/>
                         <outlet property="partyNameTextField" destination="JiX-RI-2xV" id="x34-89-xlc"/>
-                        <outlet property="payButton" destination="dz9-pL-HRd" id="xBN-3S-t6x"/>
-                        <outlet property="payLabel" destination="W7b-7Z-QRN" id="5wH-Y2-zfB"/>
+                        <outlet property="payFirstButton" destination="oLz-Ti-aKB" id="Szn-5l-37g"/>
                         <outlet property="remarkTextView" destination="JBJ-yn-c7H" id="Qhb-FI-Slz"/>
                     </connections>
                 </viewController>
