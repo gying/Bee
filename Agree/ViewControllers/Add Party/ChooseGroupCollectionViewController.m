@@ -11,6 +11,8 @@
 #import "AppDelegate.h"
 #import "Model_Group.h"
 #import "ChooseLoctaionViewController.h"
+#import <UIImageView+WebCache.h>
+#import "SRImageManager.h"
 
 @interface ChooseGroupCollectionViewController () {
     NSArray *_groupAry;
@@ -63,9 +65,15 @@ static NSString * const reuseIdentifier = @"GroupCollectionCell";
         } else {
             Model_Group *theGroup = [_groupAry objectAtIndex:indexPath.row-1];
 
-//        EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:theGroup.em_id isGroup:YES];
-        [theGroup setChat_update:[NSNumber numberWithInteger:0]];
-        [cell initCellWithGroup:theGroup isAddView:NO];
+//          EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:theGroup.em_id isGroup:YES];
+            [theGroup setChat_update:[NSNumber numberWithInteger:0]];
+            [cell initCellWithGroup:theGroup isAddView:NO];
+            
+            NSURL *imageUrl = [SRImageManager groupFrontCoverImageFromTXYFieldID:theGroup.avatar_path];
+            [cell.groupImageView sd_setImageWithURL:imageUrl
+                                          completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                                              [self setGroupAvatar:image atIndex:indexPath];
+                                          }];
             
         }
 
@@ -82,6 +90,12 @@ static NSString * const reuseIdentifier = @"GroupCollectionCell";
     float cellSize = ([UIScreen mainScreen].bounds.size.width - 3)/2;
     return CGSizeMake(cellSize, cellSize);
 }
+
+- (void)setGroupAvatar: (UIImage *)image atIndex: (NSIndexPath *)indexPath {
+    GroupCollectionViewCell *cell = (GroupCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+    [cell.groupImageView setImage:image];
+}
+
 
 
 #pragma mark - Navigation

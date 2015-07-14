@@ -28,7 +28,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-
+    
     _payType = 0;
     //设置地址文本
     if (self.party.location) {
@@ -46,6 +46,11 @@
     
     [self.partyNameTextField setDelegate:self];
     [self.remarkTextView setDelegate:self];
+    
+    self.imRichButton.tag = 1;
+    self.aaButton.tag = 2;
+    self.payFirstButton.tag = 3;
+    
     
     [self.navigationItem.rightBarButtonItem setEnabled:NO];
 }
@@ -114,29 +119,52 @@
 }
 
 - (IBAction)tapPayButton:(UIButton *)sender {
-    switch (_payType) {
+    switch (sender.tag) {
         case 0: {
             //未指定
-            _payType = 1;
-            self.payLabel.text = @"我请客";
         }
             break;
         case 1: {
             //请客
-            _payType = 2;
-            self.payLabel.text = @"AA制";
+            if (1 == _payType) {
+                //取消
+                _payType = 0;
+                [self.imRichButton setSelected:NO];
+            } else {
+                [self.imRichButton setSelected:YES];
+                [self.aaButton setSelected:NO];
+                [self.payFirstButton setSelected:NO];
+                _payType = (int)sender.tag;
+            }
+            
         }
             break;
         case 2: {
             //AA后付
-            _payType = 3;
-            self.payLabel.text = @"预先支付";
+            if (2 == _payType) {
+                //取消
+                _payType = 0;
+                [self.aaButton setSelected:NO];
+            } else {
+                [self.imRichButton setSelected:NO];
+                [self.aaButton setSelected:YES];
+                [self.payFirstButton setSelected:NO];
+                _payType = (int)sender.tag;
+            }
         }
             break;
         case 3: {
             //预支付
-            _payType = 0;
-            self.payLabel.text = @"你猜";
+            if (3 == _payType) {
+                //取消
+                _payType = 0;
+                [self.payFirstButton setSelected:NO];
+            } else {
+                [self.imRichButton setSelected:NO];
+                [self.aaButton setSelected:NO];
+                [self.payFirstButton setSelected:YES];
+                _payType = (int)sender.tag;
+            }
         }
             break;
         default:
@@ -185,7 +213,6 @@
     childController.fromRoot = YES;
     childController.party = self.party;
     [self.navigationController showViewController:childController sender:self];
-    
 
     NSLog(@"返回到选择时间界面");
 }
@@ -197,9 +224,6 @@
     childController.fromRoot = YES;
     [self.navigationController showViewController:childController sender:self];
         NSLog(@"返回到选择地址界面");
-    
-    
-    
 }
 
 /*

@@ -126,7 +126,6 @@
     self.passwordView.hidden = YES;
 }
 
-
 - (IBAction)passwordEditEnd:(id)sender {
     if (!_password) {
         _password = self.passwordTextField.text;
@@ -195,7 +194,6 @@
         } else {
             return;
         }
-        
     } else {
         UIImagePickerControllerSourceType sourceType;
         if (0 == buttonIndex) {
