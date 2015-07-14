@@ -5,7 +5,7 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <mutableArray key="LangTingGBK.TTF">
+        <mutableArray key="Lantinghei.ttc">
             <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHK--GBK1-0</string>
@@ -2158,7 +2158,7 @@
                     <navigationItem key="navigationItem" title="选择一个小组" id="BrH-Hm-Van">
                         <barButtonItem key="leftBarButtonItem" style="done" id="7mT-0W-eZ7">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="NM0-Mv-7eY">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -4294,9 +4294,9 @@
         <image name="agree_user_setting_avatar_backgroup" width="99" height="99"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="xWd-dq-8Ci"/>
         <segue reference="NNN-op-p3r"/>
         <segue reference="7g0-Ma-cMP"/>
+        <segue reference="c42-zg-aVC"/>
         <segue reference="Re4-1s-AtI"/>
         <segue reference="brR-kr-yPI"/>
     </inferredMetricsTieBreakers>

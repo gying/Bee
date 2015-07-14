@@ -93,6 +93,8 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     UIImagePickerControllerSourceType sourceType;
+    
+    
     if (0 == buttonIndex) {
         //直接拍照
         sourceType = UIImagePickerControllerSourceTypeCamera;
