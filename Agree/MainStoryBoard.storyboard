@@ -1560,7 +1560,7 @@
                     <navigationItem key="navigationItem" id="CeC-iQ-L93">
                         <barButtonItem key="leftBarButtonItem" style="done" id="G3e-s9-Dyy">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="6S0-7w-Gxh">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="返回">
@@ -1574,7 +1574,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" id="oQw-jn-TYK">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gbE-AD-fyg">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="完成">
@@ -1666,9 +1666,23 @@
             <objects>
                 <viewController id="NbH-Cq-nEH" customClass="PartyMapViewController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="4FB-ep-DZO">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="doH-v5-bIe">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="2u9-0e-F3C">
+                                <rect key="frame" x="16" y="7" width="50" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <state key="normal" title="返回">
+                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="backButton:" destination="NbH-Cq-nEH" eventType="touchUpInside" id="gIB-2g-DHc"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" id="2RK-sX-AJy">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="sH3-Jj-qwG">
-                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="FZLanTingHei-EL-GBK" pointSize="13"/>
                                 <state key="normal" title="导航"/>
