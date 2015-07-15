@@ -22,11 +22,13 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *partyNameTextField;
 @property (weak, nonatomic) IBOutlet UITextView *remarkTextView;
-@property (weak, nonatomic) IBOutlet UIButton *payButton;
-@property (weak, nonatomic) IBOutlet UILabel *payLabel;
+
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 
 
+@property (weak, nonatomic) IBOutlet UIView *payFirstView;
+@property (weak, nonatomic) IBOutlet UITextField *payFirstMoneyTextField;
+@property (weak, nonatomic) IBOutlet UIButton *payFirstDoneButton;
 
 
 @property (weak, nonatomic) IBOutlet UIButton *imRichButton;

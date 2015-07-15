@@ -27,8 +27,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    
     _payType = 0;
     //设置地址文本
     if (self.party.location) {
@@ -52,6 +50,9 @@
     self.imRichButton.tag = 1;
     self.aaButton.tag = 2;
     self.payFirstButton.tag = 3;
+    
+    
+    self.payFirstDoneButton.tag = 4;
     
     
     [self.navigationItem.rightBarButtonItem setEnabled:NO];
@@ -176,6 +177,7 @@
             
         }
             break;
+            
         case 2: {
             //AA后付
             if (2 == _payType) {
@@ -190,20 +192,39 @@
             }
         }
             break;
+            
         case 3: {
             //预支付
             if (3 == _payType) {
                 //取消
                 _payType = 0;
                 [self.payFirstButton setSelected:NO];
+                //取消预支付
+                self.party.pay_amount = nil;
             } else {
                 [self.imRichButton setSelected:NO];
                 [self.aaButton setSelected:NO];
                 [self.payFirstButton setSelected:YES];
                 _payType = (int)sender.tag;
+                
+                //显示预支付页面
+                [self.payFirstView setHidden:NO];
+                [self.payFirstMoneyTextField becomeFirstResponder];
             }
         }
             break;
+            
+        case 4: {
+            //预支付完成按钮
+            [self.payFirstView setHidden:YES];
+            [self.payFirstMoneyTextField resignFirstResponder];
+            if (self.payFirstMoneyTextField.text) {
+                self.party.pay_amount = [NSNumber numberWithFloat:[self.payFirstMoneyTextField.text floatValue]];
+                self.payFirstMoneyTextField.text = nil;
+            }
+        }
+            break;
+            
         default:
             break;
     }

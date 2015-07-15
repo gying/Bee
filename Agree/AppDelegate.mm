@@ -352,7 +352,6 @@
         
         
         [self.window setRootViewController:self.rootLoginViewController];
-
     }
 
     return YES;
@@ -534,7 +533,6 @@
                 [TXYDownloader authorize:@"201139" userId:[Model_User loadFromUserDefaults].pk_user.stringValue];
 //                self.uploadManager = [[TXYUploadManager alloc] initWithPersistenceId: @"persistenceId"];
             }
-            
         }
         default:
             break;
