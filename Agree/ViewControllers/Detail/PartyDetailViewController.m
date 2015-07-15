@@ -200,11 +200,11 @@
     
     //更新参与人数的标签
     self.inNumLabel.text = [NSString stringWithFormat:@"%d", inNum];
-    NSLog(@"%@",self.inNumLabel.text);
+//    NSLog(@"%@",self.inNumLabel.text);
     self.outNumLabel.text = [NSString stringWithFormat:@"%d", outNum];
-    NSLog(@"%@",self.outNumLabel.text);
+//    NSLog(@"%@",self.outNumLabel.text);
     self.unkownLabel.text = [NSString stringWithFormat:@"%d", unNum];
-    NSLog(@"%@",self.unkownLabel.text);
+//    NSLog(@"%@",self.unkownLabel.text);
 }
 
 - (void)setParticipateStatus {

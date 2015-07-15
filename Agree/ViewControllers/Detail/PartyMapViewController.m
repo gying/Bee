@@ -9,12 +9,13 @@
 #import "PartyMapViewController.h"
 #import "BMapKit.h"
 
-@interface PartyMapViewController ()<BMKLocationServiceDelegate, UIActionSheetDelegate> {
+@interface PartyMapViewController ()<BMKLocationServiceDelegate, UIActionSheetDelegate,BMKMapViewDelegate> {
     BMKMapView *_bdMapView;
     BMKLocationService *_locService;
     
     BMKUserLocation *_userLocation;
     BMKPointAnnotation *_chooseAnnotation;
+    UIButton * customButton;
     
 }
 
@@ -26,11 +27,14 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    
+    
     if (self.party.longitude && self.party.latitude) {
         //如果存在经纬度数据
         //则开始更新地区信息
         _bdMapView = [[BMKMapView alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height)];
         [self.view addSubview:_bdMapView];
+        [_bdMapView setDelegate:self];
         
         CLLocationCoordinate2D partyCoor;
         partyCoor.longitude = [self.party.longitude doubleValue];
@@ -41,7 +45,10 @@
         [_bdMapView addAnnotation:_chooseAnnotation];
         [_bdMapView setZoomLevel:15];
         [_bdMapView setCenterCoordinate:partyCoor];
+
+
     }
+    
     
     
     //设置定位精确度，默认：kCLLocationAccuracyBest
@@ -57,6 +64,31 @@
     
     self.availableMaps = [[NSMutableArray alloc] init];
 }
+
+- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation
+{
+    
+
+   BMKPinAnnotationView *newAnnotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"myAnnotation"];
+
+    customButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 85, 35)];
+    customButton.backgroundColor = [UIColor redColor];
+    [customButton setTitle:@"聚会地点" forState:UIControlStateNormal];
+    [customButton addTarget:self action:@selector(daohang) forControlEvents:UIControlEventTouchUpInside];
+
+//    BMKActionPaopaoView * paopaoView = [[BMKActionPaopaoView alloc]initWithCustomView:customButton];
+//    newAnnotationView.paopaoView = paopaoView;
+    [newAnnotationView addSubview:customButton];
+    
+
+    return newAnnotationView;
+    
+}
+-(void)daohang
+{
+    NSLog(@"导航");
+}
+
 
 //处理位置坐标更新
 - (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation
@@ -169,6 +201,11 @@
         //        DEBUG_LOG(@"\n%@\n%@\n%@", mapDic[@"name"], mapDic[@"url"], urlString);
         [[UIApplication sharedApplication] openURL:url];
     }
+}
+- (IBAction)backButton:(id)sender {
+    
+    NSLog(@"返回");
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

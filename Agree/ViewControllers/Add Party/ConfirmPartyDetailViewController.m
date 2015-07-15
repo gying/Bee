@@ -45,6 +45,8 @@
     [self.partyNameTextField setDelegate:self];
     [self.remarkTextView setDelegate:self];
     
+    self.remarkTextView.textAlignment = NSTextAlignmentCenter;
+    
     self.imRichButton.tag = 1;
     self.aaButton.tag = 2;
     self.payFirstButton.tag = 3;
@@ -80,7 +82,53 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)pressedTheDoneButton:(id)sender {
-    [self.doneButton setEnabled:NO];
+    NSLog(@"完成按钮");
+}
+
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+    
+    if ([self.remarkTextView.text isEqualToString:@"请输入聚会的备注信息"]) {
+        self.remarkTextView.text = nil;
+    }
+    
+    self.doneButton.enabled = YES;
+    [self.doneButton setTitle:@"关闭" forState:UIControlStateNormal];
+    self.doneButton.titleLabel.textColor = self.view.tintColor;
+    [self.doneButton addTarget:self action:@selector(colose) forControlEvents:UIControlEventTouchUpInside];
+    
+     NSLog(@"开始编辑备注信息");
+}
+-(void)colose
+{
+    NSLog(@"关闭键盘");
+
+//    [self.view endEditing:YES];
+    
+    [self.remarkTextView resignFirstResponder];
+    
+    
+    
+    
+}
+
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView {
+    if (0 == textView.text.length) {
+        [self.remarkTextView setText:@"请输入聚会的备注信息"];
+        [self.doneButton setTitle:@"完成" forState:UIControlStateNormal];
+        self.doneButton.enabled = NO;
+    }
+    else if(textView.text.length > 0 )
+    {
+        
+        [self.doneButton setTitle:@"完成" forState:UIControlStateNormal];
+        [self.doneButton addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];
+    }
+
+    NSLog(@"结束编辑备注信息");
+    return YES;
+}
+-(void)done
+{
     self.party.pk_party = [[NSUUID UUID] UUIDString];
     self.party.fk_user = [Model_User loadFromUserDefaults].pk_user;
     self.party.name = self.partyNameTextField.text;
@@ -90,17 +138,6 @@
         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
     }
     [_netManager addSchedule:self.party];
-}
-
-- (void)textViewDidBeginEditing:(UITextView *)textView {
-    self.remarkTextView.text = nil;
-}
-
-- (BOOL)textViewShouldEndEditing:(UITextView *)textView {
-    if (0 == textView.text.length) {
-        [self.remarkTextView setText:@"请输入聚会的备注信息"];
-    }
-    return YES;
 }
 
 - (IBAction)textFieldEditingChanger:(UITextField *)sender {
@@ -242,11 +279,21 @@
 
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
     ChooseLoctaionViewController *childController = [sb instantiateViewControllerWithIdentifier:@"chooseLocation"];
+    childController.party = self.party;
     childController.fromRoot = YES;
     [self.navigationController showViewController:childController sender:self];
         NSLog(@"返回到选择地址界面");
 }
 
+
+
+//键盘回收
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self.remarkTextView resignFirstResponder];
+    [self.partyNameTextField resignFirstResponder];
+    
+}
 /*
 #pragma mark - Navigation
 
