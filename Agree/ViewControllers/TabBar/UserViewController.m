@@ -66,7 +66,8 @@
 
 - (IBAction)pressedTheAccountSettingButton:(UIButton *)sender {
 }
-- (IBAction)myParty:(id)sender {
+
+- (IBAction)pressedMyPartyButton:(UIButton *)sender {
 }
 
 - (IBAction)pressedTheFeedbackButton:(UIButton *)sender {
