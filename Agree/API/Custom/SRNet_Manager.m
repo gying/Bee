@@ -111,9 +111,6 @@
 //        NSLog(@"response : %@",response);
 //        NSLog(@"backData : %@",[[NSString alloc]initWithData:backData encoding:NSUTF8StringEncoding]);
 //    }
-    
-    
-    return TRUE;
 }
 
 // 将字典或者数组转化为JSON串

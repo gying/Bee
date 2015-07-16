@@ -146,6 +146,8 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init] ;
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"CD_Party" inManagedObjectContext:context];
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"relationship == %d", relation];
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"begin_time" ascending:YES];
+    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sort]];
     [fetchRequest setEntity:entity];
     NSError *error;
     NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
@@ -165,6 +167,8 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init] ;
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"CD_Party" inManagedObjectContext:context];
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"relationship != 2"];
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"begin_time" ascending:YES];
+    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sort]];
     [fetchRequest setEntity:entity];
     NSError *error;
     NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];

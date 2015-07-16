@@ -155,7 +155,7 @@
                     [CD_Party savePartyToCD:party];
                 }
                 
-                [self.tableView reloadData];
+//                [self.tableView reloadData];
                 
             } else {
                 if (_scheduleArray) {

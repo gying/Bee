@@ -30,7 +30,6 @@
 @property (nonatomic, retain) NSNumber * pk_party_user;
 @property (nonatomic, retain) NSNumber * inNum;
 
-
 #pragma mark V2
 @property (nonatomic, strong)NSNumber *pay_type;
 @property (nonatomic, strong)NSNumber *pay_amount;
