@@ -11,8 +11,13 @@
 		C60A755F1B2825C500707D84 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C60A755B1B2825C500707D84 /* libWeChatSDK.a */; };
 		C60A75601B2825C500707D84 /* read_me.txt in Resources */ = {isa = PBXBuildFile; fileRef = C60A755C1B2825C500707D84 /* read_me.txt */; };
 		C60D3F241B4240E500E86E2D /* RootPhoneRegViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C60D3F231B4240E500E86E2D /* RootPhoneRegViewController.m */; };
+		C61D98511B564273005EF6DC /* MyPartyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C61D98501B564273005EF6DC /* MyPartyViewController.m */; };
 		C64F1D5E1B26881A0063C012 /* ChoosefriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C64F1D5D1B26881A0063C012 /* ChoosefriendsViewController.m */; };
 		C64F1D641B26CB9D0063C012 /* ChoosefriendsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C64F1D631B26CB9D0063C012 /* ChoosefriendsTableViewCell.m */; };
+		C6E25B841B57A3C70031A6B9 /* CreatedPartyTableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C6E25B831B57A3C70031A6B9 /* CreatedPartyTableViewDelegate.m */; };
+		C6E25B8A1B57ACEB0031A6B9 /* HistoryPartyTableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C6E25B891B57ACEB0031A6B9 /* HistoryPartyTableViewDelegate.m */; };
+		C6E25B8D1B57B1FA0031A6B9 /* CreatedPartyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C6E25B8C1B57B1FA0031A6B9 /* CreatedPartyTableViewCell.m */; };
+		C6E25B901B57B2190031A6B9 /* HistoryPartyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C6E25B8F1B57B2190031A6B9 /* HistoryPartyTableViewCell.m */; };
 		F0068C0D1A679E0600B9CB60 /* ChooseDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0068C001A679E0600B9CB60 /* ChooseDateViewController.m */; };
 		F0068C0E1A679E0600B9CB60 /* ChooseLoctaionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0068C021A679E0600B9CB60 /* ChooseLoctaionViewController.m */; };
 		F0068C0F1A679E0600B9CB60 /* ConfirmPartyDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0068C041A679E0600B9CB60 /* ConfirmPartyDetailViewController.m */; };
@@ -179,10 +184,20 @@
 		C60A755E1B2825C500707D84 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
 		C60D3F221B4240E500E86E2D /* RootPhoneRegViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootPhoneRegViewController.h; sourceTree = "<group>"; };
 		C60D3F231B4240E500E86E2D /* RootPhoneRegViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootPhoneRegViewController.m; sourceTree = "<group>"; };
+		C61D984F1B564273005EF6DC /* MyPartyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPartyViewController.h; sourceTree = "<group>"; };
+		C61D98501B564273005EF6DC /* MyPartyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPartyViewController.m; sourceTree = "<group>"; };
 		C64F1D5C1B26881A0063C012 /* ChoosefriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosefriendsViewController.h; sourceTree = "<group>"; };
 		C64F1D5D1B26881A0063C012 /* ChoosefriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosefriendsViewController.m; sourceTree = "<group>"; };
 		C64F1D621B26CB9D0063C012 /* ChoosefriendsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosefriendsTableViewCell.h; sourceTree = "<group>"; };
 		C64F1D631B26CB9D0063C012 /* ChoosefriendsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosefriendsTableViewCell.m; sourceTree = "<group>"; };
+		C6E25B821B57A3C70031A6B9 /* CreatedPartyTableViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreatedPartyTableViewDelegate.h; sourceTree = "<group>"; };
+		C6E25B831B57A3C70031A6B9 /* CreatedPartyTableViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreatedPartyTableViewDelegate.m; sourceTree = "<group>"; };
+		C6E25B881B57ACEB0031A6B9 /* HistoryPartyTableViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryPartyTableViewDelegate.h; sourceTree = "<group>"; };
+		C6E25B891B57ACEB0031A6B9 /* HistoryPartyTableViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryPartyTableViewDelegate.m; sourceTree = "<group>"; };
+		C6E25B8B1B57B1FA0031A6B9 /* CreatedPartyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreatedPartyTableViewCell.h; sourceTree = "<group>"; };
+		C6E25B8C1B57B1FA0031A6B9 /* CreatedPartyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreatedPartyTableViewCell.m; sourceTree = "<group>"; };
+		C6E25B8E1B57B2190031A6B9 /* HistoryPartyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryPartyTableViewCell.h; sourceTree = "<group>"; };
+		C6E25B8F1B57B2190031A6B9 /* HistoryPartyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryPartyTableViewCell.m; sourceTree = "<group>"; };
 		F0068BFF1A679E0600B9CB60 /* ChooseDateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseDateViewController.h; sourceTree = "<group>"; };
 		F0068C001A679E0600B9CB60 /* ChooseDateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseDateViewController.m; sourceTree = "<group>"; };
 		F0068C011A679E0600B9CB60 /* ChooseLoctaionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseLoctaionViewController.h; sourceTree = "<group>"; };
@@ -642,6 +657,12 @@
 				F05EAC3C1AD13B1F006F505B /* AboutUsViewController.m */,
 				F05EAC3E1AD13B42006F505B /* FeedBackViewController.h */,
 				F05EAC3F1AD13B42006F505B /* FeedBackViewController.m */,
+				C61D984F1B564273005EF6DC /* MyPartyViewController.h */,
+				C61D98501B564273005EF6DC /* MyPartyViewController.m */,
+				C6E25B821B57A3C70031A6B9 /* CreatedPartyTableViewDelegate.h */,
+				C6E25B831B57A3C70031A6B9 /* CreatedPartyTableViewDelegate.m */,
+				C6E25B881B57ACEB0031A6B9 /* HistoryPartyTableViewDelegate.h */,
+				C6E25B891B57ACEB0031A6B9 /* HistoryPartyTableViewDelegate.m */,
 			);
 			path = "User Setting";
 			sourceTree = "<group>";
@@ -855,6 +876,10 @@
 				F0A97FC11A92175F00FFA4F2 /* GroupChatTableViewCell.m */,
 				F02169F21A927CFC00353879 /* GroupPartyTableViewCell.h */,
 				F02169F31A927CFC00353879 /* GroupPartyTableViewCell.m */,
+				C6E25B8B1B57B1FA0031A6B9 /* CreatedPartyTableViewCell.h */,
+				C6E25B8C1B57B1FA0031A6B9 /* CreatedPartyTableViewCell.m */,
+				C6E25B8E1B57B2190031A6B9 /* HistoryPartyTableViewCell.h */,
+				C6E25B8F1B57B2190031A6B9 /* HistoryPartyTableViewCell.m */,
 				F05AC3C31A9B24E500CABD01 /* AllPartyTableViewCell.h */,
 				F05AC3C41A9B24E500CABD01 /* AllPartyTableViewCell.m */,
 				F07BBDAC1A9EE48A00B44C65 /* PeopleListTableViewCell.h */,
@@ -1268,12 +1293,14 @@
 				F0DA151D1AC1373800FA6199 /* UserChatViewController.m in Sources */,
 				F09F05541AB67FB50079D6DB /* Model_user_user.m in Sources */,
 				F0F5C2771A66F1490029BF7A /* MJMember.m in Sources */,
+				C6E25B841B57A3C70031A6B9 /* CreatedPartyTableViewDelegate.m in Sources */,
 				F0BF55211AAC3644000D5717 /* SRAccountView.m in Sources */,
 				F0A97FBF1A92165000FFA4F2 /* SRChatLabel.m in Sources */,
 				F07F71241A72AB92006208A1 /* JTCalendarWeekView.m in Sources */,
 				F07F71251A72AB92006208A1 /* JTCircleView.m in Sources */,
 				F07F711F1A72AB92006208A1 /* JTCalendarDayView.m in Sources */,
 				F07642F11AF1FDBF0075E0C2 /* ChooseGroupCollectionViewController.m in Sources */,
+				C6E25B8D1B57B1FA0031A6B9 /* CreatedPartyTableViewCell.m in Sources */,
 				F07F711D1A72AB92006208A1 /* JTCalendarContentView.m in Sources */,
 				F0CC83E11B2E7D0400B73652 /* CD_Group.m in Sources */,
 				F0BED4B61AA32E1000801ED2 /* RootAccountRegViewController.m in Sources */,
@@ -1286,6 +1313,7 @@
 				F07F71211A72AB92006208A1 /* JTCalendarMenuView.m in Sources */,
 				F07F711B1A72AB92006208A1 /* JTCalendar.m in Sources */,
 				F0068C0E1A679E0600B9CB60 /* ChooseLoctaionViewController.m in Sources */,
+				C61D98511B564273005EF6DC /* MyPartyViewController.m in Sources */,
 				F0F5C2951A66F1620029BF7A /* Model_Party.m in Sources */,
 				F0068C0F1A679E0600B9CB60 /* ConfirmPartyDetailViewController.m in Sources */,
 				F07F71201A72AB92006208A1 /* JTCalendarMenuMonthView.m in Sources */,
@@ -1342,6 +1370,7 @@
 				F0F5C27C1A66F1490029BF7A /* NSObject+MJKeyValue.m in Sources */,
 				F0F5C1CD1A66CEBE0029BF7A /* AppDelegate.mm in Sources */,
 				C64F1D5E1B26881A0063C012 /* ChoosefriendsViewController.m in Sources */,
+				C6E25B901B57B2190031A6B9 /* HistoryPartyTableViewCell.m in Sources */,
 				C64F1D641B26CB9D0063C012 /* ChoosefriendsTableViewCell.m in Sources */,
 				F01487E91A8F827800E41A63 /* UserViewController.m in Sources */,
 				F0F5C2921A66F1620029BF7A /* Model_Feedback.m in Sources */,
@@ -1350,6 +1379,7 @@
 				F0B82AEF1A76AE85007C58C3 /* Model_Group_Code.m in Sources */,
 				F080742C1AB948510046EA0C /* ContactsDetailTableViewController.m in Sources */,
 				F0158B5E1ACE1F0900FB69F9 /* SRMoveArray.m in Sources */,
+				C6E25B8A1B57ACEB0031A6B9 /* HistoryPartyTableViewDelegate.m in Sources */,
 				F024690E1AD180DB00FED32D /* ConvertToCommonEmoticonsHelper.m in Sources */,
 				F07F711C1A72AB92006208A1 /* JTCalendarAppearance.m in Sources */,
 				F05F30001AFBD50300AA6BE8 /* SRKeyboard.m in Sources */,

@@ -57,6 +57,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.groupScrollView.bounces = NO;
     [self.groupTabBar setSelectedItem:self.groupTalk];
   
     [self.navigationItem setTitle:self.group.name];

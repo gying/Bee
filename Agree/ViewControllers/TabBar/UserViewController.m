@@ -42,7 +42,6 @@
     
     //BB号
     [self.accountLabel setText:[NSString stringWithFormat:@"BB号:  %@",[Model_User loadFromUserDefaults].pk_user.stringValue]];
-    
 }
 
 - (void)resetAvatar {
@@ -66,8 +65,9 @@
 
 - (IBAction)pressedTheAccountSettingButton:(UIButton *)sender {
 }
-- (IBAction)myParty:(id)sender {
-    
+
+- (IBAction)pressedMyPartyButton:(UIButton *)sender {
+
 }
 
 - (IBAction)pressedTheFeedbackButton:(UIButton *)sender {
