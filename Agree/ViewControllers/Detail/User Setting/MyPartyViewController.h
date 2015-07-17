@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+
 @interface MyPartyViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UITabBar *myPartyTabBar;
 @property (weak, nonatomic) IBOutlet UITabBarItem *createdParty;
@@ -24,8 +25,6 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *createdPartyTableView;
 @property (weak, nonatomic) IBOutlet UITableView *historyPartyTableView;
-
-
 
 
 

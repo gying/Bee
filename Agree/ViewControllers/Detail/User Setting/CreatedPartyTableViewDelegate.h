@@ -8,9 +8,30 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "Model_Group.h"
 
-@interface CreatedPartyTableViewDelegate : NSObject<UITableViewDataSource, UITableViewDelegate>
+#import "SRNet_Manager.h"
+
+#import "MyPartyViewController.h"
+
+
+
+
+
+@interface CreatedPartyTableViewDelegate : NSObject<UITableViewDataSource, UITableViewDelegate,SRNetManagerDelegate>
 
 @property (nonatomic, strong)NSMutableArray *schAry;
+
+
+
+@property (nonatomic, strong)Model_Group *group;
+
+
+@property (nonatomic,strong)MyPartyViewController * myPartyVC;
+
+
+
+
+
 
 @end

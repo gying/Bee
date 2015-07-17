@@ -390,4 +390,14 @@
                                                   andRequestType:kGetUserInfoByWechat]];
 }
 
+- (BOOL)getCreatedPartyByUser: (Model_User *)user {
+    return [self requestNetorkWithDic:[self toRequestDicWithData:user.keyValues
+                                                  andRequestType:kGetCreatedParty]];
+}
+
+- (BOOL)getPartyHistoryByUser: (Model_User *)user {
+    return [self requestNetorkWithDic:[self toRequestDicWithData:user.keyValues
+                                                  andRequestType:kGetPartyHistory]];
+}
+
 @end
