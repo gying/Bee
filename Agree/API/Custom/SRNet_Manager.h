@@ -22,7 +22,9 @@
 #import "Model_Feedback.h"
 
 //定义请求地址
-#define kBaseUrlString  @"http://beagree.com/webroot/"
+//#define kBaseUrlString  @"http://beagree.com/webroot/"
+
+#define kBaseUrlString  @"http://beagree-1.wx.jaeapp.com/appCode/"
 
 //#define kBaseUrlString  @"http://interface.beagree.com/webroot/"
 
