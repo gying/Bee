@@ -36,7 +36,7 @@
     [self.avataButton.layer setMasksToBounds:YES];
     
     [self.avataButton addTarget:self action:@selector(tapAvatarButton:) forControlEvents:UIControlEventTouchUpInside];
-    [self.avataButton sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:user.avatar_path] forState:UIControlStateNormal];
+    [self.avataButton sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromOSS:user.avatar_path] forState:UIControlStateNormal];
     [self.nicknameLabel setText:user.nickname];
 
 }

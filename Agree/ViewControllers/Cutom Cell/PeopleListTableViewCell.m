@@ -26,6 +26,12 @@
 }
 
 - (void)initWithUser: (Model_User *)user {
+    self.payButton.layer.masksToBounds = YES;
+    self.payButton.layer.cornerRadius = self.payButton.frame.size.height/4;
+    
+    self.payButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.payButton.layer.borderWidth = 1.0;
+    
     self.nicknameLabel.text = user.nickname;
     
     switch ([user.relationship intValue]) {
@@ -47,19 +53,9 @@
         default:
             break;
     }
-    
-    
-    
-    //读取头像
-//    [self.avatarImageView sd_setImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:user.avatar_path]];
+
     //下载图片
-    NSURL *imageUrl = [SRImageManager miniAvatarImageFromTXYFieldID:user.avatar_path];
-//    NSString * urlstr = [imageUrl absoluteString];
-//    
-//    [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.avatarImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-//        [self.avatarImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
-//    } failBlock:nil progressBlock:nil param:nil];
-    
+    NSURL *imageUrl = [SRImageManager miniAvatarImageFromOSS:user.avatar_path];
     [self.avatarImageView sd_setImageWithURL:imageUrl];
     
 }

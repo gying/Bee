@@ -33,18 +33,9 @@
     [self.avatarButton addTarget:self action:@selector(tapAvatarButton:) forControlEvents:UIControlEventTouchUpInside];
     
     //下载图片
-    NSURL *imageUrl = [SRImageManager miniAvatarImageFromTXYFieldID:user.avatar_path];
-//    NSString *urlstr = [imageUrl absoluteString];
-//    [[TXYDownloader sharedInstanceWithPersistenceId:@"user_avatar_small"] download:urlstr
-//                                                                            target:self
-//                                                                         succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-//                                                                        UIImage *testImage = [UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]];
-//                                                                        [self.avatarButton setBackgroundImage:testImage forState:UIControlStateNormal];
-//                                                                    }
-//                                                                         failBlock:nil
-//                                                                     progressBlock:nil
-//                                                                             param:nil];
-            [self.avatarButton sd_setBackgroundImageWithURL:imageUrl forState:UIControlStateNormal];
+    NSURL *imageUrl = [SRImageManager miniAvatarImageFromOSS:user.avatar_path];
+
+    [self.avatarButton sd_setBackgroundImageWithURL:imageUrl forState:UIControlStateNormal];
     [self.nicknameLabel setText:user.nickname];
     
     

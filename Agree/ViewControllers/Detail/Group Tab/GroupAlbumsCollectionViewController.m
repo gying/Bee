@@ -31,6 +31,7 @@
     NSMutableDictionary *_imageViewDic;
     SRNet_Manager *_netManager;
     Model_Photo *_removePhoto;
+    NSString *_imagePath;
 }
 
 @end
@@ -91,34 +92,10 @@
     [cell setBackgroundColor:[UIColor lightGrayColor]];
     
     //下载图片
-    NSURL *imageUrl = [SRImageManager albumThumbnailImageFromTXYFieldID:newPhoto.pk_photo];
-//    NSString * urlstr = [imageUrl absoluteString];
-////    bool avatarData = [[TXYDownloader sharedInstanceWithPersistenceId:@"group_albums"] hasCache:urlstr];
-//    [[TXYDownloader sharedInstanceWithPersistenceId:@"group_albums"] download:urlstr
-//                                                                       target:cell.cellImageView
-//                                                                    succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-//        UIImage *testImage = [UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]];
-//        [cell.cellImageView setImage:testImage];
-//        
-//        //将图片转化成MJPhoto并加入数组
-//        MJPhoto *photo = [[MJPhoto alloc] init];
-//        photo.url = [SRImageManager originalImageFromTXYFieldID:newPhoto.pk_photo]; // 图片路径
-//        photo.srcImageView = cell.cellImageView; // 来源于哪个UIImageView
-//        if ([newPhoto.fk_user isEqual:[Model_User loadFromUserDefaults].pk_user] || [self.rootController.group.creater isEqual:[Model_User loadFromUserDefaults].pk_user] ) {
-//            //如果为群主或者为图片的上传者,则可以设置删除图片代理
-//            photo.delegate = self;
-//        }
-//        //按照数序放入字典
-//        [_imageViewDic setObject:photo forKey:[NSNumber numberWithInteger:indexPath.row]];
-//        
-//    }
-//                                                                    failBlock:nil
-//                                                                progressBlock:nil
-//                                                                        param:nil];
-    
+    NSURL *imageUrl = [SRImageManager albumThumbnailImageFromOSS:newPhoto.pk_photo];
     [cell.cellImageView sd_setImageWithURL:imageUrl completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         MJPhoto *photo = [[MJPhoto alloc] init];
-        photo.url = [SRImageManager originalImageFromTXYFieldID:newPhoto.pk_photo]; // 图片路径
+        photo.url = [SRImageManager originalImageFromOSS:newPhoto.pk_photo]; // 图片路径
         photo.srcImageView = cell.cellImageView; // 来源于哪个UIImageView
         if ([newPhoto.fk_user isEqual:[Model_User loadFromUserDefaults].pk_user] || [self.rootController.group.creater isEqual:[Model_User loadFromUserDefaults].pk_user] ) {
             //如果为群主或者为图片的上传者,则可以设置删除图片代理
@@ -213,7 +190,33 @@
     }
     
     _pickImage = [SRImageManager getSubImage:_pickImage withRect:CGRectMake(0, 0, 1280 , 1280)];
-    [_imageManager updateImageToTXY:_pickImage];
+    _imagePath = [NSUUID UUID].UUIDString;
+    
+    [[SRImageManager initImageOSSData:_pickImage
+                             withKey:_imagePath] uploadWithUploadCallback:^(BOOL isSuccess, NSError *error) {
+        if (isSuccess) {
+            //图片上传成功
+            Model_Photo *newPhoto = [[Model_Photo alloc] init];
+            [newPhoto setCreate_time:[NSDate date]];
+            [newPhoto setFk_group:self.rootController.group.pk_group];
+            [newPhoto setFk_user:[Model_User loadFromUserDefaults].pk_user];
+            [newPhoto setPk_photo:_imagePath];
+            [newPhoto setStatus:@1];
+            
+            [self.photoAry insertObject:newPhoto atIndex:0];
+            //    [self saveImageData:newPhoto];
+            if (!_netManager) {
+                _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
+            }
+            [_netManager addImageToGroup:newPhoto];
+        } else {
+            
+        }
+        
+    } withProgressCallback:^(float progress) {
+        [SVProgressHUD showProgress:progress*0.9 status:@"正在上传图片"];
+    }];
+    
 }
 
 
@@ -234,32 +237,11 @@
     //图片删除错误
 }
 
-- (void)imageUploadDoneWithFieldID:(NSString *)fieldID {
-    Model_Photo *newPhoto = [[Model_Photo alloc] init];
-    [newPhoto setCreate_time:[NSDate date]];
-    [newPhoto setFk_group:self.rootController.group.pk_group];
-    [newPhoto setFk_user:[Model_User loadFromUserDefaults].pk_user];
-    [newPhoto setPk_photo:fieldID];
-    [newPhoto setStatus:@1];
-    
-    [self.photoAry insertObject:newPhoto atIndex:0];
-    [self saveImageData:newPhoto];
-}
-
 - (void)saveImageData: (Model_Photo *)photo {
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
-    [_netManager addImageToGroup:photo];
-}
-
--(void)imageUploading:(float)proFloat {
-    [SVProgressHUD showProgress:proFloat*0.9 status:@"正在上传图片"];
-}
-
-- (void)imageUpladError {
     
 }
+
+
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (0 == buttonIndex) {

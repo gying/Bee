@@ -173,26 +173,8 @@
         [theGroup setChat_update:[NSNumber numberWithInteger:conversation.unreadMessagesCount]];
         [cell initCellWithGroup:theGroup isAddView:NO];
         
-        
-        
-        
         //下载图片
-        NSURL *imageUrl = [SRImageManager groupFrontCoverImageFromTXYFieldID:theGroup.avatar_path];
-//        NSString *urlstr = [imageUrl absoluteString];
-//        NSData *imageData = [[TXYDownloader sharedInstanceWithPersistenceId:nil] getCacheData:urlstr];
-//        if (imageData) {
-//            [self setGroupAvatar:[UIImage imageWithData:imageData] atIndex:indexPath];
-//        } else {
-//            [[TXYDownloader sharedInstanceWithPersistenceId:@"group_avatar"] download:urlstr
-//                                                                               target:self
-//                                                                            succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-//                                                                                
-//                                                                                [self setGroupAvatar:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]] atIndex:indexPath];
-//                                                                            }
-//                                                                            failBlock:nil
-//                                                                        progressBlock:nil
-//                                                                                param:nil];
-//        }
+        NSURL *imageUrl = [SRImageManager groupFrontCoverImageImageFromOSS:theGroup.avatar_path];
         
         [cell.groupImageView sd_setImageWithURL:imageUrl
                                       completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
@@ -380,25 +362,9 @@
                 [self.groupNameLabel setText:_joinGroup.name];
                 
                 //下载图片
-                NSURL *imageUrl = [SRImageManager groupFrontCoverImageFromTXYFieldID:_joinGroup.avatar_path];
-//                NSString * urlstr = [imageUrl absoluteString];
-//                
-//                NSData *imageData = [[TXYDownloader sharedInstanceWithPersistenceId:nil] getCacheData:urlstr];
-//                if (imageData) {
-//                    [self.groupCoverImageView setImage:[UIImage imageWithData:imageData]];
-//                }else{
-//                
-//                [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr
-//                                                                          target:self.groupCoverImageView
-//                                                                       succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-//                                                                           [self.groupCoverImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
-//                                                                       } failBlock:nil progressBlock:nil param:nil];
-//                }
-                
+                NSURL *imageUrl = [SRImageManager groupFrontCoverImageImageFromOSS:_joinGroup.avatar_path];
+
                 [self.groupCoverImageView sd_setImageWithURL:imageUrl];
-                
-                
-                
             } else {
                 [SVProgressHUD showSuccessWithStatus:@"未找到相关数据"];
                 //未找到小组的相关数据

@@ -69,7 +69,7 @@ static NSString * const reuseIdentifier = @"GroupCollectionCell";
             [theGroup setChat_update:[NSNumber numberWithInteger:0]];
             [cell initCellWithGroup:theGroup isAddView:NO];
             
-            NSURL *imageUrl = [SRImageManager groupFrontCoverImageFromTXYFieldID:theGroup.avatar_path];
+            NSURL *imageUrl = [SRImageManager groupFrontCoverImageImageFromOSS:theGroup.avatar_path];
             [cell.groupImageView sd_setImageWithURL:imageUrl
                                           completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                                               [self setGroupAvatar:image atIndex:indexPath];

@@ -22,13 +22,9 @@
 #import "Model_Feedback.h"
 
 //定义请求地址
-#define kBaseUrlString  @"http://203.195.159.110/webroot/"
 
-//#define kBaseUrlString  @"http://interface.beagree.com/webroot/"
-
-//#define kBaseUrlString @"http://interfacecdn.beagree.com/SR/interface/webroot/"
-
-//#define kBaseUrlString @"http://srinterfacecdn.beagree.com/webroot/"
+//#define kBaseUrlString  @"http://203.195.159.110/webroot/"
+#define kBaseUrlString  @"http://120.26.118.226/app/app_interface/"
 #define kInterfaceUrlString @"sr_interface.php"
 //#define kInterfaceUrlString @"srtext.php"
 

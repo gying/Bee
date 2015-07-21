@@ -53,33 +53,10 @@
         [self.addressBookNameLabel setHidden:YES];
         [self.nameLabel setText:adPeople.userInfo.nickname];
         
-        
         //下载图片
-        NSURL *imageUrl = [SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path];
-//        NSString * urlstr = [imageUrl absoluteString];
-//        
-////        [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.avatarImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-////            [self.avatarImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
-////        } failBlock:nil progressBlock:nil param:nil];
-//        
-//        NSData *imageData = [[TXYDownloader sharedInstanceWithPersistenceId:nil] getCacheData:urlstr];
-//        if (imageData) {
-//            [self.avatarImageView setImage:[UIImage imageWithData:imageData]];
-//        } else {
-//            [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.avatarImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-//                [self.avatarImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
-//            } failBlock:nil progressBlock:nil param:nil];
-//
-//    }
-        
+        NSURL *imageUrl = [SRImageManager miniAvatarImageFromOSS:adPeople.userInfo.avatar_path];
         [self.avatarImageView sd_setImageWithURL:imageUrl];
-        
 
-        
-        
-        
-
-//        [self.avatarImageView sd_setImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path]];
         if (adPeople.userInfo.relationship) {
             switch (adPeople.userInfo.relationship.intValue) {
                 case 1: {
@@ -137,30 +114,12 @@
         
         [self.nicknameLabel setText:adPeople.userInfo.nickname];
         [self.addressBookNameLabel setText:[NSString stringWithFormat:@"通讯录名称: %@",adPeople.name]];
-        
-        
-//        [self.avatarImageView sd_setImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path]];
+
         //下载图片
-        NSURL *imageUrl = [SRImageManager miniAvatarImageFromTXYFieldID:adPeople.userInfo.avatar_path];
-//        NSString * urlstr = [imageUrl absoluteString];
-//        
-//        
-//        NSData *imageData = [[TXYDownloader sharedInstanceWithPersistenceId:nil] getCacheData:urlstr];
-//        if (imageData) {
-//            [self.avatarImageView setImage:[UIImage imageWithData:imageData]];
-//        }else{
-//        
-//        [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.avatarImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-//            [self.avatarImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
-//        } failBlock:nil progressBlock:nil param:nil];
-//   
-//        }
-                [self.avatarImageView sd_setImageWithURL:imageUrl];
+        NSURL *imageUrl = [SRImageManager miniAvatarImageFromOSS:adPeople.userInfo.avatar_path];
+        [self.avatarImageView sd_setImageWithURL:imageUrl];
     }
 }
-
-
-
 
 
 - (IBAction)pressedTheSendButton:(id)sender {

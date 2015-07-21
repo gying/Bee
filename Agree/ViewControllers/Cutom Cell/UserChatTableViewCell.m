@@ -120,7 +120,7 @@
                 [self.chatDateLabel_self setText:dateString];
                 
                 
-                [self.avatarButton_self sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:message.avatar_path_from] forState:UIControlStateNormal];
+                [self.avatarButton_self sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromOSS:message.avatar_path_from] forState:UIControlStateNormal];
                 
                 
 
@@ -147,7 +147,7 @@
                 [self.chatDateLabel setText:dateString];
                 
                 //处理头像信息
-                [self.avatarButton sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:message.avatar_path_from] forState:UIControlStateNormal];
+                [self.avatarButton sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromOSS:message.avatar_path_from] forState:UIControlStateNormal];
                 
             }
         }
@@ -165,7 +165,7 @@
                 
                 [self.chatDateLabel_self setText:dateString];
                 
-                [self.avatarButton_self sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:message.avatar_path_from] forState:UIControlStateNormal];
+                [self.avatarButton_self sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromOSS:message.avatar_path_from] forState:UIControlStateNormal];
                 
                 self.imageButton_self.frame = CGRectMake(self.imageButton_self.frame.origin.x, self.imageButton_self.frame.origin.y, body.thumbnailImage.size.width, body.thumbnailImage.size.height);
                 
@@ -190,7 +190,7 @@
                 [self.chatDateLabel setText:dateString];
                 
                 //处理头像信息
-                [self.avatarButton sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:message.avatar_path_from] forState:UIControlStateNormal];
+                [self.avatarButton sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromOSS:message.avatar_path_from] forState:UIControlStateNormal];
                 
                 
                 if (body.thumbnailLocalPath) {

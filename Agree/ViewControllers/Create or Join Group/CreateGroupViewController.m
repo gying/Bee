@@ -211,21 +211,9 @@
                 [self.remarkLabel setHidden:YES];
                 
                 [self.groupNameLabel setText:_joinGroup.name];
-//                [self.groupCoverImageView sd_setImageWithURL:[SRImageManager groupFrontCoverImageFromTXYFieldID:_joinGroup.avatar_path]];
-                
+
                 //下载图片
-                NSURL *imageUrl = [SRImageManager groupFrontCoverImageFromTXYFieldID:_joinGroup.avatar_path];
-//                NSString * urlstr = [imageUrl absoluteString];
-//                NSData *imageData = [[TXYDownloader sharedInstanceWithPersistenceId:nil] getCacheData:urlstr];
-//                if (imageData) {
-//                    [self.groupCoverImageView setImage:[UIImage imageWithData:imageData]];
-//                }else{
-//                
-//                
-//                [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.groupCoverImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-//                    [self.groupCoverImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
-//                } failBlock:nil progressBlock:nil param:nil];
-//            }
+                NSURL *imageUrl = [SRImageManager groupFrontCoverImageImageFromOSS:_joinGroup.avatar_path];
                 [self.groupCoverImageView sd_setImageWithURL:imageUrl];
                 
             }

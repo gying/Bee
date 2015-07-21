@@ -15,9 +15,8 @@
 #import "ChoosefriendsViewController.h"
 
 
-@interface JoinUserViewController () <SRImageManagerDelegate> {
+@interface JoinUserViewController () {
     SRNet_Manager *_netManager;
-    SRImageManager *_imageManager;
     NSMutableArray *_groupMembers;
     
     ChoosefriendsViewController * choosefriendsVC;
@@ -46,14 +45,6 @@
 
 - (IBAction)groupCreateDone:(id)sender {
     [self createEMGroup];
-}
-
--(void)imageUploading:(float)proFloat
-{
-    
-    [SVProgressHUD showProgress:proFloat*0.9 maskType:SVProgressHUDMaskTypeGradient];
-//    [SVProgressHUD showProgress:proFloat*0.9];
-    NSLog(@"小组正在创建");
 }
 
 - (void)createEMGroup {
@@ -97,11 +88,24 @@
         }
         
         if (self.groupCover) {
-            if (!_imageManager) {
-                _imageManager = [[SRImageManager alloc] initWithDelegate:self];
-            }
-            [_imageManager updateImageToTXY:self.groupCover];
+            self.theGroup.avatar_path = [NSUUID UUID].UUIDString;
+            [[SRImageManager initImageOSSData:self.groupCover
+                                     withKey:self.theGroup.avatar_path] uploadWithUploadCallback:^(BOOL isSuccess, NSError *error) {
+                if (isSuccess) {
+                    //图片上传成功
+                    [_netManager addGroup:self.theGroup withMembers:_groupMembers];
+                } else {
+                    //上传失败
+                    
+                }
+            } withProgressCallback:^(float progress) {
+                [SVProgressHUD showProgress: progress*0.9
+                                   maskType:SVProgressHUDMaskTypeGradient];
+            }];
+
+            
             self.groupCover = nil;
+            
         } else {
             [_netManager addGroup:self.theGroup withMembers:_groupMembers];
         }
