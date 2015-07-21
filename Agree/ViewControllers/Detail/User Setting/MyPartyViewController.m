@@ -12,6 +12,9 @@
 #import "CreatedPartyTableViewDelegate.h"
 
 #import "HistoryPartyTableViewDelegate.h"
+#import "CreatedPartyDetailViewController.h"
+#import "HistoryPartyDetailViewController.h"
+
 
 
 
@@ -170,8 +173,27 @@
 
 }
 
+#pragma mark - Navigation
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    
+    if ([@"GOTOCREATEDPARTY" isEqualToString:segue.identifier]) {
+        CreatedPartyDetailViewController *childController = (CreatedPartyDetailViewController *)segue.destinationViewController;
+        childController.party = [_createdPartyDelegate.schAry objectAtIndex:self.chooseRow];
+        
+    }else if ([@"HISTORYPARTY" isEqualToString:segue.identifier])
+    {
+        HistoryPartyDetailViewController *childController = (HistoryPartyDetailViewController *)segue.destinationViewController;
+        childController.party = [_historyPartyDelegate.schAry objectAtIndex:self.chooseRow];
+    }
 
 
+
+
+
+}
 
 
 

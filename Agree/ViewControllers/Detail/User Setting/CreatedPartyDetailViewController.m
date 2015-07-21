@@ -1,18 +1,21 @@
 //
-//  PartyDetailViewController.m
+//  CreatedPartyDetailViewController.m
 //  Agree
 //
-//  Created by G4ddle on 15/1/26.
+//  Created by Agree on 15/7/17.
 //  Copyright (c) 2015年 superRabbit. All rights reserved.
 //
 
-#import "PartyDetailViewController.h"
+#import "CreatedPartyDetailViewController.h"
+
 #import "SRNet_Manager.h"
 #import "Model_Party_User.h"
 #import <SVProgressHUD.h>
 #import "MJExtension.h"
 #import "PartyPeopleListViewController.h"
 #import "PartyMapViewController.h"
+
+#import "PartyDetailViewController.h"
 
 #import "BMapKit.h"
 
@@ -21,7 +24,7 @@
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface PartyDetailViewController () <SRNetManagerDelegate, UIActionSheetDelegate> {
+@interface CreatedPartyDetailViewController ()<SRNetManagerDelegate, UIActionSheetDelegate> {
     SRNet_Manager *_netManager;
     Model_Party_User *_relation;
     NSMutableArray *_relArray;
@@ -29,19 +32,21 @@
     BMKMapView *_bdMapView;
     
     
+    PartyDetailViewController * partyDetaiViewController;
+    
 }
 
 @end
 
-@implementation PartyDetailViewController
+@implementation CreatedPartyDetailViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-//    [self.navigationItem setTitle:self.party.name];
-
-
+    //    [self.navigationItem setTitle:self.party.name];
     
+    
+  
     
     
     if (self.party.longitude && self.party.latitude) {
@@ -50,7 +55,7 @@
         _bdMapView = [[BMKMapView alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width - 16, [[UIScreen mainScreen] bounds].size.height - 410)];
         
         self.mapConHeight.constant = CGRectGetHeight(_bdMapView.bounds);
-//        [self.locationMapView addSubview:_bdMapView];
+        //        [self.locationMapView addSubview:_bdMapView];
         [self.locationMapView insertSubview:_bdMapView atIndex:0];
         
         CLLocationCoordinate2D partyCoor;
@@ -89,12 +94,11 @@
     _relation.fk_party = self.party.pk_party;
     _relation.fk_user = [Model_User loadFromUserDefaults].pk_user;
     
-    [self.yesButton.layer setCornerRadius:self.yesButton.frame.size.height/2];
-    [self.yesButton.layer setMasksToBounds:YES];
-    
-    [self.noButton.layer setCornerRadius:self.noButton.frame.size.height/2];
-    [self.noButton.layer setMasksToBounds:YES];
-    
+    [self.cheakButton.layer setCornerRadius:self.cheakButton.frame.size.height/2];
+    [self.cheakButton.layer setMasksToBounds:YES];
+    self.cheakButton.backgroundColor = AgreeBlue;
+    [self.cheakButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+
     [self.addressLabel setText:self.party.location];
     
     
@@ -107,21 +111,25 @@
     Model_Party *sendParty = [[Model_Party alloc] init];
     sendParty.pk_party = self.party.pk_party;
     
+//    if (self.party) {
+//        [_netManager getPartyRelationship:sendParty];
+//    }
+//    
+//    if (nil == self.party.relationship) {
+//        //在与聚会未产生关系时(第一次进入聚会详情),建立与聚会关系
+//        _relation.relationship = @0;
+//        
+//        if ([self.party.fk_user isEqualToNumber:[Model_User loadFromUserDefaults].pk_user]) {
+//            _relation.type = @2;
+//        } else {
+//            _relation.type = @1;
+//        }
+//        
+//        [_netManager createRelationshipForParty:_relation];
+//    }
+    
     if (self.party) {
         [_netManager getPartyRelationship:sendParty];
-    }
-    
-    if (nil == self.party.relationship) {
-        //在与聚会未产生关系时(第一次进入聚会详情),建立与聚会关系
-        _relation.relationship = @0;
-        
-        if ([self.party.fk_user isEqualToNumber:[Model_User loadFromUserDefaults].pk_user]) {
-            _relation.type = @2;
-        } else {
-            _relation.type = @1;
-        }
-        
-        [_netManager createRelationshipForParty:_relation];
     }
     
     [self setParticipateStatus];
@@ -132,43 +140,14 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)pressedYesButton:(id)sender {
-    if (1 == [_relation.relationship intValue]) {
-        //取消选中状态
-        _relation.relationship = @0;
-        self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] - 1];
-        [SVProgressHUD showWithStatus:@"正在取消参与请求"];
-    } else {
-        _relation.relationship = @1;
-        self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] + 1];
-        [SVProgressHUD showWithStatus:@"正在确认参与请求"];
-    }
-    
-    [_netManager updateSchedule:_relation];
-}
 
-- (IBAction)pressedNoButton:(id)sender {
-    if (2 == [_relation.relationship intValue]) {
-        //取消选中状态
-        _relation.relationship = @0;
-        [SVProgressHUD showWithStatus:@"正在取消拒绝请求"];
-    } else {
-        
-        if (1 == _relation.relationship.intValue ) {
-            self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] - 1];
-        }
-        _relation.relationship = @2;
-        [SVProgressHUD showWithStatus:@"正在确认拒绝请求"];
-    }
-    [_netManager updateSchedule:_relation];
-}
 
 - (void)reloadPeopleNum {
     
     int inNum = 0;
     int outNum = 0;
     int unNum = 0;
-    
+
     for (Model_User *user in _relArray) {
         switch ([user.relationship intValue]) {
             case 0: {
@@ -189,44 +168,35 @@
             default:
                 break;
         }
+        
+        
     }
+    
     
     //更新参与人数的标签
     self.inNumLabel.text = [NSString stringWithFormat:@"%d", inNum];
-//    NSLog(@"%@",self.inNumLabel.text);
+    //    NSLog(@"%@",self.inNumLabel.text);
     self.outNumLabel.text = [NSString stringWithFormat:@"%d", outNum];
-//    NSLog(@"%@",self.outNumLabel.text);
+    //    NSLog(@"%@",self.outNumLabel.text);
     self.unkownLabel.text = [NSString stringWithFormat:@"%d", unNum];
-//    NSLog(@"%@",self.unkownLabel.text);
+    //    NSLog(@"%@",self.unkownLabel.text);
 }
 
 - (void)setParticipateStatus {
     switch ([_relation.relationship intValue]) {
         case 0: {
             //未选择
-            self.yesButton.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
-            [self.yesButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-            
-            self.noButton.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
-            [self.noButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+
         }
             break;
         case 1: {
             //同意
-            self.yesButton.backgroundColor = AgreeBlue;
-            [self.yesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-            
-            self.noButton.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
-            [self.noButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+
         }
             break;
         case 2: {
             //拒绝
-            self.yesButton.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
-            [self.yesButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-            
-            self.noButton.backgroundColor = AgreeBlue;
-            [self.noButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+
         }
             break;
         default:
@@ -331,7 +301,7 @@
 }
 
 - (IBAction)tapBackButton:(id)sender {
-       [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -395,20 +365,20 @@
                             event.location = self.party.location;
                             
                             NSDateFormatter *tempFormatter = [[NSDateFormatter alloc]init];
-
+                            
                             [tempFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
-               
+                            
                             event.allDay = NO;
-      
+                            
                             NSDate * startTime = _party.begin_time;
                             NSDate * endTime = [NSDate dateWithTimeInterval:3600 sinceDate:startTime];
-     
+                            
                             event.startDate = startTime;
                             event.endDate = endTime;
-
+                            
                             //在事件前多少秒开始提醒
                             //提前一个小时提醒
-                           [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60.0 * 60.0]];
+                            [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60.0 * 60.0]];
                             
                             
                             [event setCalendar:[eventStore defaultCalendarForNewEvents]];
@@ -467,24 +437,29 @@
     }
 }
 
+- (IBAction)CheakButton:(id)sender {
+    
+    NSLog(@"结账");
+    
+    
+}
 
 #pragma mark - Navigation
 // In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-    if ([segue.identifier isEqualToString:@"MapView"]) {
-        //进入地图
-        PartyMapViewController *childController = (PartyMapViewController *)segue.destinationViewController;
-        childController.party = self.party;
-    } else {
-        UIButton *pressedButton = (UIButton *)sender;
-        PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
-        childController.showStatus = (int)pressedButton.tag;
-        childController.relationArray = _relArray;
-    }
-
-}
-
+//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+//    // Get the new view controller using [segue destinationViewController].
+//    // Pass the selected object to the new view controller.
+//    if ([segue.identifier isEqualToString:@"MapView"]) {
+//        //进入地图
+//        PartyMapViewController *childController = (PartyMapViewController *)segue.destinationViewController;
+//        childController.party = self.party;
+//    } else {
+//        UIButton *pressedButton = (UIButton *)sender;
+//        PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
+//        childController.showStatus = (int)pressedButton.tag;
+//        childController.relationArray = _relArray;
+//    }
+//    
+//}
 
 @end

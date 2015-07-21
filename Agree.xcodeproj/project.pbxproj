@@ -14,6 +14,9 @@
 		C61D98511B564273005EF6DC /* MyPartyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C61D98501B564273005EF6DC /* MyPartyViewController.m */; };
 		C64F1D5E1B26881A0063C012 /* ChoosefriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C64F1D5D1B26881A0063C012 /* ChoosefriendsViewController.m */; };
 		C64F1D641B26CB9D0063C012 /* ChoosefriendsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C64F1D631B26CB9D0063C012 /* ChoosefriendsTableViewCell.m */; };
+		C6833E421B58F23500F5685A /* CreatedPartyDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6833E411B58F23500F5685A /* CreatedPartyDetailViewController.m */; };
+		C6B4DA031B5CD0A000EF9BE7 /* PrepayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B4DA021B5CD0A000EF9BE7 /* PrepayViewController.m */; };
+		C6B4DA061B5CEB0E00EF9BE7 /* HistoryPartyDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B4DA051B5CEB0E00EF9BE7 /* HistoryPartyDetailViewController.m */; };
 		C6E25B841B57A3C70031A6B9 /* CreatedPartyTableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C6E25B831B57A3C70031A6B9 /* CreatedPartyTableViewDelegate.m */; };
 		C6E25B8A1B57ACEB0031A6B9 /* HistoryPartyTableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C6E25B891B57ACEB0031A6B9 /* HistoryPartyTableViewDelegate.m */; };
 		C6E25B8D1B57B1FA0031A6B9 /* CreatedPartyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C6E25B8C1B57B1FA0031A6B9 /* CreatedPartyTableViewCell.m */; };
@@ -191,6 +194,12 @@
 		C64F1D5D1B26881A0063C012 /* ChoosefriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosefriendsViewController.m; sourceTree = "<group>"; };
 		C64F1D621B26CB9D0063C012 /* ChoosefriendsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosefriendsTableViewCell.h; sourceTree = "<group>"; };
 		C64F1D631B26CB9D0063C012 /* ChoosefriendsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosefriendsTableViewCell.m; sourceTree = "<group>"; };
+		C6833E401B58F23500F5685A /* CreatedPartyDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreatedPartyDetailViewController.h; sourceTree = "<group>"; };
+		C6833E411B58F23500F5685A /* CreatedPartyDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreatedPartyDetailViewController.m; sourceTree = "<group>"; };
+		C6B4DA011B5CD0A000EF9BE7 /* PrepayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrepayViewController.h; sourceTree = "<group>"; };
+		C6B4DA021B5CD0A000EF9BE7 /* PrepayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrepayViewController.m; sourceTree = "<group>"; };
+		C6B4DA041B5CEB0E00EF9BE7 /* HistoryPartyDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryPartyDetailViewController.h; sourceTree = "<group>"; };
+		C6B4DA051B5CEB0E00EF9BE7 /* HistoryPartyDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryPartyDetailViewController.m; sourceTree = "<group>"; };
 		C6E25B821B57A3C70031A6B9 /* CreatedPartyTableViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreatedPartyTableViewDelegate.h; sourceTree = "<group>"; };
 		C6E25B831B57A3C70031A6B9 /* CreatedPartyTableViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreatedPartyTableViewDelegate.m; sourceTree = "<group>"; };
 		C6E25B881B57ACEB0031A6B9 /* HistoryPartyTableViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryPartyTableViewDelegate.h; sourceTree = "<group>"; };
@@ -665,8 +674,14 @@
 				C61D98501B564273005EF6DC /* MyPartyViewController.m */,
 				C6E25B821B57A3C70031A6B9 /* CreatedPartyTableViewDelegate.h */,
 				C6E25B831B57A3C70031A6B9 /* CreatedPartyTableViewDelegate.m */,
+				C6833E401B58F23500F5685A /* CreatedPartyDetailViewController.h */,
+				C6833E411B58F23500F5685A /* CreatedPartyDetailViewController.m */,
+				C6B4DA011B5CD0A000EF9BE7 /* PrepayViewController.h */,
+				C6B4DA021B5CD0A000EF9BE7 /* PrepayViewController.m */,
 				C6E25B881B57ACEB0031A6B9 /* HistoryPartyTableViewDelegate.h */,
 				C6E25B891B57ACEB0031A6B9 /* HistoryPartyTableViewDelegate.m */,
+				C6B4DA041B5CEB0E00EF9BE7 /* HistoryPartyDetailViewController.h */,
+				C6B4DA051B5CEB0E00EF9BE7 /* HistoryPartyDetailViewController.m */,
 			);
 			path = "User Setting";
 			sourceTree = "<group>";
@@ -1308,6 +1323,7 @@
 				F07F711D1A72AB92006208A1 /* JTCalendarContentView.m in Sources */,
 				F0CC83E11B2E7D0400B73652 /* CD_Group.m in Sources */,
 				F0BED4B61AA32E1000801ED2 /* RootAccountRegViewController.m in Sources */,
+				C6833E421B58F23500F5685A /* CreatedPartyDetailViewController.m in Sources */,
 				F0F5C2751A66F1490029BF7A /* MJArgument.m in Sources */,
 				F0EC50611A85697B000417BA /* UserSettingViewController.m in Sources */,
 				F0CC83E41B2ECF4500B73652 /* CD_Photo.m in Sources */,
@@ -1354,6 +1370,7 @@
 				F0CF4EB21ACAEDF500BBD4AF /* EModel_User_Chat.m in Sources */,
 				F0B5F4A91AAA97180013111F /* MJPhoto.m in Sources */,
 				F09F05571AB693880079D6DB /* ContactsTableViewController.m in Sources */,
+				C6B4DA031B5CD0A000EF9BE7 /* PrepayViewController.m in Sources */,
 				F0F5C2941A66F1620029BF7A /* Model_Group_User.m in Sources */,
 				F0B5F4AC1AAA97180013111F /* MJPhotoLoadingView.m in Sources */,
 				F0B4D7501AD1195C00401359 /* RootAccountLoginViewController.m in Sources */,
@@ -1390,6 +1407,7 @@
 				F08B80A01A75FAB40012E3D9 /* GroupSettingViewController.m in Sources */,
 				F0F5C1CA1A66CEBE0029BF7A /* main.m in Sources */,
 				F0068C121A679E0600B9CB60 /* GroupDetailViewController.m in Sources */,
+				C6B4DA061B5CEB0E00EF9BE7 /* HistoryPartyDetailViewController.m in Sources */,
 				F07F36D01B3001A000D76D4C /* CD_Group_User.m in Sources */,
 				F0DDC5BF1A8E7B43007BF39F /* GroupViewController.m in Sources */,
 			);
