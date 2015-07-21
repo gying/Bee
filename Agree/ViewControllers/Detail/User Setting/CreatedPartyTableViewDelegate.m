@@ -12,6 +12,8 @@
 #import "MJExtension.h"
 #import <MJRefresh.h>
 
+#import "CreatedPartyDetailViewController.h"
+
 
 
 
@@ -42,6 +44,11 @@
         return self.schAry.count;
     }
     return 0;
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    self.myPartyVC.chooseRow = (int)indexPath.row;
+    return indexPath;
 }
 
 
@@ -91,6 +98,8 @@
 - (void)interfaceReturnDataError:(int)interfaceType {
     
 }
+
+
 
 
 

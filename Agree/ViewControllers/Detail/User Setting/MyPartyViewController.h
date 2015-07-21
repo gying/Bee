@@ -26,6 +26,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *createdPartyTableView;
 @property (weak, nonatomic) IBOutlet UITableView *historyPartyTableView;
 
+@property int chooseRow;
 
 
 
