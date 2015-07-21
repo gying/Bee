@@ -10,8 +10,6 @@
 #import "SRNet_Manager.h"
 #import <SVProgressHUD.h>
 #import "MJExtension.h"
-//#import "RootAccountLoginViewController.h"
-//#import "RootAccountRegViewController.h"
 
 
 
@@ -40,10 +38,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-//    self.view.backgroundColor = [UIColor whiteColor];
     [self.sendButton setAlpha:0.2];
     [self.sendButton setEnabled:NO];
-//    regViewController = [RootAccountRegViewController new];
     
     _checkPhoneNumDone = FALSE;
 

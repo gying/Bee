@@ -21,6 +21,8 @@
 #import "WXApi.h"
 #import "SRTool.h"
 
+
+
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
 @interface AppDelegate () <EMChatManagerDelegate, SRNetManagerDelegate,WXApiDelegate>
@@ -80,6 +82,21 @@
         }
         [_netManager updateUserInfo:updateUser];
     }
+}
+
+#pragma mark 注册阿里OSS
+- (void)regAliOSS {
+    self.ossService = [ALBBOSSServiceProvider getService];
+    NSString *accessKey = @"HyDprHu2BQHp7edn"; // 实际使用中，AK/SK不应明文保存在代码中
+    NSString *secretKey = @"loWKqemVvcWH7u2RSn4EncVCkRuQcJ";
+    [self.ossService setGenerateToken:^(NSString *method, NSString *md5, NSString *type, NSString *date, NSString *xoss, NSString *resource) {
+        NSString *signature = nil;
+        NSString *content = [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@%@", method, md5, type, date, xoss, resource];
+        signature = [OSSTool calBase64Sha1WithData:content withKey:secretKey];
+        signature = [NSString stringWithFormat:@"OSS %@:%@", accessKey, signature];
+        NSLog(@"signature:%@", signature);
+        return signature;
+    }];
 }
 
 #pragma mark - 通知
@@ -286,11 +303,13 @@
     [APService setBadge:0];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
-    //腾讯云
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-        [_netManager imageManagerSign];
-    }
+    [self regAliOSS];
+    
+//    //腾讯云
+//    if (!_netManager) {
+//        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
+//        [_netManager imageManagerSign];
+//    }
 
     //推送设置
     // Required

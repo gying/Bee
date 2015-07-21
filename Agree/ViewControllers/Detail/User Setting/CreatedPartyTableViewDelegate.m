@@ -9,8 +9,19 @@
 #import "CreatedPartyTableViewDelegate.h"
 #import "Model_Party.h"
 #import "GroupPartyTableViewCell.h"
+#import "MJExtension.h"
+#import <MJRefresh.h>
+
+
+
+
+
+
 
 @implementation CreatedPartyTableViewDelegate
+{
+    SRNet_Manager *_netManager;
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -32,5 +43,56 @@
     }
     return 0;
 }
+
+
+- (void)loadPartyData {
+    
+    [self loadAllScheduleData];
+    
+}
+
+#pragma mark - 业务逻辑
+- (void)loadAllScheduleData {
+    if (!_netManager) {
+        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
+    }
+
+    
+    Model_User *user = [[Model_User alloc] init];
+    user.pk_user = [Model_User loadFromUserDefaults].pk_user;
+    [_netManager getCreatedPartyByUser:user];
+    
+}
+
+- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
+    
+    switch (interfaceType) {
+        case kGetCreatedParty: {
+            if (jsonDic) {
+                self.schAry = (NSMutableArray *)[Model_Party objectArrayWithKeyValuesArray:jsonDic];
+                [self.myPartyVC.createdPartyTableView reloadData];
+                
+               
+            } else {
+              
+                [self.schAry removeAllObjects];
+                [self.myPartyVC.createdPartyTableView reloadData];
+                
+            }
+            
+            [self.myPartyVC.createdPartyTableView.header endRefreshing];
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)interfaceReturnDataError:(int)interfaceType {
+    
+}
+
+
+
 
 @end

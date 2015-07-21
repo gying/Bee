@@ -8,6 +8,16 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <ALBB_OSS_IOS_SDK/OSSBucket.h>
+#import <ALBB_OSS_IOS_SDK/OSSData.h>
+
+#define kAvatar             @"avatar"
+#define kMiniAvatar         @"mini-avatar"
+#define kAlbumThumbnail     @"album-thumbnail"
+#define kGroupFrontCover    @"group-front-cover"
+
+
+
 
 //建立代理协议
 @protocol SRImageManagerDelegate <NSObject>
@@ -21,7 +31,6 @@
 - (void)imageDelError;
 
 - (void)imageUploadDoneWithFieldID: (NSString *)fieldID;
-
 - (void)imageUploading: (float)proFloat;
 
 @end
@@ -33,19 +42,31 @@
 
 + (UIImage *)getSubImage:(UIImage *)image withRect:(CGRect)rect;
 
-- (BOOL)updateImageToTXY: (UIImage *)image;
+//- (BOOL)updateImageToTXY: (UIImage *)image;
 
 @property (nonatomic, weak)id<SRImageManagerDelegate> delegate;
 
 
-//获取原始图片
-+ (NSURL *)originalImageFromTXYFieldID: (NSString *)fieldID;
-//小组封面
-+ (NSURL *)groupFrontCoverImageFromTXYFieldID: (NSString *)fieldID;
-//相册缩略图
-+ (NSURL *)albumThumbnailImageFromTXYFieldID: (NSString *)fieldID;
-//头像
-+ (NSURL *)avatarImageFromTXYFieldID: (NSString *)fieldID;
-//头像小图
-+ (NSURL *)miniAvatarImageFromTXYFieldID: (NSString *)fieldID;
+////获取原始图片
+//+ (NSURL *)originalImageFromTXYFieldID: (NSString *)fieldID;
+////小组封面
+//+ (NSURL *)groupFrontCoverImageFromTXYFieldID: (NSString *)fieldID;
+////相册缩略图
+//+ (NSURL *)albumThumbnailImageFromTXYFieldID: (NSString *)fieldID;
+////头像
+//+ (NSURL *)avatarImageFromTXYFieldID: (NSString *)fieldID;
+////头像小图
+//+ (NSURL *)miniAvatarImageFromTXYFieldID: (NSString *)fieldID;
+
+
+#pragma mark - OSS图片处理
++ (NSURL *)originalImageFromOSS: (NSString *)imagePath;
++ (NSURL *)avatarImageFromOSS: (NSString *)imagePath;
++ (NSURL *)miniAvatarImageFromOSS: (NSString *)imagePath;
++ (NSURL *)albumThumbnailImageFromOSS: (NSString *)imagePath;
++ (NSURL *)groupFrontCoverImageImageFromOSS: (NSString *)imagePath;
+
+
++ (OSSData *)initImageOSSData: (UIImage *)uploadImage withKey: (NSString *)keyString;
+
 @end

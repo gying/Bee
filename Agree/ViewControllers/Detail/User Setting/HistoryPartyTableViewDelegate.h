@@ -7,12 +7,24 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
+#import "Model_Group.h"
+
+#import "SRNet_Manager.h"
+
+#import "MyPartyViewController.h"
+
 
 
 #import <UIKit/UIKit.h>
 
-@interface HistoryPartyTableViewDelegate : NSObject<UITableViewDataSource, UITableViewDelegate>
+@interface HistoryPartyTableViewDelegate : NSObject<UITableViewDataSource, UITableViewDelegate,SRNetManagerDelegate>
 
 @property (nonatomic, strong)NSMutableArray *schAry;
+
+@property (nonatomic, strong)Model_Group *group;
+
+@property (nonatomic,strong)MyPartyViewController * myPartyVC;
 
 @end

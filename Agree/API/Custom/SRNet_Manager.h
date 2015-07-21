@@ -22,15 +22,9 @@
 #import "Model_Feedback.h"
 
 //定义请求地址
-//#define kBaseUrlString  @"http://beagree.com/webroot/"
 
-#define kBaseUrlString  @"http://beagree-1.wx.jaeapp.com/appCode/"
-
-//#define kBaseUrlString  @"http://interface.beagree.com/webroot/"
-
-//#define kBaseUrlString @"http://interfacecdn.beagree.com/SR/interface/webroot/"
-
-//#define kBaseUrlString @"http://srinterfacecdn.beagree.com/webroot/"
+//#define kBaseUrlString  @"http://203.195.159.110/webroot/"
+#define kBaseUrlString  @"http://120.26.118.226/app/app_interface/"
 #define kInterfaceUrlString @"sr_interface.php"
 //#define kInterfaceUrlString @"srtext.php"
 
@@ -72,6 +66,10 @@
 #define kCreateRelationForParty     49
 #define kCancelParty                46
 #define kShareParty                 411
+
+
+#define kGetCreatedParty            412
+#define kGetPartyHistory            413
 
 
 #define kImageManagerSign           101
@@ -135,4 +133,7 @@
 - (BOOL)imageManagerSign;
 - (BOOL)testInterface;
 - (BOOL)getUserInfoByWechat: (Model_User *)user;
+
+- (BOOL)getCreatedPartyByUser: (Model_User *)user;
+- (BOOL)getPartyHistoryByUser: (Model_User *)user;
 @end

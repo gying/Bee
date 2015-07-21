@@ -23,7 +23,6 @@
     UIImagePickerController *_imagePicker;
     
     UIImageView *_backImageViwe;
-    SRImageManager *_imageManager;
     UIImage *_avatarImage;
     
     NSString *_password;
@@ -59,18 +58,7 @@
     [_netManager getUserInfo:account];
     
     if (defAccount.avatar_path) {
-        NSURL *imageUrl = [SRImageManager avatarImageFromTXYFieldID:defAccount.avatar_path];
-//        NSString * urlstr = [imageUrl absoluteString];
-        
-//        [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:_backImageViwe succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-//            [_backImageViwe setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
-//        } failBlock:nil progressBlock:nil param:nil];
-        
-        
-        
-        [_backImageViwe sd_setImageWithURL:imageUrl];
-        
-        
+        [_backImageViwe sd_setImageWithURL:[SRImageManager avatarImageFromOSS:defAccount.avatar_path]];
     }
     
     if (defAccount.password) {
@@ -88,7 +76,7 @@
 }
 
 - (void)reloadDataView {
-    [_backImageViwe sd_setImageWithURL:[SRImageManager avatarImageFromTXYFieldID:[Model_User loadFromUserDefaults].avatar_path]];
+    [_backImageViwe sd_setImageWithURL:[SRImageManager avatarImageFromOSS:[Model_User loadFromUserDefaults].avatar_path]];
     self.nicknameTextField.text = _userInfo.nickname;
     
     if (_userInfo.phone) {
@@ -223,26 +211,6 @@
     [_backImageViwe setImage:_avatarImage];
 }
 
-- (void)imageUploadDoneWithFieldID:(NSString *)fieldID {
-    //图片上传成功,开始更新用户数据
-    Model_User *userInfo = [Model_User loadFromUserDefaults];
-    userInfo.avatar_path = fieldID;
-    [userInfo saveToUserDefaults];
-    
-    
-    //更新根控制器的用户头像
-    [self.rootViewController resetAvatar];
-    
-    //查看是否需要更新数据
-    //更新用户数据
-    _isUpdateData = TRUE;
-    [_netManager updateUserInfo: _userInfo];
-    _isUpdateAvatar = FALSE;
-}
-
-- (void)imageUpladError {
-    
-}
 
 - (IBAction)pressedThePasswordButton:(UIButton *)sender {
     self.passwordView.hidden = NO;
@@ -462,12 +430,35 @@
     //上传头像信息
     if (_isUpdateAvatar) {
         //更新头像信息
-        if (!_imageManager) {
-            _imageManager = [[SRImageManager alloc] initWithDelegate:self];
-        }
-        //设置头像路径到系统头像路径
         [SVProgressHUD showProgress:1.0];
-        [_imageManager updateImageToTXY:_avatarImage];
+        
+        _userInfo.avatar_path = [NSUUID UUID].UUIDString;
+        
+        [[SRImageManager initImageOSSData:_avatarImage
+                                  withKey:_userInfo.avatar_path] uploadWithUploadCallback:^(BOOL isSuccess, NSError *error) {
+            if (isSuccess) {
+                //图片上传成功,开始更新用户数据
+                Model_User *userInfo = [Model_User loadFromUserDefaults];
+                userInfo.avatar_path = _userInfo.avatar_path;
+                [userInfo saveToUserDefaults];
+                
+                
+                //更新根控制器的用户头像
+                [self.rootViewController resetAvatar];
+                
+                //查看是否需要更新数据
+                //更新用户数据
+                _isUpdateData = TRUE;
+                [_netManager updateUserInfo: _userInfo];
+                _isUpdateAvatar = FALSE;
+            } else {
+                //图片上传失败
+            }
+            
+        } withProgressCallback:^(float progress) {
+            [SVProgressHUD showProgress:progress*0.9];
+        }];
+
         [SVProgressHUD dismiss];
     } else {
         if (_isUpdateData) {

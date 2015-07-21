@@ -35,82 +35,53 @@
     
     NSString *urlString = [NSString stringWithFormat:@"%@%@", kBaseUrlString, kInterfaceUrlString];
     
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    [manager.responseSerializer setAcceptableContentTypes:[NSSet setWithObject:@"text/html"]];
+    [manager POST:urlString
+       parameters:sendDic
+          success:^(NSURLSessionDataTask *task, id responseObject) {
+              //成功
+              NSLog(@"JSON: %@", responseObject);
+                      NSMutableDictionary *dic = responseObject;
+                      if (!responseObject) {
+                          //如果返回对象不存在
+                      }
+              
+                      if (![dic  objectForKey:@"statusMsg"]) {
+                          //如果返回信息码不存在
+                      } else {
+                          NSNumber *statusNum = [dic  objectForKey:@"statusMsg"];
+                          if (0 == statusNum.intValue) {
+                              [self.delegate interfaceReturnDataSuccess:nil with:[(NSNumber *)[dic  objectForKey:@"interface"] intValue]];
+                          } else {
+                              if ([dic objectForKey:@"returnData"]) {
+                                  //返回数据存在
+                                  [self.delegate interfaceReturnDataSuccess:[dic objectForKey:@"returnData"]  with:[(NSNumber *)[dic  objectForKey:@"interface"] intValue]];
+                              }else {
+                                  //返回数据不存在
+                              }
+                          }
+                      }
+              
+              
+                      if ([self.delegate isKindOfClass:[UIViewController class]]) {
+                          _theDelegate.view.userInteractionEnabled = YES;
+                          _theDelegate.navigationController.view.userInteractionEnabled = YES;
+                          _theDelegate.tabBarController.view.userInteractionEnabled = YES;
+                      }
+          } failure:^(NSURLSessionDataTask *task, NSError *error) {
+              //失败
+              NSLog(@"Error: %@", error);
+                      [self.delegate interfaceReturnDataError: [(NSNumber *)[sendDic objectForKey:@"request_type"] intValue]];
+                      if ([self.delegate isKindOfClass:[UIViewController class]]) {
+                          _theDelegate.view.userInteractionEnabled = YES;
+                          _theDelegate.navigationController.view.userInteractionEnabled = YES;
+                          _theDelegate.tabBarController.view.userInteractionEnabled = YES;
+                      }
+                      [SVProgressHUD showErrorWithStatus:@"网络错误"];
+          }];
     
-//        NSLog(string);
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    manager.requestSerializer.timeoutInterval = 20;
-    
-//    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",nil];
-//    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    
-    
-    [manager POST:urlString parameters:sendDic success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
-        NSMutableDictionary *dic = responseObject;
-        if (!responseObject) {
-            //如果返回对象不存在
-        }
-        
-        if (![dic  objectForKey:@"statusMsg"]) {
-            //如果返回信息码不存在
-        } else {
-            NSNumber *statusNum = [dic  objectForKey:@"statusMsg"];
-            if (0 == statusNum.intValue) {
-                [self.delegate interfaceReturnDataSuccess:nil with:[(NSNumber *)[dic  objectForKey:@"interface"] intValue]];
-            } else {
-                if ([dic objectForKey:@"returnData"]) {
-                    //返回数据存在
-                    [self.delegate interfaceReturnDataSuccess:[dic objectForKey:@"returnData"]  with:[(NSNumber *)[dic  objectForKey:@"interface"] intValue]];
-                }else {
-                    //返回数据不存在
-                }                
-            }
-        }
-        
-        
-        if ([self.delegate isKindOfClass:[UIViewController class]]) {
-            _theDelegate.view.userInteractionEnabled = YES;
-            _theDelegate.navigationController.view.userInteractionEnabled = YES;
-            _theDelegate.tabBarController.view.userInteractionEnabled = YES;
-        }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        [self.delegate interfaceReturnDataError: [(NSNumber *)[sendDic objectForKey:@"request_type"] intValue]];
-        if ([self.delegate isKindOfClass:[UIViewController class]]) {
-            _theDelegate.view.userInteractionEnabled = YES;
-            _theDelegate.navigationController.view.userInteractionEnabled = YES;
-            _theDelegate.tabBarController.view.userInteractionEnabled = YES;
-        }
-//        [SVProgressHUD showErrorWithStatus:@"网络错误"];
-    }];
     return TRUE;
-    
-//    NSURL *postUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kBaseUrlString, kInterfaceUrlString]];
-//    
-//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc]initWithURL:postUrl
-//                                                               cachePolicy:NSURLRequestUseProtocolCachePolicy
-//                                                           timeoutInterval:10];
-//    [request setHTTPMethod:@"post"];
-//    
-//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:sendDic
-//                                                       options:NSJSONWritingPrettyPrinted
-//                                                         error:nil];
-//    [request setHTTPBody:jsonData];
-//    
-////    NSURLConnection *connection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
-//    
-//    
-//    NSURLResponse * response;
-//    NSError * error;
-//    NSData * backData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-//    
-//    if (error) {
-//        NSLog(@"error : %@",[error localizedDescription]);
-//    }else{
-//        NSLog(@"response : %@",response);
-//        NSLog(@"backData : %@",[[NSString alloc]initWithData:backData encoding:NSUTF8StringEncoding]);
-//    }
 }
 
 // 将字典或者数组转化为JSON串
@@ -225,63 +196,63 @@
 //保存上传图片信息
 - (BOOL)addImageToGroup: (Model_Photo *)photo {
     return [self requestNetorkWithDic:[self toRequestDicWithData:photo.keyValues
-                                                  andRequestType:62]];
+                                                  andRequestType:kAddImageToGroup]];
 }
 
 //读取群相册
 - (BOOL)getPhotoByGroup: (Model_Group *)group {
     return [self requestNetorkWithDic:[self toRequestDicWithData:group.keyValues
-                                                  andRequestType:61]];
+                                                  andRequestType:kGetPhotoByGroup]];
 }
 
 //加入小组
 - (BOOL)joinGroup: (Model_Group_User *)rel {
     return [self requestNetorkWithDic:[self toRequestDicWithData:rel.keyValues
-                                                  andRequestType:39]];
+                                                  andRequestType:kJoinGroup]];
 }
 
 //更新与小组关系
 - (BOOL)updateGroupRelationShip: (Model_Group_User *)rel {
     return [self requestNetorkWithDic:[self toRequestDicWithData:rel.keyValues
-                                                  andRequestType:34]];
+                                                  andRequestType:kUpdateGroupRelationShip]];
 }
 
 //读取用户的小组关系
 - (BOOL)getGroupRelationship: (Model_Group_User *)rel {
     return [self requestNetorkWithDic:[self toRequestDicWithData:rel.keyValues
-                                                  andRequestType:33]];
+                                                  andRequestType:kGetGroupRelationship]];
 }
 
 //读取用户信息
 - (BOOL)getUserInfo: (Model_User *)user {
     return [self requestNetorkWithDic:[self toRequestDicWithData:user.keyValues
-                                                  andRequestType:17]];
+                                                  andRequestType:kGetUserInfo]];
 }
 
 //保存用户信息
 - (BOOL)updateUserInfo: (Model_User *)user {
     return [self requestNetorkWithDic:[self toRequestDicWithData:user.keyValues
-                                                  andRequestType:15]];
+                                                  andRequestType:kUpdateUserInfo]];
 }
 
 //读取小组中的所有成员关系
 - (BOOL)getAllRelationFromGroup: (Model_Group *)group {
     return [self requestNetorkWithDic:[self toRequestDicWithData:group.keyValues
-                                                  andRequestType:36]];
+                                                  andRequestType:kGetAllRelationFromGroup]];
 }
 
 //请求服务器发送验证码
 - (BOOL)sendVerificationCode: (NSString *)phoneNum {
     return [self requestNetorkWithDic:
             [self toRequestDicWithData:[[NSDictionary alloc] initWithObjectsAndKeys: phoneNum, @"phone", nil]
-                                                                     andRequestType:18]];
+                                                                     andRequestType:kSendVerificationCode]];
 }
 
 //根据手机号码查找好友
 - (BOOL)getUserByPhone: (Model_User *)user {
     
     return [self requestNetorkWithDic:[self toRequestDicWithData:user.keyValues
-                                                  andRequestType:19]];
+                                                  andRequestType:kGetUserByPhone]];
 }
 
 //添加好友
@@ -385,6 +356,16 @@
 - (BOOL)getUserInfoByWechat: (Model_User *)user {
     return [self requestNetorkWithDic:[self toRequestDicWithData:user.keyValues
                                                   andRequestType:kGetUserInfoByWechat]];
+}
+
+- (BOOL)getCreatedPartyByUser: (Model_User *)user {
+    return [self requestNetorkWithDic:[self toRequestDicWithData:user.keyValues
+                                                  andRequestType:kGetCreatedParty]];
+}
+
+- (BOOL)getPartyHistoryByUser: (Model_User *)user {
+    return [self requestNetorkWithDic:[self toRequestDicWithData:user.keyValues
+                                                  andRequestType:kGetPartyHistory]];
 }
 
 @end

@@ -20,6 +20,9 @@
 #import "RootAccountLoginViewController.h"
 #import "UserSettingViewController.h"
 
+#import <ALBB_OSS_IOS_SDK/ALBBOSSServiceProvider.h>
+#import <ALBB_OSS_IOS_SDK/OSSTool.h>
+
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -47,6 +50,8 @@
 
 @property (strong, nonatomic) RootAccountLoginViewController *rootLoginViewController;
 @property (strong ,nonatomic) UserSettingViewController * userSettingViewcontroller;
+
+@property (nonatomic, strong)id<ALBBOSSServiceProtocol> ossService;
 
 
 

@@ -107,6 +107,7 @@
 		F0CC83E11B2E7D0400B73652 /* CD_Group.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CC83E01B2E7D0400B73652 /* CD_Group.m */; };
 		F0CC83E41B2ECF4500B73652 /* CD_Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CC83E31B2ECF4500B73652 /* CD_Photo.m */; };
 		F0CF4EB21ACAEDF500BBD4AF /* EModel_User_Chat.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CF4EB11ACAEDF500BBD4AF /* EModel_User_Chat.m */; };
+		F0D0A7E51B5D549C00FBC795 /* ALBB_OSS_IOS_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0D0A7E41B5D549C00FBC795 /* ALBB_OSS_IOS_SDK.framework */; };
 		F0D1A1181B32A677009A5B26 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0D1A1171B32A677009A5B26 /* Media.xcassets */; };
 		F0D519671B20921500AD24F9 /* Emoji.m in Sources */ = {isa = PBXBuildFile; fileRef = F0D519641B20921500AD24F9 /* Emoji.m */; };
 		F0D519681B20921500AD24F9 /* EmojiEmoticons.m in Sources */ = {isa = PBXBuildFile; fileRef = F0D519661B20921500AD24F9 /* EmojiEmoticons.m */; };
@@ -418,6 +419,7 @@
 		F0CC83E31B2ECF4500B73652 /* CD_Photo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CD_Photo.m; sourceTree = "<group>"; };
 		F0CF4EB01ACAEDF500BBD4AF /* EModel_User_Chat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EModel_User_Chat.h; sourceTree = "<group>"; };
 		F0CF4EB11ACAEDF500BBD4AF /* EModel_User_Chat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EModel_User_Chat.m; sourceTree = "<group>"; };
+		F0D0A7E41B5D549C00FBC795 /* ALBB_OSS_IOS_SDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ALBB_OSS_IOS_SDK.framework; path = Agree/API/ALBB_OSS_IOS_SDK.framework; sourceTree = "<group>"; };
 		F0D1A1171B32A677009A5B26 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		F0D519631B20921500AD24F9 /* Emoji.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Emoji.h; sourceTree = "<group>"; };
 		F0D519641B20921500AD24F9 /* Emoji.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Emoji.m; sourceTree = "<group>"; };
@@ -504,6 +506,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0D0A7E51B5D549C00FBC795 /* ALBB_OSS_IOS_SDK.framework in Frameworks */,
 				F01B4A621B0C7B1E0097144E /* libstdc++.6.dylib in Frameworks */,
 				F05D49B51B53554F0059788B /* libTXYDownloader.a in Frameworks */,
 				F0068C141A679E2F00B9CB60 /* libz.dylib in Frameworks */,
@@ -548,6 +551,7 @@
 		4B83180E4AF05F16D594BDE2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F0D0A7E41B5D549C00FBC795 /* ALBB_OSS_IOS_SDK.framework */,
 				B124D697D5B1D9DCE5C3CE49 /* libPods.a */,
 			);
 			name = Frameworks;

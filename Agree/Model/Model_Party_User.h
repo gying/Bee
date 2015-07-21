@@ -17,5 +17,11 @@
 @property (nonatomic, strong)NSNumber *syn_calendar;
 @property (nonatomic, strong)NSNumber *status;
 
+#pragma mark ver2
+@property (nonatomic, strong)NSNumber *pay_count;
+@property (nonatomic, strong)NSNumber *pay_amount;
+//付款状态(1.未付, 2.已付, 3.代付(多人状态))
+@property (nonatomic, strong)NSNumber *pay_type;
+
 
 @end

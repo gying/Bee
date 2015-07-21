@@ -61,25 +61,8 @@
             _avatarImage = [SRImageManager getSubImage:image
                                               withRect:CGRectMake(0, 0, 360, 360)];
             [_backImageViwe setImage:_avatarImage];
-            
         }];
     }
-    
-        
-//        [[TXYDownloader sharedInstanceWithPersistenceId:nil] download:self.userInfo.avatar_path
-//                                                               target:self
-//                                                            succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-//
-//                                                                //裁剪头像图片并展示
-//                                                                _avatarImage = [SRImageManager getSubImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]
-//                                                                                                  withRect:CGRectMake(0, 0, 360, 360)];
-//                                                                [_backImageViwe setImage:_avatarImage];
-//                                                                
-//                                                            } failBlock:nil progressBlock:nil param:nil];
-//    }
-    
-//    NSURL *imageUrl = [SRImageManager miniAvatarImageFromTXYFieldID:self.userInfo.avatar_path];
-    
 }
 
 - (void)imageBtnClick {
@@ -147,7 +130,6 @@
         UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您输入的昵称长度不能少于两个字节" delegate:nil cancelButtonTitle:@"确认" otherButtonTitles: nil];
         [alertview show];
     }
-    
     return YES;
 }
 
@@ -176,39 +158,38 @@
         [alertview show];
     }
     
+    self.userInfo.avatar_path = [NSUUID UUID].UUIDString;
+    
     if (isDone) {
         [SVProgressHUD showWithStatus:@"帐号创建中..." maskType:SVProgressHUDMaskTypeGradient];
         //设置账户创建时间
         [self.userInfo setSetup_time:[NSDate date]];
+        
         //保存头像信息
-        [_imageManager updateImageToTXY:_avatarImage];
-
+        [[SRImageManager initImageOSSData:_avatarImage
+                                  withKey:self.userInfo.avatar_path]
+         uploadWithUploadCallback:^(BOOL isSuccess, NSError *error) {
+            if (isSuccess) {
+                NSLog(@"there is no error");
+                
+                //图片在保存完成之后开始保存默认的帐号信息
+                [SVProgressHUD showProgress:1.0 status:@"正在上传用户信息" maskType:SVProgressHUDMaskTypeGradient];
+                self.userInfo.nickname = self.nicknameTextField.text;
+                
+                //从程序代理获取推送信息以及设备号以便于注册
+                AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                self.userInfo.jpush_id = delegate.jPushString;
+                self.userInfo.device_id = delegate.deviceToken;
+                [_netManager regUser:self.userInfo];
+                
+            } else {
+                NSLog(@"errorInfo_testDataDownloadWithProgress:%@", [error userInfo]);
+            }
+        } withProgressCallback:^(float progress) {
+            NSLog(@"current get %f", progress);
+            [SVProgressHUD showProgress:progress*0.9 status:@"正在上传头像图片" maskType:SVProgressHUDMaskTypeGradient];
+        }];
     }
-    
-}
-- (void)imageUploading: (float)proFloat {
-    [SVProgressHUD showProgress:proFloat*0.9 status:@"正在上传头像图片" maskType:SVProgressHUDMaskTypeGradient];
-}
-
-- (void)imageUploadDoneWithFieldID:(NSString *)fieldID {
-    //图片在保存完成之后开始保存默认的帐号信息
-    [SVProgressHUD showProgress:1.0 status:@"正在上传用户信息" maskType:SVProgressHUDMaskTypeGradient];
-    self.userInfo.avatar_path = fieldID;
-//    Model_User *userInfo = [Model_User loadFromUserDefaults];
-//    userInfo.avatar_path = fieldID;
-    self.userInfo.nickname = self.nicknameTextField.text;
-//    [userInfo saveToUserDefaults];
-    
-    //从程序代理获取推送信息以及设备号以便于注册
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    self.userInfo.jpush_id = delegate.jPushString;
-    self.userInfo.device_id = delegate.deviceToken;
-    
-    [_netManager regUser:self.userInfo];
-}
-
-- (void)imageUpladError {
-    
 }
 
 - (IBAction)tapCloseButton:(id)sender {

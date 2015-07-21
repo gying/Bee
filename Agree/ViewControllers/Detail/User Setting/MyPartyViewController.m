@@ -15,6 +15,12 @@
 
 
 
+
+
+#import <MJRefresh.h>
+
+
+
 @interface MyPartyViewController ()<UITabBarDelegate,UIScrollViewDelegate>
 {
     NSMutableArray *_scheduleArray;
@@ -24,6 +30,8 @@
     CreatedPartyTableViewDelegate *_createdPartyDelegate;
     
     HistoryPartyTableViewDelegate *_historyPartyDelegate;
+    
+    
     
 
     
@@ -40,12 +48,15 @@
     _scheduleArray = [CD_Party getPartyFromCDForSchedule];
     
     _createdPartyDelegate = [[CreatedPartyTableViewDelegate alloc] init];
+    _createdPartyDelegate.myPartyVC = self;
     _createdPartyDelegate.schAry = _scheduleArray;
     self.createdPartyTableView.delegate = _createdPartyDelegate;
     self.createdPartyTableView.dataSource = _createdPartyDelegate;
     
     _historyPartyDelegate = [[HistoryPartyTableViewDelegate alloc] init];
     _historyPartyDelegate.schAry = _scheduleArray;
+    _historyPartyDelegate.myPartyVC = self;
+    
     self.historyPartyTableView.delegate = _historyPartyDelegate;
     self.historyPartyTableView.dataSource = _historyPartyDelegate;
 
@@ -90,8 +101,21 @@
 
     [self.selectLineWidth setConstant:[[UIScreen mainScreen] bounds].size.width/2];
     
+    // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
+    self.createdPartyTableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:_createdPartyDelegate
+                                                                         refreshingAction:@selector(loadPartyData)];
+    
+    self.historyPartyTableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:_historyPartyDelegate refreshingAction:@selector(loadPartyData)];
+    
     
 }
+
+-(void)loadPartyData
+{
+    
+}
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
