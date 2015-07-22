@@ -21,11 +21,10 @@
 #import <SVProgressHUD.h>
 #import <MJRefresh.h>
 
-@interface GroupAlbumsCollectionViewController () <SRImageManagerDelegate, UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRNetManagerDelegate, SRPhotoManagerDelegate> {
+@interface GroupAlbumsCollectionViewController () <UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRNetManagerDelegate, SRPhotoManagerDelegate> {
     
     UIImagePickerController *_imagePicker;
     UIImage *_pickImage;
-    SRImageManager *_imageManager;
     
     NSMutableArray *_imageViewAry;
     NSMutableDictionary *_imageViewDic;
@@ -185,10 +184,6 @@
 }
 
 - (void)sendImage {
-    if (!_imageManager) {
-        _imageManager = [[SRImageManager alloc] initWithDelegate:self];
-    }
-    
     _pickImage = [SRImageManager getSubImage:_pickImage withRect:CGRectMake(0, 0, 1280 , 1280)];
     _imagePath = [NSUUID UUID].UUIDString;
     
@@ -222,25 +217,11 @@
 
 - (void)deletePhoto:(NSUInteger)index {
     _removePhoto = [self.photoAry objectAtIndex:index];
-    if (!_imageManager) {
-        _imageManager = [[SRImageManager alloc] initWithDelegate:self];
-    }
-    
     if (!_netManager) {
         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
     }
     [_netManager removePhoto:[self.photoAry objectAtIndex:index]];
 }
-
-
-- (void)imageDelError {
-    //图片删除错误
-}
-
-- (void)saveImageData: (Model_Photo *)photo {
-    
-}
-
 
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {

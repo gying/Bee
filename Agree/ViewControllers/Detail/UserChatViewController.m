@@ -33,7 +33,6 @@
     UIImagePickerController *_imagePicker;
     
     UIImage *_chatPickImage;
-    SRImageManager *_imageManager;
     NSString *_imageName;
     
     Model_User_Chat *_userChat;

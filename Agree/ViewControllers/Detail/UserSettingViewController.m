@@ -17,7 +17,7 @@
 
 
 
-@interface UserSettingViewController () <SRNetManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UITextFieldDelegate, SRImageManagerDelegate, UIAlertViewDelegate> {
+@interface UserSettingViewController () <SRNetManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UITextFieldDelegate, UIAlertViewDelegate> {
     Model_User *_userInfo;
     SRNet_Manager *_netManager;
     UIImagePickerController *_imagePicker;
@@ -46,7 +46,6 @@
     [_backImageViwe.layer setMasksToBounds:YES];
     [_backImageViwe.layer setCornerRadius:_backImageViwe.frame.size.width/2];
     [self.avatarButton addSubview:_backImageViwe];
-    
     if (!_netManager) {
         _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
     }
@@ -420,10 +419,6 @@
         _userInfo.nickname = textField.text;
     }
     return TRUE;
-}
-
--(void)imageUploading:(float)proFloat {
-    [SVProgressHUD showProgress:proFloat*0.9];
 }
 
 - (void)saveAccountData {

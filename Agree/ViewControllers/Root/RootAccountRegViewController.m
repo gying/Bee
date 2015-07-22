@@ -19,11 +19,10 @@
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface RootAccountRegViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate, SRImageManagerDelegate, SRNetManagerDelegate, UITextFieldDelegate>
+@interface RootAccountRegViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate, SRNetManagerDelegate, UITextFieldDelegate>
 {
     UIImagePickerController *_imagePicker;
     UIImageView *_backImageViwe;
-    SRImageManager *_imageManager;
     SRNet_Manager *_netManager;
     UIImage *_avatarImage;
 }
@@ -48,9 +47,6 @@
     [_backImageViwe setBackgroundColor:[UIColor whiteColor]];
     [_backImageViwe.layer setCornerRadius:_backImageViwe.frame.size.width/2];
     [self.avatarButton addSubview:_backImageViwe];
-    
-    //进入立即初始化图片代理
-    _imageManager = [[SRImageManager alloc] initWithDelegate:self];
     
     if (self.userInfo.wechat_id) {
         [self.nicknameTextField setText:self.userInfo.nickname];

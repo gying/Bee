@@ -15,10 +15,71 @@
     UIViewController *_theDelegate;
 }
 
+@synthesize completeBlock;
+
 - (id)initWithDelegate: (id<SRNetManagerDelegate>)delegate {
     self.delegate = delegate;
     return [super init];
 }
+
+
+
++ (void)requestNetWithDic:(NSMutableDictionary *)sendDic
+                 complete:(finishCallbackBlock)completeBlock
+                  failure:(requestFailureBlock)failureBlock {
+    
+    NSString *urlString = [NSString stringWithFormat:@"%@%@", kBaseUrlString, kInterfaceUrlString];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    [manager.responseSerializer setAcceptableContentTypes:[NSSet setWithObject:@"text/html"]];
+    
+    
+    SRNet_Manager *netManager = [[SRNet_Manager alloc] init];
+    netManager.completeBlock = completeBlock;
+    netManager.failureBlock = failureBlock;
+    
+    
+    [manager POST:urlString
+       parameters:sendDic
+          success:^(NSURLSessionDataTask *task, id responseObject) {
+              //返回成功
+              if (netManager.completeBlock) {
+                  
+                  NSMutableDictionary *dic = responseObject;
+                  int interfaceType = [[dic  objectForKey:@"interface"] intValue];
+                  id returnData = [dic objectForKey:@"returnData"];
+                  
+                  if (![dic  objectForKey:@"statusMsg"]) {
+                      //如果返回信息码不存在
+                      netManager.completeBlock(@"返回信息码不存在", nil, interfaceType, task);
+                  } else {
+                      //返回信息码存在
+                      NSNumber *statusNum = [dic  objectForKey:@"statusMsg"];
+                      if (0 == statusNum.intValue) {
+                          netManager.completeBlock(@"返回信息码为0", nil, interfaceType, task);
+                      } else {
+                          if (returnData) {
+                              //返回数据存在
+                              netManager.completeBlock(@"接口返回成功", returnData, interfaceType, task);
+                          }else {
+                              //返回数据不存在
+                              netManager.completeBlock(@"接口返回成功,但是数据为空", nil, interfaceType, task);
+                          }
+                      }
+                  }
+              }
+              
+              
+            } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                //请求失败
+                if (netManager.failureBlock) {
+                    netManager.failureBlock(error, task);
+                }
+            }
+     ];
+}
+
+
 
 - (BOOL)requestNetorkWithDic:(NSMutableDictionary *)sendDic {
     
@@ -136,6 +197,9 @@
 - (BOOL)getUserGroups: (Model_User *)user {
     return [self requestNetorkWithDic:[self toRequestDicWithData:user.keyValues
                                                   andRequestType:32]];
+}
++ (NSMutableDictionary *)getUserGroupsDic: (Model_User *)user {
+    return [[[SRNet_Manager alloc] init] toRequestDicWithData:user.keyValues andRequestType:32];
 }
 
 

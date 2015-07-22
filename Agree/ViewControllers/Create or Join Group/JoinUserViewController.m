@@ -145,14 +145,7 @@
     [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
-- (void)imageUploadDoneWithFieldID:(NSString *)fieldID {
-    self.theGroup.avatar_path = fieldID;
-    [_netManager addGroup:self.theGroup withMembers:_groupMembers];
-}
 
-- (void)imageUpladError {
-    
-}
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }

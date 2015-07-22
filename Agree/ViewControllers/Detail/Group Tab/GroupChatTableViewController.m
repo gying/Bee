@@ -28,11 +28,10 @@
 
 
 
-@interface GroupChatTableViewController () <SRNetManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, SRImageManagerDelegate, UIAlertViewDelegate, EMChatManagerDelegate, SRNetManagerDelegate> {
+@interface GroupChatTableViewController () <SRNetManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIAlertViewDelegate, EMChatManagerDelegate, SRNetManagerDelegate> {
     SRNet_Manager *_netManager;
     UIImagePickerController *_imagePicker;
     UIImage *_chatPickImage;
-    SRImageManager *_imageManager;
     NSString *_imageName;
     Model_Chat *_sendChat;
     

@@ -144,7 +144,50 @@
     Model_User *user = [[Model_User alloc] init];
     user.pk_user = [Model_User loadFromUserDefaults].pk_user;
     
-    [_netManager getUserGroups:user];
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager getUserGroupsDic:user]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                if (jsonDic) {
+                                    //判断小组数据是否有更新,是否需要刷新列表
+                                    NSMutableArray *tempAry = [NSMutableArray arrayWithArray:[Model_Group objectArrayWithKeyValuesArray:jsonDic]];
+                                    
+                                    BOOL isSave = YES;
+                                    if (tempAry.count == self.groupAry.count) {
+                                        //小组数据的数量一样,开始进行数据比对
+                                        for (Model_Group *theGroup in tempAry) {
+                                            //这里暂时只对小组的id进行比对
+                                            Model_Group *otherGroup = [self.groupAry objectAtIndex:[tempAry indexOfObject:theGroup]];
+                                            if (![theGroup.pk_group isEqual:otherGroup.pk_group]) {
+                                                isSave = NO;
+                                            }
+                                        }
+                                    } else {
+                                        //小组数据的数量不一样
+                                        isSave = NO;
+                                    }
+                                    
+                                    //小组有更新,开始更新步骤
+                                    //将缓存的数组全部删除
+                                    [CD_Group removeAllGroupFromCD];
+                                    for (Model_Group *group in self.groupAry) {
+                                        [CD_Group saveGroupToCD:group];
+                                    }
+                                    
+                                    if (!isSave) {
+                                        //小组数据有更新的情况下在进行界面上的刷新
+                                        self.groupAry = nil;
+                                        self.groupAry = tempAry;
+                                        [self.groupCollectionView reloadData];
+                                    }
+                                } else {
+                                    //没有加入的小组信息
+                                    //将缓存的数组全部删除
+                                    [self.groupAry removeAllObjects];
+                                    [CD_Group removeAllGroupFromCD];
+                                    [self.groupCollectionView reloadData];
+                                }
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                [SVProgressHUD showErrorWithStatus:@"网络错误"];
+                            }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -175,6 +218,7 @@
         
         //下载图片
         NSURL *imageUrl = [SRImageManager groupFrontCoverImageImageFromOSS:theGroup.avatar_path];
+        
         
         [cell.groupImageView sd_setImageWithURL:imageUrl
                                       completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
@@ -376,8 +420,6 @@
             
         case kGetUserGroups: {  //读取用户的小组
             if (jsonDic) {
-                
-                
                 //判断小组数据是否有更新,是否需要刷新列表
                 NSMutableArray *tempAry = [NSMutableArray arrayWithArray:[Model_Group objectArrayWithKeyValuesArray:jsonDic]];
 

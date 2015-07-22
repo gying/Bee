@@ -77,8 +77,9 @@
 #define kTestInterface              1101
 #define kGetUserInfoByWechat        1102
 
-
-
+//定义两个代码块
+typedef void (^finishCallbackBlock)(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task);
+typedef void (^requestFailureBlock)(NSError *error, NSURLSessionDataTask *task);
 
 //建立代理协议
 @protocol SRNetManagerDelegate <NSObject>
@@ -89,6 +90,17 @@
 @end
 
 @interface SRNet_Manager : NSObject
+
+
+@property (strong)finishCallbackBlock completeBlock;
+@property (strong)requestFailureBlock failureBlock;
+
+
++ (void)requestNetWithDic:(NSMutableDictionary *)sendDic
+                 complete:(finishCallbackBlock)completeBlock
+                  failure:(requestFailureBlock)failureBlock;
+
+
 @property (nonatomic, weak)id<SRNetManagerDelegate> delegate;
 //以建立代理协议的模式初始化
 - (id)initWithDelegate: (id<SRNetManagerDelegate>)delegate;
@@ -136,4 +148,8 @@
 
 - (BOOL)getCreatedPartyByUser: (Model_User *)user;
 - (BOOL)getPartyHistoryByUser: (Model_User *)user;
+
+
++ (NSMutableDictionary *)getUserGroupsDic: (Model_User *)user;
+
 @end

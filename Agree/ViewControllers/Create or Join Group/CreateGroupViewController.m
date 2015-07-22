@@ -16,11 +16,10 @@
 #import "SRImageManager.h"
 #import "UIImageView+WebCache.h"
 
-@interface CreateGroupViewController () <UITextFieldDelegate, SRNetManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, SRImageManagerDelegate> {
+@interface CreateGroupViewController () <UITextFieldDelegate, SRNetManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate> {
     Model_Group *_newGroup;
     SRNet_Manager *_netManager;
     UIImagePickerController *_imagePicker;
-    SRImageManager *_imageManager;
     
     UIImage *_groupCoverImage;
     Model_Group *_joinGroup;
@@ -116,10 +115,6 @@
     [picker dismissViewControllerAnimated:YES completion:nil];
     
     UIImage *pickImage = [info valueForKey:@"UIImagePickerControllerOriginalImage"];
-    
-    if (!_imageManager) {
-        _imageManager = [[SRImageManager alloc] initWithDelegate:self];
-    }
     
     _groupCoverImage = [SRImageManager getSubImage:pickImage withRect:CGRectMake(0, 0, self.groupCoverButton.frame.size.width * 2, self.groupCoverButton.frame.size.height * 2)];
     

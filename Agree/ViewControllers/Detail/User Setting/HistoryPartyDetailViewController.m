@@ -251,7 +251,7 @@
                     [_relArray addObject:newUser];
                 }
                 [self reloadPeopleNum];
-                [self.delegate detailChange:self.party];
+//                [self.delegate detailChange:self.party];
                 
                 [SRTool addPartyUpdateTip:1];
             }
@@ -263,7 +263,7 @@
                 _relation.pk_party_user = (NSNumber *)jsonDic;
                 self.party.relationship = @0;
                 [self reloadPeopleNum];
-                [self.delegate detailChange:self.party];
+//                [self.delegate detailChange:self.party];
             }
         }
             break;
@@ -272,7 +272,7 @@
             if (jsonDic) {
                 //聚会取消成功
                 [self.navigationController popViewControllerAnimated:YES];
-                [self.delegate cancelParty:self.party];
+//                [self.delegate cancelParty:self.party];
             }
         }
             break;

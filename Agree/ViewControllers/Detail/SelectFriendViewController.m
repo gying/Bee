@@ -55,17 +55,27 @@
         [_netManager getUserByPhone:_user];
     } else {
         if (0 == _relationStatus) {
-            //如果用户并不存在好友关系
-            //添加用户
-            Model_user_user *userRelation = [[Model_user_user alloc] init];
-            [userRelation setFk_user_from:[Model_User loadFromUserDefaults].pk_user];
-            [userRelation setFk_user_to:_user.pk_user];
-            [userRelation setRelationship:@1];
-            [userRelation setStatus:@1];
-            _addFriend = TRUE;
-            [_netManager addFriend:userRelation];
-            
-            [SVProgressHUD showWithStatus:@"正在发送好友请求"];
+            if ([_user.pk_user isEqualToNumber:[Model_User loadFromUserDefaults].pk_user]) {
+                //出现自己添加自己的情况
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                    message:@"无法添加您自己的帐号,请重新查找帐号"
+                                                                   delegate:self
+                                                          cancelButtonTitle:@"确定"
+                                                          otherButtonTitles: nil];
+                [alertView show];
+            } else {
+                //如果用户并不存在好友关系
+                //添加用户
+                Model_user_user *userRelation = [[Model_user_user alloc] init];
+                [userRelation setFk_user_from:[Model_User loadFromUserDefaults].pk_user];
+                [userRelation setFk_user_to:_user.pk_user];
+                [userRelation setRelationship:@1];
+                [userRelation setStatus:@1];
+                _addFriend = TRUE;
+                [_netManager addFriend:userRelation];
+                
+                [SVProgressHUD showWithStatus:@"正在发送好友请求"];
+            }
         }
     }
 }
