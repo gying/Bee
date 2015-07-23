@@ -16,9 +16,8 @@
 #import "SRImageManager.h"
 #import "UIImageView+WebCache.h"
 
-@interface CreateGroupViewController () <UITextFieldDelegate, SRNetManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate> {
+@interface CreateGroupViewController () <UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate> {
     Model_Group *_newGroup;
-    SRNet_Manager *_netManager;
     UIImagePickerController *_imagePicker;
     
     UIImage *_groupCoverImage;
@@ -54,12 +53,43 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if ([@"CodeField" isEqual:textField.restorationIdentifier]) {
         //验证码输入界面
-        if (!_netManager) {
-            _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-        }
         Model_Group_Code *newCode = [[Model_Group_Code alloc] init];
         newCode.pk_group_code = textField.text;
-        [_netManager joinTheGroupByCode:newCode];
+        
+        [SRNet_Manager requestNetWithDic:[SRNet_Manager joinTheGroupByCodeDic:newCode]
+                                complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                    if (jsonDic) {
+                                        [SVProgressHUD showSuccessWithStatus:@"找到小组"];
+                                        _joinGroup = [[Model_Group objectArrayWithKeyValuesArray:jsonDic] firstObject];
+                                        
+                                        //显示要加入的小组
+                                        [self.groupCoverImageView setHidden:NO];
+                                        [self.groupNameLabel setHidden:NO];
+                                        [self.recodeButton setHidden:NO];
+                                        [self.joinButton setHidden:NO];
+                                        [self.publicPhoneLabel setHidden:NO];
+                                        [self.publicPhoneSeg setHidden:NO];
+                                        
+                                        [self.codeInputTextField setHidden:YES];
+                                        [self.groupCoverButton setHidden:YES];
+                                        [self.remarkLabel setHidden:YES];
+                                        
+                                        [self.groupNameLabel setText:_joinGroup.name];
+                                        
+                                        //下载图片
+                                        NSURL *imageUrl = [SRImageManager groupFrontCoverImageImageFromOSS:_joinGroup.avatar_path];
+                                        [self.groupCoverImageView sd_setImageWithURL:imageUrl];
+                                        
+                                    }
+                                    else {
+                                        [SVProgressHUD showErrorWithStatus:@"未找到相关数据"];
+                                        //未找到小组的相关数据
+                                        [self.remarkLabel setText:@"未找到小组信息,请再次确认输入"];
+                                        [self.codeInputTextField becomeFirstResponder];
+                                    }
+                                } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                    
+                                }];
     } else if([self.groupNameTextField.restorationIdentifier isEqualToString:textField.restorationIdentifier]) {
         //输入小组名称
         _newGroup.name = textField.text;
@@ -186,50 +216,6 @@
     }
 }
 
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    switch (interfaceType) {
-        case kJoinTheGroupByCode: {
-            if (jsonDic) {
-                [SVProgressHUD showSuccessWithStatus:@"找到小组"];
-                _joinGroup = [[Model_Group objectArrayWithKeyValuesArray:jsonDic] firstObject];
-                
-                //显示要加入的小组
-                [self.groupCoverImageView setHidden:NO];
-                [self.groupNameLabel setHidden:NO];
-                [self.recodeButton setHidden:NO];
-                [self.joinButton setHidden:NO];
-                [self.publicPhoneLabel setHidden:NO];
-                [self.publicPhoneSeg setHidden:NO];
-                
-                [self.codeInputTextField setHidden:YES];
-                [self.groupCoverButton setHidden:YES];
-                [self.remarkLabel setHidden:YES];
-                
-                [self.groupNameLabel setText:_joinGroup.name];
-
-                //下载图片
-                NSURL *imageUrl = [SRImageManager groupFrontCoverImageImageFromOSS:_joinGroup.avatar_path];
-                [self.groupCoverImageView sd_setImageWithURL:imageUrl];
-                
-            }
-            else {
-                [SVProgressHUD showErrorWithStatus:@"未找到相关数据"];
-                //未找到小组的相关数据
-                [self.remarkLabel setText:@"未找到小组信息,请再次确认输入"];
-                [self.codeInputTextField becomeFirstResponder];
-            }
-        }
-            break;
-            
-        default:
-            break;
-    }
-    [SVProgressHUD dismiss];
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD dismiss];
-}
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }

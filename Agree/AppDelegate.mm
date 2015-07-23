@@ -25,7 +25,7 @@
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface AppDelegate () <EMChatManagerDelegate, SRNetManagerDelegate,WXApiDelegate>
+@interface AppDelegate () <EMChatManagerDelegate ,WXApiDelegate>
 
 @end
 
@@ -77,10 +77,12 @@
         updateUser.device_id = self.deviceToken;
         updateUser.jpush_id = self.jPushString;
         
-        if (!_netManager) {
-            _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-        }
-        [_netManager updateUserInfo:updateUser];
+        [SRNet_Manager requestNetWithDic:[SRNet_Manager updateUserInfoDic:updateUser]
+                                complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                    
+                                } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                    
+                                }];
     }
 }
 
@@ -304,12 +306,6 @@
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
     [self regAliOSS];
-    
-//    //腾讯云
-//    if (!_netManager) {
-//        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-//        [_netManager imageManagerSign];
-//    }
 
     //推送设置
     // Required
@@ -455,8 +451,6 @@
     completionHandler(UIBackgroundFetchResultNewData);
 }
 
-
-
 #pragma mark - Core Data stack
 
 @synthesize managedObjectContext = _managedObjectContext;
@@ -506,7 +500,6 @@
     return _persistentStoreCoordinator;
 }
 
-
 - (NSManagedObjectContext *)managedObjectContext {
     // Returns the managed object context for the application (which is already bound to the persistent store coordinator for the application.)
     if (_managedObjectContext != nil) {
@@ -536,33 +529,6 @@
         }
     }
 }
-
-#pragma mark - 网络代理
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    [SVProgressHUD dismiss];
-    switch (interfaceType) {
-        case kUpdateUserInfo: {
-        
-        }
-            break;
-        case kImageManagerSign: {
-            if (jsonDic) {
-                //注册腾讯云的万象图片
-                [TXYUploadManager authorize:@"201139" userId:[Model_User loadFromUserDefaults].pk_user.stringValue sign:(NSString *)jsonDic];
-                [TXYDownloader authorize:@"201139" userId:[Model_User loadFromUserDefaults].pk_user.stringValue];
-//                self.uploadManager = [[TXYUploadManager alloc] initWithPersistenceId: @"persistenceId"];
-            }
-        }
-        default:
-            break;
-    }
-}
-
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD dismiss];
-}
-
 
 
 

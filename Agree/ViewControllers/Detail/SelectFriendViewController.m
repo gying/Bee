@@ -14,8 +14,7 @@
 #import "SRImageManager.h"
 
 
-@interface SelectFriendViewController () <SRNetManagerDelegate> {
-    SRNet_Manager *_netManager;
+@interface SelectFriendViewController () {
     Model_User *_user;
     
     BOOL _addFriend;
@@ -44,15 +43,49 @@
 
 //点击添加按钮
 - (IBAction)pressedTheAddButton:(id)sender {
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
     if (self.avatarImage.hidden) {
         //如果头像界面那隐藏,则为查找用户
         _user = [[Model_User alloc] init];
         [_user setPhone:self.accountTextField.text];
         [_user setPk_user:[Model_User loadFromUserDefaults].pk_user];
-        [_netManager getUserByPhone:_user];
+        
+        [SRNet_Manager requestNetWithDic:[SRNet_Manager getUserByPhoneDic:_user]
+                                complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                    if (jsonDic) {
+                                        _user = [[Model_User objectArrayWithKeyValuesArray:jsonDic] objectAtIndex:0];
+                                        [self.remarkLabel setText:_user.nickname];
+                                        
+                                        [self.accountTextField setHidden:YES];
+                                        [self.avatarImage sd_setImageWithURL:[SRImageManager avatarImageFromOSS:_user.avatar_path]];
+                                        
+                                        
+                                        [self.avatarImage setHidden:NO];
+                                        [self.reInputButton setHidden:NO];
+                                        
+                                        _relationStatus = _user.relationship.intValue;
+                                        
+                                        switch (_relationStatus) {
+                                            case 0: {
+                                                [self.addButton setTitle:@"发送好友请求" forState:UIControlStateNormal];
+                                            }
+                                                break;
+                                            case 1: {
+                                                [self.addButton setTitle:@"已发送好友请求" forState:UIControlStateNormal];
+                                            }
+                                                break;
+                                            default: {
+                                                [self.addButton setTitle:@"已存在好友关系" forState:UIControlStateNormal];
+                                            }
+                                                break;
+                                        }
+                                        
+                                    } else {
+                                        //找不到该用户
+                                        [self.remarkLabel setText:@"找不到手机用户,请再次确认后输入"];
+                                    }
+                                } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                    
+                                }];
     } else {
         if (0 == _relationStatus) {
             if ([_user.pk_user isEqualToNumber:[Model_User loadFromUserDefaults].pk_user]) {
@@ -72,13 +105,21 @@
                 [userRelation setRelationship:@1];
                 [userRelation setStatus:@1];
                 _addFriend = TRUE;
-                [_netManager addFriend:userRelation];
                 
                 [SVProgressHUD showWithStatus:@"正在发送好友请求"];
+                [SRNet_Manager requestNetWithDic:[SRNet_Manager addFriendDic:userRelation]
+                                        complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                            [SVProgressHUD showSuccessWithStatus:@"好友请求发送成功"];
+                                            [self.navigationController popViewControllerAnimated:YES];
+                                        } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                            
+                                        }];
             }
         }
     }
 }
+
+
 - (IBAction)pressedTheReInputButton:(id)sender {
     [self.accountTextField setHidden:NO];
     [self.accountTextField setText:@""];
@@ -129,7 +170,6 @@
                     }
                         break;
                 }
-                
                 
             } else {
                 //找不到该用户

@@ -137,14 +137,39 @@
                     //收到请求,等待自己同意
                     //同意请求
                     [self.sendButton setEnabled:NO];
-                    if (!_netManager) {
-                        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-                    }
-                    
+
                     Model_user_user *userRelation = [[Model_user_user alloc] init];
                     userRelation.fk_user_from = [Model_User loadFromUserDefaults].pk_user;
                     userRelation.fk_user_to = _people.userInfo.pk_user;
-                    [_netManager becomeFriend:userRelation];
+                    [SRNet_Manager requestNetWithDic:[SRNet_Manager becomeFriendDic:userRelation]
+                                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                                switch (_people.userInfo.relationship.intValue) {
+                                                    case 1: {
+                                                        //已经发送请求,等待对方同意
+                                                        //等待
+                                                    }
+                                                        break;
+                                                    case 2: {
+                                                        //收到请求,等待自己同意
+                                                        //同意请求
+                                                        [_people.userInfo setRelationship:@3];
+                                                        [self.sendButton setTitle:@"成为好友" forState:UIControlStateNormal];
+                                                        
+                                                        [self updateRelation];
+                                                    }
+                                                        break;
+                                                    case 3: {
+                                                        //已经成为好友
+                                                        //打开私聊界面
+                                                    }
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
+                                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                                
+                                            }];
+                    
                 }
                     break;
                 case 3: {
@@ -158,18 +183,23 @@
         } else {
             //添加为好友
             [self.sendButton setEnabled:NO];
-            if (!_netManager) {
-                _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-            }
             
             Model_user_user *userRelation = [[Model_user_user alloc] init];
             [userRelation setFk_user_from:[Model_User loadFromUserDefaults].pk_user];
             [userRelation setFk_user_to:_people.userInfo.pk_user];
             [userRelation setRelationship:@1];
             [userRelation setStatus:@1];
-            [_netManager addFriend:userRelation];
             
-            
+            [SRNet_Manager requestNetWithDic:[SRNet_Manager addFriendDic:userRelation]
+                                    complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                        //添加为好友
+                                        [_people.userInfo setRelationship:@1];
+                                        [self.sendButton setTitle:@"请求已发送" forState:UIControlStateNormal];
+                                        
+                                        [self updateRelation];
+                                    } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                        
+                                    }];
         }
     } else {
         //通讯录,发短信邀请加入
@@ -182,53 +212,6 @@
     NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"contact_update"];
     updateValue = [NSNumber numberWithInt:updateValue.intValue + 1];
     [[NSUserDefaults standardUserDefaults] setObject:updateValue forKey:@"contact_update"];
-}
-
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    
-    switch (interfaceType) {
-        case kAddFriend: {
-            //添加为好友
-            [_people.userInfo setRelationship:@1];
-            [self.sendButton setTitle:@"请求已发送" forState:UIControlStateNormal];
-            
-            [self updateRelation];
-        }
-            break;
-        case kBecomeFriend: {
-            switch (_people.userInfo.relationship.intValue) {
-                case 1: {
-                    //已经发送请求,等待对方同意
-                    //等待
-                }
-                    break;
-                case 2: {
-                    //收到请求,等待自己同意
-                    //同意请求
-                    [_people.userInfo setRelationship:@3];
-                    [self.sendButton setTitle:@"成为好友" forState:UIControlStateNormal];
-                    
-                    [self updateRelation];
-                }
-                    break;
-                case 3: {
-                    //已经成为好友
-                    //打开私聊界面
-                }
-                    break;
-                default:
-                    break;
-            }
-        }
-            break;
-        default:
-            break;
-    }
-    [SVProgressHUD dismiss];
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
 @end

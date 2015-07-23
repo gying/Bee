@@ -17,8 +17,7 @@
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface RootAccountLoginViewController () <SRNetManagerDelegate, UIAlertViewDelegate> {
-    SRNet_Manager *_netManager;
+@interface RootAccountLoginViewController () <UIAlertViewDelegate> {
     Model_User *_wechatUser;
     BOOL _wechatLoginDone;
 }
@@ -58,14 +57,33 @@
 
 - (IBAction)tapDoneButton:(id)sender {
     [SVProgressHUD showWithStatus:@"账户登录中..." maskType:SVProgressHUDMaskTypeGradient];
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
     Model_User *sendUser = [[Model_User alloc] init];
     [sendUser setPassword:self.passwordTextField.text];
     [sendUser setPk_user:[NSNumber numberWithInt:self.accountTextField.text.intValue]];
     
-    [_netManager loginAccount:sendUser];
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager loginAccountDic:sendUser]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                if (jsonDic) {
+                                    _wechatLoginDone = NO;
+                                    [SVProgressHUD showSuccessWithStatus:@"登录成功"];
+                                    //找到帐号
+                                    Model_User *user = [[Model_User objectArrayWithKeyValuesArray:jsonDic] objectAtIndex:0];
+                                    [user saveToUserDefaults];
+                                    [self popToRootController];
+                                } else {
+                                    //没有找到帐号
+                                    [SVProgressHUD dismiss];
+                                    
+                                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"通知"
+                                                                                    message:@"帐号或者密码错误,请确认后再次输入"
+                                                                                   delegate:nil
+                                                                          cancelButtonTitle:@"确定"
+                                                                          otherButtonTitles: nil];
+                                    [alert show];
+                                }
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
 }
 
 - (void)popToRootController {
@@ -77,41 +95,11 @@
 - (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
     switch (interfaceType) {
         case kLoginAccount: {
-            if (jsonDic) {
-                _wechatLoginDone = NO;
-                [SVProgressHUD showSuccessWithStatus:@"登录成功"];
-                //找到帐号
-                Model_User *user = [[Model_User objectArrayWithKeyValuesArray:jsonDic] objectAtIndex:0];
-                [user saveToUserDefaults];
-                [self popToRootController];
-            } else {
-                //没有找到帐号
-                [SVProgressHUD dismiss];
-                
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"通知"
-                                                                message:@"帐号或者密码错误,请确认后再次输入"
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"确定"
-                                                      otherButtonTitles: nil];
-                [alert show];
-            }
+            
         }
             break;
         case kGetUserInfoByWechat: {
-            if (jsonDic) {
-                [super viewDidLoad];
-                //使用微信openid的账户存在
-                [SVProgressHUD showSuccessWithStatus:@"登录成功"];
-                //找到帐号
-                Model_User *user = [[Model_User objectArrayWithKeyValuesArray:jsonDic] objectAtIndex:0];
-                [user saveToUserDefaults];
-                [self popToRootController];
-                
-            } else {
-                //使用微信openid的账户不存在
-                _wechatLoginDone = YES;
-                [self performSegueWithIdentifier:@"GoToReg" sender:self];
-            }
+            
         }
         default:
             break;
@@ -281,10 +269,25 @@
     
     
     if (openid) {
-        if (!_netManager) {
-            _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-        }
-        [_netManager getUserInfoByWechat:_wechatUser];
+        [SRNet_Manager requestNetWithDic:[SRNet_Manager getUserInfoByWechatDic:_wechatUser]
+                                complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                    if (jsonDic) {
+                                        [super viewDidLoad];
+                                        //使用微信openid的账户存在
+                                        [SVProgressHUD showSuccessWithStatus:@"登录成功"];
+                                        //找到帐号
+                                        Model_User *user = [[Model_User objectArrayWithKeyValuesArray:jsonDic] objectAtIndex:0];
+                                        [user saveToUserDefaults];
+                                        [self popToRootController];
+                                        
+                                    } else {
+                                        //使用微信openid的账户不存在
+                                        _wechatLoginDone = YES;
+                                        [self performSegueWithIdentifier:@"GoToReg" sender:self];
+                                    }
+                                } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                    
+                                }];
     }
 }
 

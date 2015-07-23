@@ -19,11 +19,10 @@
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface RootAccountRegViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate, SRNetManagerDelegate, UITextFieldDelegate>
+@interface RootAccountRegViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate, UITextFieldDelegate>
 {
     UIImagePickerController *_imagePicker;
     UIImageView *_backImageViwe;
-    SRNet_Manager *_netManager;
     UIImage *_avatarImage;
 }
 
@@ -36,7 +35,6 @@
     // Do any additional setup after loading the view.
     
     [self.nicknameTextField setDelegate:self];
-    _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
 
     [self.doneButton.layer setCornerRadius:self.doneButton.frame.size.height/2];
     [self.doneButton setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:1.0]];
@@ -176,7 +174,29 @@
                 AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
                 self.userInfo.jpush_id = delegate.jPushString;
                 self.userInfo.device_id = delegate.deviceToken;
-                [_netManager regUser:self.userInfo];
+                
+                [SRNet_Manager requestNetWithDic:[SRNet_Manager regUserDic:self.userInfo]
+                                        complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                            if (jsonDic) {
+                                                //注册成功
+                                                //保存帐号信息
+                                                
+                                                if ([jsonDic isKindOfClass:[NSNumber class]]) {
+                                                    self.userInfo.pk_user = (NSNumber *)jsonDic;
+                                                }
+                                                [self.userInfo saveToUserDefaults];
+                                                //                [self dismissViewControllerAnimated:YES completion:nil];
+                                                //                [self.rootController popToRootController];
+                                                UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+                                                UITabBarController *rootController = [sb instantiateViewControllerWithIdentifier:@"rootTabbar"];
+                                                [self presentViewController:rootController animated:YES completion:nil];
+                                                [SVProgressHUD showSuccessWithStatus:@"注册成功"];
+                                            } else {
+                                                //注册出现错误
+                                            }
+                                        } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                            
+                                        }];
                 
             } else {
                 NSLog(@"errorInfo_testDataDownloadWithProgress:%@", [error userInfo]);
@@ -192,41 +212,9 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)interfaceReturnDataSuccess:(NSMutableDictionary *)jsonDic with:(int)interfaceType {
-    switch (interfaceType) {
-        case kRegUser: {    //注册用户
-            if (jsonDic) {
-                //注册成功
-                //保存帐号信息
-                
-                if ([jsonDic isKindOfClass:[NSNumber class]]) {
-                    self.userInfo.pk_user = (NSNumber *)jsonDic;
-                }
-                [self.userInfo saveToUserDefaults];
-//                [self dismissViewControllerAnimated:YES completion:nil];
-//                [self.rootController popToRootController];
-                UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-                UITabBarController *rootController = [sb instantiateViewControllerWithIdentifier:@"rootTabbar"];
-                [self presentViewController:rootController animated:YES completion:nil];
-                [SVProgressHUD showSuccessWithStatus:@"注册成功"];
-            } else {
-                //注册出现错误
-            }
-        }
-            break;
-        default:
-            break;
-    }
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD dismiss];
 }
 
 //键盘回收

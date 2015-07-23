@@ -25,9 +25,7 @@
 #define kLoadChatData       1
 #define kSendMessage        2
 
-@interface UserChatViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIAlertViewDelegate, EMChatManagerDelegate,UITableViewDelegate,UIScrollViewDelegate, SRNetManagerDelegate> {
-    SRNet_Manager *_netManager;
-    int _netStatus;
+@interface UserChatViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIAlertViewDelegate, EMChatManagerDelegate,UITableViewDelegate,UIScrollViewDelegate> {
     
     SRKeyboard *_srKeyBoard;
     UIImagePickerController *_imagePicker;
@@ -453,9 +451,6 @@
     [self.userChatTableView reloadData];
     [self tableViewIsScrollToBottom:YES withAnimated:YES];
     
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
     
     Model_User_Chat *newChat = [[Model_User_Chat alloc] init];
     [newChat setFk_user_from:selfAccount.pk_user];
@@ -476,7 +471,14 @@
         default:
             break;
     }
-    [_netManager addUserChat:newChat];
+    
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager addUserChatDic:newChat]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
+    
 }
 
 - (void)tableViewIsScrollToBottom: (BOOL) isScroll
@@ -686,22 +688,6 @@
         //如果拖移位置超过预定点,则推出视图
         [self.navigationController popViewControllerAnimated:YES];
     }
-}
-
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    switch (interfaceType) {
-        case kAddUserChat: {
-            
-        }
-            break;
-            
-        default:
-            break;
-    }
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    
 }
 
 /*

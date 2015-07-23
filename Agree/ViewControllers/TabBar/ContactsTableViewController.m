@@ -28,8 +28,7 @@
 #import "SRImageManager.h"
 
 
-@interface ContactsTableViewController () <SRNetManagerDelegate> {
-    SRNet_Manager *_netManager;
+@interface ContactsTableViewController () {
     NSMutableArray *_friendArray;
     SRAccountView *_accountView;
     NSInteger _selectIndex;
@@ -74,13 +73,63 @@
 }
 
 - (void)loadDataFromNet {
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
-    
     Model_User *sendUser = [[Model_User alloc] init];
     [sendUser setPk_user:[Model_User loadFromUserDefaults].pk_user];
-    [_netManager getFriendList:sendUser];
+    
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager getFriendListDic:sendUser]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                if (jsonDic) {
+                                    //        NSMutableArray *tempArray = [[NSMutableArray alloc] init];
+                                    NSMutableArray *tempArray = (NSMutableArray *)[Model_User objectArrayWithKeyValuesArray:jsonDic];
+                                    
+                                    _friendArray = nil;
+                                    _friendArray = [[NSMutableArray alloc] init];
+                                    
+                                    for (Model_User *user in tempArray) {  //循环标记用户未读取的信息
+                                        EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:user.pk_user.stringValue isGroup:NO];
+                                        user.chat_update = [NSNumber numberWithLong:conversation.unreadMessagesCount];
+                                        
+                                        if (0 != user.chat_update.integerValue) {
+                                            [_friendArray insertObject:user atIndex:0];
+                                        } else {
+                                            [_friendArray addObject:user];
+                                        }
+                                    }
+                                    
+                                } else {
+                                    _friendArray = nil;
+                                    _friendArray = [[NSMutableArray alloc] init];
+                                }
+                                
+                                [self.tableView reloadData];
+                                [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"contact_update"];
+                                [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"relation_update"];
+                                self.navigationController.tabBarItem.badgeValue = nil;
+                                [self.tableView.header endRefreshing];
+                                _isfirstLoad = FALSE;
+                                
+                                if (_intoMessage) {
+                                    //        UserChatViewController *childController = [[UserChatViewController alloc] init];
+                                    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+                                    UserChatViewController *childController = [sb instantiateViewControllerWithIdentifier:@"UserChatView"];
+                                    
+                                    Model_User *sendUser;
+                                    for (Model_User *user in _friendArray) {
+                                        if ([user.pk_user isEqualToNumber:_intoUser.pk_user]) {
+                                            sendUser = user;
+                                        }
+                                    }
+                                    if (sendUser) {
+                                        sendUser.chat_update = 0;
+                                        [self.tableView reloadData];
+                                        childController.user = sendUser;
+                                        [self.navigationController pushViewController:childController animated:YES];
+                                    }
+                                }
+                                
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -200,72 +249,6 @@
     }
 }
 
-
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    
-    switch (interfaceType) {
-        case kGetFriendList: {
-            if (jsonDic) {
-                //        NSMutableArray *tempArray = [[NSMutableArray alloc] init];
-                NSMutableArray *tempArray = (NSMutableArray *)[Model_User objectArrayWithKeyValuesArray:jsonDic];
-                
-                _friendArray = nil;
-                _friendArray = [[NSMutableArray alloc] init];
-                
-                for (Model_User *user in tempArray) {  //循环标记用户未读取的信息
-                    EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:user.pk_user.stringValue isGroup:NO];
-                    user.chat_update = [NSNumber numberWithLong:conversation.unreadMessagesCount];
-                    
-                    if (0 != user.chat_update.integerValue) {
-                        [_friendArray insertObject:user atIndex:0];
-                    } else {
-                        [_friendArray addObject:user];
-                    }
-                }
-                
-            } else {
-                _friendArray = nil;
-                _friendArray = [[NSMutableArray alloc] init];
-            }
-        }
-            break;
-            
-        default:
-            break;
-    }
-
-    
-    [self.tableView reloadData];
-    [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"contact_update"];
-    [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"relation_update"];
-    self.navigationController.tabBarItem.badgeValue = nil;
-    [self.tableView.header endRefreshing];
-    _isfirstLoad = FALSE;
-    
-    if (_intoMessage) {
-        //        UserChatViewController *childController = [[UserChatViewController alloc] init];
-        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-        UserChatViewController *childController = [sb instantiateViewControllerWithIdentifier:@"UserChatView"];
-        
-        Model_User *sendUser;
-        for (Model_User *user in _friendArray) {
-            if ([user.pk_user isEqualToNumber:_intoUser.pk_user]) {
-                sendUser = user;
-            }
-        }
-        if (sendUser) {
-            sendUser.chat_update = 0;
-            [self.tableView reloadData];
-            childController.user = sendUser;
-            [self.navigationController pushViewController:childController animated:YES];
-        }
-    }
-    
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD showErrorWithStatus:@"网络错误"];
-}
 
 #pragma mark - Navigation
 

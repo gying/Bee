@@ -24,8 +24,7 @@
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface CreatedPartyDetailViewController ()<SRNetManagerDelegate, UIActionSheetDelegate> {
-    SRNet_Manager *_netManager;
+@interface CreatedPartyDetailViewController ()<UIActionSheetDelegate> {
     Model_Party_User *_relation;
     NSMutableArray *_relArray;
     int _showStatus;
@@ -83,9 +82,6 @@
     }
     
     self.nameLabel.text = self.party.name;
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
     
     _relation = [[Model_Party_User alloc] init];
     _relation.pk_party_user = self.party.pk_party_user;
@@ -129,7 +125,18 @@
 //    }
     
     if (self.party) {
-        [_netManager getPartyRelationship:sendParty];
+        [SRNet_Manager requestNetWithDic:[SRNet_Manager getPartyRelationshipDic:sendParty]
+                                complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                    //进入 读取关系与详情
+                                    if (jsonDic) {
+                                        _relArray = (NSMutableArray *)[Model_User objectArrayWithKeyValuesArray:[jsonDic objectForKey:@"relation"]];
+                                        self.party = [[Model_Party objectArrayWithKeyValuesArray:[jsonDic objectForKey:@"party"]] objectAtIndex:0];
+                                        [self reloadPeopleNum];
+                                    }
+                                } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                    [SVProgressHUD showErrorWithStatus:@"网络错误"];
+                                }];
+        
     }
     
     [self setParticipateStatus];
@@ -321,17 +328,30 @@
             break;
         case 1: {
             //分享聚会
-            if (!_netManager) {
-                _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-            }
-            [_netManager shareParty:self.party];
+            [SRNet_Manager requestNetWithDic:[SRNet_Manager sharePartyDic:self.party]
+                                    complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                        if (jsonDic) {
+                                            //聚会分享获取链接成功
+                                            //将聚会链接赋值到粘贴板
+                                            UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+                                            pboard.string = (NSString *)jsonDic;
+                                            
+                                            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                                                message:@"聚会链接已复制到您的粘贴板"
+                                                                                               delegate:self
+                                                                                      cancelButtonTitle:@"确定"
+                                                                                      otherButtonTitles:nil];
+                                            alertView.tag = 2;
+                                            [alertView show];
+                                        }
+                                    } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                        
+                                    }];
         }
             break;
             
-#pragma mark -- 将日程添加到系统日历
         case 2: {
             //添加到日程
-            NSLog(@"添加到日程");
             //事件市场
             EKEventStore *eventStore = [[EKEventStore alloc] init];
             
@@ -418,7 +438,15 @@
                     break;
                 case 1: {   //确定
                     //取消聚会
-                    [_netManager cancelParty:self.party];
+                    [SRNet_Manager requestNetWithDic:[SRNet_Manager cancelPartyDic:self.party]
+                                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                                if (jsonDic) {
+                                                    //聚会取消成功
+                                                    [self.navigationController popViewControllerAnimated:YES];
+                                                }
+                                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                                
+                                            }];
                 }
                     break;
                 default:
@@ -438,10 +466,7 @@
 }
 
 - (IBAction)CheakButton:(id)sender {
-    
     NSLog(@"结账");
-    
-    
 }
 
 #pragma mark - Navigation

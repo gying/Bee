@@ -19,10 +19,9 @@
 #import "SelectFriendViewController.h"
 
 
-@interface ContactsDetailTableViewController () <SRNetManagerDelegate> {
+@interface ContactsDetailTableViewController (){
     NSMutableArray *_contactArray;
     NSMutableArray *_checkPhoneArray;
-    SRNet_Manager *_netManager;
     NSMutableArray *_matchUserArray;
     SRAccountView *_accountView;
 }
@@ -122,10 +121,17 @@
 }
 
 - (void)matchAddressBook {
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
-    [_netManager matchPhones:_checkPhoneArray];
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager matchPhonesDic:_checkPhoneArray]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                if (jsonDic) {
+                                    //找到匹配的项目
+                                    _matchUserArray = (NSMutableArray *)[Model_User objectArrayWithKeyValuesArray:jsonDic];
+                                    [self matchAddressBookByUserArray];
+                                }
+                                [SVProgressHUD dismiss];
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -204,27 +210,6 @@
     [self.tableView reloadData];
 }
 
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    switch (interfaceType) {
-        case kMatchPhones: {
-            if (jsonDic) {
-                //找到匹配的项目
-                _matchUserArray = (NSMutableArray *)[Model_User objectArrayWithKeyValuesArray:jsonDic];
-                [self matchAddressBookByUserArray];
-            }
-        }
-            break;
-            
-        default:
-            break;
-    }
-    
-    [SVProgressHUD dismiss];
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD showErrorWithStatus:@"网络错误"];
-}
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }

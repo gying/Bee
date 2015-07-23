@@ -16,9 +16,8 @@
 #import "CD_Party.h"
 #import <MJRefresh.h>
 
-@interface ScheduleTableViewController ()<SRNetManagerDelegate, SRPartyDetailDelegate> {
+@interface ScheduleTableViewController ()<SRPartyDetailDelegate> {
     NSMutableArray *_scheduleArray;
-    SRNet_Manager *_netManager;
     NSIndexPath *_chooseIndexPath;
     //第一次读取的标识
     BOOL _firstLoadingDone;
@@ -118,14 +117,41 @@
 
 #pragma mark - 业务逻辑
 - (void)loadAllScheduleData {
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
     [self clearUpdate];
     
     Model_User *user = [[Model_User alloc] init];
     user.pk_user = [Model_User loadFromUserDefaults].pk_user;
-    [_netManager getAllScheduleByUser:user];
+    
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager getAllScheduleByUserDic:user]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                if (jsonDic) {
+                                    for (Model_Party *party in _scheduleArray) {
+                                        [CD_Party removePartyFromCD:party];
+                                    }
+                                    
+                                    _scheduleArray = (NSMutableArray *)[Model_Party objectArrayWithKeyValuesArray:jsonDic];
+                                    
+                                    for (Model_Party *party in _scheduleArray) {
+                                        [CD_Party savePartyToCD:party];
+                                    }
+                                    
+                                    //                [self.tableView reloadData];
+                                    
+                                } else {
+                                    if (_scheduleArray) {
+                                        for (Model_Party *party in _scheduleArray) {
+                                            [CD_Party removePartyFromCD:party];
+                                        }
+                                        [_scheduleArray removeAllObjects];
+                                    }
+                                }
+                                [self.tableView reloadData];
+                                [self.tableView.header endRefreshing];
+                                //在成功读取了所有聚会后,将聚会提示设置为0
+                                [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"party_update"];
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
     
 }
 
@@ -138,47 +164,6 @@
     //开始刷新
     self.loadAgain = false;
     [self loadAllScheduleData];
-}
-
-#pragma mark - 网络代理
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    switch (interfaceType) {
-        case kGetAllScheduleByUser: {
-            if (jsonDic) {
-                for (Model_Party *party in _scheduleArray) {
-                    [CD_Party removePartyFromCD:party];
-                }
-                
-                _scheduleArray = (NSMutableArray *)[Model_Party objectArrayWithKeyValuesArray:jsonDic];
-                
-                for (Model_Party *party in _scheduleArray) {
-                    [CD_Party savePartyToCD:party];
-                }
-                
-//                [self.tableView reloadData];
-                
-            } else {
-                if (_scheduleArray) {
-                    for (Model_Party *party in _scheduleArray) {
-                        [CD_Party removePartyFromCD:party];
-                    }
-                    [_scheduleArray removeAllObjects];
-                }
-            }
-            [self.tableView reloadData];
-            [self.tableView.header endRefreshing];
-            //在成功读取了所有聚会后,将聚会提示设置为0
-            [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"party_update"];
-        }
-            break;
-            
-        default:
-            break;
-    }
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType{
-    [SVProgressHUD dismiss];
 }
 
 #pragma mark - Navigation

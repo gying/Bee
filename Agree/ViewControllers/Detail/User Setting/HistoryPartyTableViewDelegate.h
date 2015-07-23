@@ -19,12 +19,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HistoryPartyTableViewDelegate : NSObject<UITableViewDataSource, UITableViewDelegate,SRNetManagerDelegate>
+@interface HistoryPartyTableViewDelegate : NSObject<UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong)NSMutableArray *schAry;
-
 @property (nonatomic, strong)Model_Group *group;
-
 @property (nonatomic,strong)MyPartyViewController * myPartyVC;
 
 @end

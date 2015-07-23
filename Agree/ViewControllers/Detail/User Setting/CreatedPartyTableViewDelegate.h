@@ -18,20 +18,10 @@
 
 
 
-@interface CreatedPartyTableViewDelegate : NSObject<UITableViewDataSource, UITableViewDelegate,SRNetManagerDelegate>
+@interface CreatedPartyTableViewDelegate : NSObject<UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong)NSMutableArray *schAry;
-
-
-
 @property (nonatomic, strong)Model_Group *group;
-
-
 @property (nonatomic,strong)MyPartyViewController * myPartyVC;
-
-
-
-
-
 
 @end

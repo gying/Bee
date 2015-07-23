@@ -22,8 +22,7 @@
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface HistoryPartyDetailViewController ()<SRNetManagerDelegate, UIActionSheetDelegate> {
-    SRNet_Manager *_netManager;
+@interface HistoryPartyDetailViewController ()<UIActionSheetDelegate> {
     Model_Party_User *_relation;
     NSMutableArray *_relArray;
     int _showStatus;
@@ -31,7 +30,6 @@
     
     UIActionSheet * canelActionSheet;
     UIActionSheet * payActionSheet;
-    
 }
 
 @end
@@ -81,9 +79,6 @@
     }
     
     self.nameLabel.text = self.party.name;
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
     
     _relation = [[Model_Party_User alloc] init];
     _relation.pk_party_user = self.party.pk_party_user;
@@ -109,25 +104,18 @@
     Model_Party *sendParty = [[Model_Party alloc] init];
     sendParty.pk_party = self.party.pk_party;
     
-    //    if (self.party) {
-    //        [_netManager getPartyRelationship:sendParty];
-    //    }
-    //
-    //    if (nil == self.party.relationship) {
-    //        //在与聚会未产生关系时(第一次进入聚会详情),建立与聚会关系
-    //        _relation.relationship = @0;
-    //
-    //        if ([self.party.fk_user isEqualToNumber:[Model_User loadFromUserDefaults].pk_user]) {
-    //            _relation.type = @2;
-    //        } else {
-    //            _relation.type = @1;
-    //        }
-    //
-    //        [_netManager createRelationshipForParty:_relation];
-    //    }
-    
     if (self.party) {
-        [_netManager getPartyRelationship:sendParty];
+        [SRNet_Manager requestNetWithDic:[SRNet_Manager getPartyRelationshipDic:sendParty]
+                                complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                    //进入 读取关系与详情
+                                    if (jsonDic) {
+                                        _relArray = (NSMutableArray *)[Model_User objectArrayWithKeyValuesArray:[jsonDic objectForKey:@"relation"]];
+                                        self.party = [[Model_Party objectArrayWithKeyValuesArray:[jsonDic objectForKey:@"party"]] objectAtIndex:0];
+                                        [self reloadPeopleNum];
+                                    }
+                                } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                    
+                                }];
     }
     
     [self setParticipateStatus];
@@ -215,93 +203,6 @@
     [canelActionSheet showInView:self.view];
 }
 
-#pragma mark - 网络代理
-
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    switch (interfaceType) {
-        case kGetPartyRelationship: {
-            //进入 读取关系与详情
-            if (jsonDic) {
-                _relArray = (NSMutableArray *)[Model_User objectArrayWithKeyValuesArray:[jsonDic objectForKey:@"relation"]];
-                self.party = [[Model_Party objectArrayWithKeyValuesArray:[jsonDic objectForKey:@"party"]] objectAtIndex:0];
-                [self reloadPeopleNum];
-            }
-        }
-            break;
-        case kUpdateSchedule: {
-            if (jsonDic) {
-                [SVProgressHUD showSuccessWithStatus:@"参与信息发送成功"];
-                
-                //更新上级聚会数组的关系状态
-                self.party.relationship = _relation.relationship;
-                [self setParticipateStatus];
-                BOOL userInAry = NO;
-                
-                for (Model_User *user in _relArray) {
-                    if ([user.pk_user isEqualToNumber:[Model_User loadFromUserDefaults].pk_user]) {
-                        user.relationship = _relation.relationship;
-                        userInAry = YES;
-                    }
-                }
-                
-                if (!userInAry) {
-                    //用户并不在数组中,是初次加入的关系
-                    Model_User *newUser = [Model_User loadFromUserDefaults];
-                    newUser.relationship = _relation.relationship;
-                    [_relArray addObject:newUser];
-                }
-                [self reloadPeopleNum];
-//                [self.delegate detailChange:self.party];
-                
-                [SRTool addPartyUpdateTip:1];
-            }
-        }
-            break;
-            
-        case kCreateRelationForParty: {
-            if (jsonDic) {
-                _relation.pk_party_user = (NSNumber *)jsonDic;
-                self.party.relationship = @0;
-                [self reloadPeopleNum];
-//                [self.delegate detailChange:self.party];
-            }
-        }
-            break;
-            
-        case kCancelParty: {
-            if (jsonDic) {
-                //聚会取消成功
-                [self.navigationController popViewControllerAnimated:YES];
-//                [self.delegate cancelParty:self.party];
-            }
-        }
-            break;
-        case kShareParty: {
-            if (jsonDic) {
-                //聚会分享获取链接成功
-                //将聚会链接赋值到粘贴板
-                UIPasteboard *pboard = [UIPasteboard generalPasteboard];
-                pboard.string = (NSString *)jsonDic;
-                
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                                    message:@"聚会链接已复制到您的粘贴板"
-                                                                   delegate:self
-                                                          cancelButtonTitle:@"确定"
-                                                          otherButtonTitles:nil];
-                alertView.tag = 2;
-                [alertView show];
-            }
-        }
-            break;
-        default:
-            break;
-    }
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD showErrorWithStatus:@"网络错误"];
-}
-
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -332,17 +233,29 @@
             
             if (actionSheet == canelActionSheet) {
                 //分享聚会
-                if (!_netManager) {
-                    _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-                }
-                [_netManager shareParty:self.party];
-            }else if(actionSheet == payActionSheet)
-            {
+                [SRNet_Manager requestNetWithDic:[SRNet_Manager sharePartyDic:self.party]
+                                        complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                            if (jsonDic) {
+                                                //聚会分享获取链接成功
+                                                //将聚会链接赋值到粘贴板
+                                                UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+                                                pboard.string = (NSString *)jsonDic;
+                                                
+                                                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                                                    message:@"聚会链接已复制到您的粘贴板"
+                                                                                                   delegate:self
+                                                                                          cancelButtonTitle:@"确定"
+                                                                                          otherButtonTitles:nil];
+                                                alertView.tag = 2;
+                                                [alertView show];
+                                            }
+                                        } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                            
+                                        }];
+            }else if(actionSheet == payActionSheet) {
                 NSLog(@"付款类型1");
             }
             break;
-            
-#pragma mark -- 将日程添加到系统日历
         case 2:
             
             if (actionSheet == canelActionSheet) {
@@ -438,7 +351,16 @@
                     break;
                 case 1: {   //确定
                     //取消聚会
-                    [_netManager cancelParty:self.party];
+                    [SRNet_Manager requestNetWithDic:[SRNet_Manager cancelPartyDic:self.party]
+                                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                                if (jsonDic) {
+                                                    //聚会取消成功
+                                                    [self.navigationController popViewControllerAnimated:YES];
+                                                    //                [self.delegate cancelParty:self.party];
+                                                }
+                                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                                
+                                            }];
                 }
                     break;
                 default:
