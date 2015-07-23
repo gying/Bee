@@ -10,7 +10,7 @@
 #import "Model_User.h"
 #import "ContactsTableViewController.h"
 
-@interface ContactsTableViewCell : UITableViewCell
+@interface ContactsTableViewCell : UITableViewCell<UIActionSheetDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *avatarButton;
 @property (weak, nonatomic) IBOutlet UILabel *nicknameLabel;

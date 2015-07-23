@@ -14,6 +14,8 @@
 #import "PartyPeopleListViewController.h"
 #import "PartyMapViewController.h"
 
+#import "AllPartyTableViewCell.h"
+
 #import "BMapKit.h"
 
 #import "Model_Party.h"
@@ -36,6 +38,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 //    [self.navigationItem setTitle:self.party.name];
+    
+    //进来先判断有没有参与关系
+
 
 
     
@@ -135,6 +140,12 @@
                                 } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                     
                                 }];
+    } else if ([@3 isEqual:self.party.pay_type]) {
+        if ((nil != self.party.relationship) && ([@1  isEqual: self.party.relationship])) {
+            self.yesButton.enabled = NO;
+            self.noButton.enabled = NO;
+
+        }
     }
     
     [self setParticipateStatus];
@@ -146,25 +157,36 @@
 }
 
 - (IBAction)pressedYesButton:(id)sender {
-    if (1 == [_relation.relationship intValue]) {
-        //取消选中状态
-        _relation.relationship = @0;
-        self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] - 1];
-        [SVProgressHUD showWithStatus:@"正在取消参与请求"];
+
+    if ([@3 isEqual: self.party.pay_type]) {
+        NSLog(@"弹出AlertView");
+        UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"确定要参加聚会吗" message:@"确定后不能取消" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        alertView.tag = 3;
+        [alertView show];
     } else {
-        _relation.relationship = @1;
-        self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] + 1];
-        [SVProgressHUD showWithStatus:@"正在确认参与请求"];
+        if (1 == [_relation.relationship intValue]) {
+            //取消选中状态
+            
+            _relation.relationship = @0;
+            self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] - 1];
+            [SVProgressHUD showWithStatus:@"正在取消参与请求"];
+        } else {
+            _relation.relationship = @1;
+            self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] + 1];
+            [SVProgressHUD showWithStatus:@"正在确认参与请求"];
+        }
+        [SRNet_Manager requestNetWithDic:[SRNet_Manager createRelationshipForPartyDic:_relation]
+                                complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                    if (jsonDic) {
+                                        _relation.pk_party_user = (NSNumber *)jsonDic;
+                                        self.party.relationship = @0;
+                                        [self reloadPeopleNum];
+                                        [self.delegate detailChange:self.party];
+                                    }
+                                } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                    
+                                }];
     }
-    
-    [SRNet_Manager requestNetWithDic:[SRNet_Manager updateScheduleDic:_relation]
-                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
-                                if (jsonDic) {
-                                    [self updateScheduleDicDone:jsonDic];
-                                }
-                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
-                                
-                            }];
 }
 
 - (IBAction)pressedNoButton:(id)sender {
@@ -453,6 +475,51 @@
             //分享聚会
         }
             break;
+        case 3:
+        {
+            switch (buttonIndex) {
+                case 0:{
+                    //取消
+                }
+                    break;
+                    
+                case 1:{
+                    //确定参加聚会
+                    NSLog(@"确定参加聚会");
+                    if (1 == [_relation.relationship intValue]) {
+                        //取消选中状态
+                        
+                        _relation.relationship = @0;
+                        self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] - 1];
+                        [SVProgressHUD showWithStatus:@"正在取消参与请求"];
+                    } else {
+                        _relation.relationship = @1;
+                        self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] + 1];
+                        [SVProgressHUD showWithStatus:@"正在确认参与请求"];
+                    }
+                    [SRNet_Manager requestNetWithDic:[SRNet_Manager createRelationshipForPartyDic:_relation]
+                                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                                if (jsonDic) {
+                                                    _relation.pk_party_user = (NSNumber *)jsonDic;
+                                                    self.party.relationship = @0;
+                                                    [self reloadPeopleNum];
+                                                    [self.delegate detailChange:self.party];
+                                                }
+                                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                                
+                                            }];
+                    
+                    self.yesButton.enabled = NO;
+                    self.noButton.enabled = NO;
+                    
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+            break;
             
         default:
             break;
@@ -469,13 +536,23 @@
         //进入地图
         PartyMapViewController *childController = (PartyMapViewController *)segue.destinationViewController;
         childController.party = self.party;
-    } else {
+    } else if([segue.identifier isEqualToString:@"INBUTTON"])
+    {
+        NSLog(@"进入参与界面");
         UIButton *pressedButton = (UIButton *)sender;
         PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
         childController.showStatus = (int)pressedButton.tag;
         childController.relationArray = _relArray;
+    }else if ([segue.identifier isEqualToString:@"OUTBUTTON"])
+    {
+        NSLog(@"进入拒绝界面");
+    }else if([segue.identifier isEqualToString:@"UNKNOWBUTTON"])
+    {
+        NSLog(@"进入不确定界面");
+    }else
+    {
+         
     }
-
 }
 
 

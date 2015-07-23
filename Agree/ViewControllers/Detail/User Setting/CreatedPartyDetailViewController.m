@@ -15,7 +15,8 @@
 #import "PartyPeopleListViewController.h"
 #import "PartyMapViewController.h"
 
-#import "PartyDetailViewController.h"
+#import "PrepayViewController.h"
+
 
 #import "BMapKit.h"
 
@@ -30,8 +31,7 @@
     int _showStatus;
     BMKMapView *_bdMapView;
     
-    
-    PartyDetailViewController * partyDetaiViewController;
+
     
 }
 
@@ -471,20 +471,22 @@
 
 #pragma mark - Navigation
 // In a storyboard-based application, you will often want to do a little preparation before navigation
-//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-//    // Get the new view controller using [segue destinationViewController].
-//    // Pass the selected object to the new view controller.
-//    if ([segue.identifier isEqualToString:@"MapView"]) {
-//        //进入地图
-//        PartyMapViewController *childController = (PartyMapViewController *)segue.destinationViewController;
-//        childController.party = self.party;
-//    } else {
-//        UIButton *pressedButton = (UIButton *)sender;
-//        PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
-//        childController.showStatus = (int)pressedButton.tag;
-//        childController.relationArray = _relArray;
-//    }
-//    
-//}
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"MapView"]) {
+        //进入地图
+        PartyMapViewController * childController = (PartyMapViewController *)segue.destinationViewController;
+        childController.party = self.party;
+    } else if([segue.identifier isEqualToString:@"PREPAY"]){
+//        PrepayViewController * childController = (PrepayViewController *)segue.destinationViewController;
+//       [childController.payTextField becomeFirstResponder];
+    }else{
+        UIButton *pressedButton = (UIButton *)sender;
+    PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
+    childController.showStatus = (int)pressedButton.tag;
+    childController.relationArray = _relArray;
+    }
+}
 
 @end

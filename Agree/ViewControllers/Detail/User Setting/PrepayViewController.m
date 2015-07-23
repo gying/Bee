@@ -17,6 +17,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
 
     
     // Do any additional setup after loading the view.
@@ -32,12 +33,13 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+
+
+
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self.payTextField resignFirstResponder];
 }
-
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [self.payTextField becomeFirstResponder];
