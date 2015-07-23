@@ -5,147 +5,145 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <mutableArray key="LangTingGBK.TTF">
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
-        </mutableArray>
         <mutableArray key="Lantinghei.ttc">
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHB--B51-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHB--B51-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHB--B51-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
+            <string>FZLTXHK--GBK1-0</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -1735,7 +1733,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y8v-d8-FLC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2822" y="-489"/>
+            <point key="canvasLocation" x="-1960" y="4680"/>
         </scene>
         <!--日程-->
         <scene sceneID="2Y7-aH-NPZ">
@@ -2364,6 +2362,9 @@
                                                         <state key="normal">
                                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                         </state>
+                                                        <connections>
+                                                            <segue destination="NbH-Cq-nEH" kind="show" identifier="MapView" id="eu2-ve-fgg"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -2456,7 +2457,7 @@
                                                 </state>
                                                 <connections>
                                                     <action selector="CheakButton:" destination="4Mg-O4-Acz" eventType="touchUpInside" id="OOW-RO-ifE"/>
-                                                    <segue destination="zdf-E4-9G8" kind="show" id="Ot8-aM-DI3"/>
+                                                    <segue destination="zdf-E4-9G8" kind="show" identifier="PREPAY" id="Ot8-aM-DI3"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -2560,7 +2561,7 @@
                         <outlet property="cheakButton" destination="OTk-gB-FmN" id="OGZ-DT-mMF"/>
                         <outlet property="conHeight" destination="DMh-v6-3h3" id="Ov2-KC-zFB"/>
                         <outlet property="inNumLabel" destination="giX-tQ-JHM" id="1MW-6f-35n"/>
-                        <outlet property="locationMapView" destination="PnV-yC-c3n" id="MB9-OV-jum"/>
+                        <outlet property="locationMapView" destination="9lP-LL-M7a" id="QMS-oX-wBS"/>
                         <outlet property="mapConHeight" destination="AZV-2b-uCx" id="Cxp-EV-SbB"/>
                         <outlet property="nameLabel" destination="Fac-Hh-Qtf" id="7O3-8d-YAQ"/>
                         <outlet property="outNumLabel" destination="eBH-da-SFw" id="B01-wx-kZX"/>
@@ -2659,6 +2660,9 @@
                                                         <state key="normal">
                                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                         </state>
+                                                        <connections>
+                                                            <segue destination="NbH-Cq-nEH" kind="show" identifier="MapView" id="MGP-SR-Av0"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -2751,7 +2755,6 @@
                                                 </state>
                                                 <connections>
                                                     <action selector="CheakButton:" destination="7Tq-gS-d4D" eventType="touchUpInside" id="P8V-vz-S2d"/>
-                                                    <action selector="CheakButton:" destination="4Mg-O4-Acz" eventType="touchUpInside" id="yuA-sQ-FJh"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -2829,7 +2832,6 @@
                                 </state>
                                 <connections>
                                     <action selector="tapBackButton:" destination="7Tq-gS-d4D" eventType="touchUpInside" id="U3r-LZ-pDM"/>
-                                    <action selector="tapBackButton:" destination="4Mg-O4-Acz" eventType="touchUpInside" id="qXd-DA-FdV"/>
                                 </connections>
                             </button>
                         </barButtonItem>
@@ -2842,9 +2844,7 @@
                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="pressedTheCanelButton:" destination="4Mg-O4-Acz" eventType="touchUpInside" id="7Pe-ih-S9W"/>
                                     <action selector="pressedTheCanelButton:" destination="7Tq-gS-d4D" eventType="touchUpInside" id="E5t-ey-47d"/>
-                                    <action selector="pressedTheCanelButton:" destination="3Jg-yc-pMv" eventType="touchUpInside" id="RhR-Ml-5Pf"/>
                                 </connections>
                             </button>
                         </barButtonItem>
@@ -2856,7 +2856,7 @@
                         <outlet property="cancelButton" destination="0km-Zx-0yh" id="X3a-HD-a7k"/>
                         <outlet property="conHeight" destination="WjT-vg-2gi" id="EN9-1E-Bv7"/>
                         <outlet property="inNumLabel" destination="5rH-kh-GQQ" id="Bex-XX-ncU"/>
-                        <outlet property="locationMapView" destination="cT9-Kw-ysO" id="JKe-qd-8Al"/>
+                        <outlet property="locationMapView" destination="Qbc-GG-5hw" id="Dqu-P0-oDI"/>
                         <outlet property="mapConHeight" destination="TRE-bY-Hmv" id="SY8-BQ-Htp"/>
                         <outlet property="nameLabel" destination="uvX-Qe-Kao" id="iey-CM-LbX"/>
                         <outlet property="outNumLabel" destination="aZK-Ar-HgW" id="3pc-Sf-UiU"/>
@@ -2969,7 +2969,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TEh-al-qhY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2774" y="4536"/>
+            <point key="canvasLocation" x="-2774" y="4680"/>
         </scene>
         <!--我的聚会-->
         <scene sceneID="Lkx-dN-pwG">
@@ -4358,7 +4358,7 @@
                                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
-                                                    <segue destination="JTL-FW-6RC" kind="show" identifier="" id="Mwh-85-87v"/>
+                                                    <segue destination="JTL-FW-6RC" kind="show" identifier="OUTBUTTON" id="Mwh-85-87v"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h69-Lc-D04">
@@ -4373,7 +4373,7 @@
                                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
-                                                    <segue destination="JTL-FW-6RC" kind="show" identifier="" id="RJO-fJ-VQq"/>
+                                                    <segue destination="JTL-FW-6RC" kind="show" identifier="INBUTTON" id="RJO-fJ-VQq"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lQq-Ux-QIu">
@@ -4388,7 +4388,7 @@
                                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
-                                                    <segue destination="JTL-FW-6RC" kind="show" id="7g0-Ma-cMP"/>
+                                                    <segue destination="JTL-FW-6RC" kind="show" identifier="UNKNOWBUTTON" id="7g0-Ma-cMP"/>
                                                 </connections>
                                             </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Ru-sa-k7c">
@@ -4453,7 +4453,7 @@
                                                 <color key="textColor" red="0.34901960780000002" green="0.81960784310000001" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="unkownLabel" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qsC-VJ-Gzj">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="unKnowLabel" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qsC-VJ-Gzj">
                                                 <rect key="frame" x="408" y="322" width="184" height="38"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="38" id="xsG-5z-B6W"/>
@@ -4869,7 +4869,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VL2-Tv-H42" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1999" y="4697"/>
+            <point key="canvasLocation" x="1136" y="4728"/>
         </scene>
         <!--选择时间-->
         <scene sceneID="3sV-BH-LdE">
@@ -5114,7 +5114,7 @@
                                     <outlet property="delegate" destination="zEc-iu-1xD" id="GY8-eY-aqJ"/>
                                 </connections>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="支付类型" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kou-iH-f5p">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="支付类型" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kou-iH-f5p">
                                 <rect key="frame" x="16" y="334" width="568" height="24"/>
                                 <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="FZLanTingHei-EL-GBK" pointSize="17"/>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -5171,14 +5171,14 @@
                                     <action selector="tapPayButton:" destination="zEc-iu-1xD" eventType="touchUpInside" id="S5q-rA-L7s"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" text="请输入聚会的备注信息" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="JBJ-yn-c7H">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="请输入聚会的备注信息" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="JBJ-yn-c7H">
                                 <rect key="frame" x="55" y="193" width="490" height="126"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="textColor" red="0.78568892050000005" green="0.78568892050000005" blue="0.78568892050000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tef-C4-xgP">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tef-C4-xgP">
                                 <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请输入参与聚会的预付金额" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UrP-1q-Evr">
@@ -5657,11 +5657,12 @@
         <image name="agree_user_setting_avatar_backgroup" width="99" height="99"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Re4-1s-AtI"/>
+        <segue reference="u80-pL-doZ"/>
         <segue reference="NNN-op-p3r"/>
         <segue reference="7g0-Ma-cMP"/>
+        <segue reference="2j8-NZ-CvJ"/>
+        <segue reference="Re4-1s-AtI"/>
         <segue reference="xWd-dq-8Ci"/>
-        <segue reference="brR-kr-yPI"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.34901960780000002" green="0.81960784310000001" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
 </document>

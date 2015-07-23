@@ -47,12 +47,30 @@
     }
 }
 
+//点击好友头像
 - (void)tapAvatarButton: (UIButton *)sender {
-    if (self.topViewController) {
-        if (![_user.pk_user isEqual:[Model_User loadFromUserDefaults].pk_user]) {
-            [self.topViewController.accountView show];
-            [self.topViewController.accountView loadWithUser:_user withGroup:nil];
-        }
+    UIActionSheet * avatarActionSheet = [[UIActionSheet alloc]initWithTitle:@"详细" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"好友资料",@"支付款项",@"平账", nil];
+    [avatarActionSheet showInView:self];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"clickedButtonAtIndex:%ld",(long)buttonIndex);
+    if (0 == buttonIndex)
+    {
+        NSLog(@"好友资料");
+            if (self.topViewController) {
+                if (![_user.pk_user isEqual:[Model_User loadFromUserDefaults].pk_user]) {
+                    [self.topViewController.accountView show];
+                    [self.topViewController.accountView loadWithUser:_user withGroup:nil];
+                }
+            }
+    }else if(1 == buttonIndex)
+    {
+        NSLog(@"支付款项");
+    }else if(2 == buttonIndex)
+    {
+        NSLog(@"平账");
     }
 }
 
