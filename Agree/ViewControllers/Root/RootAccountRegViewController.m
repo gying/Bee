@@ -218,10 +218,10 @@
 }
 
 //键盘回收
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [self.nicknameTextField resignFirstResponder];
 }
+
 
 /*
 #pragma mark - Navigation

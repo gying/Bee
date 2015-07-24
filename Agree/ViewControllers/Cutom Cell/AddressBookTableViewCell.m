@@ -15,7 +15,6 @@
 
 @implementation AddressBookTableViewCell {
     People *_people;
-    SRNet_Manager *_netManager;
 }
 
 - (void)awakeFromNib {

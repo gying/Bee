@@ -30,7 +30,6 @@
 @end
 
 @implementation AppDelegate {
-    SRNet_Manager *_netManager;
     BMKMapManager *_mapManager;
     NSString *_token;
     

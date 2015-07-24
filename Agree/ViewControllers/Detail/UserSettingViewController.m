@@ -250,12 +250,6 @@
 
 //绑定微信按钮
 - (IBAction)pressedTheWechatButton:(UIButton *)sender {
-
-//    if (!_netManager) {
-//        _netManager = [[SRNet_Manager alloc] init];
-//        [_netManager setDelegate:self];
-//    }
-//    [_netManager testInterface];
     NSLog(@"绑定微信");
     /*! @brief 第三方程序向微信终端请求认证的消息结构
      *

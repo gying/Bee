@@ -40,12 +40,6 @@
 //    [self.navigationItem setTitle:self.party.name];
     
     //进来先判断有没有参与关系
-
-
-
-    
-    
-    
     if (self.party.longitude && self.party.latitude) {
         //如果存在经纬度数据
         //则开始更新地区信息
@@ -64,7 +58,7 @@
         [_bdMapView addAnnotation:_chooseAnnotation];
         [_bdMapView setZoomLevel:15];
         [_bdMapView setCenterCoordinate:partyCoor];
-    }
+    }\
     
     //判断是否是创建者本身.
     if ([[Model_User loadFromUserDefaults].pk_user isEqualToNumber:self.party.fk_user]) {
@@ -175,13 +169,11 @@
             self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] + 1];
             [SVProgressHUD showWithStatus:@"正在确认参与请求"];
         }
-        [SRNet_Manager requestNetWithDic:[SRNet_Manager createRelationshipForPartyDic:_relation]
+        
+        [SRNet_Manager requestNetWithDic:[SRNet_Manager updateScheduleDic:_relation]
                                 complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
                                     if (jsonDic) {
-                                        _relation.pk_party_user = (NSNumber *)jsonDic;
-                                        self.party.relationship = @0;
-                                        [self reloadPeopleNum];
-                                        [self.delegate detailChange:self.party];
+                                        [self updateScheduleDicDone:jsonDic];
                                     }
                                 } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                     
@@ -335,7 +327,6 @@
                                                       otherButtonTitles:@"确定", nil];
             alertView.tag = 1;
             [alertView show];
-            
         }
             break;
         case 1: {
@@ -359,7 +350,6 @@
                                     } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                         
                                     }];
-            
         }
             break;
             
@@ -462,7 +452,6 @@
                                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                                 
                                             }];
-                    
                 }
                     break;
                 default:
@@ -497,13 +486,10 @@
                         self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] + 1];
                         [SVProgressHUD showWithStatus:@"正在确认参与请求"];
                     }
-                    [SRNet_Manager requestNetWithDic:[SRNet_Manager createRelationshipForPartyDic:_relation]
+                    [SRNet_Manager requestNetWithDic:[SRNet_Manager updateScheduleDic:_relation]
                                             complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
                                                 if (jsonDic) {
-                                                    _relation.pk_party_user = (NSNumber *)jsonDic;
-                                                    self.party.relationship = @0;
-                                                    [self reloadPeopleNum];
-                                                    [self.delegate detailChange:self.party];
+                                                    [self updateScheduleDicDone:jsonDic];
                                                 }
                                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                                 
@@ -511,7 +497,6 @@
                     
                     self.yesButton.enabled = NO;
                     self.noButton.enabled = NO;
-                    
                 }
                     break;
                     

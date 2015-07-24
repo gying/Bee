@@ -33,12 +33,6 @@
     CreatedPartyTableViewDelegate *_createdPartyDelegate;
     
     HistoryPartyTableViewDelegate *_historyPartyDelegate;
-    
-    
-    
-
-    
-
 }
 
 @end
@@ -157,12 +151,6 @@
         [self.selectConLeft setConstant:[[UIScreen mainScreen] bounds].size.width/2];
 
     }
-    
-    NSLog(@"%f",scrollView.contentOffset.x);
-    
-
-    
-    
 }
 
 - (void)updateViewConstraints {
@@ -188,11 +176,6 @@
         HistoryPartyDetailViewController *childController = (HistoryPartyDetailViewController *)segue.destinationViewController;
         childController.party = [_historyPartyDelegate.schAry objectAtIndex:self.chooseRow];
     }
-
-
-
-
-
 }
 
 
