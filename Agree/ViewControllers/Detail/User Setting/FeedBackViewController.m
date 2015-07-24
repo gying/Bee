@@ -29,7 +29,7 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)tapFeedBackButton:(id)sender {
-    
+
     Model_Feedback *feedback = [[Model_Feedback alloc] init];
     [feedback setContent:self.feedBackTextView.text];
     [feedback setFk_user:[Model_User loadFromUserDefaults].pk_user];
@@ -46,11 +46,6 @@
                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                 
                             }];
-}
-
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD dismiss];
 }
 
 - (IBAction)tapBackButton:(id)sender {

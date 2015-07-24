@@ -92,24 +92,6 @@
     [self presentViewController:rootController animated:YES completion:nil];
 }
 
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    switch (interfaceType) {
-        case kLoginAccount: {
-            
-        }
-            break;
-        case kGetUserInfoByWechat: {
-            
-        }
-        default:
-            break;
-    }
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD showErrorWithStatus:@"网络错误"];
-}
-
 //点击微信登录按钮
 - (IBAction)tapWechatButton:(UIButton *)sender {
     

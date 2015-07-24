@@ -22,14 +22,11 @@
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-
 @interface PartyDetailViewController () <UIActionSheetDelegate> {
     Model_Party_User *_relation;
     NSMutableArray *_relArray;
     int _showStatus;
     BMKMapView *_bdMapView;
-    PeopleListTableViewCell * peopleList;
-    
 }
 
 @end
@@ -42,9 +39,6 @@
 //    [self.navigationItem setTitle:self.party.name];
     
     //进来先判断有没有参与关系
-
-
-    
     if (self.party.longitude && self.party.latitude) {
         //如果存在经纬度数据
         //则开始更新地区信息
@@ -63,7 +57,7 @@
         [_bdMapView addAnnotation:_chooseAnnotation];
         [_bdMapView setZoomLevel:15];
         [_bdMapView setCenterCoordinate:partyCoor];
-    }
+    }\
     
     //判断是否是创建者本身.
     if ([[Model_User loadFromUserDefaults].pk_user isEqualToNumber:self.party.fk_user]) {
@@ -138,8 +132,8 @@
                                 } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                     
                                 }];
-    } else if ([@3 isEqual:self.party.pay_type])
-    {
+
+    } else if ([@3 isEqual:self.party.pay_type]) {
         if ((nil != self.party.relationship) && ([@1  isEqual: self.party.relationship])) {
             self.yesButton.enabled = NO;
             self.noButton.enabled = NO;
@@ -332,7 +326,6 @@
                                                       otherButtonTitles:@"确定", nil];
             alertView.tag = 1;
             [alertView show];
-            
         }
             break;
         case 1: {
@@ -356,7 +349,6 @@
                                     } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                         
                                     }];
-            
         }
             break;
             
@@ -459,7 +451,6 @@
                                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                                 
                                             }];
-                    
                 }
                     break;
                 default:
@@ -505,7 +496,6 @@
                     
                     self.yesButton.enabled = NO;
                     self.noButton.enabled = NO;
-                    
                 }
                     break;
                     
