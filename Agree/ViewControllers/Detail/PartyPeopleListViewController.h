@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *peoplesTableview;
 @property (weak, nonatomic) IBOutlet UIView *backView;
 
+
 @property int showStatus;
 
 @property (nonatomic, strong)NSArray *relationArray;

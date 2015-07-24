@@ -13,9 +13,8 @@
 #import "MJExtension.h"
 #import "PartyPeopleListViewController.h"
 #import "PartyMapViewController.h"
-
 #import "AllPartyTableViewCell.h"
-
+#import "PeopleListTableViewCell.h"
 #import "BMapKit.h"
 
 #import "Model_Party.h"
@@ -122,7 +121,6 @@
         } else {
             _relation.type = @1;
         }
-
         [SRNet_Manager requestNetWithDic:[SRNet_Manager createRelationshipForPartyDic:_relation]
                                 complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
                                     if (jsonDic) {
@@ -134,6 +132,7 @@
                                 } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                     
                                 }];
+
     } else if ([@3 isEqual:self.party.pay_type]) {
         if ((nil != self.party.relationship) && ([@1  isEqual: self.party.relationship])) {
             self.yesButton.enabled = NO;
@@ -169,7 +168,7 @@
             self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] + 1];
             [SVProgressHUD showWithStatus:@"正在确认参与请求"];
         }
-        
+
         [SRNet_Manager requestNetWithDic:[SRNet_Manager updateScheduleDic:_relation]
                                 complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
                                     if (jsonDic) {
@@ -524,6 +523,7 @@
     } else if([segue.identifier isEqualToString:@"INBUTTON"])
     {
         NSLog(@"进入参与界面");
+        
         UIButton *pressedButton = (UIButton *)sender;
         PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
         childController.showStatus = (int)pressedButton.tag;
@@ -531,12 +531,23 @@
     }else if ([segue.identifier isEqualToString:@"OUTBUTTON"])
     {
         NSLog(@"进入拒绝界面");
+        UIButton *pressedButton = (UIButton *)sender;
+        PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
+        childController.showStatus = (int)pressedButton.tag;
+        childController.relationArray = _relArray;
+
+        
     }else if([segue.identifier isEqualToString:@"UNKNOWBUTTON"])
     {
         NSLog(@"进入不确定界面");
+        UIButton *pressedButton = (UIButton *)sender;
+        PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
+        childController.showStatus = (int)pressedButton.tag;
+        childController.relationArray = _relArray;
+
     }else
     {
-         
+
     }
 }
 
