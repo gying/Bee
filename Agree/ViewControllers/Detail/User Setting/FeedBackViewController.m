@@ -11,10 +11,7 @@
 
 #import <SVProgressHUD.h>
 
-@interface FeedBackViewController ()<SRNetManagerDelegate> {
-    SRNet_Manager *_netManager;
-}
-
+@interface FeedBackViewController ()
 @end
 
 @implementation FeedBackViewController
@@ -32,34 +29,25 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)tapFeedBackButton:(id)sender {
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
     
     Model_Feedback *feedback = [[Model_Feedback alloc] init];
     [feedback setContent:self.feedBackTextView.text];
     [feedback setFk_user:[Model_User loadFromUserDefaults].pk_user];
     [feedback setDate:[NSDate date]];
-    [_netManager feedBackMessage:feedback];
+    
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager feedBackMessageDic:feedback]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                [SVProgressHUD showSuccessWithStatus:@"反馈成功"];
+                                //    [self.navigationController popToViewController:self animated:YES];
+                                
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    [self.navigationController popToRootViewControllerAnimated:YES];
+                                });
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
 }
 
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    
-    switch (interfaceType) {
-        case kFeedBackMessage: {    //反馈信息
-            [SVProgressHUD showSuccessWithStatus:@"反馈成功"];
-            //    [self.navigationController popToViewController:self animated:YES];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.navigationController popToRootViewControllerAnimated:YES];
-            });
-        }
-            break;
-            
-        default:
-            break;
-    }
-}
 
 - (void)interfaceReturnDataError:(int)interfaceType {
     [SVProgressHUD dismiss];

@@ -16,7 +16,6 @@
 
 
 @interface JoinUserViewController () {
-    SRNet_Manager *_netManager;
     NSMutableArray *_groupMembers;
     
     ChoosefriendsViewController * choosefriendsVC;
@@ -60,10 +59,6 @@
         NSLog(@"创建成功 -- %@",group);
         
         //完成小组创建
-        if (!_netManager) {
-            _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-        }
-        
         self.theGroup.setup_time = [NSDate date];
         self.theGroup.last_post_message = @"小组成立啦!";
         self.theGroup.last_post_time = [NSDate date];
@@ -93,7 +88,20 @@
                                      withKey:self.theGroup.avatar_path] uploadWithUploadCallback:^(BOOL isSuccess, NSError *error) {
                 if (isSuccess) {
                     //图片上传成功
-                    [_netManager addGroup:self.theGroup withMembers:_groupMembers];
+                    [SRNet_Manager requestNetWithDic:[SRNet_Manager addGroupDic:self.theGroup withMembers:_groupMembers]
+                                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                                if (jsonDic) {
+                                                    [SVProgressHUD showSuccessWithStatus:@"小组创建成功"];
+                                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                                        GroupViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
+                                                        [rootController loadUserGroupRelationship];
+                                                        [self.navigationController popToRootViewControllerAnimated:YES];
+                                                    });
+                                                }
+                                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                                
+                                            }];
+                    
                 } else {
                     //上传失败
                     
@@ -107,7 +115,19 @@
             self.groupCover = nil;
             
         } else {
-            [_netManager addGroup:self.theGroup withMembers:_groupMembers];
+            [SRNet_Manager requestNetWithDic:[SRNet_Manager addGroupDic:self.theGroup withMembers:_groupMembers]
+                                    complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                        if (jsonDic) {
+                                            [SVProgressHUD showSuccessWithStatus:@"小组创建成功"];
+                                            dispatch_async(dispatch_get_main_queue(), ^{
+                                                GroupViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
+                                                [rootController loadUserGroupRelationship];
+                                                [self.navigationController popToRootViewControllerAnimated:YES];
+                                            });
+                                        }
+                                    } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                        
+                                    }];
         }
     }else {
         NSLog(@"创建错误: %@", error);
@@ -115,44 +135,6 @@
 }
 
 
-- (void)interfaceReturnDataSuccess:(NSMutableDictionary *)jsonDic with:(int)interfaceType {
-    //群组创建成功
-    
-//    [SVProgressHUD showProgress:1.0];
-    
-    
-    switch (interfaceType) {
-        case kAddGroup: {
-            if (jsonDic) {
-                [SVProgressHUD showSuccessWithStatus:@"小组创建成功"];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    GroupViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
-                    [rootController loadUserGroupRelationship];
-                    [self.navigationController popToRootViewControllerAnimated:YES];
-                });
-            }
-        }
-            break;
-            
-        default:
-            break;
-    }
-}
-
-
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD showErrorWithStatus:@"网络错误"];
-}
-
-- (void)imageUploadDoneWithFieldID:(NSString *)fieldID {
-    self.theGroup.avatar_path = fieldID;
-    [_netManager addGroup:self.theGroup withMembers:_groupMembers];
-}
-
-- (void)imageUpladError {
-    
-}
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }

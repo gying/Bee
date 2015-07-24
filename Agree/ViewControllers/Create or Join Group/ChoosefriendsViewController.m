@@ -32,13 +32,9 @@
 
 
 
-@interface ChoosefriendsViewController ()<SRNetManagerDelegate,UITableViewDelegate>
-
-{
+@interface ChoosefriendsViewController ()<UITableViewDelegate> {
     NSInteger _selectIndex;
     NSMutableArray *_friendArray;
-    SRNet_Manager *_netManager;
-//    ChoosefriendsTableViewCell *cell;
 }
 
 @end
@@ -54,14 +50,25 @@
     [self loadDataFromNet];
 }
 
-- (void)loadDataFromNet
-{
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
+- (void)loadDataFromNet {
     Model_User *sendUser = [[Model_User alloc] init];
     [sendUser setPk_user:[Model_User loadFromUserDefaults].pk_user];
-    [_netManager getFriendList:sendUser];
+    
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager getFriendListDic:sendUser]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                if (jsonDic) {
+                                    _friendArray = (NSMutableArray *)[Model_User objectArrayWithKeyValuesArray:jsonDic];
+                                } else {
+                                    _friendArray = nil;
+                                    _friendArray = [[NSMutableArray alloc] init];
+                                }
+                                
+                                [SVProgressHUD dismiss];
+                                [self.choosefriendsTableview reloadData];
+                                
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
 }
 
 #pragma mark - ChooseFriendsTableView的协议方法
@@ -113,30 +120,6 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType
-{
-    switch (interfaceType) {
-        case kGetFriendList: {
-            if (jsonDic) {
-                _friendArray = (NSMutableArray *)[Model_User objectArrayWithKeyValuesArray:jsonDic];
-            } else {
-                _friendArray = nil;
-                _friendArray = [[NSMutableArray alloc] init];
-            }
-        }
-            break;
-        default:
-            break;
-    }
-    [SVProgressHUD dismiss];
-    [self.choosefriendsTableview reloadData];
-    
-}
-- (void)interfaceReturnDataError:(int)interfaceType
-{
-    [SVProgressHUD showErrorWithStatus:@"网络错误"];
-}
-
 #pragma mark - 用户备选数组的操作方法
 
 //添加用户进入备选数组
@@ -185,9 +168,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-
-
 
 /*
 #pragma mark - Navigation

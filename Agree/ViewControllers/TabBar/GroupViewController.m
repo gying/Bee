@@ -19,9 +19,7 @@
 #import "CD_Group.h"
 #import <MJRefresh.h>
 
-@interface GroupViewController () <UICollectionViewDelegate, UICollectionViewDataSource, SRNetManagerDelegate, UITextFieldDelegate, IChatManagerDelegate> {
-    SRNet_Manager *_netManager;
-//    NSArray *_groupAry;
+@interface GroupViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate, IChatManagerDelegate> {
     NSUInteger _chooseIndexPath;
 }
 
@@ -37,10 +35,6 @@
     //先读取缓存中的小组信息
     self.groupAry = [CD_Group getGroupFromCD];
     
-    
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
     [self loadUserGroupRelationship];
     
     //在程序的代理中进行注册
@@ -144,7 +138,50 @@
     Model_User *user = [[Model_User alloc] init];
     user.pk_user = [Model_User loadFromUserDefaults].pk_user;
     
-    [_netManager getUserGroups:user];
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager getUserGroupsDic:user]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                if (jsonDic) {
+                                    //判断小组数据是否有更新,是否需要刷新列表
+                                    NSMutableArray *tempAry = [NSMutableArray arrayWithArray:[Model_Group objectArrayWithKeyValuesArray:jsonDic]];
+                                    
+                                    BOOL isSave = YES;
+                                    if (tempAry.count == self.groupAry.count) {
+                                        //小组数据的数量一样,开始进行数据比对
+                                        for (Model_Group *theGroup in tempAry) {
+                                            //这里暂时只对小组的id进行比对
+                                            Model_Group *otherGroup = [self.groupAry objectAtIndex:[tempAry indexOfObject:theGroup]];
+                                            if (![theGroup.pk_group isEqual:otherGroup.pk_group]) {
+                                                isSave = NO;
+                                            }
+                                        }
+                                    } else {
+                                        //小组数据的数量不一样
+                                        isSave = NO;
+                                    }
+                                    
+                                    //小组有更新,开始更新步骤
+                                    //将缓存的数组全部删除
+                                    [CD_Group removeAllGroupFromCD];
+                                    for (Model_Group *group in self.groupAry) {
+                                        [CD_Group saveGroupToCD:group];
+                                    }
+                                    
+                                    if (!isSave) {
+                                        //小组数据有更新的情况下在进行界面上的刷新
+                                        self.groupAry = nil;
+                                        self.groupAry = tempAry;
+                                        [self.groupCollectionView reloadData];
+                                    }
+                                } else {
+                                    //没有加入的小组信息
+                                    //将缓存的数组全部删除
+                                    [self.groupAry removeAllObjects];
+                                    [CD_Group removeAllGroupFromCD];
+                                    [self.groupCollectionView reloadData];
+                                }
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                [SVProgressHUD showErrorWithStatus:@"网络错误"];
+                            }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -175,6 +212,7 @@
         
         //下载图片
         NSURL *imageUrl = [SRImageManager groupFrontCoverImageImageFromOSS:theGroup.avatar_path];
+        
         
         [cell.groupImageView sd_setImageWithURL:imageUrl
                                       completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
@@ -255,12 +293,41 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     //验证码输入界面
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
     Model_Group_Code *newCode = [[Model_Group_Code alloc] init];
     newCode.pk_group_code = textField.text;
-    [_netManager joinTheGroupByCode:newCode];
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager joinTheGroupByCodeDic:newCode]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                if (jsonDic) {
+                                    [SVProgressHUD showSuccessWithStatus:@"找到小组"];
+                                    self.joinGroup = [[Model_Group objectArrayWithKeyValuesArray:jsonDic] firstObject];
+                                    
+                                    //显示要加入的小组
+                                    [self.groupCoverImageView setHidden:NO];
+                                    [self.groupNameLabel setHidden:NO];
+                                    [self.recodeButton setHidden:NO];
+                                    [self.joinButton setHidden:NO];
+                                    [self.publicPhoneLabel setHidden:NO];
+                                    [self.publicPhoneSeg setHidden:NO];
+                                    
+                                    [self.codeInputTextField setHidden:YES];
+                                    //            [self.groupCoverButton setHidden:YES];
+                                    [self.remarkLabel setHidden:YES];
+                                    
+                                    [self.groupNameLabel setText:_joinGroup.name];
+                                    
+                                    //下载图片
+                                    NSURL *imageUrl = [SRImageManager groupFrontCoverImageImageFromOSS:_joinGroup.avatar_path];
+                                    
+                                    [self.groupCoverImageView sd_setImageWithURL:imageUrl];
+                                } else {
+                                    [SVProgressHUD showSuccessWithStatus:@"未找到相关数据"];
+                                    //未找到小组的相关数据
+                                    [self.remarkLabel setText:@"未找到小组信息,请再次确认输入"];
+                                    [self.codeInputTextField becomeFirstResponder];
+                                }
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
     
     [textField resignFirstResponder];
 
@@ -286,7 +353,12 @@
             } else {
                 [group_user setPublic_phone:@0];
             }
-            [_netManager joinGroup:group_user];
+            [SRNet_Manager requestNetWithDic:[SRNet_Manager joinGroupDic:group_user]
+                                    complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                        [self loadUserGroupRelationship];
+                                    } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                        
+                                    }];
         }
     } onQueue:nil];
     
@@ -326,101 +398,6 @@
     
     if (sender) {
         [self.codeInputTextField becomeFirstResponder];
-    }
-}
-
-#pragma mark - 网络代理
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD showErrorWithStatus:@"网络错误"];
-}
-
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    
-    switch (interfaceType) {
-        case kJoinGroup: {  //加入小组
-            [self loadUserGroupRelationship];
-        }
-            break;
-            
-        case kJoinTheGroupByCode: { //输入小组验证码
-            if (jsonDic) {
-                [SVProgressHUD showSuccessWithStatus:@"找到小组"];
-                self.joinGroup = [[Model_Group objectArrayWithKeyValuesArray:jsonDic] firstObject];
-                
-                //显示要加入的小组
-                [self.groupCoverImageView setHidden:NO];
-                [self.groupNameLabel setHidden:NO];
-                [self.recodeButton setHidden:NO];
-                [self.joinButton setHidden:NO];
-                [self.publicPhoneLabel setHidden:NO];
-                [self.publicPhoneSeg setHidden:NO];
-                
-                [self.codeInputTextField setHidden:YES];
-                //            [self.groupCoverButton setHidden:YES];
-                [self.remarkLabel setHidden:YES];
-                
-                [self.groupNameLabel setText:_joinGroup.name];
-                
-                //下载图片
-                NSURL *imageUrl = [SRImageManager groupFrontCoverImageImageFromOSS:_joinGroup.avatar_path];
-
-                [self.groupCoverImageView sd_setImageWithURL:imageUrl];
-            } else {
-                [SVProgressHUD showSuccessWithStatus:@"未找到相关数据"];
-                //未找到小组的相关数据
-                [self.remarkLabel setText:@"未找到小组信息,请再次确认输入"];
-                [self.codeInputTextField becomeFirstResponder];
-            }
-        }
-            break;
-            
-        case kGetUserGroups: {  //读取用户的小组
-            if (jsonDic) {
-                
-                
-                //判断小组数据是否有更新,是否需要刷新列表
-                NSMutableArray *tempAry = [NSMutableArray arrayWithArray:[Model_Group objectArrayWithKeyValuesArray:jsonDic]];
-
-                BOOL isSave = YES;
-                if (tempAry.count == self.groupAry.count) {
-                    //小组数据的数量一样,开始进行数据比对
-                    for (Model_Group *theGroup in tempAry) {
-                        //这里暂时只对小组的id进行比对
-                        Model_Group *otherGroup = [self.groupAry objectAtIndex:[tempAry indexOfObject:theGroup]];
-                        if (![theGroup.pk_group isEqual:otherGroup.pk_group]) {
-                            isSave = NO;
-                        }
-                    }
-                } else {
-                    //小组数据的数量不一样
-                    isSave = NO;
-                }
-                
-                //小组有更新,开始更新步骤
-                //将缓存的数组全部删除
-                [CD_Group removeAllGroupFromCD];
-                for (Model_Group *group in self.groupAry) {
-                    [CD_Group saveGroupToCD:group];
-                }
-                
-                if (!isSave) {
-                    //小组数据有更新的情况下在进行界面上的刷新
-                    self.groupAry = nil;
-                    self.groupAry = tempAry;
-                    [self.groupCollectionView reloadData];
-                }
-            } else {
-                //没有加入的小组信息
-                //将缓存的数组全部删除
-                [self.groupAry removeAllObjects];
-                [CD_Group removeAllGroupFromCD];
-                [self.groupCollectionView reloadData];
-            }
-        }
-            break;
-            
-        default:
-            break;
     }
 }
 

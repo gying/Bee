@@ -15,15 +15,7 @@
 #import "CreatedPartyDetailViewController.h"
 
 
-
-
-
-
-
 @implementation CreatedPartyTableViewDelegate
-{
-    SRNet_Manager *_netManager;
-}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -60,48 +52,21 @@
 
 #pragma mark - 业务逻辑
 - (void)loadAllScheduleData {
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
-
-    
     Model_User *user = [[Model_User alloc] init];
     user.pk_user = [Model_User loadFromUserDefaults].pk_user;
-    [_netManager getCreatedPartyByUser:user];
-    
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager getCreatedPartyByUserDic:user]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                if (jsonDic) {
+                                    self.schAry = (NSMutableArray *)[Model_Party objectArrayWithKeyValuesArray:jsonDic];
+                                    [self.myPartyVC.createdPartyTableView reloadData];
+                                } else {
+                                    [self.schAry removeAllObjects];
+                                    [self.myPartyVC.createdPartyTableView reloadData];
+                                }
+                            }
+                             failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                 
+                             }];
 }
-
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    
-    switch (interfaceType) {
-        case kGetCreatedParty: {
-            if (jsonDic) {
-                self.schAry = (NSMutableArray *)[Model_Party objectArrayWithKeyValuesArray:jsonDic];
-                [self.myPartyVC.createdPartyTableView reloadData];
-                
-               
-            } else {
-              
-                [self.schAry removeAllObjects];
-                [self.myPartyVC.createdPartyTableView reloadData];
-                
-            }
-            
-            [self.myPartyVC.createdPartyTableView.header endRefreshing];
-        }
-            break;
-        default:
-            break;
-    }
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    
-}
-
-
-
-
-
 
 @end

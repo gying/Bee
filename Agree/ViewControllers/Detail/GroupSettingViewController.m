@@ -20,8 +20,7 @@
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface GroupSettingViewController ()<SRNetManagerDelegate, UICollectionViewDelegate, UIActionSheetDelegate> {
-    SRNet_Manager *_netManager;
+@interface GroupSettingViewController ()<UICollectionViewDelegate, UIActionSheetDelegate> {
     Model_Group_User *_relationship;
     UIImageView *_backImageViwe;
     
@@ -55,11 +54,31 @@
     
     [SRImageManager avatarImageFromOSS:[Model_User loadFromUserDefaults].avatar_path];
     
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
-    [_netManager getGroupRelationship:group_user];
-    [_netManager getAllRelationFromGroup:self.group];
+    //读取个人与小组的关系
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager getGroupRelationshipDic:group_user]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                NSArray *relAry = jsonDic;
+                                if (relAry) {
+                                    _relationship = [[Model_Group_User objectArrayWithKeyValuesArray:relAry] objectAtIndex:0];
+                                }
+                                [self reloadButtonStatusSetting];
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
+    //读取小组全部的关系
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager getAllRelationFromGroupDic:self.group]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                if (jsonDic) {
+                                    _relationArray = (NSMutableArray *)[Model_Group_User objectArrayWithKeyValuesArray:jsonDic];
+                                    [self.peopleCollectionView reloadData];
+                                    [SVProgressHUD showSuccessWithStatus:@"读取数据成功"];
+                                } else {
+                                    [SVProgressHUD showSuccessWithStatus:@"未找到相关数据"];
+                                }
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
+    
 }
 
 - (void)reloadButtonStatusSetting {
@@ -92,7 +111,28 @@
 - (IBAction)pressedTheCodeButton:(UIButton *)sender {
     Model_Group *theGroup = [[Model_Group alloc] init];
     theGroup.pk_group = self.group.pk_group;
-    [_netManager generationCodeByGroup:theGroup];
+
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager generationCodeByGroupDic:theGroup]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                if (jsonDic) {
+                                    if ([jsonDic isKindOfClass:[NSString class]]) {
+                                        [self.codeButton setTitle:jsonDic forState:UIControlStateNormal];
+                                        [self.codeRemarkLabel setText:@""];
+                                    } else {
+                                        NSArray *codeObjArray = [Model_Group_Code objectArrayWithKeyValuesArray:jsonDic];
+                                        for (Model_Group_Code *theCodeObj in codeObjArray) {
+                                            if (1 != [theCodeObj.code_status intValue]) {
+                                                //                        [self.codeLabel setText:theCodeObj.pk_group_code];
+                                                [self.codeButton setTitle:theCodeObj.pk_group_code forState:UIControlStateNormal];
+                                                [self.codeRemarkLabel setText:@""];
+                                            }
+                                        }
+                                    }
+                                }
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
+    
 }
 - (IBAction)pressedTheExitButton:(id)sender {
     UIAlertView *warnImageAlert = [[UIAlertView alloc] initWithTitle:@"警告"
@@ -169,7 +209,13 @@
 
 - (IBAction)tapSaveButton:(id)sender {
     _saveForQuit = NO;
-    [_netManager updateGroupRelationShip:_relationship];
+    
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager updateGroupRelationShip:_relationship]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                [self updateGroupRelationShipDone:jsonDic];
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -184,69 +230,13 @@
         //确认发送
         _relationship.status = @0;
         _saveForQuit = YES;
-        [_netManager updateGroupRelationShip:_relationship];
+        [SRNet_Manager requestNetWithDic:[SRNet_Manager updateGroupRelationShip:_relationship]
+                                complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                    [self updateGroupRelationShipDone:jsonDic];
+                                } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                    
+                                }];
     }
-}
-
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    switch (interfaceType) {
-        case kGetGroupRelationship: {
-            NSArray *relAry = jsonDic;
-            if (relAry) {
-                _relationship = [[Model_Group_User objectArrayWithKeyValuesArray:relAry] objectAtIndex:0];
-            }
-            [self reloadButtonStatusSetting];
-        }
-            break;
-            
-        case kGenerationCodeByGroup: {
-            if (jsonDic) {
-                if ([jsonDic isKindOfClass:[NSString class]]) {
-                    [self.codeButton setTitle:jsonDic forState:UIControlStateNormal];
-                    [self.codeRemarkLabel setText:@""];
-                } else {
-                    NSArray *codeObjArray = [Model_Group_Code objectArrayWithKeyValuesArray:jsonDic];
-                    for (Model_Group_Code *theCodeObj in codeObjArray) {
-                        if (1 != [theCodeObj.code_status intValue]) {
-                            //                        [self.codeLabel setText:theCodeObj.pk_group_code];
-                            [self.codeButton setTitle:theCodeObj.pk_group_code forState:UIControlStateNormal];
-                            [self.codeRemarkLabel setText:@""];
-                        }
-                    }
-                }
-            }
-        }
-            break;
-            
-        case kUpdateGroupRelationShip: {
-            if (_saveForQuit) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    GroupViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
-                    [rootController loadUserGroupRelationship];
-                    [self.navigationController popToRootViewControllerAnimated:YES];
-                });
-            }
-        }
-            break;
-            
-        case kGetAllRelationFromGroup: {
-            if (jsonDic) {
-                _relationArray = (NSMutableArray *)[Model_Group_User objectArrayWithKeyValuesArray:jsonDic];
-                [self.peopleCollectionView reloadData];
-                [SVProgressHUD showSuccessWithStatus:@"读取数据成功"];
-            } else {
-                [SVProgressHUD showSuccessWithStatus:@"未找到相关数据"];
-            }
-        }
-            break;
-            
-        default:
-            break;
-    }
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD showErrorWithStatus:@"网络错误"];
 }
 
 - (IBAction)tapBackButton:(id)sender {
@@ -266,7 +256,12 @@
     if (0 == buttonIndex) {
         //保存退出
         _saveForQuit = NO;
-        [_netManager updateGroupRelationShip:_relationship];
+        [SRNet_Manager requestNetWithDic:[SRNet_Manager updateGroupRelationShip:_relationship]
+                                complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                    [self updateGroupRelationShipDone:jsonDic];
+                                } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                    
+                                }];
         [self.navigationController popViewControllerAnimated:YES];
     } else if (1 == buttonIndex) {
         //直接退出
@@ -275,6 +270,16 @@
         return;
     }
     
+}
+
+- (void)updateGroupRelationShipDone: (id)jsonDic {
+    if (_saveForQuit) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            GroupViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
+            [rootController loadUserGroupRelationship];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        });
+    }
 }
 
 #pragma mark - Navigation

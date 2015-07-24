@@ -13,9 +13,8 @@
 #import "MJExtension.h"
 #import "PartyPeopleListViewController.h"
 #import "PartyMapViewController.h"
-
 #import "AllPartyTableViewCell.h"
-
+#import "PeopleListTableViewCell.h"
 #import "BMapKit.h"
 
 #import "Model_Party.h"
@@ -23,14 +22,13 @@
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface PartyDetailViewController () <SRNetManagerDelegate, UIActionSheetDelegate,UIAlertViewDelegate> {
-    SRNet_Manager *_netManager;
+
+@interface PartyDetailViewController () <UIActionSheetDelegate> {
     Model_Party_User *_relation;
     NSMutableArray *_relArray;
     int _showStatus;
     BMKMapView *_bdMapView;
-    
-  
+    PeopleListTableViewCell * peopleList;
     
 }
 
@@ -46,9 +44,6 @@
     //进来先判断有没有参与关系
 
 
-
-    
-    
     
     if (self.party.longitude && self.party.latitude) {
         //如果存在经纬度数据
@@ -84,10 +79,6 @@
     }
     
     self.nameLabel.text = self.party.name;
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
-    
     _relation = [[Model_Party_User alloc] init];
     _relation.pk_party_user = self.party.pk_party_user;
     _relation.relationship = self.party.relationship;
@@ -114,7 +105,17 @@
     sendParty.pk_party = self.party.pk_party;
     
     if (self.party) {
-        [_netManager getPartyRelationship:sendParty];
+        [SRNet_Manager requestNetWithDic:[SRNet_Manager getPartyRelationshipDic:sendParty]
+                                complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                    if (jsonDic) {
+                                        _relArray = (NSMutableArray *)[Model_User objectArrayWithKeyValuesArray:[jsonDic objectForKey:@"relation"]];
+                                        self.party = [[Model_Party objectArrayWithKeyValuesArray:[jsonDic objectForKey:@"party"]] objectAtIndex:0];
+                                        [self reloadPeopleNum];
+                                    }
+                                } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                    
+                                }];
+        
     }
     
     if (nil == self.party.relationship) {
@@ -126,8 +127,17 @@
         } else {
             _relation.type = @1;
         }
-        
-        [_netManager createRelationshipForParty:_relation];
+        [SRNet_Manager requestNetWithDic:[SRNet_Manager createRelationshipForPartyDic:_relation]
+                                complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                    if (jsonDic) {
+                                        _relation.pk_party_user = (NSNumber *)jsonDic;
+                                        self.party.relationship = @0;
+                                        [self reloadPeopleNum];
+                                        [self.delegate detailChange:self.party];
+                                    }
+                                } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                    
+                                }];
     } else if ([@3 isEqual:self.party.pay_type])
     {
         if ((nil != self.party.relationship) && ([@1  isEqual: self.party.relationship])) {
@@ -135,7 +145,6 @@
             self.noButton.enabled = NO;
 
         }
-        
     }
     
     [self setParticipateStatus];
@@ -165,12 +174,16 @@
             self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] + 1];
             [SVProgressHUD showWithStatus:@"正在确认参与请求"];
         }
-        [_netManager updateSchedule:_relation];
+
+        [SRNet_Manager requestNetWithDic:[SRNet_Manager updateScheduleDic:_relation]
+                                complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                    if (jsonDic) {
+                                        [self updateScheduleDicDone:jsonDic];
+                                    }
+                                } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                    
+                                }];
     }
-    
-  
-    
-    
 }
 
 - (IBAction)pressedNoButton:(id)sender {
@@ -186,7 +199,41 @@
         _relation.relationship = @2;
         [SVProgressHUD showWithStatus:@"正在确认拒绝请求"];
     }
-    [_netManager updateSchedule:_relation];
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager updateScheduleDic:_relation]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                if (jsonDic) {
+                                    [self updateScheduleDicDone:jsonDic];
+                                }
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
+}
+
+- (void)updateScheduleDicDone: (id)jsonDic {
+    [SVProgressHUD showSuccessWithStatus:@"参与信息发送成功"];
+    
+    //更新上级聚会数组的关系状态
+    self.party.relationship = _relation.relationship;
+    [self setParticipateStatus];
+    BOOL userInAry = NO;
+    
+    for (Model_User *user in _relArray) {
+        if ([user.pk_user isEqualToNumber:[Model_User loadFromUserDefaults].pk_user]) {
+            user.relationship = _relation.relationship;
+            userInAry = YES;
+        }
+    }
+    
+    if (!userInAry) {
+        //用户并不在数组中,是初次加入的关系
+        Model_User *newUser = [Model_User loadFromUserDefaults];
+        newUser.relationship = _relation.relationship;
+        [_relArray addObject:newUser];
+    }
+    [self reloadPeopleNum];
+    [self.delegate detailChange:self.party];
+    
+    [SRTool addPartyUpdateTip:1];
 }
 
 - (void)reloadPeopleNum {
@@ -269,99 +316,12 @@
     [sheet showInView:self.view];
 }
 
-#pragma mark - 网络代理
-
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    switch (interfaceType) {
-        case kGetPartyRelationship: {
-            //进入 读取关系与详情
-            if (jsonDic) {
-                _relArray = (NSMutableArray *)[Model_User objectArrayWithKeyValuesArray:[jsonDic objectForKey:@"relation"]];
-                self.party = [[Model_Party objectArrayWithKeyValuesArray:[jsonDic objectForKey:@"party"]] objectAtIndex:0];
-                [self reloadPeopleNum];
-            }
-        }
-            break;
-        case kUpdateSchedule: {
-            if (jsonDic) {
-                [SVProgressHUD showSuccessWithStatus:@"参与信息发送成功"];
-                
-                //更新上级聚会数组的关系状态
-                self.party.relationship = _relation.relationship;
-                [self setParticipateStatus];
-                BOOL userInAry = NO;
-                
-                for (Model_User *user in _relArray) {
-                    if ([user.pk_user isEqualToNumber:[Model_User loadFromUserDefaults].pk_user]) {
-                        user.relationship = _relation.relationship;
-                        userInAry = YES;
-                    }
-                }
-                
-                if (!userInAry) {
-                    //用户并不在数组中,是初次加入的关系
-                    Model_User *newUser = [Model_User loadFromUserDefaults];
-                    newUser.relationship = _relation.relationship;
-                    [_relArray addObject:newUser];
-                }
-                [self reloadPeopleNum];
-                [self.delegate detailChange:self.party];
-                
-                [SRTool addPartyUpdateTip:1];
-            }
-        }
-            break;
-            
-        case kCreateRelationForParty: {
-            if (jsonDic) {
-                _relation.pk_party_user = (NSNumber *)jsonDic;
-                self.party.relationship = @0;
-                [self reloadPeopleNum];
-                [self.delegate detailChange:self.party];
-            }
-        }
-            break;
-            
-        case kCancelParty: {
-            if (jsonDic) {
-                //聚会取消成功
-                [self.navigationController popViewControllerAnimated:YES];
-                [self.delegate cancelParty:self.party];
-            }
-        }
-            break;
-        case kShareParty: {
-            if (jsonDic) {
-                //聚会分享获取链接成功
-                //将聚会链接赋值到粘贴板
-                UIPasteboard *pboard = [UIPasteboard generalPasteboard];
-                pboard.string = (NSString *)jsonDic;
-                
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                                    message:@"聚会链接已复制到您的粘贴板"
-                                                                   delegate:self
-                                                          cancelButtonTitle:@"确定"
-                                                          otherButtonTitles:nil];
-                alertView.tag = 2;
-                [alertView show];
-            }
-        }
-            break;
-        default:
-            break;
-    }
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD showErrorWithStatus:@"网络错误"];
-}
 
 - (IBAction)tapBackButton:(id)sender {
        [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
     switch (buttonIndex) {
         case 0: {
             //取消聚会
@@ -377,14 +337,29 @@
             break;
         case 1: {
             //分享聚会
-            if (!_netManager) {
-                _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-            }
-            [_netManager shareParty:self.party];
+            [SRNet_Manager requestNetWithDic:[SRNet_Manager sharePartyDic:self.party]
+                                    complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                        if (jsonDic) {
+                                            //聚会分享获取链接成功
+                                            //将聚会链接赋值到粘贴板
+                                            UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+                                            pboard.string = (NSString *)jsonDic;
+                                            
+                                            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                                                message:@"聚会链接已复制到您的粘贴板"
+                                                                                               delegate:self
+                                                                                      cancelButtonTitle:@"确定"
+                                                                                      otherButtonTitles:nil];
+                                            alertView.tag = 2;
+                                            [alertView show];
+                                        }
+                                    } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                        
+                                    }];
+            
         }
             break;
             
-#pragma mark -- 将日程添加到系统日历
         case 2: {
             //添加到日程
             NSLog(@"添加到日程");
@@ -474,7 +449,17 @@
                     break;
                 case 1: {   //确定
                     //取消聚会
-                    [_netManager cancelParty:self.party];
+                    [SRNet_Manager requestNetWithDic:[SRNet_Manager cancelPartyDic:self.party]
+                                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                                if (jsonDic) {
+                                                    //聚会取消成功
+                                                    [self.navigationController popViewControllerAnimated:YES];
+                                                    [self.delegate cancelParty:self.party];
+                                                }
+                                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                                
+                                            }];
+                    
                 }
                     break;
                 default:
@@ -509,7 +494,14 @@
                         self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] + 1];
                         [SVProgressHUD showWithStatus:@"正在确认参与请求"];
                     }
-                    [_netManager updateSchedule:_relation];
+                    [SRNet_Manager requestNetWithDic:[SRNet_Manager updateScheduleDic:_relation]
+                                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                                if (jsonDic) {
+                                                    [self updateScheduleDicDone:jsonDic];
+                                                }
+                                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                                
+                                            }];
                     
                     self.yesButton.enabled = NO;
                     self.noButton.enabled = NO;
@@ -541,6 +533,7 @@
     } else if([segue.identifier isEqualToString:@"INBUTTON"])
     {
         NSLog(@"进入参与界面");
+        
         UIButton *pressedButton = (UIButton *)sender;
         PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
         childController.showStatus = (int)pressedButton.tag;
@@ -548,12 +541,23 @@
     }else if ([segue.identifier isEqualToString:@"OUTBUTTON"])
     {
         NSLog(@"进入拒绝界面");
+        UIButton *pressedButton = (UIButton *)sender;
+        PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
+        childController.showStatus = (int)pressedButton.tag;
+        childController.relationArray = _relArray;
+
+        
     }else if([segue.identifier isEqualToString:@"UNKNOWBUTTON"])
     {
         NSLog(@"进入不确定界面");
+        UIButton *pressedButton = (UIButton *)sender;
+        PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
+        childController.showStatus = (int)pressedButton.tag;
+        childController.relationArray = _relArray;
+
     }else
     {
-         
+
     }
 }
 

@@ -10,6 +10,7 @@
 #import "UIImageView+WebCache.h"
 #import "SRImageManager.h"
 
+#define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 @implementation PeopleListTableViewCell
 
 - (void)awakeFromNib {
@@ -25,13 +26,37 @@
     // Configure the view for the selected state
 }
 
-- (void)initWithUser: (Model_User *)user {
-    self.payButton.layer.masksToBounds = YES;
-    self.payButton.layer.cornerRadius = self.payButton.frame.size.height/4;
+- (void)initWithUser: (Model_User *)user withShowStatus: (int)showStatus {
+//    self.payButton.layer.masksToBounds = YES;
+//    self.payButton.layer.cornerRadius = self.payButton.frame.size.height/4;
+//    self.payButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+//    self.payButton.layer.borderWidth = 1.0;
     
-    self.payButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.payButton.layer.borderWidth = 1.0;
+//    self.tapSwitch.tintColor = AgreeBlue;
+//    self.tapSwitch.thumbTintColor = AgreeBlue;
     
+    
+    switch (showStatus) {
+        case 1:{
+            [self.tapSwitch setHidden:NO];
+        }
+            break;
+            
+        case 2: {
+            [self.tapSwitch setHidden:YES];
+        }
+            break;
+            
+        case 3: {
+            [self.tapSwitch setHidden:YES];
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
+    self.tapSwitch.onTintColor = AgreeBlue;
     self.nicknameLabel.text = user.nickname;
     
     switch ([user.relationship intValue]) {

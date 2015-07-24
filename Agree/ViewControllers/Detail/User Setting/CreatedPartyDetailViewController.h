@@ -12,18 +12,18 @@
 
 #import <EventKit/EventKit.h>
 
-@protocol SRPartyDetailDelegate <NSObject>
-
-@required
-- (void)detailChange: (Model_Party *)party;
-- (void)cancelParty: (Model_Party *)party;
-
-@end
+//@protocol SRPartyDetailDelegate <NSObject>
+//
+//@required
+//- (void)detailChange: (Model_Party *)party;
+//- (void)cancelParty: (Model_Party *)party;
+//
+//@end
 
 
 @interface CreatedPartyDetailViewController : UIViewController
 @property (nonatomic, strong)Model_Party *party;
-@property (nonatomic, strong)id<SRPartyDetailDelegate> delegate;
+//@property (nonatomic, strong)id<SRPartyDetailDelegate> delegate;
 
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 

@@ -13,8 +13,7 @@
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface BandingPhoneViewController ()<SRNetManagerDelegate> {
-    SRNet_Manager *_netManager;
+@interface BandingPhoneViewController (){
     BOOL _sendCodeDone;
     NSString *_phoneNum;
     NSString *_code;
@@ -58,12 +57,28 @@
 }
 
 - (IBAction)pressedTheSendButton:(UIButton *)sender {
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
     if (!_sendCodeDone) {
         _phoneNum = self.phoneTextField.text;
-        [_netManager sendVerificationCode:self.phoneTextField.text];
+        [SRNet_Manager requestNetWithDic:[SRNet_Manager sendVerificationCodeDic:self.phoneTextField.text]
+                                complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                    if (jsonDic) {
+                                        _sendCodeDone = TRUE;
+                                        NSNumber *codeNum = [jsonDic objectForKey:@"code"];
+                                        _code = codeNum.stringValue;
+                                        [self.phoneTextField setText:@""];
+                                        [self.phoneTextField setPlaceholder:@"输入验证码"];
+                                        [self.remarkLabel setText:@"验证码发送成功"];
+                                        [self.sendButton setTitle:@"完成验证" forState:UIControlStateNormal];
+                                        //        [self.sendButton setTintColor:AgreeBlue];
+                                        [self.sendButton setTitleColor:AgreeBlue forState:UIControlStateNormal];
+                                        [self.sendButton setEnabled:NO];
+                                        [SVProgressHUD showSuccessWithStatus:@"验证码发送成功"];
+                                    } else {
+                                        [SVProgressHUD dismiss];
+                                    }
+                                } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                    
+                                }];
     } else {
         //验证码确认
         if ([_code isEqualToString:self.self.phoneTextField.text]) {
@@ -71,53 +86,27 @@
             Model_User *sendUser = [[Model_User alloc] init];
             [sendUser setPhone:_phoneNum];
             [sendUser setPk_user:[Model_User loadFromUserDefaults].pk_user];
-            [_netManager updateUserInfo:sendUser];
+            
+            [SRNet_Manager requestNetWithDic:[SRNet_Manager updateUserInfoDic:sendUser]
+                                    complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                        //保存用户信息成功
+                                        [SVProgressHUD showSuccessWithStatus:@"验证码认证成功"];
+                                        UserSettingViewController *rootController = [self.navigationController.viewControllers objectAtIndex:1];
+                                        [rootController reloadDataView];
+                                        //绑定手机已完成,推出到主视图
+                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                            [self.navigationController popViewControllerAnimated:YES];
+                                        });
+                                    } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                        
+                                    }];
+            
         } else {
             [self.remarkLabel setText:@"验证码错误,请重新输入"];
         }
     }
 }
 
-- (void)interfaceReturnDataSuccess:(NSMutableDictionary *)jsonDic with:(int)interfaceType {
-    
-    switch (interfaceType) {
-        case kSendVerificationCode: {
-            if (jsonDic) {
-                _sendCodeDone = TRUE;
-                NSNumber *codeNum = [jsonDic objectForKey:@"code"];
-                _code = codeNum.stringValue;
-                [self.phoneTextField setText:@""];
-                [self.phoneTextField setPlaceholder:@"输入验证码"];
-                [self.remarkLabel setText:@"验证码发送成功"];
-                [self.sendButton setTitle:@"完成验证" forState:UIControlStateNormal];
-                //        [self.sendButton setTintColor:AgreeBlue];
-                [self.sendButton setTitleColor:AgreeBlue forState:UIControlStateNormal];
-                [self.sendButton setEnabled:NO];
-                [SVProgressHUD showSuccessWithStatus:@"验证码发送成功"];
-            } else {
-                [SVProgressHUD dismiss];
-            }
-        }
-            break;
-        case kUpdateUserInfo: {
-            //保存用户信息成功
-            [SVProgressHUD showSuccessWithStatus:@"验证码认证成功"];
-            UserSettingViewController *rootController = [self.navigationController.viewControllers objectAtIndex:1];
-            [rootController reloadDataView];
-            //绑定手机已完成,推出到主视图
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.navigationController popViewControllerAnimated:YES];
-            });
-        }
-            break;
-        default:
-            break;
-    }
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    
-}
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }

@@ -17,9 +17,8 @@
 
 
 
-@interface UserSettingViewController () <SRNetManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UITextFieldDelegate, SRImageManagerDelegate, UIAlertViewDelegate> {
+@interface UserSettingViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UITextFieldDelegate, UIAlertViewDelegate> {
     Model_User *_userInfo;
-    SRNet_Manager *_netManager;
     UIImagePickerController *_imagePicker;
     
     UIImageView *_backImageViwe;
@@ -46,16 +45,24 @@
     [_backImageViwe.layer setMasksToBounds:YES];
     [_backImageViwe.layer setCornerRadius:_backImageViwe.frame.size.width/2];
     [self.avatarButton addSubview:_backImageViwe];
-    
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
-    
+
     Model_User *defAccount = [Model_User loadFromUserDefaults];
     
     Model_User *account = [[Model_User alloc] init];
     account.pk_user = defAccount.pk_user;
-    [_netManager getUserInfo:account];
+    
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager getUserInfoDic:account]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                //读取用户资料
+                                NSArray *accountAry = [Model_User objectArrayWithKeyValuesArray:jsonDic];
+                                
+                                if (0 != accountAry.count) {
+                                    _userInfo = [accountAry objectAtIndex:0];
+                                    [self reloadDataView];
+                                }
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
     
     if (defAccount.avatar_path) {
         [_backImageViwe sd_setImageWithURL:[SRImageManager avatarImageFromOSS:defAccount.avatar_path]];
@@ -422,10 +429,6 @@
     return TRUE;
 }
 
--(void)imageUploading:(float)proFloat {
-    [SVProgressHUD showProgress:proFloat*0.9];
-}
-
 - (void)saveAccountData {
     //上传头像信息
     if (_isUpdateAvatar) {
@@ -449,7 +452,25 @@
                 //查看是否需要更新数据
                 //更新用户数据
                 _isUpdateData = TRUE;
-                [_netManager updateUserInfo: _userInfo];
+                [SRNet_Manager requestNetWithDic:[SRNet_Manager updateUserInfoDic:_userInfo]
+                                        complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                            //更新用户资料
+                                            _isUpdateData = FALSE;
+                                            
+                                            Model_User *userInfo = [Model_User loadFromUserDefaults];
+                                            //更新用户昵称
+                                            userInfo.nickname = self.nicknameTextField.text;
+                                            [userInfo saveToUserDefaults];
+                                            
+                                            if (_isQuit) {
+                                                //是否退出
+                                                [self.navigationController popViewControllerAnimated:YES];
+                                            } else {
+                                                _isUpdateData = FALSE;
+                                            }
+                                        } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                            
+                                        }];
                 _isUpdateAvatar = FALSE;
             } else {
                 //图片上传失败
@@ -464,7 +485,25 @@
         if (_isUpdateData) {
             //查看是否需要更新数据
             //更新用户数据
-            [_netManager updateUserInfo: _userInfo];
+            [SRNet_Manager requestNetWithDic:[SRNet_Manager updateUserInfoDic:_userInfo]
+                                    complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                        //更新用户资料
+                                        _isUpdateData = FALSE;
+                                        
+                                        Model_User *userInfo = [Model_User loadFromUserDefaults];
+                                        //更新用户昵称
+                                        userInfo.nickname = self.nicknameTextField.text;
+                                        [userInfo saveToUserDefaults];
+                                        
+                                        if (_isQuit) {
+                                            //是否退出
+                                            [self.navigationController popViewControllerAnimated:YES];
+                                        } else {
+                                            _isUpdateData = FALSE;
+                                        }
+                                    } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                        
+                                    }];
         }
     }
 }
@@ -517,55 +556,6 @@
         return YES;
     }
     return YES;
-}
-
-
-
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    switch (interfaceType) {
-        case kUpdateUserInfo: { //更新用户资料
-            //更新用户资料
-            _isUpdateData = FALSE;
-            
-            Model_User *userInfo = [Model_User loadFromUserDefaults];
-            //更新用户昵称
-            userInfo.nickname = self.nicknameTextField.text;
-            [userInfo saveToUserDefaults];
-            
-            if (_isQuit) {
-                //是否退出
-                [self.navigationController popViewControllerAnimated:YES];
-            } else {
-                _isUpdateData = FALSE;
-            }
-        }
-            break;
-        case kGetUserInfo: {
-            //读取用户资料
-            NSArray *accountAry = [Model_User objectArrayWithKeyValuesArray:jsonDic];
-            
-            if (0 != accountAry.count) {
-                _userInfo = [accountAry objectAtIndex:0];
-                [self reloadDataView];
-            } else {
-                
-            }
-        }
-            break;
-            
-        case kTestInterface: {    //读取用户资料
-            
-        }
-            
-            break;
-        default:
-            break;
-    }
-//    [SVProgressHUD dismiss];
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD dismiss];
 }
 
 #pragma mark - Navigation

@@ -13,7 +13,7 @@
 
 
 
-@interface AddressBookTableViewCell : UITableViewCell <SRNetManagerDelegate>
+@interface AddressBookTableViewCell : UITableViewCell 
 @property (weak, nonatomic) IBOutlet UIImageView *avatarImageView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *nicknameLabel;

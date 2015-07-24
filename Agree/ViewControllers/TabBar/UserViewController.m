@@ -81,42 +81,60 @@
                                                          delegate:self
                                                 cancelButtonTitle:@"取消"
                                                 otherButtonTitles:@"确定", nil];
+    logoutAlert.tag = 1;
     [logoutAlert show];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    switch (buttonIndex) {
-        case 0: {   //取消
-            
-        }
-            break;
-        case 1: {   //确定
-            [SVProgressHUD showWithStatus:@"正在退出帐号"];
-            //将用户资料清空
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:kDefUser];
-            
-            //退出环信
-            EMError *error = nil;
-            NSDictionary *info = [[EaseMob sharedInstance].chatManager logoffWithUnbindDeviceToken:YES error:&error];
-            if (!error && info) {
-                NSLog(@"退出帐号成功");
+    if (1 == alertView.tag) {
+        switch (buttonIndex) {
+            case 0: {   //取消
+                
             }
-            
-            //移除用户资料
-            [CD_Group removeAllGroupFromCD];
-            [CD_Party removeAllPartyFromCD];
-            [CD_Group_User removeAllGroupUserFromCD];
-            [CD_Photo removeAllPhotoFromCD];
-            
-            //设置代理,弹出视图控制器
-            AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-            [delegate logout];
-            [SVProgressHUD showSuccessWithStatus:@"退出成功"];
+                break;
+            case 1: {   //确定
+                [SVProgressHUD showWithStatus:@"正在退出帐号"];
+                //将用户资料清空
+                [[NSUserDefaults standardUserDefaults] removeObjectForKey:kDefUser];
+                
+                //退出环信
+                EMError *error = nil;
+                NSDictionary *info = [[EaseMob sharedInstance].chatManager logoffWithUnbindDeviceToken:YES error:&error];
+                if (!error && info) {
+                    NSLog(@"退出帐号成功");
+                }
+                
+                //移除用户资料
+                [CD_Group removeAllGroupFromCD];
+                [CD_Party removeAllPartyFromCD];
+                [CD_Group_User removeAllGroupUserFromCD];
+                [CD_Photo removeAllPhotoFromCD];
+                
+                //设置代理,弹出视图控制器
+                AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                [delegate logout];
+                [SVProgressHUD showSuccessWithStatus:@"退出成功"];
+            }
+                break;
+            default:
+                break;
         }
-            break;
-        default:
-            break;
     }
+}
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    if ([@"GoToMyParty" isEqualToString:identifier]) {
+        UIAlertView *logoutAlert = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                              message:@"我的聚会还未开放,我们将会很快的在下个版本开放它."
+                                                             delegate:self
+                                                    cancelButtonTitle:@"确定"
+                                                    otherButtonTitles:nil];
+        logoutAlert.tag = 2;
+        [logoutAlert show];
+
+        return NO;
+    }
+    return YES;
 }
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation

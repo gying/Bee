@@ -12,11 +12,10 @@
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface PartyPeopleListViewController () <UITableViewDataSource, UITableViewDelegate,UIScrollViewDelegate> {
+@interface PartyPeopleListViewController () <UITableViewDataSource, UITableViewDelegate,UIScrollViewDelegate,UIActionSheetDelegate> {
     NSMutableArray *_inArray;
     NSMutableArray *_outArray;
     NSMutableArray *_unknowArray;
-    
     NSMutableArray *_showArray;
 }
 
@@ -28,10 +27,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-//    
-//    self.backView.backgroundColor = [UIColor redColor];
-//    self.peoplesTableview.backgroundColor = [UIColor greenColor];
-//    
     
     [self setRelationData];
     
@@ -111,6 +106,8 @@
 
 - (IBAction)pressedTheInButton:(id)sender {
     
+    self.showStatus = 1;
+    
     [self resetAllButton];
     [self.inButton setBackgroundColor:AgreeBlue];
     [self.inButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -123,6 +120,7 @@
     
 }
 - (IBAction)pressedTheUnknowButton:(id)sender {
+    self.showStatus = 2;
     
     [self resetAllButton];
     [self.unknowButton setBackgroundColor:AgreeBlue];
@@ -135,7 +133,7 @@
     NSLog(@"不确定");
 }
 - (IBAction)pressedTheOutButton:(id)sender {
-    
+    self.showStatus = 3;
     [self resetAllButton];
     [self.outButton setBackgroundColor:AgreeBlue];
     [self.outButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -185,9 +183,13 @@
     PeopleListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (nil == cell) {
         cell = [[PeopleListTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        
+        
     }
 //    cell.backgroundColor = [UIColor blackColor];
-    [cell initWithUser:theUser];
+//    [cell initWithUser:theUser];
+    
+    [cell initWithUser:theUser withShowStatus:self.showStatus];
     return cell;
 
 }
@@ -197,7 +199,32 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)tapBackButton:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    
+    
+    UIActionSheet * actionSheet = [[UIActionSheet alloc]initWithTitle:@"是否保存当前信息" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定保存" otherButtonTitles: @"保存并退出",@"退出",nil];
+    
+    [actionSheet showInView:self.view];
+    
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (0 == buttonIndex) {
+        NSLog(@"确定保存");
+    }else if(1 == buttonIndex)
+    {
+        NSLog(@"保存并退出");
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    else if (2 == buttonIndex)
+    {
+        NSLog(@"退出");
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    else if(3 == buttonIndex)
+    {
+        NSLog(@"取消");
+    }
 }
 
 /*

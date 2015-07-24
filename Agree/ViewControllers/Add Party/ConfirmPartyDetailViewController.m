@@ -15,8 +15,7 @@
 #import "ChooseLoctaionViewController.h"
 #import "ChooseDateViewController.h"
 
-@interface ConfirmPartyDetailViewController ()<SRNetManagerDelegate, UITextFieldDelegate, UITextViewDelegate> {
-    SRNet_Manager *_netManager;
+@interface ConfirmPartyDetailViewController ()<UITextFieldDelegate, UITextViewDelegate> {
     int _payType;
 }
 
@@ -66,15 +65,11 @@
         [self.addressButton setTitle:@"未选择地址" forState:UIControlStateNormal];
         self.party.location = @"未选择地址";
     }
-    
-    
+
     //设置时间文本
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
     [dateFormatter setDateFormat:@"yyyy年M月d日 EEEE aa hh:mm"];
     [self.dateButton setTitle:[dateFormatter stringFromDate:self.party.begin_time] forState:UIControlStateNormal];
-    
-
- 
 }
 
 - (void)didReceiveMemoryWarning {
@@ -82,33 +77,52 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)pressedTheDoneButton:(id)sender {
-    NSLog(@"完成按钮");
+    if ([self.doneButton.titleLabel.text isEqualToString:@"关闭"]) {
+        //关闭键盘
+        [self.remarkTextView resignFirstResponder];
+        [self.doneButton setTitle:@"完成" forState:UIControlStateNormal];
+    } else {
+        //完成聚会
+        //开始建立聚会
+        self.party.pk_party = [[NSUUID UUID] UUIDString];
+        self.party.fk_user = [Model_User loadFromUserDefaults].pk_user;
+        self.party.name = self.partyNameTextField.text;
+        self.party.remark = self.remarkTextView.text;
+        self.party.pay_type = [NSNumber numberWithInt:_payType];
+        
+        [SVProgressHUD showWithStatus:@"聚会创建中..." maskType:SVProgressHUDMaskTypeGradient];
+        
+        [SRNet_Manager requestNetWithDic:[SRNet_Manager addScheduleDic:self.party]
+                                complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                    if (self.isGroupParty) {
+                                        GroupDetailViewController *rootController = [self.navigationController.viewControllers objectAtIndex:1];
+                                        rootController.partyLoadingAgain = TRUE;
+                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                            [self.navigationController popToViewController:rootController animated:YES];
+                                        });
+                                        [SVProgressHUD showSuccessWithStatus:@"聚会创建成功"];
+                                    } else {
+                                        ScheduleTableViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
+                                        rootController.loadAgain = true;
+                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                            [self.navigationController popToRootViewControllerAnimated:YES];
+                                        });
+                                    }
+                                    [SVProgressHUD dismiss];
+                                } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                    
+                                }];
+    }
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
-    
     if ([self.remarkTextView.text isEqualToString:@"请输入聚会的备注信息"]) {
         self.remarkTextView.text = nil;
     }
     
     self.doneButton.enabled = YES;
     [self.doneButton setTitle:@"关闭" forState:UIControlStateNormal];
-    self.doneButton.titleLabel.textColor = self.view.tintColor;
-    [self.doneButton addTarget:self action:@selector(colose) forControlEvents:UIControlEventTouchUpInside];
-    
-     NSLog(@"开始编辑备注信息");
-}
--(void)colose
-{
-    NSLog(@"关闭键盘");
 
-//    [self.view endEditing:YES];
-    
-    [self.remarkTextView resignFirstResponder];
-    
-    
-    
-    
 }
 
 - (BOOL)textViewShouldEndEditing:(UITextView *)textView {
@@ -117,27 +131,11 @@
         [self.doneButton setTitle:@"完成" forState:UIControlStateNormal];
         self.doneButton.enabled = NO;
     }
-    else if(textView.text.length > 0 )
-    {
-        
+    else if(textView.text.length > 0 ) {
         [self.doneButton setTitle:@"完成" forState:UIControlStateNormal];
-        [self.doneButton addTarget:self action:@selector(done) forControlEvents:UIControlEventTouchUpInside];
     }
 
-    NSLog(@"结束编辑备注信息");
     return YES;
-}
--(void)done
-{
-    self.party.pk_party = [[NSUUID UUID] UUIDString];
-    self.party.fk_user = [Model_User loadFromUserDefaults].pk_user;
-    self.party.name = self.partyNameTextField.text;
-    self.party.remark = self.remarkTextView.text;
-    self.party.pay_type = [NSNumber numberWithInt:_payType];
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
-    [_netManager addSchedule:self.party];
 }
 
 - (IBAction)textFieldEditingChanger:(UITextField *)sender {
@@ -230,35 +228,6 @@
     }
 }
 
--(void)interfaceReturnDataSuccess:(NSMutableDictionary *)jsonDic with:(int)interfaceType {
-    switch (interfaceType) {
-        case kAddSchedule: {
-            if (self.isGroupParty) {
-                GroupDetailViewController *rootController = [self.navigationController.viewControllers objectAtIndex:1];
-                rootController.partyLoadingAgain = TRUE;
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.navigationController popToViewController:rootController animated:YES];
-                });
-            } else {
-                ScheduleTableViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
-                rootController.loadAgain = true;
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.navigationController popToRootViewControllerAnimated:YES];
-                });
-            }
-        }
-            break;
-            
-        default:
-            break;
-    }
-    
-    [SVProgressHUD dismiss];
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD dismiss];
-}
 //返回上一页
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];

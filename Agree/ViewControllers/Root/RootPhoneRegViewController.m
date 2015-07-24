@@ -16,10 +16,7 @@
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface RootPhoneRegViewController ()<UINavigationControllerDelegate,UITextFieldDelegate,SRNetManagerDelegate>
-
-{
-    SRNet_Manager *_netManager;
+@interface RootPhoneRegViewController ()<UINavigationControllerDelegate,UITextFieldDelegate> {
     BOOL _sendCodeDone;
     NSString *_phoneNum;
     NSString *_code;
@@ -47,13 +44,30 @@
 }
 //发送验证码按钮
 - (IBAction)sendButton:(id)sender {
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
     if (!_sendCodeDone) {
         _phoneNum = self.numberTextfield.text;
-        [_netManager sendVerificationCode:self.numberTextfield.text];
-        [SVProgressHUD showWithStatus:@"码发送中..." maskType:SVProgressHUDMaskTypeGradient];
+        [SVProgressHUD showWithStatus:@"验证码码发送中..." maskType:SVProgressHUDMaskTypeGradient];
+        
+        [SRNet_Manager requestNetWithDic:[SRNet_Manager sendVerificationCodeDic:self.numberTextfield.text] complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+            if (jsonDic) {
+                _sendCodeDone = TRUE;
+                NSNumber *codeNum = [jsonDic objectForKey:@"code"];
+                _code = codeNum.stringValue;
+                [self.numberTextfield setText:@""];
+                [self.numberTextfield setPlaceholder:@"输入验证码"];
+                [self.numberLable setText:@"验证码发送成功"];
+                [self.sendButton setTitle:@"完成验证" forState:UIControlStateNormal];
+                [self.sendButton setTitleColor:AgreeBlue forState:UIControlStateNormal];
+                [self.sendButton setEnabled:NO];
+                [SVProgressHUD showSuccessWithStatus:@"验证码发送成功"];
+            } else {
+                [SVProgressHUD dismiss];
+            }
+            
+        } failure:^(NSError *error, NSURLSessionDataTask *task) {
+            [SVProgressHUD showErrorWithStatus:@"网络错误,请重试" maskType:SVProgressHUDMaskTypeGradient];
+        }];
+        
     } else {
         //验证码确认
         if ([_code isEqualToString:self.self.numberTextfield.text]&&(self.sendButton.titleLabel.text = @"完成验证")) {
@@ -63,62 +77,33 @@
             //验证码确认完毕.
             self.userInfo.phone = _phoneNum;
             
-            if (!_netManager) {
-                _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-            }
             Model_User *phoneAccount = [[Model_User alloc] init];
             phoneAccount.phone = _phoneNum;
-            [_netManager getUserByPhone:phoneAccount];
+            [SRNet_Manager requestNetWithDic:[SRNet_Manager getUserByPhoneDic:phoneAccount]
+                                    complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                        if (jsonDic) {
+                                            //查到用户
+                                            Model_User *loadAccount = [[Model_User objectArrayWithKeyValuesArray:(NSArray *)jsonDic] firstObject];
+                                            [loadAccount saveToUserDefaults];
+                                            UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+                                            UITabBarController *rootController = [sb instantiateViewControllerWithIdentifier:@"rootTabbar"];
+                                            [self presentViewController:rootController animated:YES completion:nil];
+                                            [SVProgressHUD showSuccessWithStatus:@"查找到用户,正在进行登录" maskType:SVProgressHUDMaskTypeGradient];
+                                        } else {
+                                            //未查到用户
+                                            _checkPhoneNumDone = YES;
+                                            [self performSegueWithIdentifier:@"GoToReg" sender:self];
+                                            [SVProgressHUD showSuccessWithStatus:@"未查找到用户,进入注册" maskType:SVProgressHUDMaskTypeGradient];
+                                        }
+                                    }
+                                     failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                         [SVProgressHUD showErrorWithStatus:@"网络错误,请重试" maskType:SVProgressHUDMaskTypeGradient];
+                                     }];
             phoneAccount = nil;
-            
             
         } else {
             [self.numberLable setText:@"验证码错误,请重新输入"];
         }
-    }
-}
-
-- (void)interfaceReturnDataSuccess:(NSMutableDictionary *)jsonDic with:(int)interfaceType {
-    
-    switch (interfaceType) {
-        case kSendVerificationCode: {
-            if (jsonDic) {
-                _sendCodeDone = TRUE;
-                NSNumber *codeNum = [jsonDic objectForKey:@"code"];
-                _code = codeNum.stringValue;
-                [self.numberTextfield setText:@""];
-                [self.numberTextfield setPlaceholder:@"输入验证码"];
-                [self.numberLable setText:@"验证码发送成功"];
-                [self.sendButton setTitle:@"完成验证" forState:UIControlStateNormal];
-                //        [self.sendButton setTintColor:AgreeBlue];
-                [self.sendButton setTitleColor:AgreeBlue forState:UIControlStateNormal];
-                [self.sendButton setEnabled:NO];
-                [SVProgressHUD showSuccessWithStatus:@"验证码发送成功"];
-            } else {
-                [SVProgressHUD dismiss];
-            }
-        }
-            break;
-            
-        case kGetUserByPhone: {
-            if (jsonDic) {
-                //查到用户
-                 Model_User *loadAccount = [[Model_User objectArrayWithKeyValuesArray:(NSArray *)jsonDic] firstObject];
-                [loadAccount saveToUserDefaults];
-                UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-                UITabBarController *rootController = [sb instantiateViewControllerWithIdentifier:@"rootTabbar"];
-                [self presentViewController:rootController animated:YES completion:nil];
-                [SVProgressHUD showSuccessWithStatus:@"查找到用户,正在进行登录" maskType:SVProgressHUDMaskTypeGradient];
-            } else {
-                //未查到用户
-                _checkPhoneNumDone = YES;
-                [self performSegueWithIdentifier:@"GoToReg" sender:self];
-                [SVProgressHUD showSuccessWithStatus:@"未查找到用户,进入注册" maskType:SVProgressHUDMaskTypeGradient];
-            }
-        }
-            break;
-        default:
-            break;
     }
 }
 
@@ -141,10 +126,6 @@
             [self.sendButton setEnabled:NO];
         }
     }
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD showErrorWithStatus:@"网络错误,请重试" maskType:SVProgressHUDMaskTypeGradient];
 }
 
 //键盘回收

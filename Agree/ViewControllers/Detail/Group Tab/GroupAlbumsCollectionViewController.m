@@ -21,15 +21,13 @@
 #import <SVProgressHUD.h>
 #import <MJRefresh.h>
 
-@interface GroupAlbumsCollectionViewController () <SRImageManagerDelegate, UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRNetManagerDelegate, SRPhotoManagerDelegate> {
+@interface GroupAlbumsCollectionViewController () <UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRPhotoManagerDelegate> {
     
     UIImagePickerController *_imagePicker;
     UIImage *_pickImage;
-    SRImageManager *_imageManager;
     
     NSMutableArray *_imageViewAry;
     NSMutableDictionary *_imageViewDic;
-    SRNet_Manager *_netManager;
     Model_Photo *_removePhoto;
     NSString *_imagePath;
 }
@@ -61,13 +59,29 @@
     //先读取缓存中的图片信息
     self.photoAry = [CD_Photo getPhotoFromCDByGroup:self.group];
     [self.albumsCollectionView reloadData];
+
     
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
     Model_Group *sendGroup = [[Model_Group alloc] init];
     [sendGroup setPk_group:self.group.pk_group];
-    [_netManager getPhotoByGroup:sendGroup];
+    
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager getPhotoByGroupDic:sendGroup]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                if (jsonDic) {
+                                    [CD_Photo removePhotoFromCDByGroup:self.group];
+                                    self.photoAry = (NSMutableArray *)[Model_Photo objectArrayWithKeyValuesArray:jsonDic];
+                                    
+                                    for (Model_Photo *photo in self.photoAry) {
+                                        [CD_Photo savePhotoToCD:photo];
+                                    }
+                                    [self.albumsCollectionView reloadData];
+                                } else {
+                                    
+                                }
+                                [self.albumsCollectionView.header endRefreshing];
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                [SVProgressHUD showErrorWithStatus:@"网络错误"];
+                            }];
+    
 }
 
 #pragma mark <UICollectionViewDataSource>
@@ -185,10 +199,6 @@
 }
 
 - (void)sendImage {
-    if (!_imageManager) {
-        _imageManager = [[SRImageManager alloc] initWithDelegate:self];
-    }
-    
     _pickImage = [SRImageManager getSubImage:_pickImage withRect:CGRectMake(0, 0, 1280 , 1280)];
     _imagePath = [NSUUID UUID].UUIDString;
     
@@ -204,11 +214,24 @@
             [newPhoto setStatus:@1];
             
             [self.photoAry insertObject:newPhoto atIndex:0];
-            //    [self saveImageData:newPhoto];
-            if (!_netManager) {
-                _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-            }
-            [_netManager addImageToGroup:newPhoto];
+            
+            [SRNet_Manager requestNetWithDic:[SRNet_Manager addImageToGroupDic:newPhoto]
+                                    complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                        [SVProgressHUD showProgress:1.0 status:@"上传图片数据"];
+                                        if (jsonDic) {
+                                            //清除原先数组中的元素
+                                            [_imageViewAry removeAllObjects];
+                                            _imageViewAry = nil;
+                                            [_imageViewDic removeAllObjects];
+                                            _imageViewDic = nil;
+                                            [self.albumsCollectionView reloadData];
+                                        } else {
+                                            
+                                        }
+                                        [SVProgressHUD showSuccessWithStatus:@"成功"];
+                                    } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                        [SVProgressHUD showErrorWithStatus:@"网络错误"];
+                                    }];
         } else {
             
         }
@@ -222,25 +245,23 @@
 
 - (void)deletePhoto:(NSUInteger)index {
     _removePhoto = [self.photoAry objectAtIndex:index];
-    if (!_imageManager) {
-        _imageManager = [[SRImageManager alloc] initWithDelegate:self];
-    }
     
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
-    [_netManager removePhoto:[self.photoAry objectAtIndex:index]];
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager removePhotoDic:_removePhoto]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                if (jsonDic) {
+                                    [self.photoAry removeObject:_removePhoto];
+                                    [_imageViewAry removeAllObjects];
+                                    _imageViewAry = nil;
+                                    [_imageViewDic removeAllObjects];
+                                    _imageViewDic = nil;
+                                    [self.albumsCollectionView reloadData];
+                                } else {
+                                    
+                                }
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                [SVProgressHUD showErrorWithStatus:@"网络错误"];
+                            }];
 }
-
-
-- (void)imageDelError {
-    //图片删除错误
-}
-
-- (void)saveImageData: (Model_Photo *)photo {
-    
-}
-
 
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {

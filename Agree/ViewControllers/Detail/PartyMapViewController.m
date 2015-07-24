@@ -69,17 +69,24 @@
 {
     
 
-   BMKPinAnnotationView *newAnnotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"myAnnotation"];
+   BMKPinAnnotationView *newAnnotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil];
 
-    customButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 85, 35)];
-    customButton.backgroundColor = [UIColor redColor];
-    [customButton setTitle:@"聚会地点" forState:UIControlStateNormal];
+    [newAnnotationView setFrame:CGRectMake(newAnnotationView.frame.origin.x, newAnnotationView.frame.origin.y,45,45)];
+    
+    newAnnotationView.image = nil;
+    [newAnnotationView setContentMode:UIViewContentModeScaleAspectFit];
+    customButton = [[UIButton alloc]initWithFrame:CGRectMake(0,0,45,45)];
+    customButton.backgroundColor = [UIColor clearColor];
+//    [customButton setTitle:@"聚会地点" forState:UIControlStateNormal];
     [customButton addTarget:self action:@selector(daohang) forControlEvents:UIControlEventTouchUpInside];
+    
+    [customButton setImage:[UIImage imageNamed:@"sr_map_point"] forState:UIControlStateNormal];
+    
 
 //    BMKActionPaopaoView * paopaoView = [[BMKActionPaopaoView alloc]initWithCustomView:customButton];
 //    newAnnotationView.paopaoView = paopaoView;
+    newAnnotationView.backgroundColor = [UIColor blackColor];
     [newAnnotationView addSubview:customButton];
-    
 
     return newAnnotationView;
     
