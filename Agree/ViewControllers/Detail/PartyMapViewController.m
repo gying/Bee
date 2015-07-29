@@ -95,6 +95,9 @@
                                                cancelButtonTitle:@"取消"
                                           destructiveButtonTitle:nil
                                                otherButtonTitles:nil];
+    for (NSDictionary *dic in self.availableMaps) {
+        [action addButtonWithTitle:[NSString stringWithFormat:@"%@", dic[@"name"]]];
+    }
     [action showInView:self.view];
 }
 

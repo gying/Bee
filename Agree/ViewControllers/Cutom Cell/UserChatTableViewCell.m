@@ -341,33 +341,16 @@
 
 //点击好友头像
 - (IBAction)pressedTheAvatarButton:(id)sender {
-    
-    UIActionSheet * avatarActionSheet = [[UIActionSheet alloc]initWithTitle:@"详细" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"好友资料",@"支付款项",@"平账", nil];
-    [avatarActionSheet showInView:self];
-    
-}
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    NSLog(@"clickedButtonAtIndex:%ld",(long)buttonIndex);
-    if (0 == buttonIndex)
-    {
-        NSLog(@"好友资料");
-            if (self.topViewController) {
-                [self.topViewController.accountView show];
-                Model_User *sendUser = [[Model_User alloc] init];
+    NSLog(@"好友资料");
+    if (self.topViewController) {
+        [self.topViewController.accountView show];
+        Model_User *sendUser = [[Model_User alloc] init];
         
-                sendUser.pk_user = _chat.fk_user;
-                sendUser.nickname = _chat.nickname_from;
-                sendUser.avatar_path = _chat.avatar_path_from;
-                [self.topViewController.accountView loadWithUser:sendUser withGroup:nil];
-            
-        }
-    }else if(1 == buttonIndex)
-    {
-        NSLog(@"支付款项");
-    }else if(2 == buttonIndex)
-    {
-        NSLog(@"平账");
+        sendUser.pk_user = _chat.fk_user;
+        sendUser.nickname = _chat.nickname_from;
+        sendUser.avatar_path = _chat.avatar_path_from;
+        [self.topViewController.accountView loadWithUser:sendUser withGroup:nil];
+        
     }
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
