@@ -36,6 +36,9 @@
 //付款状态(1.未付, 2.已付, 3.代付(多人状态))
 @property (nonatomic, strong)NSNumber *pay_type;
 
+@property (nonatomic, strong)NSNumber *pk_party_user;
+
+
 
 - (void)saveToUserDefaults;
 + (Model_User *)loadFromUserDefaults;

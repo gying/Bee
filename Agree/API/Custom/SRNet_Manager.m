@@ -350,4 +350,15 @@
                                 andRequestType:kGetPartyHistory];
 }
 
++ (NSMutableDictionary *)updatePartyRelationships: (NSMutableArray *)partyRelationAry {
+    NSMutableArray *relationAry = [[NSMutableArray alloc] init];
+    for (Model_Party_User *relation in partyRelationAry) {
+        [relationAry addObject:relation.keyValues];
+    }
+    return [SRNet_Manager toRequestDicWithData:
+            [[NSDictionary alloc] initWithObjectsAndKeys: relationAry, @"partyRelationships",
+             [Model_User loadFromUserDefaults].pk_user, @"user_id", nil]
+                                andRequestType:kUpdatePartyRelationships];
+}
+
 @end

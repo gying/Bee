@@ -71,29 +71,31 @@
 
    BMKPinAnnotationView *newAnnotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil];
 
-    [newAnnotationView setFrame:CGRectMake(newAnnotationView.frame.origin.x, newAnnotationView.frame.origin.y,45,45)];
+    [newAnnotationView setFrame:CGRectMake(newAnnotationView.frame.origin.x, newAnnotationView.frame.origin.y,35,35)];
     
-    newAnnotationView.image = nil;
+    [newAnnotationView setEnabled:YES];
     [newAnnotationView setContentMode:UIViewContentModeScaleAspectFit];
-    customButton = [[UIButton alloc]initWithFrame:CGRectMake(0,0,45,45)];
+    customButton = [[UIButton alloc]initWithFrame:CGRectMake(-6.55,-3,45,45)];
     customButton.backgroundColor = [UIColor clearColor];
-//    [customButton setTitle:@"聚会地点" forState:UIControlStateNormal];
     [customButton addTarget:self action:@selector(daohang) forControlEvents:UIControlEventTouchUpInside];
-    
     [customButton setImage:[UIImage imageNamed:@"sr_map_point"] forState:UIControlStateNormal];
-    
-
 //    BMKActionPaopaoView * paopaoView = [[BMKActionPaopaoView alloc]initWithCustomView:customButton];
 //    newAnnotationView.paopaoView = paopaoView;
-    newAnnotationView.backgroundColor = [UIColor blackColor];
+    newAnnotationView.backgroundColor = [UIColor clearColor];
     [newAnnotationView addSubview:customButton];
-
     return newAnnotationView;
+    
     
 }
 -(void)daohang
 {
     NSLog(@"导航");
+    UIActionSheet *action = [[UIActionSheet alloc] initWithTitle:@"选择导航方式"
+                                                        delegate:self
+                                               cancelButtonTitle:@"取消"
+                                          destructiveButtonTitle:nil
+                                               otherButtonTitles:nil];
+    [action showInView:self.view];
 }
 
 

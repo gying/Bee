@@ -21,7 +21,7 @@
 
 @property int showStatus;
 
-@property (nonatomic, strong)NSArray *relationArray;
+@property (nonatomic, strong)NSMutableArray *relationArray;
 @property BOOL isCreator;
 
 @end

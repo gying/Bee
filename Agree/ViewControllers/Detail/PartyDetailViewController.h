@@ -25,6 +25,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UIButton *yesButton;
 @property (weak, nonatomic) IBOutlet UIButton *noButton;
+@property (weak, nonatomic) IBOutlet UILabel *payType;
 
 
 @property (weak, nonatomic) IBOutlet UILabel *inNumLabel;
@@ -41,5 +42,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *conHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *mapConHeight;
 @property (weak, nonatomic) IBOutlet UIButton *cancelPartyButton;
+@property (weak, nonatomic) IBOutlet UILabel *money;
+@property (weak, nonatomic) IBOutlet UILabel *inLabel;
 
 @end

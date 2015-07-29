@@ -9,6 +9,7 @@
 #import "PartyPeopleListViewController.h"
 #import "Model_User.h"
 #import "PeopleListTableViewCell.h"
+#import "SRNet_Manager.h"
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
@@ -119,9 +120,6 @@
     
     _showArray = _inArray;
     [self.peoplesTableview reloadData];
-    
-    NSLog(@"参加");
-    
 }
 - (IBAction)pressedTheUnknowButton:(id)sender {
     self.showStatus = 2;
@@ -133,8 +131,6 @@
     
     _showArray = _unknowArray;
     [self.peoplesTableview reloadData];
-    
-    NSLog(@"不确定");
 }
 - (IBAction)pressedTheOutButton:(id)sender {
     self.showStatus = 3;
@@ -145,10 +141,6 @@
     
     _showArray = _outArray;
     [self.peoplesTableview reloadData];
-    
-    
-    
-    NSLog(@"拒绝");
 }
 
 - (void)resetAllButton {
@@ -181,8 +173,6 @@
     PeopleListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (nil == cell) {
         cell = [[PeopleListTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-        
-        
     }
 
     [cell initWithUser:theUser withShowStatus:self.showStatus isCreator:self.isCreator];
@@ -223,7 +213,24 @@
 }
 
 - (IBAction)tapSaveButton:(UIButton *)sender {
+    //开始初始化关系数组
+    NSMutableArray *relationAry = [[NSMutableArray alloc] init];
+    for (Model_User *user in self.relationArray) {
+        Model_Party_User *partyRealtion = [[Model_Party_User alloc] init];
+        partyRealtion.pk_party_user = user.pk_party_user;
+        partyRealtion.pay_type = user.pay_type;
+        [relationAry addObject:partyRealtion];
+    }
+    
+    
     //点击保存按钮,开始保存数据
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager updatePartyRelationships:relationAry]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                //保存操作成功
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
+    
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {

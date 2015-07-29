@@ -51,6 +51,7 @@
                             complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
                                 if (jsonDic) {
                                     self.schAry = (NSMutableArray *)[Model_Party objectArrayWithKeyValuesArray:jsonDic];
+                                    [self.myPartyVC reloadTipView:self.schAry.count withType:1];
                                     [self.myPartyVC.createdPartyTableView reloadData];
                                 } else {
                                     [self.schAry removeAllObjects];

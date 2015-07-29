@@ -36,6 +36,8 @@
 #define kJoinTheGroupByCode         38
 #define kGetScheduleByGroupID       43
 #define kUpdateSchedule             45
+#define kUpdatePartyRelationships   451
+
 #define kGetPartyRelationship       48
 #define kAddImageToGroup            62
 #define kGetPhotoByGroup            61
@@ -134,5 +136,6 @@ typedef void (^requestFailureBlock)(NSError *error, NSURLSessionDataTask *task);
 + (NSMutableDictionary *)getUserInfoByWechatDic: (Model_User *)user;
 + (NSMutableDictionary *)getCreatedPartyByUserDic: (Model_User *)user;
 + (NSMutableDictionary *)getPartyHistoryByUserDic: (Model_User *)user;
++ (NSMutableDictionary *)updatePartyRelationships: (NSMutableArray *)partyRelationAry;
 
 @end

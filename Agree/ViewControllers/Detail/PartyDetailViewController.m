@@ -22,11 +22,14 @@
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface PartyDetailViewController () <UIActionSheetDelegate> {
+@interface PartyDetailViewController () <UIActionSheetDelegate,BMKLocationServiceDelegate,BMKMapViewDelegate> {
     Model_Party_User *_relation;
     NSMutableArray *_relArray;
     int _showStatus;
     BMKMapView *_bdMapView;
+    
+    UIButton * customButton;
+    
 }
 
 @end
@@ -38,7 +41,50 @@
     // Do any additional setup after loading the view.
 //    [self.navigationItem setTitle:self.party.name];
     
-    //进来先判断有没有参与关系
+    //类型的边框与圆弧
+    self.payType.layer.cornerRadius = self.payType.frame.size.height/4;
+//    self.payType.layer.borderColor = AgreeBlue.CGColor;
+    self.payType.layer.borderColor = [UIColor colorWithWhite:0.8 alpha:1.0].CGColor;
+    self.payType.layer.borderWidth = 1.0;
+    self.payType.textColor = AgreeBlue;
+    self.payType.alpha = 0.5;
+    
+    [self.money setText:[NSString stringWithFormat:@"¥%@", self.party.pay_amount]];
+    
+    switch (self.party.pay_type.intValue) {
+        case 1: {
+            //请客
+            [self.payType setText:@"请客"];
+        }
+            
+            break;
+        case 2: {
+            //AA
+            [self.payType setText:@"AA制"];
+        }
+            
+            break;
+        case 3: {
+            //预付
+            [self.payType setText:@"预付款"];
+        }
+            
+            break;
+        default:
+            break;
+    }
+
+    if ([@1 isEqual:self.party.relationship]) {
+        [self.money setTextColor:[UIColor whiteColor]];
+        [self.inLabel setTextColor:[UIColor whiteColor]];
+    } else {
+        [self.money setTextColor:[UIColor lightGrayColor]];
+        [self.inLabel setTextColor:[UIColor lightGrayColor]];
+    }
+    
+
+
+    
     if (self.party.longitude && self.party.latitude) {
         //如果存在经纬度数据
         //则开始更新地区信息
@@ -47,6 +93,7 @@
         self.mapConHeight.constant = CGRectGetHeight(_bdMapView.bounds);
 //        [self.locationMapView addSubview:_bdMapView];
         [self.locationMapView insertSubview:_bdMapView atIndex:0];
+        [_bdMapView setDelegate:self];
         
         CLLocationCoordinate2D partyCoor;
         partyCoor.longitude = [self.party.longitude doubleValue];
@@ -153,7 +200,7 @@
 
     if ([@3 isEqual: self.party.pay_type]) {
         NSLog(@"弹出AlertView");
-        UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"确定要参加聚会吗" message:@"确定后不能取消" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"确定要参加聚会吗" message:@"该聚会为预付款聚会,如果确认参与之后,将无法取消参与该聚会." delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
         alertView.tag = 3;
         [alertView show];
     } else {
@@ -163,10 +210,16 @@
             _relation.relationship = @0;
             self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] - 1];
             [SVProgressHUD showWithStatus:@"正在取消参与请求"];
+            [self.money setTextColor:[UIColor lightGrayColor]];
+            [self.inLabel setTextColor:[UIColor lightGrayColor]];
+            
         } else {
             _relation.relationship = @1;
             self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] + 1];
             [SVProgressHUD showWithStatus:@"正在确认参与请求"];
+            [self.money setTextColor:[UIColor whiteColor]];
+            [self.inLabel setTextColor:[UIColor whiteColor]];
+            
         }
 
         [SRNet_Manager requestNetWithDic:[SRNet_Manager updateScheduleDic:_relation]
@@ -177,7 +230,13 @@
                                 } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                     
                                 }];
+        
+        
     }
+    
+    
+    
+    
 }
 
 - (IBAction)pressedNoButton:(id)sender {
@@ -185,6 +244,8 @@
         //取消选中状态
         _relation.relationship = @0;
         [SVProgressHUD showWithStatus:@"正在取消拒绝请求"];
+        [self.money setTextColor:[UIColor lightGrayColor]];
+        [self.inLabel setTextColor:[UIColor lightGrayColor]];
     } else {
         
         if (1 == _relation.relationship.intValue ) {
@@ -201,6 +262,9 @@
                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                 
                             }];
+    
+    [self.money setTextColor:[UIColor lightGrayColor]];
+    [self.inLabel setTextColor:[UIColor lightGrayColor]];
 }
 
 - (void)updateScheduleDicDone: (id)jsonDic {
@@ -508,6 +572,32 @@
         default:
             break;
     }
+}
+
+- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation
+{
+    
+    
+    BMKPinAnnotationView *newAnnotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil];
+    
+    [newAnnotationView setFrame:CGRectMake(newAnnotationView.frame.origin.x, newAnnotationView.frame.origin.y,35,35)];
+    
+    [newAnnotationView setEnabled:YES];
+    [newAnnotationView setContentMode:UIViewContentModeScaleAspectFit];
+    customButton = [[UIButton alloc]initWithFrame:CGRectMake(-6.55,-3,45,45)];
+    customButton.backgroundColor = [UIColor clearColor];
+    [customButton addTarget:self action:@selector(daohang) forControlEvents:UIControlEventTouchUpInside];
+    [customButton setImage:[UIImage imageNamed:@"sr_map_point"] forState:UIControlStateNormal];
+    //    BMKActionPaopaoView * paopaoView = [[BMKActionPaopaoView alloc]initWithCustomView:customButton];
+    //    newAnnotationView.paopaoView = paopaoView;
+    newAnnotationView.backgroundColor = [UIColor clearColor];
+    [newAnnotationView addSubview:customButton];
+    return newAnnotationView;
+    
+}
+-(void)daohang
+{
+    NSLog(@"导航");
 }
 
 

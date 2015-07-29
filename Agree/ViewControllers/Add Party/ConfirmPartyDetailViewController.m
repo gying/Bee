@@ -166,7 +166,9 @@
                 //取消
                 _payType = 0;
                 [self.imRichButton setSelected:NO];
+                [self.payTypeLabel setText:@"支付类型"];
             } else {
+                [self.payTypeLabel setText:@"请客"];
                 [self.imRichButton setSelected:YES];
                 [self.aaButton setSelected:NO];
                 [self.payFirstButton setSelected:NO];
@@ -182,7 +184,9 @@
                 //取消
                 _payType = 0;
                 [self.aaButton setSelected:NO];
+                [self.payTypeLabel setText:@"支付类型"];
             } else {
+                [self.payTypeLabel setText:@"AA制"];
                 [self.imRichButton setSelected:NO];
                 [self.aaButton setSelected:YES];
                 [self.payFirstButton setSelected:NO];
@@ -197,9 +201,11 @@
                 //取消
                 _payType = 0;
                 [self.payFirstButton setSelected:NO];
+                [self.payTypeLabel setText:@"支付类型"];
                 //取消预支付
                 self.party.pay_amount = nil;
             } else {
+                [self.payTypeLabel setText:@"预付费"];
                 [self.imRichButton setSelected:NO];
                 [self.aaButton setSelected:NO];
                 [self.payFirstButton setSelected:YES];
@@ -218,6 +224,8 @@
             [self.payFirstMoneyTextField resignFirstResponder];
             if (self.payFirstMoneyTextField.text) {
                 self.party.pay_amount = [NSNumber numberWithFloat:[self.payFirstMoneyTextField.text floatValue]];
+                [self.payTypeLabel setText:[NSString stringWithFormat:@"预付费金额: %@", self.payFirstMoneyTextField.text]];
+                
                 self.payFirstMoneyTextField.text = nil;
             }
         }

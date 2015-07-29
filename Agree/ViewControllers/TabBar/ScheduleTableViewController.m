@@ -16,11 +16,16 @@
 #import "CD_Party.h"
 #import <MJRefresh.h>
 
+#define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 @interface ScheduleTableViewController ()<SRPartyDetailDelegate> {
     NSMutableArray *_scheduleArray;
     NSIndexPath *_chooseIndexPath;
     //第一次读取的标识
     BOOL _firstLoadingDone;
+    UIView * _backView;
+    UILabel * _textLabel;
+    
+    
 }
 
 @end
@@ -29,15 +34,43 @@
 
 #pragma mark - 界面操作
 - (void)viewDidLoad {
+    
+    [self backView];
+
     self.loadAgain = false;
-    
     _scheduleArray = [CD_Party getPartyFromCDForSchedule];
-    
+    [self reloadTipView:_scheduleArray.count];
     [self loadAllScheduleData];
     [super viewDidLoad];
     
     // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
     self.tableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh:)];
+    
+
+}
+
+
+-(void)backView
+{
+    _backView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    _backView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:_backView];
+    _textLabel = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2 - 50, self.view.frame.size.height - 180, 100, 40)];
+    _textLabel.backgroundColor = [UIColor clearColor];
+    _textLabel.text = @"请添加日程";
+    _textLabel.textAlignment = NSTextAlignmentCenter;
+    _textLabel.font = [UIFont systemFontOfSize:14];
+    _textLabel.textColor = AgreeBlue;
+    [_backView addSubview:_textLabel];
+}
+
+- (void)reloadTipView: (NSInteger)aryCount {
+    if (0 == aryCount) {
+        [_backView setHidden:NO];
+        
+    }else {
+        [_backView setHidden:YES];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -73,6 +106,8 @@
         return _scheduleArray.count;
     }
     return 0;
+    
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -100,6 +135,7 @@
             theParty.relationship = party.relationship;
         }
     }
+
     [self.tableView reloadData];
 }
 
@@ -111,6 +147,7 @@
         }
     }
     [_scheduleArray removeObject:cancelParty];
+    [self reloadTipView:_scheduleArray.count];
     [self.tableView reloadData];
 }
 
@@ -130,7 +167,7 @@
                                     }
                                     
                                     _scheduleArray = (NSMutableArray *)[Model_Party objectArrayWithKeyValuesArray:jsonDic];
-                                    
+                                    [self reloadTipView:_scheduleArray.count];
                                     for (Model_Party *party in _scheduleArray) {
                                         [CD_Party savePartyToCD:party];
                                     }
@@ -143,6 +180,7 @@
                                             [CD_Party removePartyFromCD:party];
                                         }
                                         [_scheduleArray removeAllObjects];
+                                        [self reloadTipView:_scheduleArray.count];
                                     }
                                 }
                                 [self.tableView reloadData];

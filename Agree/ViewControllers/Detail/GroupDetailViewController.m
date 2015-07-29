@@ -43,6 +43,9 @@
     GroupChatTableViewCell *cell;
     
     EMConversation *_conversation;
+    
+
+    
 }
 
 @end
@@ -136,6 +139,32 @@
     _albumsDelegate.rootController = self;
     
     [self setkeyBoard];
+    
+    
+
+    self.view2Label.backgroundColor = [UIColor clearColor];
+    self.view2Label.text = @"请添加日程";
+    self.view2Label.textColor = AgreeBlue;
+    self.view2Label.textAlignment = NSTextAlignmentCenter;
+    self.view2Label.font = [UIFont systemFontOfSize:14];
+    
+    
+    self.view3Label.backgroundColor = [UIColor clearColor];
+    self.view3Label.text = @"请添加照片";
+    self.view3Label.textColor = AgreeBlue;
+    self.view3Label.textAlignment = NSTextAlignmentCenter;
+    self.view3Label.font = [UIFont systemFontOfSize:14];
+    
+    if (0 != _partyDelegate.partyArray.count) {
+        NSLog(@"当有日程的时候不显示LABEL");
+        self.backView2.hidden = YES;
+    }
+    
+    if (0 != _albumsDelegate.photoAry.count) {
+        NSLog(@"当有照片的时候不显示LABEL");
+        self.backView3.hidden = YES;
+    }
+    
 }
 
 
@@ -207,7 +236,13 @@
         [self.groupTabBar setSelectedItem:self.groupTalk];
         [_srKeyboard.mBackView setHidden:NO];
         [self setkeyBoard];
+        
+
+        
+        
     } else if (CGRectGetWidth([UIScreen mainScreen].bounds) == scrollView.contentOffset.x) {
+
+    
         
         [self.selectConLeft setConstant:[[UIScreen mainScreen] bounds].size.width/3];
         
@@ -227,11 +262,19 @@
             // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
             self.partyTableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:_partyDelegate refreshingAction:@selector(loadPartyData)];
             [_partyDelegate loadPartyData];
-            //            [self.partyTableView reloadData];
+
         }
-    } else if (CGRectGetWidth([UIScreen mainScreen].bounds) * 2 == scrollView.contentOffset.x) {
-        //相册界面
+        if (0 == _partyDelegate.partyArray.count) {
+            self.backView2.hidden = NO;
+        }else{
+            self.backView2.hidden = YES;
+        }
+
         
+    } else if (CGRectGetWidth([UIScreen mainScreen].bounds) * 2 == scrollView.contentOffset.x) {
+        
+       
+        //相册界面
         [self.selectConLeft setConstant:[[UIScreen mainScreen] bounds].size.width/3 * 2];
         
         [self.groupTabBar setSelectedItem:self.groupPhotos];
@@ -241,6 +284,16 @@
             [_albumsDelegate loadPhotoData];
             _albumsDelegate.albumsLoadingDone = TRUE;
         }
+        
+        if (0 == _albumsDelegate.photoAry.count) {
+            self.backView3.hidden = NO;
+
+        }else{
+            self.backView3.hidden = YES;
+        }
+        
+
+        
     }
     else {
         

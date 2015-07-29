@@ -17,7 +17,7 @@
 
 #import <MJRefresh.h>
 
-
+#define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
 @interface MyPartyViewController ()<UITabBarDelegate,UIScrollViewDelegate> {
     NSDictionary *norDic;
@@ -57,10 +57,46 @@
     self.historyPartyTableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:_historyPartyDelegate
                                                                          refreshingAction:@selector(loadPartyData)];
     
+    self.textLabel1.backgroundColor = [UIColor clearColor];
+    self.textLabel1.text = @"请添加创建的聚会";
+    self.textLabel1.textColor = AgreeBlue;
+    self.textLabel1.textAlignment = NSTextAlignmentCenter;
+    self.textLabel1.font = [UIFont systemFontOfSize:14];
     
+    
+    self.textLabel2.backgroundColor = [UIColor clearColor];
+    self.textLabel2.text = @"请添加历史聚会";
+    self.textLabel2.textColor = AgreeBlue;
+    self.textLabel2.textAlignment = NSTextAlignmentCenter;
+    self.textLabel2.font = [UIFont systemFontOfSize:14];
+    
+    
+    if (0 != _createdPartyDelegate.schAry.count) {
+        NSLog(@"当没有创建的聚会时");
+        self.backView1.hidden = YES;
+    }
+    
+    if (0 != _historyPartyDelegate.schAry.count) {
+        NSLog(@"当没有历史聚会时");
+        self.backView2.hidden = YES;
+    }
 }
 
 - (void)setupTabbar {
+    norDic = [NSDictionary dictionaryWithObjectsAndKeys:
+              [UIColor grayColor],
+              NSForegroundColorAttributeName,
+              [UIFont fontWithName:@"STHeitiSC-Light" size:12.0f],
+              NSFontAttributeName,
+              nil];
+    
+    selDic = [NSDictionary dictionaryWithObjectsAndKeys:
+              self.view.tintColor,
+              NSForegroundColorAttributeName,
+              [UIFont fontWithName:@"STHeitiSC-Light" size:12.0f],
+              NSFontAttributeName,
+              nil];
+    
     [self.createdParty setTitleTextAttributes:norDic forState:UIControlStateNormal];
     [self.createdParty setTitleTextAttributes:selDic forState:UIControlStateSelected];
     
@@ -77,23 +113,46 @@
     
     
     
-    norDic = [NSDictionary dictionaryWithObjectsAndKeys:
-              [UIColor grayColor],
-              NSForegroundColorAttributeName,
-              [UIFont fontWithName:@"STHeitiSC-Light" size:12.0f],
-              NSFontAttributeName,
-              nil];
-    
-    selDic = [NSDictionary dictionaryWithObjectsAndKeys:
-              self.view.tintColor,
-              NSForegroundColorAttributeName,
-              [UIFont fontWithName:@"STHeitiSC-Light" size:12.0f],
-              NSFontAttributeName,
-              nil];
     
     [self.myPartyTabBar setSelectedItem:self.createdParty];
     [self.selectLineWidth setConstant:[[UIScreen mainScreen] bounds].size.width/2];
+}
 
+- (void)reloadTipView: (NSInteger)aryCount withType:(int)inttype {
+    //1 创建的聚会
+    //2 聚会的历史记录
+    if (0 == aryCount) {
+        switch (inttype) {
+            case 1: {
+                [self.backView1 setHidden:NO];
+            }
+                break;
+            case 2: {
+                [self.backView2 setHidden:NO];
+            }
+                break;
+            default:
+                break;
+        }
+        
+        
+        
+    }else {
+        
+        switch (inttype) {
+            case 1: {
+                [self.backView1 setHidden:YES];
+            }
+                break;
+            case 2: {
+                [self.backView2 setHidden:YES];
+            }
+                break;
+            default:
+                break;
+        }
+        [self.backView2 setHidden:YES];
+    }
 }
 
 
@@ -126,6 +185,15 @@
         
         [self.selectConLeft setConstant:0];
         
+        if (0 == _createdPartyDelegate.schAry.count) {
+            self.backView1.hidden = NO;
+        }else{
+            self.backView1.hidden = YES;
+        }
+        
+        
+
+        
         //群聊界面
         [self.myPartyTabBar setSelectedItem:self.createdParty];
     }else if (CGRectGetWidth([UIScreen mainScreen].bounds) == scrollView.contentOffset.x){
@@ -133,6 +201,12 @@
         [self.myPartyTabBar setSelectedItem:self.historyParty];
         
         [self.selectConLeft setConstant:[[UIScreen mainScreen] bounds].size.width/2];
+        
+        if (0 == _historyPartyDelegate.schAry.count) {
+            self.backView2.hidden = NO;
+        }else{
+            self.backView2.hidden = YES;
+        }
 
     }
 }
