@@ -51,13 +51,26 @@
 }
 */
 
+- (void)reloadTipView: (NSInteger)aryCount {
+    if (0 == aryCount) {
+        [self.rootController.backView3 setHidden:NO];
+        
+    }else {
+        [self.rootController.backView3 setHidden:YES];
+    }
+}
+
 -(void)loadPhotoData {
+    
+    
     
     if (!self.photoAry) {
         self.photoAry = [[NSMutableArray alloc] init];
     }
+    
     //先读取缓存中的图片信息
     self.photoAry = [CD_Photo getPhotoFromCDByGroup:self.group];
+    [self reloadTipView:self.photoAry.count];
     [self.albumsCollectionView reloadData];
 
     
@@ -73,7 +86,9 @@
                                     for (Model_Photo *photo in self.photoAry) {
                                         [CD_Photo savePhotoToCD:photo];
                                     }
+                                    [self reloadTipView:self.photoAry.count];
                                     [self.albumsCollectionView reloadData];
+                                    
                                 } else {
                                     
                                 }
@@ -225,6 +240,7 @@
                                             [_imageViewDic removeAllObjects];
                                             _imageViewDic = nil;
                                             [self.albumsCollectionView reloadData];
+                                            [self reloadTipView:self.photoAry.count];
                                         } else {
                                             
                                         }
@@ -246,6 +262,7 @@
 - (void)deletePhoto:(NSUInteger)index {
     _removePhoto = [self.photoAry objectAtIndex:index];
     
+    
     [SRNet_Manager requestNetWithDic:[SRNet_Manager removePhotoDic:_removePhoto]
                             complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
                                 if (jsonDic) {
@@ -255,6 +272,7 @@
                                     [_imageViewDic removeAllObjects];
                                     _imageViewDic = nil;
                                     [self.albumsCollectionView reloadData];
+                                    [self reloadTipView:self.photoAry.count];
                                 } else {
                                     
                                 }

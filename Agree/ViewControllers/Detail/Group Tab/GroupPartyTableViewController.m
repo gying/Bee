@@ -15,7 +15,10 @@
 #import "CD_Party.h"
 #import <MJRefresh.h>
 
+
+
 @interface GroupPartyTableViewController ()
+
 
 @end
 
@@ -27,8 +30,18 @@
     [self.partyTableView reloadData];
 }
 
+- (void)reloadTipView: (NSInteger)aryCount {
+    if (0 == aryCount) {
+        [self.delegate.backView2 setHidden:NO];
+        
+    }else {
+        [self.delegate.backView2 setHidden:YES];
+    }
+}
+
 - (void)loadPartyData {
     self.partyArray = [CD_Party getPartyFromCDByGroup:self.group];
+    [self reloadTipView:self.partyArray.count];
     [self.partyTableView reloadData];
 
     [SRNet_Manager requestNetWithDic:[SRNet_Manager getScheduleByGroupIDDic:self.group.pk_group
@@ -39,6 +52,7 @@
                                     //                [SVProgressHUD showSuccessWithStatus:@"读取数据成功"];
                                     [CD_Party removePartyFromCDByGroup:self.group];
                                     self.partyArray = (NSMutableArray *)[Model_Party objectArrayWithKeyValuesArray:jsonDic];
+                                    [self reloadTipView:self.partyArray.count];
                                     [self.partyTableView reloadData];
                                     
                                     for (Model_Party *party in self.partyArray) {
@@ -60,6 +74,12 @@
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate.groupDelegate setDataChange:TRUE];
     
+    
+    
+    
+
+
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -115,6 +135,8 @@
         }
     }
     [self.partyArray removeObject:cancelParty];
+    //
+    [self reloadTipView:self.partyArray.count];
     [self.partyTableView reloadData];
 }
 

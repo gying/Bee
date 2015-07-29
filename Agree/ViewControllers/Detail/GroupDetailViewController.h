@@ -35,6 +35,18 @@
 @property (weak, nonatomic) IBOutlet UITableView *partyTableView;
 @property (weak, nonatomic) IBOutlet UICollectionView *albumsCollectionView;
 
+
+@property (weak, nonatomic) IBOutlet UILabel *view2Label;
+
+@property (weak, nonatomic) IBOutlet UILabel *view3Label;
+
+@property (weak, nonatomic) IBOutlet UIView *backView2;
+
+
+@property (weak, nonatomic) IBOutlet UIView *backView3;
+
+
+
 @property (nonatomic, strong)Model_Party *chooseParty;
 @property (nonatomic, strong)SRAccountView *accountView;
 

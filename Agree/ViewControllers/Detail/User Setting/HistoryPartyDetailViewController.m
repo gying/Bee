@@ -22,7 +22,7 @@
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface HistoryPartyDetailViewController ()<UIActionSheetDelegate> {
+@interface HistoryPartyDetailViewController ()<UIActionSheetDelegate,BMKLocationServiceDelegate,BMKMapViewDelegate> {
     Model_Party_User *_relation;
     NSMutableArray *_relArray;
     int _showStatus;
@@ -30,6 +30,8 @@
     
     UIActionSheet * canelActionSheet;
     UIActionSheet * payActionSheet;
+    
+    UIButton * customButton;
 }
 
 @end
@@ -53,6 +55,7 @@
         self.mapConHeight.constant = CGRectGetHeight(_bdMapView.bounds);
         //        [self.locationMapView addSubview:_bdMapView];
         [self.locationMapView insertSubview:_bdMapView atIndex:0];
+        [_bdMapView setDelegate:self];
         
         CLLocationCoordinate2D partyCoor;
         partyCoor.longitude = [self.party.longitude doubleValue];
@@ -377,6 +380,32 @@
         default:
             break;
     }
+}
+
+- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation
+{
+    
+    
+    BMKPinAnnotationView *newAnnotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil];
+    
+    [newAnnotationView setFrame:CGRectMake(newAnnotationView.frame.origin.x, newAnnotationView.frame.origin.y,35,35)];
+    
+    [newAnnotationView setEnabled:YES];
+    [newAnnotationView setContentMode:UIViewContentModeScaleAspectFit];
+    customButton = [[UIButton alloc]initWithFrame:CGRectMake(-6.55,-3,45,45)];
+    customButton.backgroundColor = [UIColor clearColor];
+    [customButton addTarget:self action:@selector(daohang) forControlEvents:UIControlEventTouchUpInside];
+    [customButton setImage:[UIImage imageNamed:@"sr_map_point"] forState:UIControlStateNormal];
+    //    BMKActionPaopaoView * paopaoView = [[BMKActionPaopaoView alloc]initWithCustomView:customButton];
+    //    newAnnotationView.paopaoView = paopaoView;
+    newAnnotationView.backgroundColor = [UIColor clearColor];
+    [newAnnotationView addSubview:customButton];
+    return newAnnotationView;
+    
+}
+-(void)daohang
+{
+    NSLog(@"导航");
 }
 
 - (IBAction)CheakButton:(id)sender {
