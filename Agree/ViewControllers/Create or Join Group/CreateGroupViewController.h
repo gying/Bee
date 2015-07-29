@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TXYDownloader.h"
 
 @interface CreateGroupViewController : UIViewController
 

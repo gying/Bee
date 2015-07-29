@@ -22,12 +22,8 @@
 #import "Model_Feedback.h"
 
 //定义请求地址
-
-//#define kBaseUrlString  @"http://203.195.159.110/webroot/"
 #define kBaseUrlString  @"http://120.26.118.226/app/app_interface/"
 #define kInterfaceUrlString @"sr_interface.php"
-//#define kInterfaceUrlString @"srtext.php"
-
 
 #define kAddGroup                   31
 #define kRegUser                    11
@@ -40,6 +36,9 @@
 #define kJoinTheGroupByCode         38
 #define kGetScheduleByGroupID       43
 #define kUpdateSchedule             45
+#define kUpdatePartyRelationships   451
+
+
 #define kGetPartyRelationship       48
 #define kAddImageToGroup            62
 #define kGetPhotoByGroup            61
@@ -76,6 +75,7 @@
 
 #define kTestInterface              1101
 #define kGetUserInfoByWechat        1102
+#define kUpdateParty                414
 
 //定义两个代码块
 typedef void (^finishCallbackBlock)(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task);
@@ -138,5 +138,7 @@ typedef void (^requestFailureBlock)(NSError *error, NSURLSessionDataTask *task);
 + (NSMutableDictionary *)getUserInfoByWechatDic: (Model_User *)user;
 + (NSMutableDictionary *)getCreatedPartyByUserDic: (Model_User *)user;
 + (NSMutableDictionary *)getPartyHistoryByUserDic: (Model_User *)user;
++ (NSMutableDictionary *)updatePartyRelationships: (NSMutableArray *)partyRelationAry;
++ (NSMutableDictionary *)updateParty: (Model_Party *)party;
 
 @end

@@ -8,8 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol PerpayDelegate <NSObject>
+
+@required
+- (void)inputAmount: (NSNumber *)amount;
+
+@end
+
 @interface PrepayViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UITextField *payTextField;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
+
+@property id<PerpayDelegate> delegate;
 
 @end

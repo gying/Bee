@@ -13,8 +13,6 @@
 #import "GroupViewController.h"
 #import "UserChatViewController.h"
 #import "ScheduleTableViewController.h"
-#import "TXYUploadManager.h"
-#import "TXYDownloader.h"
 
 #import "WXApi.h"
 #import "RootAccountLoginViewController.h"
@@ -43,8 +41,6 @@
 
 @property (nonatomic, strong)NSString *jPushString;
 @property (nonatomic, strong)NSString *deviceToken;
-
-@property (nonatomic, strong)TXYUploadManager *uploadManager;
 
 
 

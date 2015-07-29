@@ -11,8 +11,7 @@
 #import "SRImageManager.h"
 
 
-@implementation GroupCollectionViewCell {
-}
+@implementation GroupCollectionViewCell
 
 - (void)initCellWithGroup: (Model_Group *)group isAddView: (BOOL)isAddView {
     self.groupImageView.image = nil;
@@ -61,26 +60,10 @@
         
         [self.group2ndView.layer setMasksToBounds:YES];
         [self.group2ndView.layer setCornerRadius:3];
-        
-        ;
-        //    [self.groupImageView sd_setImageWithURL:[SRImageManager groupFrontCoverImageFromTXYFieldID:group.avatar_path]];
-        
-        
-//        //下载图片
-//        NSURL *imageUrl = [SRImageManager groupFrontCoverImageFromTXYFieldID:group.avatar_path];
-//        NSString *urlstr = [imageUrl absoluteString];
-//        [[TXYDownloader sharedInstanceWithPersistenceId:nil] download:urlstr
-//                                                               target:self
-//                                                            succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-//                                                                [self.groupImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]]; }
-//                                                            failBlock:nil
-//                                                        progressBlock:nil
-//                                                                param:nil];
     }
 }
 
 - (void)initAddView {
-    
     self.lineView.hidden = YES;
     self.groupImageView.image = [UIImage imageNamed:@"agree_add_icon"];
     [self.groupImageView setContentMode:UIViewContentModeCenter];

@@ -89,9 +89,9 @@
     }
     
     if ([context save:nil]) {
-        NSLog(@"删除成功");
+
     } else {
-        NSLog(@"删除失败");
+
     }
 }
 
@@ -109,9 +109,9 @@
     }
     
     if ([context save:nil]) {
-        NSLog(@"删除成功");
+
     } else {
-        NSLog(@"删除失败");
+
     }
 }
 
@@ -127,9 +127,9 @@
     }
     
     if ([context save:nil]) {
-        NSLog(@"删除成功");
+
     } else {
-        NSLog(@"删除失败");
+
     }
 }
 

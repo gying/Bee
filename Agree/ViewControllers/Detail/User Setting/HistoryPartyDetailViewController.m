@@ -15,8 +15,7 @@
 #import "PartyPeopleListViewController.h"
 #import "PartyMapViewController.h"
 
-#import "BMapKit.h"
-
+#import <BaiduMapAPI/BMapKit.h>
 #import "Model_Party.h"
 #import "SRTool.h"
 

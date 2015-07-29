@@ -18,21 +18,18 @@
 #import "PrepayViewController.h"
 
 
-#import "BMapKit.h"
-
+#import <BaiduMapAPI/BMapKit.h>
 #import "Model_Party.h"
 #import "SRTool.h"
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface CreatedPartyDetailViewController ()<UIActionSheetDelegate,BMKLocationServiceDelegate,BMKMapViewDelegate> {
+@interface CreatedPartyDetailViewController ()<UIActionSheetDelegate,BMKLocationServiceDelegate,BMKMapViewDelegate, PerpayDelegate> {
     Model_Party_User *_relation;
     NSMutableArray *_relArray;
     int _showStatus;
     BMKMapView *_bdMapView;
     UIButton * customButton;
-
-    
 }
 
 @end
@@ -43,10 +40,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     //    [self.navigationItem setTitle:self.party.name];
-    
-    
-  
-    
     
     if (self.party.longitude && self.party.latitude) {
         //如果存在经纬度数据
@@ -70,7 +63,8 @@
     }
     
     //判断是否是创建者本身.
-    if ([[Model_User loadFromUserDefaults].pk_user isEqualToNumber:self.party.fk_user]) {
+    
+    if ([SRTool partyCreatorIsSelf:self.party]) {
         [self.cancelButton setHidden:NO];
     } else {
         [self.cancelButton setHidden:YES];
@@ -375,22 +369,36 @@
     [newAnnotationView setContentMode:UIViewContentModeScaleAspectFit];
     customButton = [[UIButton alloc]initWithFrame:CGRectMake(-6.55,-3,45,45)];
     customButton.backgroundColor = [UIColor clearColor];
-    [customButton addTarget:self action:@selector(daohang) forControlEvents:UIControlEventTouchUpInside];
+//    [customButton addTarget:self action:@selector(daohang) forControlEvents:UIControlEventTouchUpInside];
     [customButton setImage:[UIImage imageNamed:@"sr_map_point"] forState:UIControlStateNormal];
     //    BMKActionPaopaoView * paopaoView = [[BMKActionPaopaoView alloc]initWithCustomView:customButton];
     //    newAnnotationView.paopaoView = paopaoView;
     newAnnotationView.backgroundColor = [UIColor clearColor];
     [newAnnotationView addSubview:customButton];
     return newAnnotationView;
-    
 }
--(void)daohang
-{
-    NSLog(@"导航");
-}
+
 
 - (IBAction)CheakButton:(id)sender {
     NSLog(@"结账");
+}
+
+- (void)inputAmount:(NSNumber *)amount {
+    
+    
+    self.party.pay_amount = amount;
+    //只发送修改的关键不分
+    Model_Party *sendParty = [[Model_Party alloc] init];
+    sendParty.pk_party = self.party.pk_party;
+    sendParty.pay_amount = amount;
+    //输入结账完成,这里将做结账处理
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager updateParty:sendParty] complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+        //返回结账信息成功.
+        
+    } failure:^(NSError *error, NSURLSessionDataTask *task) {
+        //结账信息输入失败.
+        
+    }];
 }
 
 #pragma mark - Navigation
@@ -403,13 +411,15 @@
         PartyMapViewController * childController = (PartyMapViewController *)segue.destinationViewController;
         childController.party = self.party;
     } else if([segue.identifier isEqualToString:@"PREPAY"]){
-//        PrepayViewController * childController = (PrepayViewController *)segue.destinationViewController;
+        PrepayViewController * childController = (PrepayViewController *)segue.destinationViewController;
+        [childController setDelegate:self];
 //       [childController.payTextField becomeFirstResponder];
     }else{
         UIButton *pressedButton = (UIButton *)sender;
-    PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
-    childController.showStatus = (int)pressedButton.tag;
-    childController.relationArray = _relArray;
+        PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
+        childController.isCreator = [SRTool partyCreatorIsSelf:self.party];
+        childController.showStatus = (int)pressedButton.tag;
+        childController.relationArray = _relArray;
     }
 }
 

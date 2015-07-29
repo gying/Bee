@@ -26,7 +26,6 @@
     if (nil == cell) {
         cell = [[GroupPartyTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
-    
     [cell initWithParty:theParty];
     return cell;
 };
@@ -38,15 +37,13 @@
     return 0;
 }
 
-
-- (void)loadPartyData {
-    
-    [self loadAllScheduleData];
-    
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    self.myPartyVC.chooseRow = (int)indexPath.row;
+    return indexPath;
 }
 
 #pragma mark - 业务逻辑
-- (void)loadAllScheduleData {
+- (void)loadPartyData {
     Model_User *user = [[Model_User alloc] init];
     user.pk_user = [Model_User loadFromUserDefaults].pk_user;
     
@@ -64,6 +61,7 @@
                                 [self.myPartyVC.historyPartyTableView.header endRefreshing];
                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                 
+                                [self.myPartyVC.historyPartyTableView.header endRefreshing];
                             }];
     
 }

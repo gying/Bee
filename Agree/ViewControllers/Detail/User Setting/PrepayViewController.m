@@ -16,10 +16,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    
-
-    
     // Do any additional setup after loading the view.
     
 }
@@ -34,17 +30,21 @@
 }
 
 
-
-
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [self.payTextField resignFirstResponder];
 }
-- (void)viewWillAppear:(BOOL)animated
-{
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     [self.payTextField becomeFirstResponder];
 }
 
+- (IBAction)tapPayButton:(id)sender {
+    [self.delegate inputAmount:[NSNumber numberWithFloat:[self.payTextField.text floatValue]]];
+    
+    
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 /*
 #pragma mark - Navigation

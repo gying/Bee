@@ -43,15 +43,8 @@
     return indexPath;
 }
 
-
-- (void)loadPartyData {
-    
-    [self loadAllScheduleData];
-    
-}
-
 #pragma mark - 业务逻辑
-- (void)loadAllScheduleData {
+- (void)loadPartyData {
     Model_User *user = [[Model_User alloc] init];
     user.pk_user = [Model_User loadFromUserDefaults].pk_user;
     [SRNet_Manager requestNetWithDic:[SRNet_Manager getCreatedPartyByUserDic:user]
@@ -64,9 +57,11 @@
                                     [self.schAry removeAllObjects];
                                     [self.myPartyVC.createdPartyTableView reloadData];
                                 }
+                                
+                                [self.myPartyVC.createdPartyTableView.header endRefreshing];
                             }
                              failure:^(NSError *error, NSURLSessionDataTask *task) {
-                                 
+                                 [self.myPartyVC.createdPartyTableView.header endRefreshing];
                              }];
 }
 

@@ -15,7 +15,7 @@
 #import "PartyMapViewController.h"
 #import "AllPartyTableViewCell.h"
 #import "PeopleListTableViewCell.h"
-#import "BMapKit.h"
+#import <BaiduMapAPI/BMapKit.h>
 
 #import "Model_Party.h"
 #import "SRTool.h"
@@ -42,10 +42,39 @@
 //    [self.navigationItem setTitle:self.party.name];
     
     //类型的边框与圆弧
-    self.payType.layer.cornerRadius = self.payType.frame.size.height/5;
-    self.payType.layer.borderColor = AgreeBlue.CGColor;
+    self.payType.layer.cornerRadius = self.payType.frame.size.height/4;
+//    self.payType.layer.borderColor = AgreeBlue.CGColor;
+    self.payType.layer.borderColor = [UIColor colorWithWhite:0.8 alpha:1.0].CGColor;
     self.payType.layer.borderWidth = 1.0;
     self.payType.textColor = AgreeBlue;
+    self.payType.alpha = 0.7;
+    
+    [self.money setText:[NSString stringWithFormat:@"¥%@", self.party.pay_amount]];
+    
+    switch (self.party.pay_type.intValue) {
+        case 1: {
+            //请客
+            [self.payType setText:@"请客"];
+        }
+            
+            break;
+        case 2: {
+            //AA
+            [self.payType setText:@"AA制"];
+        }
+            
+            break;
+        case 3: {
+            //预付
+            [self.payType setText:@"预付款"];
+        }
+            
+            break;
+        default: {
+            [self.payType setText:@"未指定"];
+        }
+            break;
+    }
 
     if ([@1 isEqual:self.party.relationship]) {
         [self.money setTextColor:[UIColor whiteColor]];
@@ -173,7 +202,7 @@
 
     if ([@3 isEqual: self.party.pay_type]) {
         NSLog(@"弹出AlertView");
-        UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"确定要参加聚会吗" message:@"确定后不能取消" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"确定要参加聚会吗" message:@"该聚会为预付款聚会,如果确认参与之后,将无法取消参与该聚会." delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
         alertView.tag = 3;
         [alertView show];
     } else {
@@ -589,6 +618,7 @@
         
         UIButton *pressedButton = (UIButton *)sender;
         PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
+        childController.isCreator = [SRTool partyCreatorIsSelf:self.party];
         childController.showStatus = (int)pressedButton.tag;
         childController.relationArray = _relArray;
     }else if ([segue.identifier isEqualToString:@"OUTBUTTON"])
@@ -596,6 +626,7 @@
         NSLog(@"进入拒绝界面");
         UIButton *pressedButton = (UIButton *)sender;
         PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
+        childController.isCreator = [SRTool partyCreatorIsSelf:self.party];
         childController.showStatus = (int)pressedButton.tag;
         childController.relationArray = _relArray;
 
@@ -605,6 +636,7 @@
         NSLog(@"进入不确定界面");
         UIButton *pressedButton = (UIButton *)sender;
         PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
+        childController.isCreator = [SRTool partyCreatorIsSelf:self.party];
         childController.showStatus = (int)pressedButton.tag;
         childController.relationArray = _relArray;
 

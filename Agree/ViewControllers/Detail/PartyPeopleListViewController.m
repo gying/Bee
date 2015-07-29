@@ -9,6 +9,7 @@
 #import "PartyPeopleListViewController.h"
 #import "Model_User.h"
 #import "PeopleListTableViewCell.h"
+#import "SRNet_Manager.h"
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
@@ -17,6 +18,9 @@
     NSMutableArray *_outArray;
     NSMutableArray *_unknowArray;
     NSMutableArray *_showArray;
+    
+    NSMutableArray *_tempInArray;
+    BOOL _inArrayIsChange;
 }
 
 @end
@@ -26,7 +30,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
     
     [self setRelationData];
     
@@ -63,6 +66,8 @@
         default:
             break;
     }
+    
+    _tempInArray = [[NSMutableArray alloc] initWithArray:_inArray];
     
 }
 
@@ -115,9 +120,6 @@
     
     _showArray = _inArray;
     [self.peoplesTableview reloadData];
-    
-    NSLog(@"参加");
-    
 }
 - (IBAction)pressedTheUnknowButton:(id)sender {
     self.showStatus = 2;
@@ -129,8 +131,6 @@
     
     _showArray = _unknowArray;
     [self.peoplesTableview reloadData];
-    
-    NSLog(@"不确定");
 }
 - (IBAction)pressedTheOutButton:(id)sender {
     self.showStatus = 3;
@@ -141,10 +141,6 @@
     
     _showArray = _outArray;
     [self.peoplesTableview reloadData];
-    
-    
-    
-    NSLog(@"拒绝");
 }
 
 - (void)resetAllButton {
@@ -163,12 +159,6 @@
 }
 
 
-
-
-
-
-
-
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (_showArray) {
         return _showArray.count;
@@ -183,13 +173,9 @@
     PeopleListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (nil == cell) {
         cell = [[PeopleListTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-        
-        
     }
-//    cell.backgroundColor = [UIColor blackColor];
-//    [cell initWithUser:theUser];
-    
-    [cell initWithUser:theUser withShowStatus:self.showStatus];
+
+    [cell initWithUser:theUser withShowStatus:self.showStatus isCreator:self.isCreator];
     return cell;
 
 }
@@ -200,30 +186,69 @@
 }
 - (IBAction)tapBackButton:(id)sender {
     
+    //首先做是否更改状态的判断
+    for (Model_User *tempUser in _tempInArray) {
+        for (Model_User *user in _inArray) {
+            if (!tempUser.pay_type) {
+                tempUser.pay_type = @0;
+            }
+            if (!(tempUser.pay_type.intValue == user.pay_type.intValue)) {
+                //未被改变过
+                _inArrayIsChange = YES;
+            }
+        }
+    }
     
-    UIActionSheet * actionSheet = [[UIActionSheet alloc]initWithTitle:@"是否保存当前信息" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定保存" otherButtonTitles: @"保存并退出",@"退出",nil];
+    if (_inArrayIsChange) {
+        UIActionSheet * actionSheet = [[UIActionSheet alloc]initWithTitle:@"是否保存当前信息"
+                                                                 delegate:self
+                                                        cancelButtonTitle:@"取消"
+                                                   destructiveButtonTitle:@"保存后退出"
+                                                        otherButtonTitles:@"直接退出",nil];
+        
+        [actionSheet showInView:self.view];
+    } else {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
+- (IBAction)tapSaveButton:(UIButton *)sender {
+    //开始初始化关系数组
+    NSMutableArray *relationAry = [[NSMutableArray alloc] init];
+    for (Model_User *user in self.relationArray) {
+        Model_Party_User *partyRealtion = [[Model_Party_User alloc] init];
+        partyRealtion.pk_party_user = user.pk_party_user;
+        partyRealtion.pay_type = user.pay_type;
+        [relationAry addObject:partyRealtion];
+    }
     
-    [actionSheet showInView:self.view];
+    
+    //点击保存按钮,开始保存数据
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager updatePartyRelationships:relationAry]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                //保存操作成功
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
     
 }
 
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (0 == buttonIndex) {
-        NSLog(@"确定保存");
-    }else if(1 == buttonIndex)
-    {
-        NSLog(@"保存并退出");
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-    else if (2 == buttonIndex)
-    {
-        NSLog(@"退出");
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-    else if(3 == buttonIndex)
-    {
-        NSLog(@"取消");
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    switch (buttonIndex) {
+        case 0: {
+            //保存后退出
+            
+            
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+            break;
+        case 1: {
+            //直接退出
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+            break;
+        default:
+            break;
     }
 }
 

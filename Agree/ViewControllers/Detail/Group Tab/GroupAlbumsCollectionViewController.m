@@ -167,16 +167,14 @@
     if (!_imagePicker) {
         _imagePicker = [[UIImagePickerController alloc] init];
         _imagePicker.delegate = self;
-        UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
-        //判断是否有摄像头
-        if(![UIImagePickerController isSourceTypeAvailable:sourceType]) {
-            sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        }
     }
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择图片来源" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"拍照" otherButtonTitles:@"图片库", nil];
         [sheet showInView:self.rootController.view];
+    } else {
+        _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [self.rootController presentViewController:_imagePicker animated:YES completion:nil];
     }
 }
 

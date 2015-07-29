@@ -15,23 +15,16 @@
 #import "CreatedPartyDetailViewController.h"
 #import "HistoryPartyDetailViewController.h"
 
-
-
-
-
-
 #import <MJRefresh.h>
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface MyPartyViewController ()<UITabBarDelegate,UIScrollViewDelegate>
-{
-    NSMutableArray *_scheduleArray;
+
+@interface MyPartyViewController ()<UITabBarDelegate,UIScrollViewDelegate> {
     NSDictionary *norDic;
     NSDictionary *selDic;
     
     CreatedPartyTableViewDelegate *_createdPartyDelegate;
-    
     HistoryPartyTableViewDelegate *_historyPartyDelegate;
 }
 
@@ -41,72 +34,29 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // Do any additional setup after loading the view.
     
-    _scheduleArray = [CD_Party getPartyFromCDForSchedule];
+    [self setupTabbar];
     
     _createdPartyDelegate = [[CreatedPartyTableViewDelegate alloc] init];
     _createdPartyDelegate.myPartyVC = self;
-    _createdPartyDelegate.schAry = _scheduleArray;
     self.createdPartyTableView.delegate = _createdPartyDelegate;
     self.createdPartyTableView.dataSource = _createdPartyDelegate;
+    [_createdPartyDelegate loadPartyData];
     
     _historyPartyDelegate = [[HistoryPartyTableViewDelegate alloc] init];
-    _historyPartyDelegate.schAry = _scheduleArray;
     _historyPartyDelegate.myPartyVC = self;
-    
     self.historyPartyTableView.delegate = _historyPartyDelegate;
     self.historyPartyTableView.dataSource = _historyPartyDelegate;
-
-    
-    
-    
-    // Do any additional setup after loading the view.
-    self.myPartyScrollView.delegate = self;
-    self.myPartyTabBar.delegate = self;
-    
-    
-    
-    self.myPartyScrollView.showsHorizontalScrollIndicator = NO;
-    self.myPartyScrollView.showsVerticalScrollIndicator = NO;
-
-    self.myPartyScrollView.bounces = NO;
-    
-    
-    
-    norDic = [NSDictionary dictionaryWithObjectsAndKeys:
-              [UIColor grayColor],
-              NSForegroundColorAttributeName,
-              [UIFont fontWithName:@"STHeitiSC-Light" size:12.0f],
-              NSFontAttributeName,
-              nil];
-    
-    selDic = [NSDictionary dictionaryWithObjectsAndKeys:
-              self.view.tintColor,
-              NSForegroundColorAttributeName,
-              [UIFont fontWithName:@"STHeitiSC-Light" size:12.0f],
-              NSFontAttributeName,
-              nil];
-    
-    [self.myPartyTabBar setSelectedItem:self.createdParty];
-    
-    [self.createdParty setTitleTextAttributes:norDic forState:UIControlStateNormal];
-    [self.createdParty setTitleTextAttributes:selDic forState:UIControlStateSelected];
-    
-    [self.historyParty setTitleTextAttributes:norDic forState:UIControlStateNormal];
-    [self.historyParty setTitleTextAttributes:selDic forState:UIControlStateSelected];
-    
-
-    [self.selectLineWidth setConstant:[[UIScreen mainScreen] bounds].size.width/2];
+    [_historyPartyDelegate loadPartyData];
     
     // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
     self.createdPartyTableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:_createdPartyDelegate
                                                                          refreshingAction:@selector(loadPartyData)];
     
-    self.historyPartyTableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:_historyPartyDelegate refreshingAction:@selector(loadPartyData)];
     
-    
-    
-    
+    self.historyPartyTableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:_historyPartyDelegate
+                                                                         refreshingAction:@selector(loadPartyData)];
     
     self.textLabel1.backgroundColor = [UIColor clearColor];
     self.textLabel1.text = @"请添加创建的聚会";
@@ -131,21 +81,46 @@
         NSLog(@"当没有历史聚会时");
         self.backView2.hidden = YES;
     }
-    
-    
 }
 
--(void)loadPartyData
-{
+- (void)setupTabbar {
+    norDic = [NSDictionary dictionaryWithObjectsAndKeys:
+              [UIColor grayColor],
+              NSForegroundColorAttributeName,
+              [UIFont fontWithName:@"STHeitiSC-Light" size:12.0f],
+              NSFontAttributeName,
+              nil];
     
+    selDic = [NSDictionary dictionaryWithObjectsAndKeys:
+              self.view.tintColor,
+              NSForegroundColorAttributeName,
+              [UIFont fontWithName:@"STHeitiSC-Light" size:12.0f],
+              NSFontAttributeName,
+              nil];
+    
+    [self.createdParty setTitleTextAttributes:norDic forState:UIControlStateNormal];
+    [self.createdParty setTitleTextAttributes:selDic forState:UIControlStateSelected];
+    
+    [self.historyParty setTitleTextAttributes:norDic forState:UIControlStateNormal];
+    [self.historyParty setTitleTextAttributes:selDic forState:UIControlStateSelected];
+    
+    self.myPartyScrollView.delegate = self;
+    self.myPartyTabBar.delegate = self;
+    
+    self.myPartyScrollView.showsHorizontalScrollIndicator = NO;
+    self.myPartyScrollView.showsVerticalScrollIndicator = NO;
+    
+    self.myPartyScrollView.bounces = NO;
+    
+    [self.myPartyTabBar setSelectedItem:self.createdParty];
+    [self.selectLineWidth setConstant:[[UIScreen mainScreen] bounds].size.width/2];
+
 }
 
 - (void)reloadTipView: (NSInteger)aryCount withType:(int)inttype {
     //1 创建的聚会
     //2 聚会的历史记录
-    
-    
-    
+
     if (0 == aryCount) {
         switch (inttype) {
             case 1: {

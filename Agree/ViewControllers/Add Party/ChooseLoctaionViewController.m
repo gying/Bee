@@ -9,7 +9,7 @@
 #import "ChooseLoctaionViewController.h"
 #import "ChooseDateViewController.h"
 #import "Model_Party.h"
-#import "BMapKit.h"
+#import <BaiduMapAPI/BMapKit.h>
 
 #import "ConfirmPartyDetailViewController.h"
 
@@ -176,6 +176,7 @@ errorCode:(BMKSearchErrorCode)error{
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     [_bdMapView viewWillAppear];
     _bdMapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
     _locService.delegate = self;
@@ -188,6 +189,7 @@ errorCode:(BMKSearchErrorCode)error{
     _bdMapView.delegate = nil; // 不用时，置nil
     _locService.delegate = nil;
     _searcher.delegate = nil;
+    [super viewWillDisappear:animated];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

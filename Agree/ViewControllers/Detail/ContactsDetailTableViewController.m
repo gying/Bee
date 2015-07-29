@@ -31,6 +31,7 @@
 @implementation ContactsDetailTableViewController
 
 - (void)viewDidLoad {
+    [super viewDidLoad];
     [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"relation_update"];
     
     // Uncomment the following line to preserve selection between presentations.
@@ -42,8 +43,6 @@
     _accountView = [[SRAccountView alloc] init];
     [_accountView setHidden:YES];
     [self getAddressBook];
-    
-    [super viewDidLoad];
 }
 
 - (void)getAddressBook {
@@ -83,6 +82,7 @@
         
         if ((__bridge id)abFullName != nil) {
             nameString = (__bridge NSString *)abFullName;
+            
         } else {
             if ((__bridge id)abLastName != nil)
             {
@@ -102,6 +102,7 @@
                 newPeople.phoneAry = [[NSMutableArray alloc] init];
             }
             NSString *phoneString = (__bridge NSString *)phone;
+            
             phoneString = [phoneString stringByReplacingOccurrencesOfString:@"+86" withString:@""];
             phoneString = [phoneString stringByReplacingOccurrencesOfString:@" " withString:@""];
             phoneString = [phoneString stringByReplacingOccurrencesOfString:@"(" withString:@""];
@@ -110,10 +111,8 @@
             
             
             [newPeople.phoneAry addObject:phoneString];
-//            NSLog(@"Phone: %@\n", phone);
             [_checkPhoneArray addObject:phoneString];
         }
-        
         [_contactArray addObject:newPeople];
     }
     

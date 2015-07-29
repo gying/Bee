@@ -11,7 +11,9 @@
 #import "SRImageManager.h"
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
-@implementation PeopleListTableViewCell
+@implementation PeopleListTableViewCell  {
+    Model_User *_user;
+}
 
 - (void)awakeFromNib {
     // Initialization code
@@ -21,12 +23,14 @@
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
+    [super setSelected:NO animated:animated];
 
     // Configure the view for the selected state
 }
 
-- (void)initWithUser: (Model_User *)user withShowStatus: (int)showStatus {
+- (void)initWithUser: (Model_User *)user
+      withShowStatus: (int)showStatus
+           isCreator: (BOOL) isCreator {
 //    self.payButton.layer.masksToBounds = YES;
 //    self.payButton.layer.cornerRadius = self.payButton.frame.size.height/4;
 //    self.payButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
@@ -34,21 +38,62 @@
     
 //    self.tapSwitch.tintColor = AgreeBlue;
 //    self.tapSwitch.thumbTintColor = AgreeBlue;
-    
+    _user = user;
     
     switch (showStatus) {
         case 1:{
-            [self.tapSwitch setHidden:NO];
+            if (isCreator) {
+                //在创建者的时候才进行支付控制的展示
+                [self.tapSwitch setHidden:NO];
+                [self.payLabel setHidden:NO];
+                
+                if (!user.pay_type) {
+                    user.pay_type = @0;
+                }
+
+                switch (user.pay_type.intValue) {
+                    case 1: {   //未付
+                        [self.tapSwitch setOn:NO];
+                        [self switchChange:self.tapSwitch];
+                    }
+                        break;
+                    case 2: {
+                        //已付
+                        //已付款情况直接禁用switch.
+                        [self.tapSwitch setOn:YES];
+                        [self.tapSwitch setEnabled:NO];
+                        [self switchChange:self.tapSwitch];
+                    }
+                        break;
+                    case 3: {   //代付
+                        
+                    }
+                        break;
+                    default: {  //其他
+                        [self.tapSwitch setOn:NO];
+                        [self switchChange:self.tapSwitch];
+                    }
+                        break;
+                }
+                
+                [self.tapSwitch addTarget:self action:@selector(switchChange:) forControlEvents:UIControlEventValueChanged];
+                
+            } else {
+                [self.tapSwitch setHidden:YES];
+                [self.payLabel setHidden:YES];
+            }
         }
             break;
             
         case 2: {
             [self.tapSwitch setHidden:YES];
+            [self.payLabel setHidden:YES];
         }
             break;
             
         case 3: {
             [self.tapSwitch setHidden:YES];
+            [self.payLabel setHidden:YES];
         }
             break;
             
@@ -83,6 +128,20 @@
     NSURL *imageUrl = [SRImageManager miniAvatarImageFromOSS:user.avatar_path];
     [self.avatarImageView sd_setImageWithURL:imageUrl];
     
+}
+
+- (void)switchChange: (id)sender {
+    if (self.tapSwitch.on) {
+        [self.payLabel setText:@"已支付"];
+        [self.payLabel setTextColor:AgreeBlue];
+        _user.pay_type = @2;
+        
+        
+    } else {
+        [self.payLabel setText:@"未支付"];
+        [self.payLabel setTextColor:[UIColor lightGrayColor]];
+        _user.pay_type = @1;
+    }
 }
 
 @end

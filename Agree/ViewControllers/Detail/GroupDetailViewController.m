@@ -170,7 +170,7 @@
 
 
 - (void)didReceiveMemoryWarning {
-    
+    [super didReceiveMemoryWarning];
 }
 
 - (void)setkeyBoard {
@@ -180,6 +180,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate setChatDelegate:self];
     
@@ -196,7 +197,7 @@
 - (void)viewDidDisappear:(BOOL)animated {
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate setChatDelegate:nil];
-    
+    [super viewDidDisappear:animated];
 }
 
 - (void)showImageAtIndexPath:(int)indexPath withImageArray: (NSMutableArray *)imageViewArray {

@@ -88,6 +88,7 @@
 
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     [self refreshUpdateInfo];
 }
 
@@ -97,6 +98,7 @@
     [self pressedTheRecodeButton:nil];
     [self.codeInputTextField setText:nil];
     [self.codeInputTextField resignFirstResponder];
+    [super viewWillDisappear:animated];
 }
 
 - (void)refreshUpdateInfo {
@@ -206,7 +208,7 @@
     } else {
         
         Model_Group *theGroup = [self.groupAry objectAtIndex:indexPath.row];
-        EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:theGroup.em_id isGroup:YES];
+        EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:theGroup.em_id conversationType:eConversationTypeGroupChat];
         [theGroup setChat_update:[NSNumber numberWithInteger:conversation.unreadMessagesCount]];
         [cell initCellWithGroup:theGroup isAddView:NO];
         

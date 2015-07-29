@@ -32,7 +32,6 @@
 @property (nonatomic, strong)NSNumber *pay_fk_user;
 @property (nonatomic, strong)NSNumber *interval;
 
-
 @property (nonatomic, strong)NSNumber *relationship;
 @property (nonatomic, strong)NSNumber *pk_party_user;
 

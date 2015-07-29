@@ -34,6 +34,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *imRichButton;
 @property (weak, nonatomic) IBOutlet UIButton *aaButton;
 @property (weak, nonatomic) IBOutlet UIButton *payFirstButton;
+@property (weak, nonatomic) IBOutlet UILabel *payTypeLabel;
 
 - (void)reloadView;
 
