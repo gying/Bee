@@ -116,6 +116,7 @@
     switch (party.pay_type.integerValue) {
         case 0: {
             //未指定
+            self.inLabel.text = @"IN";
         }
             break;
         case 1: {

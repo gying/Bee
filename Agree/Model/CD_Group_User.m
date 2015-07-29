@@ -129,9 +129,9 @@
     
     // 5. 通知_context保存数据
     if ([context save:nil]) {
-        NSLog(@"删除成功");
+
     } else {
-        NSLog(@"删除失败");
+
     }
 }
 
@@ -149,9 +149,8 @@
     
     // 5. 通知_context保存数据
     if ([context save:nil]) {
-        NSLog(@"删除成功");
+
     } else {
-        NSLog(@"删除失败");
     }
 }
 
@@ -168,9 +167,9 @@
     
     // 5. 通知_context保存数据
     if ([context save:nil]) {
-        NSLog(@"删除成功");
+
     } else {
-        NSLog(@"删除失败");
+
     }
 }
 

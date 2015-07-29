@@ -26,7 +26,6 @@
     if (nil == cell) {
         cell = [[GroupPartyTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
-    
     [cell initWithParty:theParty];
     return cell;
 };
@@ -36,6 +35,11 @@
         return self.schAry.count;
     }
     return 0;
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    self.myPartyVC.chooseRow = (int)indexPath.row;
+    return indexPath;
 }
 
 #pragma mark - 业务逻辑

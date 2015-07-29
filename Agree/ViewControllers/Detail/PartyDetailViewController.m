@@ -47,7 +47,7 @@
     self.payType.layer.borderColor = [UIColor colorWithWhite:0.8 alpha:1.0].CGColor;
     self.payType.layer.borderWidth = 1.0;
     self.payType.textColor = AgreeBlue;
-    self.payType.alpha = 0.5;
+    self.payType.alpha = 0.7;
     
     [self.money setText:[NSString stringWithFormat:@"¥%@", self.party.pay_amount]];
     
@@ -70,7 +70,9 @@
         }
             
             break;
-        default:
+        default: {
+            [self.payType setText:@"未指定"];
+        }
             break;
     }
 

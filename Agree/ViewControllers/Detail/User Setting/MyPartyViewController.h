@@ -30,8 +30,11 @@
 
 
 @property (weak, nonatomic) IBOutlet UIView *backView1;
+
 @property (weak, nonatomic) IBOutlet UIView *backView2;
+
 @property (weak, nonatomic) IBOutlet UILabel *textLabel1;
+
 @property (weak, nonatomic) IBOutlet UILabel *textLabel2;
 
 - (void)reloadTipView: (NSInteger)aryCount withType:(int)inttype;

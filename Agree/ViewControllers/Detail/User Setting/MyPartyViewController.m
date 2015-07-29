@@ -19,6 +19,7 @@
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
+
 @interface MyPartyViewController ()<UITabBarDelegate,UIScrollViewDelegate> {
     NSDictionary *norDic;
     NSDictionary *selDic;
@@ -111,16 +112,15 @@
     
     self.myPartyScrollView.bounces = NO;
     
-    
-    
-    
     [self.myPartyTabBar setSelectedItem:self.createdParty];
     [self.selectLineWidth setConstant:[[UIScreen mainScreen] bounds].size.width/2];
+
 }
 
 - (void)reloadTipView: (NSInteger)aryCount withType:(int)inttype {
     //1 创建的聚会
     //2 聚会的历史记录
+
     if (0 == aryCount) {
         switch (inttype) {
             case 1: {

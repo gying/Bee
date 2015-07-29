@@ -361,4 +361,9 @@
                                 andRequestType:kUpdatePartyRelationships];
 }
 
++ (NSMutableDictionary *)updateParty: (Model_Party *)party {
+    return [SRNet_Manager toRequestDicWithData:party.keyValues
+                                andRequestType:kUpdateParty] ;
+}
+
 @end
