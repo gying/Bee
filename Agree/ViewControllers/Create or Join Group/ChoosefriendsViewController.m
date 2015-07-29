@@ -161,6 +161,7 @@
 //界面将要退出的时候,对父控制器进行被备选数组的赋值
 - (void)viewWillDisappear:(BOOL)animated {
     self.rootController.choosePeopleArray = self.choosePeopleArray;
+    [super viewWillDisappear:animated];
 }
 
 

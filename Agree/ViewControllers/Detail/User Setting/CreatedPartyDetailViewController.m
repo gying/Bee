@@ -18,8 +18,7 @@
 #import "PrepayViewController.h"
 
 
-#import "BMapKit.h"
-
+#import <BaiduMapAPI/BMapKit.h>
 #import "Model_Party.h"
 #import "SRTool.h"
 
@@ -30,9 +29,6 @@
     NSMutableArray *_relArray;
     int _showStatus;
     BMKMapView *_bdMapView;
-    
-
-    
 }
 
 @end
@@ -43,10 +39,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     //    [self.navigationItem setTitle:self.party.name];
-    
-    
-  
-    
     
     if (self.party.longitude && self.party.latitude) {
         //如果存在经纬度数据
@@ -69,7 +61,8 @@
     }
     
     //判断是否是创建者本身.
-    if ([[Model_User loadFromUserDefaults].pk_user isEqualToNumber:self.party.fk_user]) {
+    
+    if ([SRTool partyCreatorIsSelf:self.party]) {
         [self.cancelButton setHidden:NO];
     } else {
         [self.cancelButton setHidden:YES];
@@ -379,9 +372,10 @@
 //       [childController.payTextField becomeFirstResponder];
     }else{
         UIButton *pressedButton = (UIButton *)sender;
-    PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
-    childController.showStatus = (int)pressedButton.tag;
-    childController.relationArray = _relArray;
+        PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
+        childController.isCreator = [SRTool partyCreatorIsSelf:self.party];
+        childController.showStatus = (int)pressedButton.tag;
+        childController.relationArray = _relArray;
     }
 }
 

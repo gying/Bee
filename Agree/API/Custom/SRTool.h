@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Model_Party.h"
 
 @interface SRTool : NSObject
 
@@ -20,4 +21,7 @@
 + (int)dateJudgeWithDate: (NSDate *)date;
 
 + (void)addPartyUpdateTip: (int) addNum;
+
+//判断聚会创建者是否是自己
++ (BOOL)partyCreatorIsSelf: (Model_Party *)party;
 @end

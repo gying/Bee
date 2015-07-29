@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "UserViewController.h"
 
-#import "TXYDownloader.h"
-
 #import "WXApiObject.h"
 #import "WXApi.h"
 

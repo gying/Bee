@@ -7,7 +7,7 @@
 //
 
 #import "PartyMapViewController.h"
-#import "BMapKit.h"
+#import <BaiduMapAPI/BMapKit.h>
 
 @interface PartyMapViewController ()<BMKLocationServiceDelegate, UIActionSheetDelegate,BMKMapViewDelegate> {
     BMKMapView *_bdMapView;

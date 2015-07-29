@@ -14,7 +14,7 @@
 #import "RootAccountLoginViewController.h"
 #import "UserSettingViewController.h"
 
-#import "BMapKit.h"
+#import <BaiduMapAPI/BMapKit.h>
 #import "SDImageCache.h"
 
 #import "EaseMob.h"
@@ -104,7 +104,10 @@
 #pragma mark 收到聊天信息
 - (void)didReceiveMessage:(EMMessage *)message {
     //这里收到了信息
-    if (message.isGroup) {
+    
+    
+    
+    if (message.messageType == eMessageTypeGroupChat) {
         //群聊
         if (self.chatDelegate) {
             //处于某小组的详情界面中
@@ -244,7 +247,7 @@
 - (void)didFinishedReceiveOfflineMessages:(NSArray *)offlineMessages {
     NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"contact_update"];
     for (EMMessage *message in offlineMessages) {
-        if (message.isGroup) {
+        if (message.messageType == eMessageTypeGroupChat) {
             //小组信息
         } else {
             //私聊信息
@@ -411,13 +414,9 @@
     
     //获取到设备串号,开始注册帐号
     //处理串号格式
-    NSString *token = [[NSString alloc] init];
-    token = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
-    token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
-    
-    self.deviceToken = token;
-    
-    
+    self.deviceToken = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+    self.deviceToken = [self.deviceToken stringByReplacingOccurrencesOfString:@" " withString:@""];
+
     // Required
     //根据串号注册极光推送
     [APService registerDeviceToken:deviceToken];

@@ -15,7 +15,7 @@
 #import "PartyMapViewController.h"
 #import "AllPartyTableViewCell.h"
 #import "PeopleListTableViewCell.h"
-#import "BMapKit.h"
+#import <BaiduMapAPI/BMapKit.h>
 
 #import "Model_Party.h"
 #import "SRTool.h"
@@ -526,6 +526,7 @@
         
         UIButton *pressedButton = (UIButton *)sender;
         PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
+        childController.isCreator = [SRTool partyCreatorIsSelf:self.party];
         childController.showStatus = (int)pressedButton.tag;
         childController.relationArray = _relArray;
     }else if ([segue.identifier isEqualToString:@"OUTBUTTON"])
@@ -533,6 +534,7 @@
         NSLog(@"进入拒绝界面");
         UIButton *pressedButton = (UIButton *)sender;
         PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
+        childController.isCreator = [SRTool partyCreatorIsSelf:self.party];
         childController.showStatus = (int)pressedButton.tag;
         childController.relationArray = _relArray;
 
@@ -542,6 +544,7 @@
         NSLog(@"进入不确定界面");
         UIButton *pressedButton = (UIButton *)sender;
         PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
+        childController.isCreator = [SRTool partyCreatorIsSelf:self.party];
         childController.showStatus = (int)pressedButton.tag;
         childController.relationArray = _relArray;
 

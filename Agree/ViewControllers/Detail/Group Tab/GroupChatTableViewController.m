@@ -493,7 +493,7 @@
 
 - (void)repackMessage: (NSArray *)relationAry {
     //读取私信的消息列表
-    _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:self.group.em_id isGroup:YES];
+    _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:self.group.em_id conversationType:eConversationTypeGroupChat];
     NSArray *messages = [_conversation loadAllMessages];
     
     for (EMMessage *message in messages) {

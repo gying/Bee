@@ -22,12 +22,8 @@
 #import "Model_Feedback.h"
 
 //定义请求地址
-
-//#define kBaseUrlString  @"http://203.195.159.110/webroot/"
 #define kBaseUrlString  @"http://120.26.118.226/app/app_interface/"
 #define kInterfaceUrlString @"sr_interface.php"
-//#define kInterfaceUrlString @"srtext.php"
-
 
 #define kAddGroup                   31
 #define kRegUser                    11

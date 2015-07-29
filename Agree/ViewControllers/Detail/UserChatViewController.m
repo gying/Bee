@@ -96,8 +96,7 @@
     
     
     //读取私信的消息列表
-    _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:self.user.pk_user.stringValue isGroup:NO];
-    
+    _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:self.user.pk_user.stringValue conversationType:(eConversationTypeChat)];
     NSArray *messages = [_conversation loadAllMessages];
     
     [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
@@ -174,6 +173,7 @@
 
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     _srKeyBoard = [[SRKeyboard alloc] init];
     [_srKeyBoard textViewShowView:self
            customKeyboardDelegate:self
@@ -181,6 +181,7 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
     _srKeyBoard = nil;
 }
 

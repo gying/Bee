@@ -11,14 +11,18 @@
 //defs
 #define kSDKAppKey @"EASEMOB_APPKEY"
 #define kSDKApnsCertName @"EASEMOB_APNSCERTNAME"
+#define kSDKConfigEnableConsoleLogger @"EASEMOB_CONFIG_ENABLECONSOLELOGGER"
+
+//private server
 #define kSDKServerApi @"EASEMOB_API_ADDRESS"
 #define kSDKServerChat @"EASEMOB_IM_ADDRESS"
 #define kSDKServerChatPort @"EASEMOB_IM_PORT"
 #define kSDKServerGroupDomain @"EASEMOB_GROUP_DOMAIN"
 #define kSDKServerChatDomain @"EASEMOB_CHAT_DOMAIN"
-#define kSDKConfigEnableConsoleLogger @"EASEMOB_CONFIG_ENABLECONSOLELOGGER"
 #define kSDKConfigUseHttps @"EASEMOB_CONFIG_USEHTTPS"
 #define kSDKConfigEnableIPAccess @"EASEMOB_ENABLE_IP_ACCESS"
+#define kSDKConfigPingIntervalWifi @"EASEMOB_PING_INTERVAL_WIFI"
+#define kSDKConfigPingIntervalWwan @"EASEMOB_PING_INTERVAL_WWAN"
 
 //defs headers
 #import "EMChatManagerDefs.h"

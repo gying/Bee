@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "Model_Group.h"
-#import "TXYDownloader.h"
 
 @interface GroupCollectionViewCell : UICollectionViewCell
 

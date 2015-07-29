@@ -36,12 +36,12 @@
 
 
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [self.payTextField resignFirstResponder];
 }
-- (void)viewWillAppear:(BOOL)animated
-{
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     [self.payTextField becomeFirstResponder];
 }
 

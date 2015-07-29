@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "Model_User.h"
 #import "SRNet_Manager.h"
-
-#import "TXYDownloader.h"
 @protocol SRAccountViewDelegate <NSObject>
 
 @end

@@ -23,5 +23,6 @@
 @property (nonatomic, strong)NSMutableArray *schAry;
 @property (nonatomic, strong)Model_Group *group;
 @property (nonatomic,strong)MyPartyViewController * myPartyVC;
+- (void)loadPartyData;
 
 @end

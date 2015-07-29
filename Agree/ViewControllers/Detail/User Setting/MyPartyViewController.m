@@ -15,23 +15,15 @@
 #import "CreatedPartyDetailViewController.h"
 #import "HistoryPartyDetailViewController.h"
 
-
-
-
-
-
 #import <MJRefresh.h>
 
 
 
-@interface MyPartyViewController ()<UITabBarDelegate,UIScrollViewDelegate>
-{
-    NSMutableArray *_scheduleArray;
+@interface MyPartyViewController ()<UITabBarDelegate,UIScrollViewDelegate> {
     NSDictionary *norDic;
     NSDictionary *selDic;
     
     CreatedPartyTableViewDelegate *_createdPartyDelegate;
-    
     HistoryPartyTableViewDelegate *_historyPartyDelegate;
 }
 
@@ -41,34 +33,46 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // Do any additional setup after loading the view.
     
-    _scheduleArray = [CD_Party getPartyFromCDForSchedule];
+    [self setupTabbar];
     
     _createdPartyDelegate = [[CreatedPartyTableViewDelegate alloc] init];
     _createdPartyDelegate.myPartyVC = self;
-    _createdPartyDelegate.schAry = _scheduleArray;
     self.createdPartyTableView.delegate = _createdPartyDelegate;
     self.createdPartyTableView.dataSource = _createdPartyDelegate;
+    [_createdPartyDelegate loadPartyData];
     
     _historyPartyDelegate = [[HistoryPartyTableViewDelegate alloc] init];
-    _historyPartyDelegate.schAry = _scheduleArray;
     _historyPartyDelegate.myPartyVC = self;
-    
     self.historyPartyTableView.delegate = _historyPartyDelegate;
     self.historyPartyTableView.dataSource = _historyPartyDelegate;
+    [_historyPartyDelegate loadPartyData];
+    
+    // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
+    self.createdPartyTableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:_createdPartyDelegate
+                                                                         refreshingAction:@selector(loadPartyData)];
+    
+    
+    self.historyPartyTableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:_historyPartyDelegate
+                                                                         refreshingAction:@selector(loadPartyData)];
+    
+    
+}
 
+- (void)setupTabbar {
+    [self.createdParty setTitleTextAttributes:norDic forState:UIControlStateNormal];
+    [self.createdParty setTitleTextAttributes:selDic forState:UIControlStateSelected];
     
+    [self.historyParty setTitleTextAttributes:norDic forState:UIControlStateNormal];
+    [self.historyParty setTitleTextAttributes:selDic forState:UIControlStateSelected];
     
-    
-    // Do any additional setup after loading the view.
     self.myPartyScrollView.delegate = self;
     self.myPartyTabBar.delegate = self;
     
-    
-    
     self.myPartyScrollView.showsHorizontalScrollIndicator = NO;
     self.myPartyScrollView.showsVerticalScrollIndicator = NO;
-
+    
     self.myPartyScrollView.bounces = NO;
     
     
@@ -88,28 +92,8 @@
               nil];
     
     [self.myPartyTabBar setSelectedItem:self.createdParty];
-    
-    [self.createdParty setTitleTextAttributes:norDic forState:UIControlStateNormal];
-    [self.createdParty setTitleTextAttributes:selDic forState:UIControlStateSelected];
-    
-    [self.historyParty setTitleTextAttributes:norDic forState:UIControlStateNormal];
-    [self.historyParty setTitleTextAttributes:selDic forState:UIControlStateSelected];
-    
-
     [self.selectLineWidth setConstant:[[UIScreen mainScreen] bounds].size.width/2];
-    
-    // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
-    self.createdPartyTableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:_createdPartyDelegate
-                                                                         refreshingAction:@selector(loadPartyData)];
-    
-    self.historyPartyTableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:_historyPartyDelegate refreshingAction:@selector(loadPartyData)];
-    
-    
-}
 
--(void)loadPartyData
-{
-    
 }
 
 

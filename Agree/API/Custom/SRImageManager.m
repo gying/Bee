@@ -32,7 +32,7 @@
     UIGraphicsBeginImageContext(smallBounds.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextDrawImage(context, smallBounds, subImageRef);
-    UIImage* smallImage = [UIImage imageWithCGImage:subImageRef];
+    UIImage *smallImage = [UIImage imageWithCGImage:subImageRef];
     UIGraphicsEndImageContext();
     
     return smallImage;

@@ -9,6 +9,7 @@
 #import "SRTool.h"
 #import "Model_User.h"
 
+
 @implementation SRTool
 
 + (NSString *)dateToString: (NSDate *)date {
@@ -83,6 +84,14 @@
     NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"party_update"];
     updateValue = [NSNumber numberWithInt: updateValue.intValue + addNum];
     [[NSUserDefaults standardUserDefaults] setObject:updateValue forKey:@"party_update"];
+}
+
++ (BOOL)partyCreatorIsSelf: (Model_Party *)party {
+    if ([[Model_User loadFromUserDefaults].pk_user isEqualToNumber:party.fk_user]) {
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 

@@ -17,6 +17,9 @@
     NSMutableArray *_outArray;
     NSMutableArray *_unknowArray;
     NSMutableArray *_showArray;
+    
+    NSMutableArray *_tempInArray;
+    BOOL _inArrayIsChange;
 }
 
 @end
@@ -26,7 +29,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
     
     [self setRelationData];
     
@@ -63,6 +65,8 @@
         default:
             break;
     }
+    
+    _tempInArray = [[NSMutableArray alloc] initWithArray:_inArray];
     
 }
 
@@ -163,12 +167,6 @@
 }
 
 
-
-
-
-
-
-
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (_showArray) {
         return _showArray.count;
@@ -186,10 +184,8 @@
         
         
     }
-//    cell.backgroundColor = [UIColor blackColor];
-//    [cell initWithUser:theUser];
-    
-    [cell initWithUser:theUser withShowStatus:self.showStatus];
+
+    [cell initWithUser:theUser withShowStatus:self.showStatus isCreator:self.isCreator];
     return cell;
 
 }
@@ -200,30 +196,52 @@
 }
 - (IBAction)tapBackButton:(id)sender {
     
+    //首先做是否更改状态的判断
+    for (Model_User *tempUser in _tempInArray) {
+        for (Model_User *user in _inArray) {
+            if (!tempUser.pay_type) {
+                tempUser.pay_type = @0;
+            }
+            if (!(tempUser.pay_type.intValue == user.pay_type.intValue)) {
+                //未被改变过
+                _inArrayIsChange = YES;
+            }
+        }
+    }
     
-    UIActionSheet * actionSheet = [[UIActionSheet alloc]initWithTitle:@"是否保存当前信息" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定保存" otherButtonTitles: @"保存并退出",@"退出",nil];
-    
-    [actionSheet showInView:self.view];
-    
+    if (_inArrayIsChange) {
+        UIActionSheet * actionSheet = [[UIActionSheet alloc]initWithTitle:@"是否保存当前信息"
+                                                                 delegate:self
+                                                        cancelButtonTitle:@"取消"
+                                                   destructiveButtonTitle:@"保存后退出"
+                                                        otherButtonTitles:@"直接退出",nil];
+        
+        [actionSheet showInView:self.view];
+    } else {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (0 == buttonIndex) {
-        NSLog(@"确定保存");
-    }else if(1 == buttonIndex)
-    {
-        NSLog(@"保存并退出");
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-    else if (2 == buttonIndex)
-    {
-        NSLog(@"退出");
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-    else if(3 == buttonIndex)
-    {
-        NSLog(@"取消");
+- (IBAction)tapSaveButton:(UIButton *)sender {
+    //点击保存按钮,开始保存数据
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    switch (buttonIndex) {
+        case 0: {
+            //保存后退出
+            
+            
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+            break;
+        case 1: {
+            //直接退出
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+            break;
+        default:
+            break;
     }
 }
 

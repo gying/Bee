@@ -9,9 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "People.h"
 #import "SRNet_Manager.h"
-#import "TXYDownloader.h"
-
-
 
 @interface AddressBookTableViewCell : UITableViewCell 
 @property (weak, nonatomic) IBOutlet UIImageView *avatarImageView;

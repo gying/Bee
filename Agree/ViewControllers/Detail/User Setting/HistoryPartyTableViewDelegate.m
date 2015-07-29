@@ -38,15 +38,8 @@
     return 0;
 }
 
-
-- (void)loadPartyData {
-    
-    [self loadAllScheduleData];
-    
-}
-
 #pragma mark - 业务逻辑
-- (void)loadAllScheduleData {
+- (void)loadPartyData {
     Model_User *user = [[Model_User alloc] init];
     user.pk_user = [Model_User loadFromUserDefaults].pk_user;
     
@@ -63,6 +56,7 @@
                                 [self.myPartyVC.historyPartyTableView.header endRefreshing];
                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                 
+                                [self.myPartyVC.historyPartyTableView.header endRefreshing];
                             }];
     
 }

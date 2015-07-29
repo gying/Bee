@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "SRNet_Manager.h"
-#import "TXYDownloader.h"
 
 @interface GroupViewController : UIViewController
 
