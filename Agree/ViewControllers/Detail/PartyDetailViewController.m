@@ -84,6 +84,12 @@
         [self.inLabel setTextColor:[UIColor lightGrayColor]];
     }
     
+    if (![@3  isEqual: self.party.pay_type]) {
+        self.money.hidden = YES;
+        self.inLabel.hidden = YES;
+        [self.yesButton setTitle:@"参与" forState:UIControlStateNormal];
+    }
+
 
 
     

@@ -133,6 +133,26 @@
                                 
                             }];
     
+    if ([self.codeRemarkLabel.text isEqual:@""]) {
+        //复制
+        UIMenuItem *itCopy = [[UIMenuItem alloc] initWithTitle:@"复制" action:@selector(handleCopyCell:)];
+        UIMenuController *menu = [UIMenuController sharedMenuController];
+        [menu setMenuItems:[NSArray arrayWithObjects:itCopy, nil]];
+        [menu setTargetRect:self.codeButton.frame inView:self.view];
+        [menu setMenuVisible:YES animated:YES];
+    }
+}
+- (BOOL)canBecomeFirstResponder{
+    return YES;
+}
+
+- (void)handleCopyCell:(id)sender
+{
+    NSLog(@"复制");
+    UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+    pboard.string = self.codeButton.titleLabel.text;
+    NSLog(@"%@",pboard.string);
+    
 }
 - (IBAction)pressedTheExitButton:(id)sender {
     UIAlertView *warnImageAlert = [[UIAlertView alloc] initWithTitle:@"警告"

@@ -90,11 +90,14 @@
 -(void)daohang
 {
     NSLog(@"导航");
+    [self availableMapsApps];
     UIActionSheet *action = [[UIActionSheet alloc] initWithTitle:@"选择导航方式"
                                                         delegate:self
                                                cancelButtonTitle:@"取消"
                                           destructiveButtonTitle:nil
                                                otherButtonTitles:nil];
+    
+    
     for (NSDictionary *dic in self.availableMaps) {
         [action addButtonWithTitle:[NSString stringWithFormat:@"%@", dic[@"name"]]];
     }
