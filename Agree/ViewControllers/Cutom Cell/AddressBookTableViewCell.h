@@ -10,7 +10,10 @@
 #import "People.h"
 #import "SRNet_Manager.h"
 
-@interface AddressBookTableViewCell : UITableViewCell 
+#import <MessageUI/MFMessageComposeViewController.h>
+
+
+@interface AddressBookTableViewCell : UITableViewCell<MFMessageComposeViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *avatarImageView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *nicknameLabel;

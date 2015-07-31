@@ -44,6 +44,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *conHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *mapConHeight;
 @property (weak, nonatomic) IBOutlet UIButton *cancelPartyButton;
+@property (weak, nonatomic) IBOutlet UILabel *payType;
 
 
 
