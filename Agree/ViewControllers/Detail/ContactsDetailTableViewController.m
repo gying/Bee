@@ -43,6 +43,9 @@
     _accountView = [[SRAccountView alloc] init];
     [_accountView setHidden:YES];
     [self getAddressBook];
+    
+
+    
 }
 
 - (void)getAddressBook {

@@ -13,12 +13,21 @@
 #import "SRImageManager.h"
 
 
+
+
 @implementation AddressBookTableViewCell {
     People *_people;
 }
 
 - (void)awakeFromNib {
     // Initialization code
+    
+    //类型的边框与圆弧
+        self.sendButton.layer.cornerRadius = self.sendButton.frame.size.height/4;
+        self.sendButton.layer.borderColor = [UIColor colorWithWhite:0.8 alpha:1.0].CGColor;
+        self.sendButton.layer.borderWidth = 1.0;
+        self.sendButton.alpha = 0.7;
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -204,8 +213,21 @@
         //通讯录,发短信邀请加入
         NSString *firstPhone = [_people.phoneAry firstObject];
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"sms://%@", firstPhone]]];
+        
+        
+        
+        MFMessageComposeViewController * controller = [[MFMessageComposeViewController alloc] init];
+        controller.recipients = [NSArray arrayWithObject:firstPhone];
+        controller.body = @"请直接将此条认证短信发送给我们，以完成手机安全绑定。(9qzkd27953ma)";
+        controller.messageComposeDelegate = self;
+        
+        
+    
+        
     }
 }
+
+
 
 - (void)updateRelation {
     NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"contact_update"];

@@ -122,38 +122,45 @@
 }
 
 - (IBAction)passwordEditEnd:(id)sender {
-    if (!_password) {
-        _password = self.passwordTextField.text;
-        self.passwordTextField.text = nil;
-        self.passwordRemarkLabel.text = @"为了确保正确,请再次输入密码";
-        [self.passwordTextField becomeFirstResponder];
-    } else {
-        
-        if ([_password isEqual:self.passwordTextField.text]) {
-            _userInfo.password = _password;
-            _password = nil;
-            //设置密码完成
-            [self.passwordTextField resignFirstResponder];
-            [self.passwordRemarkLabel setText:@"请输入想要设置的密码"];
-            [self.passwordView setHidden:YES];
-            _isUpdateData = YES;
+    
+//    if ([self.passwordTextField.text isEqual:_userInfo.password])
+//        
+    
+    {
+        if (!_password) {
+            _password = self.passwordTextField.text;
             self.passwordTextField.text = nil;
-        } else {
-            //两次密码输入不一样
-            _password = nil;
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                                message:@"您输入的两次密码并不相同,请重新进行输入."
-                                                               delegate:self
-                                                      cancelButtonTitle:@"确定"
-                                                      otherButtonTitles:nil];
-            self.passwordRemarkLabel.text = @"请输入想要设置的密码";
-            [alertView show];
+            self.passwordRemarkLabel.text = @"为了确保正确,请再次输入密码";
             [self.passwordTextField becomeFirstResponder];
-            self.passwordTextField.text = nil;
+        } else {
+            
+            if ([_password isEqual:self.passwordTextField.text]) {
+                _userInfo.password = _password;
+                _password = nil;
+                //设置密码完成
+                [self.passwordTextField resignFirstResponder];
+                [self.passwordRemarkLabel setText:@"请输入想要设置的密码"];
+                [self.passwordView setHidden:YES];
+                _isUpdateData = YES;
+                self.passwordTextField.text = nil;
+            } else {
+                //两次密码输入不一样
+                _password = nil;
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                    message:@"您输入的两次密码并不相同,请重新进行输入."
+                                                                   delegate:self
+                                                          cancelButtonTitle:@"确定"
+                                                          otherButtonTitles:nil];
+                self.passwordRemarkLabel.text = @"请输入想要设置的密码";
+                [alertView show];
+                [self.passwordTextField becomeFirstResponder];
+                self.passwordTextField.text = nil;
+            }
         }
-    }
-}
 
+    }
+
+}
 - (void)imageBtnClick {
     //点击图片按钮
     

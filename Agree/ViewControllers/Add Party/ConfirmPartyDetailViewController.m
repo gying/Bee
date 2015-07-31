@@ -17,6 +17,8 @@
 
 @interface ConfirmPartyDetailViewController ()<UITextFieldDelegate, UITextViewDelegate> {
     int _payType;
+    
+    
 }
 
 @end
@@ -26,6 +28,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+
     _payType = 0;
     //设置地址文本
     if (self.party.location) {
@@ -238,7 +241,27 @@
 
 //返回上一页
 - (IBAction)tapBackButton:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (self.isGroupParty) {
+//        UIViewController *viewController = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 3];
+//        [self.navigationController popToViewController:viewController animated:YES];
+        
+        for (UIViewController *subController in self.navigationController.viewControllers) {
+            
+            if ([subController isKindOfClass:[GroupDetailViewController class]]) {
+                [self.navigationController popToViewController:subController animated:YES];
+                break;
+            }
+        }
+        
+        
+    } else {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
+    
+    
+    
+    NSLog(@"返回日程界面");
+    
 }
 //改变时间
 - (IBAction)changeDate:(id)sender {
@@ -248,6 +271,7 @@
     childController.fromRoot = YES;
     childController.party = self.party;
     [self.navigationController showViewController:childController sender:self];
+    [childController.tnextButton setTitle:@"完成修改" forState:UIControlStateNormal];
 
     NSLog(@"返回到选择时间界面");
 }
@@ -260,6 +284,9 @@
     childController.fromRoot = YES;
     [self.navigationController showViewController:childController sender:self];
         NSLog(@"返回到选择地址界面");
+    
+    [childController.lnextButton setTitle:@"完成修改" forState:UIControlStateNormal];
+
 }
 
 

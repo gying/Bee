@@ -20,5 +20,6 @@
 @property BOOL fromRoot;
 @property (nonatomic, strong)Model_Party *party;
 
+@property (weak, nonatomic) IBOutlet UIButton *lnextButton;
 
 @end

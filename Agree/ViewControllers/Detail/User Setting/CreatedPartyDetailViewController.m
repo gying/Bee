@@ -91,12 +91,47 @@
         [_bdMapView setZoomLevel:15];
         [_bdMapView setCenterCoordinate:partyCoor];
     }
+    //类型的边框与圆弧
+    self.payType.layer.cornerRadius = self.payType.frame.size.height/4;
+    //    self.payType.layer.borderColor = AgreeBlue.CGColor;
+    self.payType.layer.borderColor = [UIColor colorWithWhite:0.8 alpha:1.0].CGColor;
+    self.payType.layer.borderWidth = 1.0;
+    self.payType.textColor = AgreeBlue;
+    self.payType.alpha = 0.7;
+    
+    switch (self.party.pay_type.intValue) {
+        case 1: {
+            //请客
+            [self.payType setText:@"请客"];
+        }
+            
+            break;
+        case 2: {
+            //AA
+            [self.payType setText:@"AA制"];
+        }
+            
+            break;
+        case 3: {
+            //预付
+            [self.payType setText:@"预付款"];
+        }
+            
+            break;
+        default: {
+            [self.payType setText:@"未指定"];
+        }
+            break;
+    }
+    
+    
+    
     
     //判断是否是创建者本身.
     if ([SRTool partyCreatorIsSelf:self.party]) {
         [self.cancelButton setHidden:NO];
     } else {
-        [self.cancelButton setHidden:YES];
+        [self.cancelButton setHidden:NO];
     }
     
     self.conHeight.constant = (CGRectGetHeight([UIScreen mainScreen].applicationFrame)-44)*2;
@@ -219,12 +254,20 @@
 }
 
 - (IBAction)pressedTheCanelButton:(id)sender {
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择操作类型"
-                                                       delegate:self
-                                              cancelButtonTitle:@"取消"
-                                         destructiveButtonTitle:@"取消聚会"
-                                              otherButtonTitles:@"分享",@"添加到系统日历",nil];
-    [sheet showInView:self.view];
+    
+    if ([SRTool partyCreatorIsSelf:self.party]) {
+        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择操作类型"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"取消"
+                                             destructiveButtonTitle:@"取消聚会"
+                                                  otherButtonTitles:@"分享",@"添加到系统日历",nil];
+        [sheet showInView:self.view];
+    }else
+    {
+        UIActionSheet * sheet = [[UIActionSheet alloc]initWithTitle:@"选择操作类型" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"分享",@"添加到系统日历", nil];
+        [sheet showInView:self.view];
+    }
+    
 }
 
 - (IBAction)tapBackButton:(id)sender {
@@ -232,118 +275,224 @@
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
-    switch (buttonIndex) {
-        case 0: {
-            //取消聚会
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                                message:@"确定要取消该聚会吗?"
-                                                               delegate:self
-                                                      cancelButtonTitle:@"取消"
-                                                      otherButtonTitles:@"确定", nil];
-            alertView.tag = 1;
-            [alertView show];
-            
-        }
-            break;
-        case 1: {
-            //分享聚会
-            [SRNet_Manager requestNetWithDic:[SRNet_Manager sharePartyDic:self.party]
-                                    complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
-                                        if (jsonDic) {
-                                            //聚会分享获取链接成功
-                                            //将聚会链接赋值到粘贴板
-                                            UIPasteboard *pboard = [UIPasteboard generalPasteboard];
-                                            pboard.string = (NSString *)jsonDic;
-                                            
-                                            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                                                                message:@"聚会链接已复制到您的粘贴板"
-                                                                                               delegate:self
-                                                                                      cancelButtonTitle:@"确定"
-                                                                                      otherButtonTitles:nil];
-                                            alertView.tag = 2;
-                                            [alertView show];
-                                        }
-                                    } failure:^(NSError *error, NSURLSessionDataTask *task) {
-                                        
-                                    }];
-        }
-            break;
-            
-        case 2: {
-            //添加到日程
-            //事件市场
-            EKEventStore *eventStore = [[EKEventStore alloc] init];
-            
-            //6.0及以上通过下面方式写入事件
-            if ([eventStore respondsToSelector:@selector(requestAccessToEntityType:completion:)])
-            {
-                // the selector is available, so we must be on iOS 6 or newer
-                [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        if (error)
-                        {
-                            //错误信息
-                            // display error message here
-                        }
-                        else if (!granted)
-                        {
-                            //被用户拒绝，不允许访问日历
-                            // display access denied error message here
-                        }
-                        else
-                        {
-                            // access granted
-                            // ***** do the important stuff here *****
-                            
-                            //事件保存到日历
-                            
-                            
-                            //创建事件
-                            EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
-                            event.title     = self.party.name;
-                            event.location = self.party.location;
-                            
-                            NSDateFormatter *tempFormatter = [[NSDateFormatter alloc]init];
-                            
-                            [tempFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
-                            
-                            event.allDay = NO;
-                            
-                            NSDate * startTime = _party.begin_time;
-                            NSDate * endTime = [NSDate dateWithTimeInterval:3600 sinceDate:startTime];
-                            
-                            event.startDate = startTime;
-                            event.endDate = endTime;
-                            
-                            //在事件前多少秒开始提醒
-                            //提前一个小时提醒
-                            [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60.0 * 60.0]];
-                            
-                            
-                            [event setCalendar:[eventStore defaultCalendarForNewEvents]];
-                            NSError *err;
-                            [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
-                            
-                            
-                            if (err) {
-                                
-                            }
-                            UIAlertView *alert = [[UIAlertView alloc]
-                                                  initWithTitle:@"添加成功"
-                                                  message:@" "
-                                                  delegate:nil
-                                                  cancelButtonTitle:@"完成"
-                                                  otherButtonTitles:nil];
-                            [alert show];
-                        }
-                    });
-                }];
+    if ([SRTool partyCreatorIsSelf:self.party]) {
+        switch (buttonIndex) {
+            case 0: {
+                //取消聚会
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                    message:@"确定要取消该聚会吗?"
+                                                                   delegate:self
+                                                          cancelButtonTitle:@"取消"
+                                                          otherButtonTitles:@"确定", nil];
+                alertView.tag = 1;
+                [alertView show];
+                
             }
+                break;
+            case 1: {
+                //分享聚会
+                [SRNet_Manager requestNetWithDic:[SRNet_Manager sharePartyDic:self.party]
+                                        complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                            if (jsonDic) {
+                                                //聚会分享获取链接成功
+                                                //将聚会链接赋值到粘贴板
+                                                UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+                                                pboard.string = (NSString *)jsonDic;
+                                                
+                                                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                                                    message:@"聚会链接已复制到您的粘贴板"
+                                                                                                   delegate:self
+                                                                                          cancelButtonTitle:@"确定"
+                                                                                          otherButtonTitles:nil];
+                                                alertView.tag = 2;
+                                                [alertView show];
+                                            }
+                                        } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                            
+                                        }];
+            }
+                break;
+                
+            case 2: {
+                //添加到日程
+                //事件市场
+                EKEventStore *eventStore = [[EKEventStore alloc] init];
+                
+                //6.0及以上通过下面方式写入事件
+                if ([eventStore respondsToSelector:@selector(requestAccessToEntityType:completion:)])
+                {
+                    // the selector is available, so we must be on iOS 6 or newer
+                    [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if (error)
+                            {
+                                //错误信息
+                                // display error message here
+                            }
+                            else if (!granted)
+                            {
+                                //被用户拒绝，不允许访问日历
+                                // display access denied error message here
+                            }
+                            else
+                            {
+                                // access granted
+                                // ***** do the important stuff here *****
+                                
+                                //事件保存到日历
+                                
+                                
+                                //创建事件
+                                EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
+                                event.title     = self.party.name;
+                                event.location = self.party.location;
+                                
+                                NSDateFormatter *tempFormatter = [[NSDateFormatter alloc]init];
+                                
+                                [tempFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
+                                
+                                event.allDay = NO;
+                                
+                                NSDate * startTime = _party.begin_time;
+                                NSDate * endTime = [NSDate dateWithTimeInterval:3600 sinceDate:startTime];
+                                
+                                event.startDate = startTime;
+                                event.endDate = endTime;
+                                
+                                //在事件前多少秒开始提醒
+                                //提前一个小时提醒
+                                [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60.0 * 60.0]];
+                                
+                                
+                                [event setCalendar:[eventStore defaultCalendarForNewEvents]];
+                                NSError *err;
+                                [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
+                                
+                                
+                                if (err) {
+                                    
+                                }
+                                UIAlertView *alert = [[UIAlertView alloc]
+                                                      initWithTitle:@"添加成功"
+                                                      message:@" "
+                                                      delegate:nil
+                                                      cancelButtonTitle:@"完成"
+                                                      otherButtonTitles:nil];
+                                [alert show];
+                            }
+                        });
+                    }];
+                }
+            }
+                break;
+            default:
+                break;
         }
-            break;
-        default:
-            break;
+
+    }else
+    {
+        
+        switch (buttonIndex) {
+    case 1: {
+        //分享聚会
+        [SRNet_Manager requestNetWithDic:[SRNet_Manager sharePartyDic:self.party]
+                                complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                    if (jsonDic) {
+                                        //聚会分享获取链接成功
+                                        //将聚会链接赋值到粘贴板
+                                        UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+                                        pboard.string = (NSString *)jsonDic;
+                                        
+                                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                                            message:@"聚会链接已复制到您的粘贴板"
+                                                                                           delegate:self
+                                                                                  cancelButtonTitle:@"确定"
+                                                                                  otherButtonTitles:nil];
+                                        alertView.tag = 2;
+                                        [alertView show];
+                                    }
+                                } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                    
+                                }];
+    }
+        break;
+        
+    case 2: {
+        //添加到日程
+        //事件市场
+        EKEventStore *eventStore = [[EKEventStore alloc] init];
+        
+        //6.0及以上通过下面方式写入事件
+        if ([eventStore respondsToSelector:@selector(requestAccessToEntityType:completion:)])
+        {
+            // the selector is available, so we must be on iOS 6 or newer
+            [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (error)
+                    {
+                        //错误信息
+                        // display error message here
+                    }
+                    else if (!granted)
+                    {
+                        //被用户拒绝，不允许访问日历
+                        // display access denied error message here
+                    }
+                    else
+                    {
+                        // access granted
+                        // ***** do the important stuff here *****
+                        
+                        //事件保存到日历
+                        
+                        
+                        //创建事件
+                        EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
+                        event.title     = self.party.name;
+                        event.location = self.party.location;
+                        
+                        NSDateFormatter *tempFormatter = [[NSDateFormatter alloc]init];
+                        
+                        [tempFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
+                        
+                        event.allDay = NO;
+                        
+                        NSDate * startTime = _party.begin_time;
+                        NSDate * endTime = [NSDate dateWithTimeInterval:3600 sinceDate:startTime];
+                        
+                        event.startDate = startTime;
+                        event.endDate = endTime;
+                        
+                        //在事件前多少秒开始提醒
+                        //提前一个小时提醒
+                        [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60.0 * 60.0]];
+                        
+                        
+                        [event setCalendar:[eventStore defaultCalendarForNewEvents]];
+                        NSError *err;
+                        [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
+                        
+                        
+                        if (err) {
+                            
+                        }
+                        UIAlertView *alert = [[UIAlertView alloc]
+                                              initWithTitle:@"添加成功"
+                                              message:@" "
+                                              delegate:nil
+                                              cancelButtonTitle:@"完成"
+                                              otherButtonTitles:nil];
+                        [alert show];
+                    }
+                });
+            }];
+        }
+    }
+        break;
+    default:
+        break;
+        
+        }
     }
 }
 

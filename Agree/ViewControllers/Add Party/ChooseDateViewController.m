@@ -83,7 +83,7 @@
     if ([[self buildDate] timeIntervalSinceDate:[NSDate date]] <= 60*60*2) {
         //聚会未超过两个小时,显示警告
         UIAlertView *timeAlert = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                            message:@"聚会的开始时间必须是在当前时间的两个小时后"
+                                                            message:@"聚会的开始时间必须是在当前时间的三个小时后"
                                                            delegate:self
                                                   cancelButtonTitle:@"确定"
                                                   otherButtonTitles:nil];

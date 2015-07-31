@@ -384,13 +384,27 @@
     }
     
     //复制出的内容
-    NSLog(@"%@",cell.chatMessageTextLabel_self.text);
-    NSLog(@"%@",cell.chatMessageTextLabel.text);
+    NSLog(@"%@",pboard.string);
     
 }
-
-- (void)handleResendCell:(id)sender {
-    NSLog(@"handle resend cell");
+- (void)handleResendCell:(id)sender
+{
+    NSLog(@"再次发送");
+    
+    
+    UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+    
+    if (cell.chatMessageTextLabel_self) {
+        pboard.string = cell.chatMessageTextLabel_self.text;
+    }else if
+        (cell.chatMessageTextLabel)
+    {
+        pboard.string = cell.chatMessageTextLabel.text;
+    }
+    
+    //复制出的内容
+    NSLog(@"%@",pboard.string);
+    
 }
 
 

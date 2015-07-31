@@ -27,8 +27,10 @@
 #import <MJRefresh.h>
 #import "SRImageManager.h"
 
+#import "PartyDetailViewController.h"
 
-@interface ContactsTableViewController () {
+#define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
+@interface ContactsTableViewController (){
     NSMutableArray *_friendArray;
     SRAccountView *_accountView;
     NSInteger _selectIndex;
@@ -36,6 +38,9 @@
     
     BOOL _intoMessage;
     Model_User *_intoUser;
+    
+    UIView * _backView;
+    UILabel * _textLabel;
 }
 
 @end
@@ -44,13 +49,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-//    [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"contact_update"];
+    [self backView];
+
     
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
@@ -61,15 +62,42 @@
     [self.updateView.layer setMasksToBounds:YES];
     
     _isfirstLoad = TRUE;
+    [self reloadTipView:_friendArray.count];
     [self loadDataFromNet];
+    
+    
     
     // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
     self.tableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh:)];
 }
 
+-(void)backView
+{
+    _backView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    _backView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:_backView];
+    _textLabel = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2 - 50, self.view.frame.size.height - 180, 100, 40)];
+    _textLabel.backgroundColor = [UIColor clearColor];
+    _textLabel.text = @"请添加好友";
+    _textLabel.textAlignment = NSTextAlignmentCenter;
+    _textLabel.font = [UIFont systemFontOfSize:14];
+    _textLabel.textColor = AgreeBlue;
+    [_backView addSubview:_textLabel];
+}
+
+- (void)reloadTipView: (NSInteger)aryCount {
+    if (0 == aryCount) {
+        [_backView setHidden:NO];
+        
+    }else {
+        [_backView setHidden:YES];
+    }
+}
+
 - (void)refresh:(id)sender {
     _isfirstLoad = TRUE;
     [self loadDataFromNet];
+
 }
 
 - (void)loadDataFromNet {
@@ -94,6 +122,7 @@
                                         } else {
                                             [_friendArray addObject:user];
                                         }
+                                        [self reloadTipView:_friendArray.count];
                                     }
                                     
                                 } else {
@@ -102,6 +131,7 @@
                                 }
                                 
                                 [self.tableView reloadData];
+                                [self reloadTipView:_friendArray.count];
                                 [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"contact_update"];
                                 [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"relation_update"];
                                 self.navigationController.tabBarItem.badgeValue = nil;
