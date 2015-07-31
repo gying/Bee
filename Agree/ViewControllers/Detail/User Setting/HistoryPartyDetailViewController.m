@@ -409,8 +409,7 @@
                                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                                 
                                             }];
-                }
-                
+                } 
         }
         
     }

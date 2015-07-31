@@ -53,7 +53,11 @@
             //AA
             if (self.party.pay_amount) {
                 //已经结账的AA制聚会
+                [self.cheakButton setHidden:YES];
+                [self.payDoneView setHidden:NO];
                 
+                self.moneyAmount.text = [NSString stringWithFormat:@"总额 %d", self.party.pay_amount.intValue];
+                self.moneyDone.text = [NSString stringWithFormat:@"已收 %d", 200];
             }
         }
             
