@@ -612,31 +612,31 @@
         //进入地图
         PartyMapViewController *childController = (PartyMapViewController *)segue.destinationViewController;
         childController.party = self.party;
-    } else if([segue.identifier isEqualToString:@"INBUTTON"])
-    {
+    } else if([segue.identifier isEqualToString:@"INBUTTON"]) {
         NSLog(@"进入参与界面");
         
         UIButton *pressedButton = (UIButton *)sender;
         PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
         childController.isCreator = [SRTool partyCreatorIsSelf:self.party];
+        childController.isPayor = [SRTool partyPayorIsSelf:self.party];
         childController.showStatus = (int)pressedButton.tag;
         childController.relationArray = _relArray;
-    }else if ([segue.identifier isEqualToString:@"OUTBUTTON"])
-    {
+    }else if ([segue.identifier isEqualToString:@"OUTBUTTON"]) {
         NSLog(@"进入拒绝界面");
         UIButton *pressedButton = (UIButton *)sender;
         PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
         childController.isCreator = [SRTool partyCreatorIsSelf:self.party];
+        childController.isPayor = [SRTool partyPayorIsSelf:self.party];
         childController.showStatus = (int)pressedButton.tag;
         childController.relationArray = _relArray;
 
         
-    }else if([segue.identifier isEqualToString:@"UNKNOWBUTTON"])
-    {
+    }else if([segue.identifier isEqualToString:@"UNKNOWBUTTON"]) {
         NSLog(@"进入不确定界面");
         UIButton *pressedButton = (UIButton *)sender;
         PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
         childController.isCreator = [SRTool partyCreatorIsSelf:self.party];
+        childController.isPayor = [SRTool partyPayorIsSelf:self.party];
         childController.showStatus = (int)pressedButton.tag;
         childController.relationArray = _relArray;
 

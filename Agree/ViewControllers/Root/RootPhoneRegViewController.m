@@ -65,7 +65,7 @@
             }
             
         } failure:^(NSError *error, NSURLSessionDataTask *task) {
-            [SVProgressHUD showErrorWithStatus:@"网络错误,请重试" maskType:SVProgressHUDMaskTypeGradient];
+
         }];
         
     } else {
@@ -97,7 +97,7 @@
                                         }
                                     }
                                      failure:^(NSError *error, NSURLSessionDataTask *task) {
-                                         [SVProgressHUD showErrorWithStatus:@"网络错误,请重试" maskType:SVProgressHUDMaskTypeGradient];
+
                                      }];
             phoneAccount = nil;
             

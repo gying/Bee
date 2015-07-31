@@ -412,7 +412,6 @@
     NSLog(@"付款");
     payActionSheet = [[UIActionSheet alloc]initWithTitle:@"选择付款类型" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"类型0",@"类型1",@"类型2", nil];
     
-    
     [payActionSheet showInView:self.view];
 }
 
@@ -430,6 +429,8 @@
     } else {
         UIButton *pressedButton = (UIButton *)sender;
         PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
+        childController.isCreator = [SRTool partyCreatorIsSelf:self.party];
+        childController.isPayor = [SRTool partyPayorIsSelf:self.party];
         childController.showStatus = (int)pressedButton.tag;
         childController.relationArray = _relArray;
     }

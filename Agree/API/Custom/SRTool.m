@@ -45,18 +45,6 @@
     }
 }
 
-+ (NSURL *)imageUrlFromPath: (NSString *)path {
-//    NSString *urlString = [NSString stringWithFormat:@"http://superrabbit.oss-cn-qingdao.aliyuncs.com/%@.png",path];
-    NSString *urlString = [NSString stringWithFormat:@"http://image.beagree.com/%@.png",path];
-    return [NSURL URLWithString:urlString];
-}
-
-+ (NSURL *)miniImageUrlFromPath: (NSString *)path {
-//    NSString *urlString = [NSString stringWithFormat:@"http://superrabbit.oss-cn-qingdao.aliyuncs.com/%@_mini.png",path];
-    NSString *urlString = [NSString stringWithFormat:@"http://image.beagree.com/%@.png",path];
-    return [NSURL URLWithString:urlString];
-}
-
 //判断日期是属于今天还是昨天
 //1:今天
 //2:昨天
@@ -88,6 +76,18 @@
 
 + (BOOL)partyCreatorIsSelf: (Model_Party *)party {
     if ([[Model_User loadFromUserDefaults].pk_user isEqualToNumber:party.fk_user]) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
++ (BOOL)partyPayorIsSelf: (Model_Party *)party {
+    if (!party.pay_fk_user) {
+        return YES;
+    }
+    
+    if ([[Model_User loadFromUserDefaults].pk_user isEqualToNumber:party.pay_fk_user]) {
         return YES;
     } else {
         return NO;

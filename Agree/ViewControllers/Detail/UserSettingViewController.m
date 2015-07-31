@@ -439,7 +439,6 @@
                 userInfo.avatar_path = _userInfo.avatar_path;
                 [userInfo saveToUserDefaults];
                 
-                
                 //更新根控制器的用户头像
                 [self.rootViewController resetAvatar];
                 

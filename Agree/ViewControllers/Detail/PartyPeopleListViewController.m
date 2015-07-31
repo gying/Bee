@@ -175,7 +175,7 @@
         cell = [[PeopleListTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
 
-    [cell initWithUser:theUser withShowStatus:self.showStatus isCreator:self.isCreator];
+    [cell initWithUser:theUser withShowStatus:self.showStatus isCreator:self.isCreator isPayor:self.isPayor];
     return cell;
 
 }

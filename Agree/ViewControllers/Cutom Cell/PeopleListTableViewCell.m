@@ -30,7 +30,8 @@
 
 - (void)initWithUser: (Model_User *)user
       withShowStatus: (int)showStatus
-           isCreator: (BOOL) isCreator {
+           isCreator: (BOOL)isCreator
+             isPayor: (BOOL)isPayor {
 //    self.payButton.layer.masksToBounds = YES;
 //    self.payButton.layer.cornerRadius = self.payButton.frame.size.height/4;
 //    self.payButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
@@ -42,8 +43,8 @@
     
     switch (showStatus) {
         case 1:{
-            if (isCreator) {
-                //在创建者的时候才进行支付控制的展示
+            if (isPayor) {
+                //在当前用户为付款者的时候才进行支付控制的展示
                 [self.tapSwitch setHidden:NO];
                 [self.payLabel setHidden:NO];
                 

@@ -182,7 +182,7 @@
                                     [self.groupCollectionView reloadData];
                                 }
                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
-                                [SVProgressHUD showErrorWithStatus:@"网络错误"];
+
                             }];
 }
 

@@ -23,6 +23,7 @@
 
 @property (nonatomic, strong)NSMutableArray *relationArray;
 @property BOOL isCreator;
+@property BOOL isPayor;
 
 @end
 
