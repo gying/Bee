@@ -359,11 +359,8 @@
 - (void)talkBtnClick:(UITextView *)textViewGet {
     
     if (0 != textViewGet.text.length) {
-        [self sendMessageDone:[EMSendMessageHepler sendTextMessageWithString:textViewGet.text
-                                                                  toUsername:self.user.pk_user.stringValue
-                                                                 isChatGroup:NO
-                                                           requireEncryption:NO
-                                                                         ext:nil]];
+        [self sendMessageFromString:textViewGet.text];
+        
     }
 }
 
@@ -456,6 +453,18 @@
                                                              isChatGroup:NO
                                                        requireEncryption:NO
                                                                      ext:nil]];
+}
+
+
+- (void)sendMessageFromString: (NSString *)text {
+
+    
+    [self sendMessageDone:[EMSendMessageHepler sendTextMessageWithString:text
+                                                              toUsername:self.user.pk_user.stringValue
+                                                             isChatGroup:NO
+                                                       requireEncryption:NO
+                                                                     ext:nil]];
+
 }
 
 - (void)sendMessageDone:(EMMessage *)message {
@@ -606,29 +615,38 @@
 {
     NSLog(@"复制");
 
-   
 
-    
-    
     UIPasteboard *pboard = [UIPasteboard generalPasteboard];
     
-    if (_longTapCell.chatMessageTextLabel_self) {
+    if (!_longTapCell.chatMessageTextLabel_self.isHidden ) {
         pboard.string = _longTapCell.chatMessageTextLabel_self.text;
-    }else if
-        (_longTapCell.chatMessageTextLabel)
+    }else
     {
         pboard.string = _longTapCell.chatMessageTextLabel.text;
     }
     
     //复制出的内容
-    NSLog(@"%@",_longTapCell.chatMessageTextLabel_self.text);
-    
-    NSLog(@"%@",_longTapCell.chatMessageTextLabel.text);
+    NSLog(@"%@",pboard.string);
  
 }
 
 - (void)handleResendCell:(id)sender {
     NSLog(@"handle resend cell");
+    
+    UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+    
+    if (!_longTapCell.chatMessageTextLabel_self.isHidden ) {
+        pboard.string = _longTapCell.chatMessageTextLabel_self.text;
+    }else
+    {
+        pboard.string = _longTapCell.chatMessageTextLabel.text;
+    }
+   
+    
+    [self sendMessageFromString:pboard.string];
+    
+    //复制出的内容
+    NSLog(@"%@",pboard.string);
 }
 
 

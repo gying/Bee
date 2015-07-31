@@ -25,4 +25,5 @@
 
 //@property (nonatomic , strong )UserChatTableViewCell *cell;
 
+- (void)sendMessageFromString: (NSString *)text;
 @end

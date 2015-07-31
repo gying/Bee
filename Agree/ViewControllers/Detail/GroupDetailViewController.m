@@ -375,10 +375,9 @@
 
     UIPasteboard *pboard = [UIPasteboard generalPasteboard];
     
-    if (cell.chatMessageTextLabel_self) {
+    if (!cell.chatMessageTextLabel_self.isHidden) {
         pboard.string = cell.chatMessageTextLabel_self.text;
-    }else if
-        (cell.chatMessageTextLabel)
+    }else
     {
         pboard.string = cell.chatMessageTextLabel.text;
     }
@@ -394,16 +393,16 @@
     
     UIPasteboard *pboard = [UIPasteboard generalPasteboard];
     
-    if (cell.chatMessageTextLabel_self) {
+    if (!cell.chatMessageTextLabel_self.isHidden) {
         pboard.string = cell.chatMessageTextLabel_self.text;
-    }else if
-        (cell.chatMessageTextLabel)
-    {
+    }else {
         pboard.string = cell.chatMessageTextLabel.text;
     }
     
     //复制出的内容
     NSLog(@"%@",pboard.string);
+    
+    [_chatDelegate sendMessageFromString:pboard.string];
     
 }
 
