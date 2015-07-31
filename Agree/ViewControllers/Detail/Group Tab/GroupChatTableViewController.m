@@ -236,12 +236,16 @@
 - (void)talkBtnClick:(UITextView *)textViewGet {
     
     if (0 != textViewGet.text.length) {
-        [self sendMessageDone:[EMSendMessageHepler sendTextMessageWithString:textViewGet.text
-                                                                  toUsername:self.group.em_id
-                                                                 isChatGroup:YES
-                                                           requireEncryption:NO
-                                                                         ext:nil]];
+        [self sendMessageFromString:textViewGet.text];
     } 
+}
+
+- (void)sendMessageFromString: (NSString *)text {
+    [self sendMessageDone:[EMSendMessageHepler sendTextMessageWithString:text
+                                                              toUsername:self.group.em_id
+                                                             isChatGroup:YES
+                                                       requireEncryption:NO
+                                                                     ext:nil]];
 }
 
 #pragma mark -- 发送消息结束

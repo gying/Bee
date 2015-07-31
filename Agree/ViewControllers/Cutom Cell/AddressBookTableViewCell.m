@@ -213,16 +213,14 @@
         //通讯录,发短信邀请加入
         NSString *firstPhone = [_people.phoneAry firstObject];
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"sms://%@", firstPhone]]];
-        
-        
+ 
         
         MFMessageComposeViewController * controller = [[MFMessageComposeViewController alloc] init];
-        controller.recipients = [NSArray arrayWithObject:firstPhone];
-        controller.body = @"请直接将此条认证短信发送给我们，以完成手机安全绑定。(9qzkd27953ma)";
         controller.messageComposeDelegate = self;
+
+        controller.recipients = [NSArray arrayWithObject:firstPhone];
+        controller.body = @"短信输入框默认内容";
         
-        
-    
         
     }
 }

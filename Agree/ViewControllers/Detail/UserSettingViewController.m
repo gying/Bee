@@ -29,6 +29,7 @@
     BOOL _isUpdateAvatar;
     BOOL _isQuit;
     BOOL _isUpdateData;
+    BOOL _firstInputCheck;
     
     
 }
@@ -122,12 +123,10 @@
 }
 
 - (IBAction)passwordEditEnd:(id)sender {
-    
-//    if ([self.passwordTextField.text isEqual:_userInfo.password])
-//        
-    
-    {
+
+    if (_firstInputCheck) {
         if (!_password) {
+            
             _password = self.passwordTextField.text;
             self.passwordTextField.text = nil;
             self.passwordRemarkLabel.text = @"为了确保正确,请再次输入密码";
@@ -143,6 +142,7 @@
                 [self.passwordView setHidden:YES];
                 _isUpdateData = YES;
                 self.passwordTextField.text = nil;
+                _firstInputCheck = TRUE;
             } else {
                 //两次密码输入不一样
                 _password = nil;
@@ -155,11 +155,30 @@
                 [alertView show];
                 [self.passwordTextField becomeFirstResponder];
                 self.passwordTextField.text = nil;
+                _firstInputCheck = TRUE;
             }
         }
+    } else {
+        if ([self.passwordTextField.text isEqual:_userInfo.password]) {
+            [self.passwordTextField resignFirstResponder];
+            [self.passwordRemarkLabel setText:@"请输入想要设置的密码"];
+            self.passwordTextField.text = nil;
 
+            _firstInputCheck = TRUE;
+            
+        }else {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                message:@"您输入的密码不正确,请重新输入."
+                                                               delegate:self
+                                                      cancelButtonTitle:@"确定"
+                                                      otherButtonTitles:nil];
+            self.passwordRemarkLabel.text = @"请输入当前密码";
+            [alertView show];
+            self.passwordTextField.text = nil;
+            [self.passwordTextField resignFirstResponder];
+            _firstInputCheck = FALSE;
+        }
     }
-
 }
 - (void)imageBtnClick {
     //点击图片按钮
