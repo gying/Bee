@@ -155,7 +155,7 @@
     if (nil == cell) {
         cell = [[AddressBookTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AddressBookCell"];
     }
-    
+    cell.contactsDetailTableVC = self;
     [cell initWithPeople:[_contactArray objectAtIndex:indexPath.row]];
     
     // Configure the cell...
@@ -216,6 +216,27 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+
+//MFMESSAGE的协议方法
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
+{
+    
+    switch (result) {
+        case MessageComposeResultCancelled:
+            NSLog(@"取消");
+            break;
+        case MessageComposeResultFailed:
+            NSLog(@"发送短信错误");
+            break;
+        case MessageComposeResultSent:
+            break;
+        default:
+            break;
+    }
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    NSLog(@"退出");
+}
 
 #pragma mark - Navigation
 // In a storyboard-based application, you will often want to do a little preparation before navigation
