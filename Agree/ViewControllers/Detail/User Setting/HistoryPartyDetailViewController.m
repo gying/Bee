@@ -18,10 +18,11 @@
 #import <BaiduMapAPI/BMapKit.h>
 #import "Model_Party.h"
 #import "SRTool.h"
+#import "PrepayViewController.h"
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface HistoryPartyDetailViewController ()<UIActionSheetDelegate,BMKLocationServiceDelegate,BMKMapViewDelegate> {
+@interface HistoryPartyDetailViewController ()<UIActionSheetDelegate,BMKLocationServiceDelegate,BMKMapViewDelegate, PerpayDelegate> {
     Model_Party_User *_relation;
     NSMutableArray *_relArray;
     int _showStatus;
@@ -80,23 +81,71 @@
         case 1: {
             //请客
             [self.payType setText:@"请客"];
+            [self.payButton setHidden:YES];
         }
             
             break;
         case 2: {
             //AA
             [self.payType setText:@"AA制"];
+            if (self.party.pay_amount) {
+                //已经结账的AA制聚会
+                if ([SRTool partyPayorIsSelf:self.party]) {
+                    //聚会的付款人为本人
+                    [self.payButton setHidden:YES];
+                    [self.payDoneView setHidden:NO];
+                    
+                    self.moneyAmount.text = [NSString stringWithFormat:@"总额 %d", self.party.pay_amount.intValue];
+                    self.moneyDone.text = @"已收 正在计算...";
+                } else {
+                    switch (self.party.user_pay_type.intValue) {
+                        case 1: {
+                            //未支付
+                        }
+                            break;
+                        case 2: {
+                            //已支付
+                            //已支付 - 显示付款的详情内容
+                            [self.payButton setHidden:YES];
+                            [self.payDoneView setHidden:NO];
+                            
+                            self.moneyAmount.text = [NSString stringWithFormat:@"总额 %d", self.party.pay_amount.intValue];
+                            self.moneyDone.text = @"已收 正在计算...";
+                            
+                        }
+                            break;
+                        case 3: {
+                            //支持代付
+                        }
+                            break;
+                        default: {
+                            //默认为空为未付
+                        }
+                            break;
+                    }
+                }
+            } else {
+                
+            }
         }
             
             break;
         case 3: {
             //预付
             [self.payType setText:@"预付款"];
+            [self.payButton setHidden:YES];
+            
+            [self.payDoneView setHidden:NO];
+            
+            self.moneyAmount.text = @"参与人数";
+            self.moneyDone.text = @"付款人数";
+            
         }
             
             break;
         default: {
             [self.payType setText:@"未指定"];
+            [self.payButton setHidden:YES];
         }
             break;
     }
@@ -171,11 +220,19 @@
     int outNum = 0;
     int unNum = 0;
     
-    
-    
-    
+    int moneyDoneSum = 0;
+    //付款人数
+    int payNum = 0;
     
     for (Model_User *user in _relArray) {
+        //这里顺便对已付的款项进行计算
+        
+        if (user.pay_type && 1 != user.pay_type.intValue && 0 != user.pay_type.intValue) {
+            moneyDoneSum = moneyDoneSum + user.pay_amount.intValue;
+            payNum++;
+        }
+        
+        
         switch ([user.relationship intValue]) {
             case 0: {
                 //未表态
@@ -200,6 +257,7 @@
     }
     
     
+    
     //更新参与人数的标签
     self.inNumLabel.text = [NSString stringWithFormat:@"%d", inNum];
     //    NSLog(@"%@",self.inNumLabel.text);
@@ -207,6 +265,35 @@
     //    NSLog(@"%@",self.outNumLabel.text);
     self.unkownLabel.text = [NSString stringWithFormat:@"%d", unNum];
     //    NSLog(@"%@",self.unkownLabel.text);
+    
+    switch (self.party.pay_type.intValue) {
+        case 1: {
+            //请客
+
+        }
+            
+            break;
+        case 2: {
+            //AA
+            //这里获取到已付款的数量,并做展示
+            self.moneyDone.text = [NSString stringWithFormat:@"已收 %d", moneyDoneSum];
+        }
+            
+            break;
+        case 3: {
+            //预付
+            self.moneyDone.text = [NSString stringWithFormat:@"已付人数 %d", payNum];
+            self.moneyAmount.text = [NSString stringWithFormat:@"参与人数 %d", inNum];
+            
+        }
+            
+            break;
+        default: {
+
+        }
+            break;
+    }
+    
 }
 
 - (void)setParticipateStatus {
@@ -301,7 +388,6 @@
                 }
                 break;
             case 2:
-                
                 if (actionSheet == canelActionSheet) {
                     //添加到日程
                     NSLog(@"添加到日程");
@@ -383,8 +469,7 @@
                 break;
         }
 
-    }else
-    {
+    }else {
         switch (buttonIndex)
         {
                 case 0:
@@ -482,10 +567,30 @@
 
 - (IBAction)CheakButton:(id)sender {
     
-    NSLog(@"付款");
-    payActionSheet = [[UIActionSheet alloc]initWithTitle:@"选择付款类型" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"类型0",@"类型1",@"类型2", nil];
+//    NSLog(@"付款");
+//    payActionSheet = [[UIActionSheet alloc]initWithTitle:@"选择付款类型" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"类型0",@"类型1",@"类型2", nil];
+//    
+//    [payActionSheet showInView:self.view];
+}
+
+- (void)inputAmount:(NSNumber *)amount {
     
-    [payActionSheet showInView:self.view];
+    [SVProgressHUD showSuccessWithStatus:@"正在处理付款信息" maskType:SVProgressHUDMaskTypeGradient];
+    self.party.pay_amount = amount;
+    //只发送修改的关键部分
+    Model_Party *sendParty = [[Model_Party alloc] init];
+    sendParty.pk_party = self.party.pk_party;
+    sendParty.pay_amount = amount;
+    sendParty.pay_fk_user = [Model_User loadFromUserDefaults].pk_user;
+    //输入结账完成,这里将做结账处理
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager settleParty:sendParty] complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+        //返回结账信息成功.
+        [SVProgressHUD showSuccessWithStatus:@"标注支付完成"];
+        
+    } failure:^(NSError *error, NSURLSessionDataTask *task) {
+        //结账信息输入失败.
+        
+    }];
 }
 
 
@@ -499,9 +604,14 @@
         //进入地图
         PartyMapViewController *childController = (PartyMapViewController *)segue.destinationViewController;
         childController.party = self.party;
+    } else if([segue.identifier isEqualToString:@"PREPAY"]){
+        PrepayViewController *childController = (PrepayViewController *)segue.destinationViewController;
+        [childController setDelegate:self];
+        //       [childController.payTextField becomeFirstResponder];
     } else {
         UIButton *pressedButton = (UIButton *)sender;
         PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
+        childController.party = self.party;
         childController.isCreator = [SRTool partyCreatorIsSelf:self.party];
         childController.isPayor = [SRTool partyPayorIsSelf:self.party];
         childController.showStatus = (int)pressedButton.tag;

@@ -24,4 +24,7 @@
 @property (nonatomic, strong)NSNumber *pay_type;
 
 
+@property (nonatomic, strong)NSNumber *pay_fk_user;
+
+
 @end

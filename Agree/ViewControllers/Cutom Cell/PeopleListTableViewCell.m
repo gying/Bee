@@ -40,9 +40,11 @@
 //    self.tapSwitch.tintColor = AgreeBlue;
 //    self.tapSwitch.thumbTintColor = AgreeBlue;
     _user = user;
+
     
     switch (showStatus) {
         case 1:{
+//            if (YES) {
             if (isPayor) {
                 //在当前用户为付款者的时候才进行支付控制的展示
                 [self.tapSwitch setHidden:NO];
@@ -109,6 +111,10 @@
         case 1: {
             //参与用户
             self.statusLabel.text = @"确认参与";
+            
+            if (user.pay_amount) {
+                self.statusLabel.text = [[NSString alloc] initWithFormat:@"%d元", user.pay_amount.intValue];
+            }
         }
             break;
         case 2: {
@@ -141,7 +147,7 @@
     } else {
         [self.payLabel setText:@"未支付"];
         [self.payLabel setTextColor:[UIColor lightGrayColor]];
-        _user.pay_type = @1;
+        _user.pay_type = @0;
     }
 }
 

@@ -31,6 +31,8 @@
     BOOL _isUpdateData;
     BOOL _firstInputCheck;
     
+    NSString *_openid;
+    
     
 }
 
@@ -165,14 +167,13 @@
             self.passwordTextField.text = nil;
 
             _firstInputCheck = TRUE;
-            
         }else {
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
                                                                 message:@"您输入的密码不正确,请重新输入."
                                                                delegate:self
                                                       cancelButtonTitle:@"确定"
                                                       otherButtonTitles:nil];
-            self.passwordRemarkLabel.text = @"请输入当前密码";
+            self.passwordRemarkLabel.text = @"请输入原密码";
             [alertView show];
             self.passwordTextField.text = nil;
             [self.passwordTextField resignFirstResponder];
@@ -359,17 +360,13 @@
     //从微信客户端返回第三方客户端的执行方法
     NSLog(@"从客户端返回第三方客户端的执行方法！！！！！！！！！！！！！！！！！！");
     //    SendAuthResp *temp = (SendAuthResp*)resp;
-    if([resp isKindOfClass:[SendMessageToWXResp class]])
-    {
+    if([resp isKindOfClass:[SendMessageToWXResp class]]) {
         
     }
-    else if([resp isKindOfClass:[SendAuthResp class]])
-    {
+    else if([resp isKindOfClass:[SendAuthResp class]]) {
         SendAuthResp *temp = (SendAuthResp*)resp;
         _codeStr = temp.code;
-    }
-    else if ([resp isKindOfClass:[AddCardToWXCardPackageResp class]])
-    {
+    } else if ([resp isKindOfClass:[AddCardToWXCardPackageResp class]]) {
     }
     
     
@@ -423,8 +420,44 @@
     NSLog(@"%@",uidDataDic);
     
     if (openid) {
-        _userInfo.wechat_id = openid;
-        _isUpdateData = YES;
+        //这里获取到微信的OPENID号码
+        
+        if ([_userInfo.wechat_id isEqualToString:openid]) {
+            //重复绑定
+            UIAlertView *wechatAlertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                      message:@"您已经绑定了当前的微信号码"
+                                                                     delegate:self
+                                                            cancelButtonTitle:@"确定"
+                                                            otherButtonTitles:nil];
+            wechatAlertView.tag = 2;
+            [wechatAlertView show];
+        } else {
+            Model_User *checkWechatUser = [[Model_User alloc] init];
+            checkWechatUser.wechat_id = [uidDataDic objectForKey:@"openid"];
+            
+            [SRNet_Manager requestNetWithDic:[SRNet_Manager getUserInfoByWechatDic:checkWechatUser]
+                                    complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                        if (jsonDic) {
+                                            //使用微信openid的账户存在
+                                            _openid = openid;
+                                            UIAlertView *wechatAlertView2 = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                                                       message:@"当前微信号码已经绑定了其他必聚帐号,是否要解绑其他帐号,以绑定到当前帐号?"
+                                                                                                      delegate:self
+                                                                                             cancelButtonTitle:@"取消"
+                                                                                             otherButtonTitles:@"确定", nil];
+                                            wechatAlertView2.tag = 3;
+                                            [wechatAlertView2 show];
+                                            
+                                        } else {
+                                            //使用微信openid的账户不存在
+                                            _userInfo.wechat_id = openid;
+                                            _isUpdateData = YES;
+                                            
+                                        }
+                                    } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                        
+                                    }];
+        }
     }
 }
 
@@ -547,18 +580,52 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    switch (buttonIndex) {
-        case 0: {   //取消
-            
+    //tag:
+    //1.绑定手机
+    
+    switch (alertView.tag) {
+        case 1: {
+            //绑定手机
+            switch (buttonIndex) {
+                case 0: {   //取消
+                    
+                }
+                    break;
+                case 1: {   //确定
+                    [self performSegueWithIdentifier:@"BandPhone" sender:self];
+                }
+                    break;
+                default:
+                    break;
+            }
         }
             break;
-        case 1: {   //确定
-            [self performSegueWithIdentifier:@"BandPhone" sender:self];
+        case 2: {
+            //微信重复绑定提示
+        }
+            break;
+        case 3: {
+            //微信帐号已经绑定到其他帐号的提示
+            switch (buttonIndex) {
+                case 0: {   //取消
+                    
+                }
+                    break;
+                case 1: {   //确定
+//                    [self performSegueWithIdentifier:@"BandPhone" sender:self];
+                    _userInfo.wechat_id = _openid;
+                    _isUpdateData = YES;
+                }
+                    break;
+                default:
+                    break;
+            }
         }
             break;
         default:
             break;
     }
+    
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
@@ -569,6 +636,7 @@
                                                                delegate:self
                                                       cancelButtonTitle:@"取消"
                                                       otherButtonTitles:@"确定", nil];
+            alertView.tag = 1;
             [alertView show];
             return NO;
         }

@@ -45,4 +45,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *money;
 @property (weak, nonatomic) IBOutlet UILabel *inLabel;
 
+
+@property (weak, nonatomic) IBOutlet UIView *payDoneView;
+@property (weak, nonatomic) IBOutlet UILabel *moneyDone;
+@property (weak, nonatomic) IBOutlet UILabel *moneyAmount;
+
 @end

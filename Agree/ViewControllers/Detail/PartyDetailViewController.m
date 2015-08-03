@@ -89,9 +89,6 @@
         self.inLabel.hidden = YES;
         [self.yesButton setTitle:@"参与" forState:UIControlStateNormal];
     }
-
-
-
     
     if (self.party.longitude && self.party.latitude) {
         //如果存在经纬度数据
@@ -170,7 +167,8 @@
     if (nil == self.party.relationship) {
         //在与聚会未产生关系时(第一次进入聚会详情),建立与聚会关系
         _relation.relationship = @0;
-        
+        //设置加入时候为未支付状态
+        _relation.pay_type = @0;
         if ([self.party.fk_user isEqualToNumber:[Model_User loadFromUserDefaults].pk_user]) {
             _relation.type = @2;
         } else {
@@ -189,11 +187,26 @@
                                 }];
 
     } else if ([@3 isEqual:self.party.pay_type]) {
+        
+        //这里为预付款聚会
         if ((nil != self.party.relationship) && ([@1  isEqual: self.party.relationship])) {
+            //用户的标识为参与
+            //这里为预付款聚会已参与
             self.yesButton.enabled = NO;
             self.noButton.enabled = NO;
-
-        }
+            
+            if ([SRTool partyPayorIsSelf:self.party]) {
+                //查看聚会的付款人是否为自己
+                //如果自己为付款人则显示人数数据
+                self.yesButton.hidden = YES;
+                self.noButton.hidden = YES;
+                
+                [self.payDoneView setHidden:NO];
+                
+                self.moneyAmount.text = @"参与人数";
+                self.moneyDone.text = @"付款人数";
+            }
+        }   
     }
     
     [self setParticipateStatus];
@@ -227,7 +240,6 @@
             [SVProgressHUD showWithStatus:@"正在确认参与请求"];
             [self.money setTextColor:[UIColor whiteColor]];
             [self.inLabel setTextColor:[UIColor whiteColor]];
-            
         }
 
         [SRNet_Manager requestNetWithDic:[SRNet_Manager updateScheduleDic:_relation]
@@ -238,8 +250,6 @@
                                 } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                     
                                 }];
-        
-        
     }
     
     
@@ -308,7 +318,19 @@
     int outNum = 0;
     int unNum = 0;
     
+    int moneyDoneSum = 0;
+    //付款人数
+    int payNum = 0;
+    
     for (Model_User *user in _relArray) {
+        
+        //这里顺便对已付的款项进行计算
+        
+        if (user.pay_type && 1 != user.pay_type.intValue && 0 != user.pay_type.intValue) {
+            moneyDoneSum = moneyDoneSum + user.pay_amount.intValue;
+            payNum++;
+        }
+        
         switch ([user.relationship intValue]) {
             case 0: {
                 //未表态
@@ -337,6 +359,36 @@
 //    NSLog(@"%@",self.outNumLabel.text);
     self.unkownLabel.text = [NSString stringWithFormat:@"%d", unNum];
 //    NSLog(@"%@",self.unkownLabel.text);
+    
+    
+    
+    switch (self.party.pay_type.intValue) {
+        case 1: {
+            //请客
+            
+        }
+            
+            break;
+        case 2: {
+            //AA
+            //这里获取到已付款的数量,并做展示
+//            self.moneyDone.text = [NSString stringWithFormat:@"已收 %d", moneyDoneSum];
+        }
+            
+            break;
+        case 3: {
+            //预付
+            self.moneyDone.text = [NSString stringWithFormat:@"已付人数 %d", payNum];
+            self.moneyAmount.text = [NSString stringWithFormat:@"参与人数 %d", inNum];
+            
+        }
+            
+            break;
+        default: {
+            
+        }
+            break;
+    }
 }
 
 - (void)setParticipateStatus {
@@ -653,8 +705,7 @@
             //分享聚会
         }
             break;
-        case 3:
-        {
+        case 3: {
             switch (buttonIndex) {
                 case 0:{
                     //取消
@@ -666,14 +717,32 @@
                     NSLog(@"确定参加聚会");
                     if (1 == [_relation.relationship intValue]) {
                         //取消选中状态
-                        
                         _relation.relationship = @0;
                         self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] - 1];
                         [SVProgressHUD showWithStatus:@"正在取消参与请求"];
+                        
+                        [self.money setTextColor:[UIColor lightGrayColor]];
+                        [self.inLabel setTextColor:[UIColor lightGrayColor]];
+                        
                     } else {
                         _relation.relationship = @1;
                         self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] + 1];
                         [SVProgressHUD showWithStatus:@"正在确认参与请求"];
+                        
+                        [self.money setTextColor:[UIColor whiteColor]];
+                        [self.inLabel setTextColor:[UIColor whiteColor]];
+                        //将聚会关系的状态设置为2 以便服务端识别为预付款聚会
+                        _relation.pay_amount = self.party.pay_amount;
+                        
+                        //这里因为版本兼容关系,如果预付聚会没有收款人,则将收款人设置为创建者.
+                        if (self.party.pay_fk_user) {
+                            _relation.pay_fk_user = self.party.pay_fk_user;
+                        } else {
+                            _relation.pay_fk_user = self.party.fk_user;
+                        }
+                        
+                        _relation.pay_fk_user = self.party.pay_fk_user;
+                        _relation.status = @2;
                     }
                     [SRNet_Manager requestNetWithDic:[SRNet_Manager updateScheduleDic:_relation]
                                             complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
@@ -741,6 +810,7 @@
         
         UIButton *pressedButton = (UIButton *)sender;
         PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
+        childController.party = self.party;
         childController.isCreator = [SRTool partyCreatorIsSelf:self.party];
         childController.isPayor = [SRTool partyPayorIsSelf:self.party];
         childController.showStatus = (int)pressedButton.tag;
@@ -749,6 +819,7 @@
         NSLog(@"进入拒绝界面");
         UIButton *pressedButton = (UIButton *)sender;
         PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
+        childController.party = self.party;
         childController.isCreator = [SRTool partyCreatorIsSelf:self.party];
         childController.isPayor = [SRTool partyPayorIsSelf:self.party];
         childController.showStatus = (int)pressedButton.tag;
@@ -759,6 +830,7 @@
         NSLog(@"进入不确定界面");
         UIButton *pressedButton = (UIButton *)sender;
         PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
+        childController.party = self.party;
         childController.isCreator = [SRTool partyCreatorIsSelf:self.party];
         childController.isPayor = [SRTool partyPayorIsSelf:self.party];
         childController.showStatus = (int)pressedButton.tag;

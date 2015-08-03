@@ -93,6 +93,31 @@
         self.party.remark = self.remarkTextView.text;
         self.party.pay_type = [NSNumber numberWithInt:_payType];
         
+        switch (_payType) {
+            case 1: {
+                //请客
+            }
+                break;
+                
+            case 2: {
+                //AA
+            }
+                break;
+                
+            case 3: {
+                //预付
+                //预付的默认收款人为自己
+                self.party.pay_fk_user = self.party.fk_user;
+            }
+                break;
+                
+            default: {
+                //未指定
+            }
+                break;
+        }
+        
+        
         [SVProgressHUD showWithStatus:@"聚会创建中..." maskType:SVProgressHUDMaskTypeGradient];
         
         [SRNet_Manager requestNetWithDic:[SRNet_Manager addScheduleDic:self.party]

@@ -84,7 +84,7 @@
 
 + (BOOL)partyPayorIsSelf: (Model_Party *)party {
     if (!party.pay_fk_user) {
-        return YES;
+        party.pay_fk_user = party.fk_user;
     }
     
     if ([[Model_User loadFromUserDefaults].pk_user isEqualToNumber:party.pay_fk_user]) {

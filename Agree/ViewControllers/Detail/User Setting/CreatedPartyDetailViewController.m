@@ -39,41 +39,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    //    [self.navigationItem setTitle:self.party.name];
-    
-    //判断聚会类型
-    switch (self.party.pay_type.intValue) {
-        case 1: {
-            //请客
-            
-        }
-            
-            break;
-        case 2: {
-            //AA
-            if (self.party.pay_amount) {
-                //已经结账的AA制聚会
-                [self.cheakButton setHidden:YES];
-                [self.payDoneView setHidden:NO];
-                
-                self.moneyAmount.text = [NSString stringWithFormat:@"总额 %d", self.party.pay_amount.intValue];
-                self.moneyDone.text = [NSString stringWithFormat:@"已收 %d", 200];
-            }
-        }
-            
-            break;
-        case 3: {
-            //预付
-            
-        }
-            
-            break;
-        default: {
-            
-        }
-            break;
-    }
-    
     
     if (self.party.longitude && self.party.latitude) {
         //如果存在经纬度数据
@@ -113,6 +78,14 @@
         case 2: {
             //AA
             [self.payType setText:@"AA制"];
+            if (self.party.pay_amount) {
+                //已经结账的AA制聚会
+                [self.cheakButton setHidden:YES];
+                [self.payDoneView setHidden:NO];
+                
+                self.moneyAmount.text = [NSString stringWithFormat:@"总额 %d", self.party.pay_amount.intValue];
+                self.moneyDone.text = [NSString stringWithFormat:@"已收 %d", 200];
+            }
         }
             
             break;
@@ -129,14 +102,6 @@
     }
     
     
-    
-    
-    //判断是否是创建者本身.
-    if ([SRTool partyCreatorIsSelf:self.party]) {
-        [self.cancelButton setHidden:NO];
-    } else {
-        [self.cancelButton setHidden:NO];
-    }
     
     self.conHeight.constant = (CGRectGetHeight([UIScreen mainScreen].applicationFrame)-44)*2;
     
@@ -571,6 +536,7 @@
     Model_Party *sendParty = [[Model_Party alloc] init];
     sendParty.pk_party = self.party.pk_party;
     sendParty.pay_amount = amount;
+    sendParty.pay_fk_user = [Model_User loadFromUserDefaults].pk_user;
     //输入结账完成,这里将做结账处理
     [SRNet_Manager requestNetWithDic:[SRNet_Manager settleParty:sendParty] complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
         //返回结账信息成功.
@@ -597,6 +563,7 @@
     }else{
         UIButton *pressedButton = (UIButton *)sender;
         PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
+        childController.party = self.party;
         childController.isCreator = [SRTool partyCreatorIsSelf:self.party];
         childController.isPayor = [SRTool partyPayorIsSelf:self.party];
         childController.showStatus = (int)pressedButton.tag;

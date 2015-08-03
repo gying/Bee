@@ -85,11 +85,149 @@
     }
 }
 
+- (void)initWithPayType: (Model_Party *)party {
+    //开始分析付款状态
+    
+    //1.等待结账(适用于AA)
+    //2.等待付款(使用于AA与预付款)
+    //3.已经完成付款
+    
+    //4.已完成结账工作(需要在接口端进行判断 或者 增加字段属性)
+    
+    //首先先确定聚会支付类型
+    switch (party.pay_type.intValue) {
+        case 1: {
+            //请客
+            //请客则直接显示为已完成
+            
+            [self.statusView setHidden:YES];
+            
+            [self.dateView setBackgroundColor:AgreeBlue];
+            [self.dateLabel setTextColor:[UIColor whiteColor]];
+            [self.timeLabel setTextColor:[UIColor whiteColor]];
+            
+            [self.partyNameLabel setTextColor:[UIColor darkGrayColor]];
+            [self.partyAdreessLabel setTextColor:[UIColor darkGrayColor]];
+            
+            [self.inLabel setTextColor:AgreeBlue];
+            
+            [self.peopleCountLabel setText:@"已完成"];
+        }
+            break;
+            
+        case 2: {
+            //AA
+            if (!party.pay_amount) {
+                //如果付款项为空或者0 则代表还未结账
+                [self.statusView setHidden:YES];
+                
+                [self.dateView setBackgroundColor:[UIColor clearColor]];
+                [self.dateLabel setTextColor:AgreeBlue];
+                [self.timeLabel setTextColor:AgreeBlue];
+                
+                [self.partyNameLabel setTextColor:[UIColor grayColor]];
+                [self.partyAdreessLabel setTextColor:[UIColor lightGrayColor]];
+                
+                [self.inLabel setTextColor:[UIColor grayColor]];
+                
+                [self.peopleCountLabel setText:@"等待结账"];
+                
+            } else {
+                if (party.user_pay_type && 0 != party.user_pay_type.intValue && 1 != party.user_pay_type.intValue) {
+                    //已付款
+                    [self.statusView setHidden:YES];
+                    
+                    [self.dateView setBackgroundColor:AgreeBlue];
+                    [self.dateLabel setTextColor:[UIColor whiteColor]];
+                    [self.timeLabel setTextColor:[UIColor whiteColor]];
+                    
+                    [self.partyNameLabel setTextColor:[UIColor darkGrayColor]];
+                    [self.partyAdreessLabel setTextColor:[UIColor darkGrayColor]];
+                    
+                    [self.inLabel setTextColor:AgreeBlue];
+                    
+                    [self.peopleCountLabel setText:@"已付款"];
+                    
+                } else {
+                    //等待付款中
+                    [self.statusView setHidden:NO];
+                    
+                    [self.dateView setBackgroundColor:[UIColor clearColor]];
+                    [self.dateLabel setTextColor:AgreeBlue];
+                    [self.timeLabel setTextColor:AgreeBlue];
+                    
+                    [self.partyNameLabel setTextColor:[UIColor grayColor]];
+                    [self.partyAdreessLabel setTextColor:[UIColor lightGrayColor]];
+                    
+                    [self.inLabel setTextColor:[UIColor grayColor]];
+                    
+                    [self.peopleCountLabel setText:@"等待付款"];
+                }
+            }
+        }
+            
+            break;
+        case 3: {
+            //预付
+            if (party.user_pay_type && 0 != party.user_pay_type.intValue && 1 != party.user_pay_type.intValue) {
+                //已付款
+                [self.statusView setHidden:YES];
+                
+                [self.dateView setBackgroundColor:AgreeBlue];
+                [self.dateLabel setTextColor:[UIColor whiteColor]];
+                [self.timeLabel setTextColor:[UIColor whiteColor]];
+                
+                [self.partyNameLabel setTextColor:[UIColor darkGrayColor]];
+                [self.partyAdreessLabel setTextColor:[UIColor darkGrayColor]];
+                
+                [self.inLabel setTextColor:AgreeBlue];
+                
+                [self.peopleCountLabel setText:@"已付款"];
+                
+            } else {
+                //等待付款中
+                [self.statusView setHidden:NO];
+                
+                [self.dateView setBackgroundColor:[UIColor clearColor]];
+                [self.dateLabel setTextColor:AgreeBlue];
+                [self.timeLabel setTextColor:AgreeBlue];
+                
+                [self.partyNameLabel setTextColor:[UIColor grayColor]];
+                [self.partyAdreessLabel setTextColor:[UIColor lightGrayColor]];
+                
+                [self.inLabel setTextColor:[UIColor grayColor]];
+                [self.peopleCountLabel setText:@"等待付款"];
+            }
+        }
+            
+            break;
+        default: {
+            //未指定,则直接显示完成,与请客类似
+            [self.statusView setHidden:YES];
+            
+            [self.dateView setBackgroundColor:AgreeBlue];
+            [self.dateLabel setTextColor:[UIColor whiteColor]];
+            [self.timeLabel setTextColor:[UIColor whiteColor]];
+            
+            [self.partyNameLabel setTextColor:[UIColor darkGrayColor]];
+            [self.partyAdreessLabel setTextColor:[UIColor darkGrayColor]];
+            
+            [self.inLabel setTextColor:AgreeBlue];
+            
+            [self.peopleCountLabel setText:@"已完成"];
+            
+        }
+            break;
+    }
+}
+
 - (void)initWithParty: (Model_Party *)party {
     [self.statusView.layer setCornerRadius:self.statusView.frame.size.height/2];
     [self.statusView.layer setMasksToBounds:YES];
     
-    [self initRelationship:party.relationship];
+    [self initWithPayType:party];
+//    [self initRelationship:party.relationship];
+    
     [self.partyNameLabel setText:party.name];
     [self.partyAdreessLabel setText:party.location];
     
@@ -99,12 +237,15 @@
     [dateFormatter setDateFormat:@"M月d日"];
     [self.dateLabel setText:[dateFormatter stringFromDate:beginDate]];
     
-    if (![party.inNum isKindOfClass:[NSNull class]]) {
-        [self.peopleCountLabel setText:[NSString stringWithFormat:@"%d",[party.inNum intValue]]];
-    } else {
-        party.inNum = [NSNumber numberWithInt:0];
-        [self.peopleCountLabel setText:@"0"];
-    }
+    [self.peopleCountLabel setFont:[UIFont systemFontOfSize:11]];
+    [self.peopleCountLabel setTextColor:[UIColor lightGrayColor]];
+    
+//    if (![party.inNum isKindOfClass:[NSNull class]]) {
+//        [self.peopleCountLabel setText:[NSString stringWithFormat:@"%d",[party.inNum intValue]]];
+//    } else {
+//        party.inNum = [NSNumber numberWithInt:0];
+//        [self.peopleCountLabel setText:@"0"];
+//    }
     
     NSDateFormatter *timeFormatter = [[NSDateFormatter alloc]init];
     [timeFormatter setDateFormat:@"k:ss"];
@@ -134,7 +275,7 @@
 
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
+    [super setSelected:NO animated:animated];
 
     // Configure the view for the selected state
 }

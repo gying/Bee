@@ -45,6 +45,20 @@
     } else {
         [self.countLabel setHidden:YES];
     }
+    
+    if (!user.surplus) {
+        [self.surplusLabel setHidden:YES];
+    } else {
+        [self.surplusLabel setHidden:NO];
+        [self.surplusLabel setText:[NSString stringWithFormat:@"未收: %d元", user.surplus.intValue]];
+    }
+    
+    if (!user.overdraft) {
+        [self.overdraftLabel setHidden:YES];
+    } else {
+        [self.surplusLabel setHidden:NO];
+        [self.overdraftLabel setText:[NSString stringWithFormat:@"未收: %d元", user.overdraft.intValue]];
+    }
 }
 
 //点击好友头像
