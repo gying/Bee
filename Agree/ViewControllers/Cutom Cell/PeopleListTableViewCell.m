@@ -30,7 +30,8 @@
 
 - (void)initWithUser: (Model_User *)user
       withShowStatus: (int)showStatus
-           isCreator: (BOOL) isCreator {
+           isCreator: (BOOL)isCreator
+             isPayor: (BOOL)isPayor {
 //    self.payButton.layer.masksToBounds = YES;
 //    self.payButton.layer.cornerRadius = self.payButton.frame.size.height/4;
 //    self.payButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
@@ -39,11 +40,13 @@
 //    self.tapSwitch.tintColor = AgreeBlue;
 //    self.tapSwitch.thumbTintColor = AgreeBlue;
     _user = user;
+
     
     switch (showStatus) {
         case 1:{
-            if (isCreator) {
-                //在创建者的时候才进行支付控制的展示
+//            if (YES) {
+            if (isPayor) {
+                //在当前用户为付款者的时候才进行支付控制的展示
                 [self.tapSwitch setHidden:NO];
                 [self.payLabel setHidden:NO];
                 
@@ -108,6 +111,10 @@
         case 1: {
             //参与用户
             self.statusLabel.text = @"确认参与";
+            
+            if (user.pay_amount) {
+                self.statusLabel.text = [[NSString alloc] initWithFormat:@"%d元", user.pay_amount.intValue];
+            }
         }
             break;
         case 2: {
@@ -140,7 +147,7 @@
     } else {
         [self.payLabel setText:@"未支付"];
         [self.payLabel setTextColor:[UIColor lightGrayColor]];
-        _user.pay_type = @1;
+        _user.pay_type = @0;
     }
 }
 

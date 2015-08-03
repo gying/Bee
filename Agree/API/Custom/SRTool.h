@@ -16,12 +16,13 @@
 + (NSString *)dateStringForPartyListCell: (NSDate *)date;
 + (BOOL)isSelfID: (NSNumber *)pk_user;
 
-//+ (NSURL *)imageUrlFromPath: (NSString *)path;
-//+ (NSURL *)miniImageUrlFromPath: (NSString *)path;
 + (int)dateJudgeWithDate: (NSDate *)date;
 
 + (void)addPartyUpdateTip: (int) addNum;
 
 //判断聚会创建者是否是自己
 + (BOOL)partyCreatorIsSelf: (Model_Party *)party;
+
+//判断聚会的支付者是否是自己
++ (BOOL)partyPayorIsSelf: (Model_Party *)party;
 @end

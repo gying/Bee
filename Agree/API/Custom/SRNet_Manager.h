@@ -75,7 +75,7 @@
 
 #define kTestInterface              1101
 #define kGetUserInfoByWechat        1102
-#define kUpdateParty                414
+#define kSettleParty                414
 
 //定义两个代码块
 typedef void (^finishCallbackBlock)(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task);
@@ -139,6 +139,6 @@ typedef void (^requestFailureBlock)(NSError *error, NSURLSessionDataTask *task);
 + (NSMutableDictionary *)getCreatedPartyByUserDic: (Model_User *)user;
 + (NSMutableDictionary *)getPartyHistoryByUserDic: (Model_User *)user;
 + (NSMutableDictionary *)updatePartyRelationships: (NSMutableArray *)partyRelationAry;
-+ (NSMutableDictionary *)updateParty: (Model_Party *)party;
++ (NSMutableDictionary *)settleParty: (Model_Party *)party;
 
 @end

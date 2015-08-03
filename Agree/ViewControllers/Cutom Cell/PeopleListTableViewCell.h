@@ -19,6 +19,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *payLabel;
 
 
-- (void)initWithUser: (Model_User *)user withShowStatus: (int)showStatus isCreator: (BOOL) isCreator ;
+- (void)initWithUser: (Model_User *)user withShowStatus: (int)showStatus isCreator: (BOOL) isCreator isPayor:(BOOL)isPayor ;
 
 @end

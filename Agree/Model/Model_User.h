@@ -38,6 +38,10 @@
 
 @property (nonatomic, strong)NSNumber *pk_party_user;
 
+//财务
+@property (nonatomic, strong)NSNumber *surplus;
+@property (nonatomic, strong)NSNumber *overdraft;
+
 
 
 - (void)saveToUserDefaults;

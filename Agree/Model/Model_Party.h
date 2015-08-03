@@ -34,6 +34,8 @@
 
 @property (nonatomic, strong)NSNumber *relationship;
 @property (nonatomic, strong)NSNumber *pk_party_user;
+//用户的支付状态
+@property (nonatomic, strong)NSNumber *user_pay_type;
 
 //参与人数
 @property (nonatomic, strong)NSNumber *inNum;

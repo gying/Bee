@@ -80,7 +80,9 @@
                     break;
                 case 3: {
                     //已经成为好友
-                    [self.sendButton setTitle:@"成为好友" forState:UIControlStateNormal];
+//                    [self.sendButton setTitle:@"成为好友" forState:UIControlStateNormal];
+                    [self.sendButton setTitle:@"已为好友" forState:UIControlStateNormal];
+                    [self.sendButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
                 }
                     break;
                 default:
@@ -110,7 +112,8 @@
                     break;
                 case 3: {
                     //已经成为好友
-                    [self.sendButton setTitle:@"成为好友" forState:UIControlStateNormal];
+                    [self.sendButton setTitle:@"已为好友" forState:UIControlStateNormal];
+                    [self.sendButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
                 }
                     break;
                 default:
@@ -162,7 +165,8 @@
                                                         //收到请求,等待自己同意
                                                         //同意请求
                                                         [_people.userInfo setRelationship:@3];
-                                                        [self.sendButton setTitle:@"成为好友" forState:UIControlStateNormal];
+                                                        [self.sendButton setTitle:@"已为好友" forState:UIControlStateNormal];
+                                                        [self.sendButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
                                                         
                                                         [self updateRelation];
                                                     }
@@ -178,7 +182,6 @@
                                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                                 
                                             }];
-                    
                 }
                     break;
                 case 3: {

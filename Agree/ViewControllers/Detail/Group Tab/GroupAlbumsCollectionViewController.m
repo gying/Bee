@@ -94,7 +94,7 @@
                                 }
                                 [self.albumsCollectionView.header endRefreshing];
                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
-                                [SVProgressHUD showErrorWithStatus:@"网络错误"];
+
                             }];
     
 }
@@ -244,7 +244,7 @@
                                         }
                                         [SVProgressHUD showSuccessWithStatus:@"成功"];
                                     } failure:^(NSError *error, NSURLSessionDataTask *task) {
-                                        [SVProgressHUD showErrorWithStatus:@"网络错误"];
+
                                     }];
         } else {
             
@@ -275,7 +275,7 @@
                                     
                                 }
                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
-                                [SVProgressHUD showErrorWithStatus:@"网络错误"];
+
                             }];
 }
 

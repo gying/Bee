@@ -27,8 +27,6 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 
-
-
 @property (weak, nonatomic) IBOutlet UILabel *inNumLabel;
 @property (weak, nonatomic) IBOutlet UILabel *outNumLabel;
 @property (weak, nonatomic) IBOutlet UILabel *unkownLabel;
@@ -46,6 +44,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *cancelPartyButton;
 @property (weak, nonatomic) IBOutlet UILabel *payType;
 
+@property (weak, nonatomic) IBOutlet UIView *payDoneView;
+@property (weak, nonatomic) IBOutlet UILabel *moneyDone;
+@property (weak, nonatomic) IBOutlet UILabel *moneyAmount;
 
 
 
