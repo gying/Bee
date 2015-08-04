@@ -58,7 +58,6 @@
     self.rootLoginViewController = [sb instantiateViewControllerWithIdentifier:@"rootAccountLogin"];
     self.rootLoginViewController.userInfo = regUser;
     //微信授权登陆注册
-//    self.rootLoginViewController = [[RootAccountLoginViewController alloc]init];
     [WXApi registerApp:@"wx9be30a70fcb480ae"];
     [self.window setRootViewController:self.rootLoginViewController];
 }
@@ -267,12 +266,15 @@
 #pragma mark - 系统运行
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
     //微信授权登陆注册
-    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
+//    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
+    return [WXApi handleOpenURL:url delegate:self.wechatViewController];
 }
 
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
+//    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
+    
+    return [WXApi handleOpenURL:url delegate:self.wechatViewController];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -351,31 +353,38 @@
     //判断进入的界面
     //查找用户id
 //    NSNumber *user_id = [Model_User loadFromUserDefaults].pk_user;
-    if ([Model_User loadFromUserDefaults]) {
-        //拥有用户id
-        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-        self.rootController = [sb instantiateViewControllerWithIdentifier:@"rootTabbar"];
-        [self.window setRootViewController:self.rootController];
-        
-    } else {
-        _viewForLogin = TRUE;
-        
-        //如果未注册,则开始注册流程
-        Model_User *regUser = [[Model_User alloc] init];
-        //设置uuid作为账户唯一码
-//        [regUser setPk_user:[[[NSUUID alloc] init] UUIDString]];
-//        //设置串号id
-//        _token = token;
-//        [regUser setDevice_id:_token];
-        
-        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-        self.rootLoginViewController = [sb instantiateViewControllerWithIdentifier:@"rootAccountLogin"];
-        self.rootLoginViewController.userInfo = regUser;
-        
-        
-        [self.window setRootViewController:self.rootLoginViewController];
-    }
+//    if ([Model_User loadFromUserDefaults]) {
+//        //拥有用户id
+//        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+//        self.rootController = [sb instantiateViewControllerWithIdentifier:@"rootTabbar"];
+//        [self.window setRootViewController:self.rootController];
+//        
+//    } else {
+//        _viewForLogin = TRUE;
+//        
+//        //如果未注册,则开始注册流程
+//        Model_User *regUser = [[Model_User alloc] init];
+//        //设置uuid作为账户唯一码
+////        [regUser setPk_user:[[[NSUUID alloc] init] UUIDString]];
+////        //设置串号id
+////        _token = token;
+////        [regUser setDevice_id:_token];
+//        
+//        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+//        self.rootLoginViewController = [sb instantiateViewControllerWithIdentifier:@"rootAccountLogin"];
+//        self.rootLoginViewController.userInfo = regUser;
+//        
+//        
+//        [self.window setRootViewController:self.rootLoginViewController];
+//    }
 
+    
+    
+    UIStoryboard * sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+    
+    self.rootViewController = [sb instantiateViewControllerWithIdentifier:@"ROOTVIEWCONTROLLER"];
+    [self.window setRootViewController:self.rootViewController];
+    
     return YES;
 }
 

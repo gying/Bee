@@ -14,7 +14,6 @@
 
 
 
-
 @implementation AddressBookTableViewCell {
     People *_people;
 }
@@ -215,18 +214,25 @@
     } else {
         //通讯录,发短信邀请加入
         NSString *firstPhone = [_people.phoneAry firstObject];
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"sms://%@", firstPhone]]];
- 
-        
+//        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"sms://%@", firstPhone]]];
         MFMessageComposeViewController * controller = [[MFMessageComposeViewController alloc] init];
-        controller.messageComposeDelegate = self;
+        controller.messageComposeDelegate = self.contactsDetailTableVC;
 
         controller.recipients = [NSArray arrayWithObject:firstPhone];
         controller.body = @"短信输入框默认内容";
         
-        
-    }
+        [self.contactsDetailTableVC presentViewController:controller animated:YES completion:nil];
+
 }
+    
+}
+
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
+{
+    NSLog(@"MFmessage回调方法");
+    
+}
+
 
 
 

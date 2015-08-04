@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "People.h"
 #import "SRNet_Manager.h"
+#import "ContactsDetailTableViewController.h"
 
 
 #import <MessageUI/MFMessageComposeViewController.h>
@@ -20,6 +21,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *nicknameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *addressBookNameLabel;
 @property (weak, nonatomic) IBOutlet UIButton *sendButton;
+
+@property ( strong, nonatomic )ContactsDetailTableViewController * contactsDetailTableVC;
 
 - (void)initWithPeople: (People *)adPeople;
 

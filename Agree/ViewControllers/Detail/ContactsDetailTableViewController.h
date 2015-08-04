@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import <MessageUI/MFMessageComposeViewController.h>
 
-
-@interface ContactsDetailTableViewController : UITableViewController
+@interface ContactsDetailTableViewController : UITableViewController<MFMessageComposeViewControllerDelegate>
 
 @end
