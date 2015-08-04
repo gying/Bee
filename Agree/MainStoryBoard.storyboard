@@ -170,7 +170,7 @@
                                 <rect key="frame" x="0.0" y="540" width="600" height="65"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1RG-SN-H56">
-                                        <rect key="frame" x="20" y="-5" width="270" height="45"/>
+                                        <rect key="frame" x="20" y="-5" width="275" height="45"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="46" id="GVk-Yh-oSL"/>
@@ -189,7 +189,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hks-hV-tWT">
-                                        <rect key="frame" x="310" y="-5" width="270" height="45"/>
+                                        <rect key="frame" x="305" y="-5" width="275" height="45"/>
                                         <color key="backgroundColor" red="0.34901960780000002" green="0.81960784310000001" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="45" id="lNu-rt-SUO"/>
@@ -210,7 +210,7 @@
                                     <constraint firstItem="1RG-SN-H56" firstAttribute="leading" secondItem="Ewk-Gr-Q7b" secondAttribute="leading" constant="20" id="ET6-yG-XPc"/>
                                     <constraint firstItem="Hks-hV-tWT" firstAttribute="height" secondItem="1RG-SN-H56" secondAttribute="height" id="IYV-Yy-wMH"/>
                                     <constraint firstAttribute="bottom" secondItem="1RG-SN-H56" secondAttribute="bottom" constant="25" id="Uqv-BN-Usa"/>
-                                    <constraint firstItem="Hks-hV-tWT" firstAttribute="leading" secondItem="1RG-SN-H56" secondAttribute="trailing" constant="20" id="Z10-eH-MsW"/>
+                                    <constraint firstItem="Hks-hV-tWT" firstAttribute="leading" secondItem="1RG-SN-H56" secondAttribute="trailing" constant="10" id="Z10-eH-MsW"/>
                                     <constraint firstAttribute="trailing" secondItem="Hks-hV-tWT" secondAttribute="trailing" constant="20" id="axG-wq-QVg"/>
                                     <constraint firstAttribute="bottom" secondItem="Hks-hV-tWT" secondAttribute="bottom" constant="25" id="wSA-e9-wZT"/>
                                 </constraints>
@@ -232,6 +232,9 @@
                                                 <exclude reference="Xrm-OL-TIF"/>
                                             </mask>
                                         </variation>
+                                        <connections>
+                                            <segue destination="LJ3-Re-knL" kind="show" id="USo-gl-amq"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7D6-On-YsP">
                                         <rect key="frame" x="20" y="55" width="560" height="45"/>
@@ -248,6 +251,9 @@
                                                 <exclude reference="HUv-FE-QLi"/>
                                             </mask>
                                         </variation>
+                                        <connections>
+                                            <action selector="tapWeChatButton:" destination="iBN-eo-4ZX" eventType="touchUpInside" id="Xex-CT-4gB"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -280,6 +286,9 @@
                                                 <exclude reference="Vx9-Vz-qoO"/>
                                             </mask>
                                         </variation>
+                                        <connections>
+                                            <segue destination="LJ3-Re-knL" kind="show" id="P0v-y1-CgT"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i89-Ew-5ws">
                                         <rect key="frame" x="20" y="55" width="560" height="45"/>
@@ -296,6 +305,9 @@
                                                 <exclude reference="R3n-va-anO"/>
                                             </mask>
                                         </variation>
+                                        <connections>
+                                            <action selector="tapWeChatButton:" destination="iBN-eo-4ZX" eventType="touchUpInside" id="feo-Y5-bIt"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -346,7 +358,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6h4-yP-eyM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3696" y="-600"/>
+            <point key="canvasLocation" x="-2459" y="1"/>
         </scene>
         <!--Root Account Login View Controller-->
         <scene sceneID="xJK-Mj-hxn">
@@ -6275,13 +6287,14 @@
         <image name="agree_user_setting_avatar_backgroup" width="99" height="99"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="c42-zg-aVC"/>
-        <segue reference="t3l-Pa-TQa"/>
+        <segue reference="brR-kr-yPI"/>
         <segue reference="NNa-bE-Gah"/>
         <segue reference="NNN-op-p3r"/>
-        <segue reference="RJO-fJ-VQq"/>
         <segue reference="2j8-NZ-CvJ"/>
-        <segue reference="brR-kr-yPI"/>
+        <segue reference="RJO-fJ-VQq"/>
+        <segue reference="c42-zg-aVC"/>
+        <segue reference="t3l-Pa-TQa"/>
+        <segue reference="USo-gl-amq"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.34901960780000002" green="0.81960784310000001" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
 </document>
