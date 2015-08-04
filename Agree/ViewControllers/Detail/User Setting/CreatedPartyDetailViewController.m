@@ -60,6 +60,8 @@
         [_bdMapView setZoomLevel:15];
         [_bdMapView setCenterCoordinate:partyCoor];
     }
+    
+    
     //类型的边框与圆弧
     self.payType.layer.cornerRadius = self.payType.frame.size.height/4;
     //    self.payType.layer.borderColor = AgreeBlue.CGColor;
@@ -67,11 +69,13 @@
     self.payType.layer.borderWidth = 1.0;
     self.payType.textColor = AgreeBlue;
     self.payType.alpha = 0.7;
+
     
     switch (self.party.pay_type.intValue) {
         case 1: {
             //请客
             [self.payType setText:@"请客"];
+            [self.cheakButton setHidden:YES];
         }
             
             break;
@@ -80,11 +84,42 @@
             [self.payType setText:@"AA制"];
             if (self.party.pay_amount) {
                 //已经结账的AA制聚会
-                [self.cheakButton setHidden:YES];
-                [self.payDoneView setHidden:NO];
+                if ([SRTool partyPayorIsSelf:self.party]) {
+                    //聚会的付款人为本人
+                    [self.cheakButton setHidden:YES];
+                    [self.payDoneView setHidden:NO];
+                    
+                    self.moneyAmount.text = [NSString stringWithFormat:@"总额 %d", self.party.pay_amount.intValue];
+                    self.moneyDone.text = @"已收 正在计算...";
+                } else {
+                    switch (self.party.user_pay_type.intValue) {
+                        case 1: {
+                            //未支付
+                        }
+                            break;
+                        case 2: {
+                            //已支付
+                            //已支付 - 显示付款的详情内容
+                            [self.cheakButton setHidden:YES];
+                            [self.payDoneView setHidden:NO];
+                            
+                            self.moneyAmount.text = [NSString stringWithFormat:@"总额 %d", self.party.pay_amount.intValue];
+                            self.moneyDone.text = @"已收 正在计算...";
+                            
+                        }
+                            break;
+                        case 3: {
+                            //支持代付
+                        }
+                            break;
+                        default: {
+                            //默认为空为未付
+                        }
+                            break;
+                    }
+                }
+            } else {
                 
-                self.moneyAmount.text = [NSString stringWithFormat:@"总额 %d", self.party.pay_amount.intValue];
-                self.moneyDone.text = [NSString stringWithFormat:@"已收 %d", 200];
             }
         }
             
@@ -92,16 +127,30 @@
         case 3: {
             //预付
             [self.payType setText:@"预付款"];
+            [self.cheakButton setHidden:YES];
+            
+            [self.payDoneView setHidden:NO];
+            
+            self.moneyAmount.text = @"参与人数";
+            self.moneyDone.text = @"付款人数";
+            
         }
             
             break;
         default: {
             [self.payType setText:@"未指定"];
+            [self.cheakButton setHidden:YES];
         }
             break;
     }
     
     
+    //判断是否是创建者本身.
+    if ([[Model_User loadFromUserDefaults].pk_user isEqualToNumber:self.party.fk_user]) {
+        [self.cancelButton setHidden:NO];
+    } else {
+        [self.cancelButton setHidden:NO];
+    }
     
     self.conHeight.constant = (CGRectGetHeight([UIScreen mainScreen].applicationFrame)-44)*2;
     
@@ -122,7 +171,7 @@
     [self.cheakButton.layer setMasksToBounds:YES];
     self.cheakButton.backgroundColor = AgreeBlue;
     [self.cheakButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-
+    
     [self.addressLabel setText:self.party.location];
     
     
@@ -147,10 +196,17 @@
                                 } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                     
                                 }];
-        
     }
     
     [self setParticipateStatus];
+    
+    if (0 == self.party.inNum.intValue) {
+        //无人参与聚会
+        [self.payDoneView setHidden:YES];
+        [self.cheakButton setHidden:YES];
+        
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -165,8 +221,20 @@
     int inNum = 0;
     int outNum = 0;
     int unNum = 0;
-
+    
+    int moneyDoneSum = 0;
+    //付款人数
+    int payNum = 0;
+    
     for (Model_User *user in _relArray) {
+        //这里顺便对已付的款项进行计算
+        
+        if (user.pay_type && 1 != user.pay_type.intValue && 0 != user.pay_type.intValue) {
+            moneyDoneSum = moneyDoneSum + user.pay_amount.intValue;
+            payNum++;
+        }
+        
+        
         switch ([user.relationship intValue]) {
             case 0: {
                 //未表态
@@ -186,10 +254,8 @@
             default:
                 break;
         }
-        
-        
     }
-    
+
     
     //更新参与人数的标签
     self.inNumLabel.text = [NSString stringWithFormat:@"%d", inNum];
@@ -198,6 +264,34 @@
     //    NSLog(@"%@",self.outNumLabel.text);
     self.unkownLabel.text = [NSString stringWithFormat:@"%d", unNum];
     //    NSLog(@"%@",self.unkownLabel.text);
+    
+    switch (self.party.pay_type.intValue) {
+        case 1: {
+            //请客
+            
+        }
+            
+            break;
+        case 2: {
+            //AA
+            //这里获取到已付款的数量,并做展示
+            self.moneyDone.text = [NSString stringWithFormat:@"已收 %d", moneyDoneSum];
+        }
+            
+            break;
+        case 3: {
+            //预付
+            self.moneyDone.text = [NSString stringWithFormat:@"已付人数 %d", payNum];
+            self.moneyAmount.text = [NSString stringWithFormat:@"参与人数 %d", inNum];
+            
+        }
+            
+            break;
+        default: {
+            
+        }
+            break;
+    }
 }
 
 - (void)setParticipateStatus {
@@ -504,10 +598,7 @@
 }
 
 
-- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation
-{
-    
-    
+- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation {
     BMKPinAnnotationView *newAnnotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil];
     
     [newAnnotationView setFrame:CGRectMake(newAnnotationView.frame.origin.x, newAnnotationView.frame.origin.y,35,35)];

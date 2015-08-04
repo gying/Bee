@@ -120,9 +120,6 @@
 //    [self subChatArray];
     
     
-
-    
-    
     self.view.backgroundColor =[UIColor groupTableViewBackgroundColor];
     
     _albumsDelegate = [[GroupAlbumsCollectionViewController alloc] init];
@@ -428,6 +425,7 @@
         controller.isGroupParty = TRUE;
     } else if ([@"GroupSetting" isEqual:segue.identifier]) {
         //进入小组设置
+        [SVProgressHUD show];
         GroupSettingViewController *controller = (GroupSettingViewController *)segue.destinationViewController;
         controller.group = self.group;
     } else if ([@"PartyDetail" isEqual:segue.identifier]) {

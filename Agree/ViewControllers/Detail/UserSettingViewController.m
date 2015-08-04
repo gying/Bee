@@ -43,7 +43,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
     _backImageViwe = [[UIImageView alloc] initWithFrame:CGRectMake(4.5, 4.5, 90, 90)];
     [_backImageViwe.layer setMasksToBounds:YES];
     [_backImageViwe.layer setCornerRadius:_backImageViwe.frame.size.width/2];
@@ -56,6 +55,8 @@
     
     [SRNet_Manager requestNetWithDic:[SRNet_Manager getUserInfoDic:account]
                             complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                
+                                [SVProgressHUD dismiss];
                                 //读取用户资料
                                 NSArray *accountAry = [Model_User objectArrayWithKeyValuesArray:jsonDic];
                                 
@@ -107,7 +108,7 @@
         }
             break;
         case 3: {
-            [self.sexButton setTitle:@"人妖" forState:UIControlStateNormal];
+            [self.sexButton setTitle:@"其他" forState:UIControlStateNormal];
         }
             break;
         default:
@@ -241,7 +242,7 @@
     _isUpdateAvatar = TRUE;
     //对原始图片进行裁剪,并保存到用户头像信息
     _avatarImage = [SRImageManager getSubImage:[info valueForKey:@"UIImagePickerControllerOriginalImage"]
-                                              withRect:CGRectMake(0, 0, 180, 180)];
+                                      withRect:CGRectMake(0, 0, 180, 180)];
     [_backImageViwe setImage:_avatarImage];
 }
 
@@ -261,7 +262,7 @@
         [sender setTitle:@"女" forState:UIControlStateNormal];
         _userInfo.sex = @2;
     } else if ([sender.titleLabel.text isEqual:@"女"]) {
-        [sender setTitle:@"人妖" forState:UIControlStateNormal];
+        [sender setTitle:@"其他" forState:UIControlStateNormal];
         _userInfo.sex = @3;
     } else {
         [sender setTitle:@"性别" forState:UIControlStateNormal];
@@ -272,8 +273,6 @@
 - (IBAction)pressedThePhoneButton:(UIButton *)sender {
     
 }
-
-
 
 //绑定微信按钮
 - (IBAction)pressedTheWechatButton:(UIButton *)sender {

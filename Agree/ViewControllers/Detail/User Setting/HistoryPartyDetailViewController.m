@@ -41,11 +41,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    //    [self.navigationItem setTitle:self.party.name];
-    
-    
-    
-    
+
     
     if (self.party.longitude && self.party.latitude) {
         //如果存在经纬度数据

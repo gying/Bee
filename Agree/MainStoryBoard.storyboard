@@ -145,7 +145,6 @@
             <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
         </mutableArray>
         <mutableArray key="Lantinghei.ttc">
             <string>FZLTXHB--B51-0</string>
@@ -2085,7 +2084,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cBv-iY-qWh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-546" y="1401"/>
+            <point key="canvasLocation" x="-592" y="1423"/>
         </scene>
         <!--通讯录-->
         <scene sceneID="hWR-tu-oU3">
@@ -2352,7 +2351,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6CY-WY-DdP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="92" y="1007"/>
+            <point key="canvasLocation" x="211" y="943"/>
         </scene>
         <!--创建的聚会详情-->
         <scene sceneID="qDm-hP-tQZ">
@@ -3636,16 +3635,6 @@
                                 </connections>
                             </button>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="done" id="pKz-Gv-Yeo">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="o7T-6y-waG">
-                                <rect key="frame" x="451" y="7" width="50" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="Lantinghei SC" pointSize="13"/>
-                                <state key="normal" title="设置">
-                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
-                        </barButtonItem>
                     </navigationItem>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -4305,7 +4294,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zXE-Lm-j0x" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-546" y="2089"/>
+            <point key="canvasLocation" x="-592" y="2139"/>
         </scene>
         <!--绑定手机-->
         <scene sceneID="R37-5T-L7f">
@@ -4392,7 +4381,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CDU-AM-QhL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="123" y="2829"/>
+            <point key="canvasLocation" x="139" y="2847"/>
         </scene>
         <!--通讯录-->
         <scene sceneID="aFh-ZL-VYV">
@@ -4440,11 +4429,12 @@
                                             <color key="highlightedColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BD9-Av-xBB">
-                                            <rect key="frame" x="516" y="13" width="76" height="30"/>
+                                            <rect key="frame" x="516" y="15" width="76" height="30"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="76" id="AUh-Tn-no1"/>
                                                 <constraint firstAttribute="height" constant="30" id="mdp-S8-O3u"/>
                                             </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                             <state key="normal" title="发送">
                                                 <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </state>
@@ -4460,7 +4450,7 @@
                                         <constraint firstItem="w52-1o-wCu" firstAttribute="top" secondItem="8hQ-Rl-iKk" secondAttribute="topMargin" constant="-4" id="ORn-jd-43C"/>
                                         <constraint firstItem="w52-1o-wCu" firstAttribute="leading" secondItem="8hQ-Rl-iKk" secondAttribute="leadingMargin" id="TO1-Y0-Y9x"/>
                                         <constraint firstItem="BD9-Av-xBB" firstAttribute="leading" secondItem="H2f-mT-OCu" secondAttribute="trailing" constant="8" id="WCs-rh-EDz"/>
-                                        <constraint firstItem="BD9-Av-xBB" firstAttribute="top" secondItem="8hQ-Rl-iKk" secondAttribute="topMargin" constant="5" id="Z4P-UC-XQ4"/>
+                                        <constraint firstItem="BD9-Av-xBB" firstAttribute="top" secondItem="8hQ-Rl-iKk" secondAttribute="topMargin" constant="7" id="Z4P-UC-XQ4"/>
                                         <constraint firstItem="H2f-mT-OCu" firstAttribute="top" secondItem="8hQ-Rl-iKk" secondAttribute="top" constant="14" id="fU1-rU-fpn"/>
                                         <constraint firstItem="BD9-Av-xBB" firstAttribute="trailing" secondItem="8hQ-Rl-iKk" secondAttribute="trailingMargin" id="hEI-OU-9Jc"/>
                                         <constraint firstItem="3ep-1E-sLM" firstAttribute="leading" secondItem="w52-1o-wCu" secondAttribute="trailing" constant="8" id="ibX-LH-vuk"/>
@@ -4518,7 +4508,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Goi-cN-P4G" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="256" y="1695"/>
+            <point key="canvasLocation" x="211" y="1699"/>
         </scene>
         <!--选择地点-->
         <scene sceneID="Uxt-yP-vVa">
@@ -5300,7 +5290,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VL2-Tv-H42" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="794" y="3704"/>
+            <point key="canvasLocation" x="792" y="3761"/>
         </scene>
         <!--选择时间-->
         <scene sceneID="3sV-BH-LdE">

@@ -11,7 +11,7 @@
 
 #import <SVProgressHUD.h>
 
-@interface FeedBackViewController ()
+@interface FeedBackViewController () <UIAlertViewDelegate>
 @end
 
 @implementation FeedBackViewController
@@ -37,15 +37,24 @@
     
     [SRNet_Manager requestNetWithDic:[SRNet_Manager feedBackMessageDic:feedback]
                             complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
-                                [SVProgressHUD showSuccessWithStatus:@"反馈成功"];
-                                //    [self.navigationController popToViewController:self animated:YES];
+                                [SVProgressHUD dismiss];
                                 
                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                    //        [self.feedBackTextView resignFirstResponder];
                                     [self.navigationController popToRootViewControllerAnimated:YES];
                                 });
+                                
+                                UIAlertView *feedBackAlert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"感谢您的反馈,我们将会努力做的更好." delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                                
+                                [feedBackAlert show];
+                                
                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                 
                             }];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
 }
 
 - (IBAction)tapBackButton:(id)sender {

@@ -36,7 +36,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [SVProgressHUD showWithStatus:@"小组信息读取中..." maskType:SVProgressHUDMaskTypeGradient];
+//    [SVProgressHUD showWithStatus:@"小组信息读取中..." maskType:SVProgressHUDMaskTypeGradient];
     
     // Do any additional setup after loading the view.
     _accountView = [[SRAccountView alloc] init];
@@ -69,12 +69,14 @@
     [SRNet_Manager requestNetWithDic:[SRNet_Manager getAllRelationFromGroupDic:self.group]
                             complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
                                 if (jsonDic) {
+                                    [SVProgressHUD dismiss];
                                     _relationArray = (NSMutableArray *)[Model_Group_User objectArrayWithKeyValuesArray:jsonDic];
                                     [self.peopleCollectionView reloadData];
-                                    [SVProgressHUD showSuccessWithStatus:@"读取数据成功"];
+                                    
                                 } else {
-                                    [SVProgressHUD showSuccessWithStatus:@"未找到相关数据"];
+                                    
                                 }
+                                
                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                 
                             }];
