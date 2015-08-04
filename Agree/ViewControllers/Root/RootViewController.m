@@ -20,6 +20,31 @@
     self.loginRegView.hidden = NO;
     self.loginView.hidden = YES;
     self.regView.hidden = YES;
+    
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSString *file = [bundle pathForResource:@"beagree_test" ofType:@"mp4"];
+    NSURL *url = [NSURL fileURLWithPath:file];
+    
+    self.moviePlayer =[[MPMoviePlayerController alloc] initWithContentURL:url];
+    
+    [self.moviePlayer setScalingMode:MPMovieScalingModeAspectFill];
+    self.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
+    [self.moviePlayer setRepeatMode:MPMovieRepeatModeOne];
+    [self.moviePlayer prepareToPlay];
+    [self.moviePlayer]
+    [self.moviePlayer.view setFrame:self.view.bounds];  // player的尺寸
+//    [self.view addSubview: self.moviePlayer.view];
+    [self.view insertSubview:self.moviePlayer.view atIndex:0];
+    
+    self.moviePlayer.shouldAutoplay=YES;
+    
+//    UILabel *logoLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 200, 260, 100)];
+//    [logoLabel setTextColor:[UIColor whiteColor]];
+//    [logoLabel setText:@"必聚"];
+//    [logoLabel setTextAlignment:NSTextAlignmentCenter];
+//    [logoLabel setFont:[UIFont systemFontOfSize:80]];
+//    [self.view addSubview:logoLabel];
+    
 
 }
 - (IBAction)loginButton:(id)sender {

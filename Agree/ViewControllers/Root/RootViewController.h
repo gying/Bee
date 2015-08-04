@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MediaPlayer/MPMoviePlayerController.h>
 
 @interface RootViewController : UIViewController
 
@@ -22,7 +23,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *phoneRegButton;
 @property (weak, nonatomic) IBOutlet UIButton *weChatRegButton;
 
-
+@property (nonatomic, strong)MPMoviePlayerController *moviePlayer;
 
 
 

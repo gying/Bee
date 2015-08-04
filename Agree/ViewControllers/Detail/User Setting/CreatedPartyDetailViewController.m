@@ -204,9 +204,7 @@
         //无人参与聚会
         [self.payDoneView setHidden:YES];
         [self.cheakButton setHidden:YES];
-        
     }
-    
 }
 
 - (void)didReceiveMemoryWarning {
