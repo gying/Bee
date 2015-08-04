@@ -171,11 +171,11 @@
                                 <rect key="frame" x="0.0" y="535" width="600" height="65"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1RG-SN-H56">
-                                        <rect key="frame" x="20" y="-5" width="275" height="50"/>
+                                        <rect key="frame" x="20" y="0.0" width="275" height="45"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="46" id="GVk-Yh-oSL"/>
-                                            <constraint firstAttribute="height" constant="50" id="exL-Do-KIR"/>
+                                            <constraint firstAttribute="height" constant="45" id="exL-Do-KIR"/>
                                         </constraints>
                                         <state key="normal" title="登陆">
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -190,10 +190,10 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hks-hV-tWT">
-                                        <rect key="frame" x="305" y="-5" width="275" height="50"/>
+                                        <rect key="frame" x="305" y="0.0" width="275" height="45"/>
                                         <color key="backgroundColor" red="0.34901960780000002" green="0.81960784310000001" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="lNu-rt-SUO"/>
+                                            <constraint firstAttribute="height" constant="45" id="lNu-rt-SUO"/>
                                         </constraints>
                                         <state key="normal" title="注册">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
