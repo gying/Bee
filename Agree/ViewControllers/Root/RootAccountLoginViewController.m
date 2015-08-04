@@ -13,6 +13,8 @@
 #import "MJExtension.h"
 #import <SVProgressHUD.h>
 
+#import "AppDelegate.h"
+
 
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
@@ -94,6 +96,9 @@
 
 //点击微信登录按钮
 - (IBAction)tapWechatButton:(UIButton *)sender {
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    delegate.wechatViewController = self;
+    
     
     NSLog(@"微信授权登陆");
     /*! @brief 第三方程序向微信终端请求认证的消息结构

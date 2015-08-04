@@ -15,6 +15,8 @@
 #import "UIImageView+WebCache.h"
 #import "SRImageManager.h"
 
+#import "AppDelegate.h"
+
 
 
 @interface UserSettingViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UITextFieldDelegate, UIAlertViewDelegate> {
@@ -277,6 +279,9 @@
 
 //绑定微信按钮
 - (IBAction)pressedTheWechatButton:(UIButton *)sender {
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    delegate.wechatViewController = self;
+    
     NSLog(@"绑定微信");
     /*! @brief 第三方程序向微信终端请求认证的消息结构
      *

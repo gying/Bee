@@ -14,8 +14,6 @@
 
 
 
-
-
 @implementation AddressBookTableViewCell {
     People *_people;
 }
@@ -226,6 +224,12 @@
         [self.contactsDetailTableVC presentViewController:controller animated:YES completion:nil];
 
 }
+    
+}
+
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
+{
+    NSLog(@"MFmessage回调方法");
     
 }
 
