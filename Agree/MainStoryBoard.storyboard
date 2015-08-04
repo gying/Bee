@@ -167,17 +167,17 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ewk-Gr-Q7b" userLabel="LoginRegView" customClass="rootvi">
-                                <rect key="frame" x="0.0" y="540" width="600" height="60"/>
+                                <rect key="frame" x="0.0" y="540" width="600" height="65"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1RG-SN-H56">
-                                        <rect key="frame" x="20" y="0.0" width="270" height="50"/>
+                                        <rect key="frame" x="20" y="-5" width="270" height="45"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="46" id="GVk-Yh-oSL"/>
-                                            <constraint firstAttribute="height" constant="50" id="exL-Do-KIR"/>
+                                            <constraint firstAttribute="height" constant="45" id="exL-Do-KIR"/>
                                         </constraints>
                                         <state key="normal" title="登陆">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
                                         <variation key="default">
                                             <mask key="constraints">
@@ -189,30 +189,30 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hks-hV-tWT">
-                                        <rect key="frame" x="310" y="0.0" width="270" height="50"/>
+                                        <rect key="frame" x="310" y="-5" width="270" height="45"/>
                                         <color key="backgroundColor" red="0.34901960780000002" green="0.81960784310000001" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="lNu-rt-SUO"/>
+                                            <constraint firstAttribute="height" constant="45" id="lNu-rt-SUO"/>
                                         </constraints>
                                         <state key="normal" title="注册">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
                                             <action selector="regButton:" destination="iBN-eo-4ZX" eventType="touchUpInside" id="gwp-05-Ic3"/>
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="5qe-rg-WkC"/>
+                                    <constraint firstAttribute="height" constant="65" id="5qe-rg-WkC"/>
                                     <constraint firstItem="Hks-hV-tWT" firstAttribute="width" secondItem="1RG-SN-H56" secondAttribute="width" id="BIi-my-U4J"/>
                                     <constraint firstItem="1RG-SN-H56" firstAttribute="leading" secondItem="Ewk-Gr-Q7b" secondAttribute="leading" constant="20" id="ET6-yG-XPc"/>
                                     <constraint firstItem="Hks-hV-tWT" firstAttribute="height" secondItem="1RG-SN-H56" secondAttribute="height" id="IYV-Yy-wMH"/>
-                                    <constraint firstAttribute="bottom" secondItem="1RG-SN-H56" secondAttribute="bottom" constant="10" id="Uqv-BN-Usa"/>
+                                    <constraint firstAttribute="bottom" secondItem="1RG-SN-H56" secondAttribute="bottom" constant="25" id="Uqv-BN-Usa"/>
                                     <constraint firstItem="Hks-hV-tWT" firstAttribute="leading" secondItem="1RG-SN-H56" secondAttribute="trailing" constant="20" id="Z10-eH-MsW"/>
                                     <constraint firstAttribute="trailing" secondItem="Hks-hV-tWT" secondAttribute="trailing" constant="20" id="axG-wq-QVg"/>
-                                    <constraint firstAttribute="bottom" secondItem="Hks-hV-tWT" secondAttribute="bottom" constant="10" id="wSA-e9-wZT"/>
+                                    <constraint firstAttribute="bottom" secondItem="Hks-hV-tWT" secondAttribute="bottom" constant="25" id="wSA-e9-wZT"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Evy-NK-nSU" userLabel="LoginView">
@@ -225,7 +225,7 @@
                                             <constraint firstAttribute="height" constant="30" id="Xrm-OL-TIF"/>
                                         </constraints>
                                         <state key="normal" title="手机登陆">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
                                         <variation key="default">
                                             <mask key="constraints">
@@ -241,7 +241,7 @@
                                         </constraints>
                                         <state key="normal" title="微信登陆">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
                                         <variation key="default">
                                             <mask key="constraints">
@@ -250,7 +250,7 @@
                                         </variation>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="7D6-On-YsP" secondAttribute="trailing" constant="20" id="AH9-R8-vnH"/>
                                     <constraint firstItem="7D6-On-YsP" firstAttribute="leading" secondItem="Evy-NK-nSU" secondAttribute="leading" constant="20" id="ERj-mw-08v"/>
@@ -273,7 +273,7 @@
                                             <constraint firstAttribute="height" constant="30" id="Vx9-Vz-qoO"/>
                                         </constraints>
                                         <state key="normal" title="手机注册">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
                                         <variation key="default">
                                             <mask key="constraints">
@@ -289,7 +289,7 @@
                                         </constraints>
                                         <state key="normal" title="微信注册">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
                                         <variation key="default">
                                             <mask key="constraints">
@@ -298,7 +298,7 @@
                                         </variation>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="i89-Ew-5ws" firstAttribute="height" secondItem="pHQ-RT-mlX" secondAttribute="height" id="BR3-ms-xvR"/>
                                     <constraint firstItem="i89-Ew-5ws" firstAttribute="leading" secondItem="fpb-R0-eE4" secondAttribute="leading" constant="20" id="I48-Q8-x1M"/>
@@ -316,7 +316,7 @@
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Evy-NK-nSU" firstAttribute="leading" secondItem="Grk-aL-f1f" secondAttribute="leading" id="0xk-L9-09i"/>
-                            <constraint firstItem="9TJ-F1-Jaw" firstAttribute="top" secondItem="Ewk-Gr-Q7b" secondAttribute="bottom" id="G65-yF-trl"/>
+                            <constraint firstItem="9TJ-F1-Jaw" firstAttribute="top" secondItem="Ewk-Gr-Q7b" secondAttribute="bottom" constant="-5" id="G65-yF-trl"/>
                             <constraint firstItem="Ewk-Gr-Q7b" firstAttribute="leading" secondItem="Grk-aL-f1f" secondAttribute="leading" id="VEg-0g-Or1"/>
                             <constraint firstAttribute="trailing" secondItem="Ewk-Gr-Q7b" secondAttribute="trailing" id="WUT-IF-0lT"/>
                             <constraint firstItem="Ewk-Gr-Q7b" firstAttribute="top" secondItem="Evy-NK-nSU" secondAttribute="bottom" id="Woj-Jd-3ab"/>
