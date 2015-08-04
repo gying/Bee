@@ -33,6 +33,31 @@
     self.loginRegView.hidden = NO;
     self.loginView.hidden = YES;
     self.regView.hidden = YES;
+    
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSString *file = [bundle pathForResource:@"beagree_test" ofType:@"mp4"];
+    NSURL *url = [NSURL fileURLWithPath:file];
+    
+    self.moviePlayer =[[MPMoviePlayerController alloc] initWithContentURL:url];
+    
+    [self.moviePlayer setScalingMode:MPMovieScalingModeAspectFill];
+    self.moviePlayer.controlStyle = MPMovieControlStyleNone;
+    [self.moviePlayer setRepeatMode:MPMovieRepeatModeOne];
+    [self.moviePlayer setShouldAutoplay:YES];
+    [self.moviePlayer prepareToPlay];
+    [self.moviePlayer.view setFrame:self.view.bounds];  // player的尺寸
+//    [self.view addSubview: self.moviePlayer.view];
+    [self.view insertSubview:self.moviePlayer.view atIndex:0];
+    
+    self.moviePlayer.shouldAutoplay=YES;
+    
+//    UILabel *logoLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 200, 260, 100)];
+//    [logoLabel setTextColor:[UIColor whiteColor]];
+//    [logoLabel setText:@"必聚"];
+//    [logoLabel setTextAlignment:NSTextAlignmentCenter];
+//    [logoLabel setFont:[UIFont systemFontOfSize:80]];
+//    [self.view addSubview:logoLabel];
+
     [self.loginButton.layer setCornerRadius:2];
     [self.regButton.layer setCornerRadius:2];
     [self.phoneLoginButton.layer setCornerRadius:2];
@@ -40,12 +65,13 @@
     [self.weChatLoginButton.layer setCornerRadius:2];
     [self.weChatRegButton.layer setCornerRadius:2];
     
-    
-
-    
-    
-    
-    
+    [self.loginButton setAlpha:0.9];
+    [self.regButton setAlpha:0.9];
+    [self.phoneLoginButton setAlpha:0.9];
+    [self.phoneRegButton setAlpha:0.9];
+    [self.weChatLoginButton setAlpha:0.9];
+    [self.weChatRegButton setAlpha:0.9];
+  
 
 }
 - (IBAction)loginButton:(id)sender {

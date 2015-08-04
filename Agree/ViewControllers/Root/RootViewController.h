@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MediaPlayer/MPMoviePlayerController.h>
 #import "Model_User.h"
 #import "WXApiObject.h"
 #import "WXApi.h"
@@ -25,7 +26,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *phoneRegButton;
 @property (weak, nonatomic) IBOutlet UIButton *weChatRegButton;
 
-
+@property (nonatomic, strong)MPMoviePlayerController *moviePlayer;
 
 
 @property (nonatomic , strong)NSString * codeStr;

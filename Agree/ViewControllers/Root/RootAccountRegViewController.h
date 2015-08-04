@@ -10,6 +10,7 @@
 #import "Model_User.h"
 #import "RootAccountLoginViewController.h"
 
+//.
 @interface RootAccountRegViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UITextField *nicknameTextField;
 @property (weak, nonatomic) IBOutlet UIButton *avatarButton;

@@ -56,16 +56,14 @@
     if (!user.overdraft) {
         [self.overdraftLabel setHidden:YES];
     } else {
-        [self.surplusLabel setHidden:NO];
-        [self.overdraftLabel setText:[NSString stringWithFormat:@"未收: %d元", user.overdraft.intValue]];
+        [self.overdraftLabel setHidden:NO];
+        [self.overdraftLabel setText:[NSString stringWithFormat:@"欠款: %d元", user.overdraft.intValue]];
     }
 }
 
 //点击好友头像
 - (void)tapAvatarButton: (UIButton *)sender {
-
     
-    NSLog(@"好友资料");
     if (self.topViewController) {
         if (![_user.pk_user isEqual:[Model_User loadFromUserDefaults].pk_user]) {
             [self.topViewController.accountView show];

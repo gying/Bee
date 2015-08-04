@@ -116,9 +116,9 @@
             }
                 break;
         }
+
+        [SVProgressHUD show];
         
-        
-        [SVProgressHUD showWithStatus:@"聚会创建中..." maskType:SVProgressHUDMaskTypeGradient];
         
         [SRNet_Manager requestNetWithDic:[SRNet_Manager addScheduleDic:self.party]
                                 complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
@@ -128,7 +128,6 @@
                                         dispatch_async(dispatch_get_main_queue(), ^{
                                             [self.navigationController popToViewController:rootController animated:YES];
                                         });
-                                        [SVProgressHUD showSuccessWithStatus:@"聚会创建成功"];
                                     } else {
                                         ScheduleTableViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
                                         rootController.loadAgain = true;
@@ -157,7 +156,7 @@
     if (0 == textView.text.length) {
         [self.remarkTextView setText:@"请输入聚会的备注信息"];
         [self.doneButton setTitle:@"完成" forState:UIControlStateNormal];
-        self.doneButton.enabled = NO;
+//        self.doneButton.enabled = NO;
     }
     else if(textView.text.length > 0 ) {
         [self.doneButton setTitle:@"完成" forState:UIControlStateNormal];

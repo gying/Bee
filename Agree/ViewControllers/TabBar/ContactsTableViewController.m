@@ -9,17 +9,11 @@
 #import "ContactsTableViewController.h"
 
 #import "SRNet_Manager.h"
-
 #import "MJExtension.h"
-
 #import <SVProgressHUD.h>
-
 #import "ContactsTableViewCell.h"
-
 #import "SRAccountView.h"
-
 #import "UserChatViewController.h"
-
 #import "AppDelegate.h"
 
 #import "EaseMob.h"

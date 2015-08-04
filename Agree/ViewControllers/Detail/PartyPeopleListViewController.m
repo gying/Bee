@@ -183,10 +183,13 @@
     if (nil == cell) {
         cell = [[PeopleListTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
-
+    if (!theUser.pay_amount) {
+        if (self.party.pay_amount) {
+            theUser.pay_amount = self.party.pay_amount;
+        }
+    }
     [cell initWithUser:theUser withShowStatus:self.showStatus isCreator:self.isCreator isPayor:self.isPayor];
     return cell;
-
 }
 
 - (void)didReceiveMemoryWarning {

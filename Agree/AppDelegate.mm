@@ -284,6 +284,11 @@
 //    [[SDImageCache sharedImageCache] clearDisk];
 //    [[SDImageCache sharedImageCache] clearMemory];
     
+    //设置等待HUD界面
+    [SVProgressHUD setBackgroundColor:[UIColor colorWithWhite:0.2 alpha:0.9]];
+    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD setForegroundColor: AgreeBlue];
+    
     //registerSDKWithAppKey:注册的appKey，详细见下面注释。
     //apnsCertName:推送证书名(不需要加后缀)，详细见下面注释。
     [[EaseMob sharedInstance] registerSDKWithAppKey:@"superrabbit#superrabbit" apnsCertName:@"AgreeIOSPush_Dev" otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:NO]}];

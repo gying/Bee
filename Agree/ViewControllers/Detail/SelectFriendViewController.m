@@ -128,8 +128,7 @@
     [self.avatarImage sd_setImageWithURL:nil];
     [self.reInputButton setHidden:YES];
     [self.remarkLabel setText:@"输入好友必聚号或绑定的手机号码"];
-    
-    
+
     [self.addButton setTitle:@"查找用户" forState:UIControlStateNormal];
 }
 

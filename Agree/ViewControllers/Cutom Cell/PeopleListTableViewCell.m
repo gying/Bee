@@ -82,8 +82,41 @@
                 [self.tapSwitch addTarget:self action:@selector(switchChange:) forControlEvents:UIControlEventValueChanged];
                 
             } else {
-                [self.tapSwitch setHidden:YES];
-                [self.payLabel setHidden:YES];
+                //在非付款者的情况下也进行支付显示,不过禁用switch按钮
+                [self.tapSwitch setHidden:NO];
+                [self.payLabel setHidden:NO];
+                
+                if (!user.pay_type) {
+                    user.pay_type = @0;
+                }
+                
+                switch (user.pay_type.intValue) {
+                    case 1: {   //未付
+                        [self.tapSwitch setOn:NO];
+                        [self switchChange:self.tapSwitch];
+                    }
+                        break;
+                    case 2: {
+                        //已付
+                        //已付款情况直接禁用switch.
+                        [self.tapSwitch setOn:YES];
+                        [self.tapSwitch setEnabled:NO];
+                        [self switchChange:self.tapSwitch];
+                    }
+                        break;
+                    case 3: {   //代付
+                        
+                    }
+                        break;
+                    default: {  //其他
+                        [self.tapSwitch setOn:NO];
+                        [self switchChange:self.tapSwitch];
+                    }
+                        break;
+                }
+                
+                //设置为全部禁用
+                [self.tapSwitch setEnabled:NO];
             }
         }
             break;
@@ -128,6 +161,27 @@
         }
             break;
         default:
+            break;
+    }
+    
+    
+    switch (user.pay_type.intValue) {
+        case 1: {   //未付
+            self.statusLabel.text = [[NSString alloc] initWithFormat:@"%d元 等待支付..", user.pay_amount.intValue];
+        }
+            break;
+        case 2: {
+            //已付
+            self.statusLabel.text = [[NSString alloc] initWithFormat:@"%d元 支付完成..", user.pay_amount.intValue];
+        }
+            break;
+        case 3: {   //代付
+            
+        }
+            break;
+        default: {  //其他
+            
+        }
             break;
     }
 

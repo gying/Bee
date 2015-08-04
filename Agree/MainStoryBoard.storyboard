@@ -145,7 +145,6 @@
             <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHK--GBK1-0</string>
             <string>FZLTXHK--GBK1-0</string>
-            <string>FZLTXHK--GBK1-0</string>
         </mutableArray>
         <mutableArray key="Lantinghei.ttc">
             <string>FZLTXHB--B51-0</string>
@@ -168,10 +167,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ewk-Gr-Q7b" userLabel="LoginRegView" customClass="rootvi">
-                                <rect key="frame" x="0.0" y="535" width="600" height="65"/>
+                                <rect key="frame" x="0.0" y="540" width="600" height="65"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1RG-SN-H56">
-                                        <rect key="frame" x="20" y="0.0" width="275" height="45"/>
+                                        <rect key="frame" x="20" y="-5" width="270" height="45"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="46" id="GVk-Yh-oSL"/>
@@ -190,7 +189,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hks-hV-tWT">
-                                        <rect key="frame" x="305" y="0.0" width="275" height="45"/>
+                                        <rect key="frame" x="310" y="-5" width="270" height="45"/>
                                         <color key="backgroundColor" red="0.34901960780000002" green="0.81960784310000001" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="45" id="lNu-rt-SUO"/>
@@ -210,16 +209,11 @@
                                     <constraint firstItem="Hks-hV-tWT" firstAttribute="width" secondItem="1RG-SN-H56" secondAttribute="width" id="BIi-my-U4J"/>
                                     <constraint firstItem="1RG-SN-H56" firstAttribute="leading" secondItem="Ewk-Gr-Q7b" secondAttribute="leading" constant="20" id="ET6-yG-XPc"/>
                                     <constraint firstItem="Hks-hV-tWT" firstAttribute="height" secondItem="1RG-SN-H56" secondAttribute="height" id="IYV-Yy-wMH"/>
-                                    <constraint firstAttribute="bottom" secondItem="1RG-SN-H56" secondAttribute="bottom" constant="20" id="Uqv-BN-Usa"/>
-                                    <constraint firstItem="Hks-hV-tWT" firstAttribute="leading" secondItem="1RG-SN-H56" secondAttribute="trailing" constant="10" id="Z10-eH-MsW"/>
+                                    <constraint firstAttribute="bottom" secondItem="1RG-SN-H56" secondAttribute="bottom" constant="25" id="Uqv-BN-Usa"/>
+                                    <constraint firstItem="Hks-hV-tWT" firstAttribute="leading" secondItem="1RG-SN-H56" secondAttribute="trailing" constant="20" id="Z10-eH-MsW"/>
                                     <constraint firstAttribute="trailing" secondItem="Hks-hV-tWT" secondAttribute="trailing" constant="20" id="axG-wq-QVg"/>
-                                    <constraint firstAttribute="bottom" secondItem="Hks-hV-tWT" secondAttribute="bottom" constant="20" id="wSA-e9-wZT"/>
+                                    <constraint firstAttribute="bottom" secondItem="Hks-hV-tWT" secondAttribute="bottom" constant="25" id="wSA-e9-wZT"/>
                                 </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="IYV-Yy-wMH"/>
-                                    </mask>
-                                </variation>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Evy-NK-nSU" userLabel="LoginView">
                                 <rect key="frame" x="0.0" y="480" width="600" height="120"/>
@@ -231,16 +225,13 @@
                                             <constraint firstAttribute="height" constant="30" id="Xrm-OL-TIF"/>
                                         </constraints>
                                         <state key="normal" title="手机登陆">
-                                            <color key="titleShadowColor" red="1" green="0.85454340679999996" blue="0.90361866020000003" alpha="0.0" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
                                         <variation key="default">
                                             <mask key="constraints">
                                                 <exclude reference="Xrm-OL-TIF"/>
                                             </mask>
                                         </variation>
-                                        <connections>
-                                            <segue destination="LJ3-Re-knL" kind="show" id="yqs-6q-T6I"/>
-                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7D6-On-YsP">
                                         <rect key="frame" x="20" y="55" width="560" height="45"/>
@@ -250,16 +241,13 @@
                                         </constraints>
                                         <state key="normal" title="微信登陆">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" red="0.4230890276" green="0.96154908459999999" blue="0.40412907799999997" alpha="0.0" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
                                         <variation key="default">
                                             <mask key="constraints">
                                                 <exclude reference="HUv-FE-QLi"/>
                                             </mask>
                                         </variation>
-                                        <connections>
-                                            <action selector="tapWeChatButton:" destination="iBN-eo-4ZX" eventType="touchUpInside" id="sVi-0I-Ubo"/>
-                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -292,9 +280,6 @@
                                                 <exclude reference="Vx9-Vz-qoO"/>
                                             </mask>
                                         </variation>
-                                        <connections>
-                                            <segue destination="LJ3-Re-knL" kind="show" id="Hbu-9j-c3I"/>
-                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i89-Ew-5ws">
                                         <rect key="frame" x="20" y="55" width="560" height="45"/>
@@ -311,9 +296,6 @@
                                                 <exclude reference="R3n-va-anO"/>
                                             </mask>
                                         </variation>
-                                        <connections>
-                                            <action selector="tapWeChatButton:" destination="iBN-eo-4ZX" eventType="touchUpInside" id="y8G-ZP-so2"/>
-                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -334,7 +316,7 @@
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Evy-NK-nSU" firstAttribute="leading" secondItem="Grk-aL-f1f" secondAttribute="leading" id="0xk-L9-09i"/>
-                            <constraint firstItem="9TJ-F1-Jaw" firstAttribute="top" secondItem="Ewk-Gr-Q7b" secondAttribute="bottom" id="G65-yF-trl"/>
+                            <constraint firstItem="9TJ-F1-Jaw" firstAttribute="top" secondItem="Ewk-Gr-Q7b" secondAttribute="bottom" constant="-5" id="G65-yF-trl"/>
                             <constraint firstItem="Ewk-Gr-Q7b" firstAttribute="leading" secondItem="Grk-aL-f1f" secondAttribute="leading" id="VEg-0g-Or1"/>
                             <constraint firstAttribute="trailing" secondItem="Ewk-Gr-Q7b" secondAttribute="trailing" id="WUT-IF-0lT"/>
                             <constraint firstItem="Ewk-Gr-Q7b" firstAttribute="top" secondItem="Evy-NK-nSU" secondAttribute="bottom" id="Woj-Jd-3ab"/>
@@ -364,7 +346,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6h4-yP-eyM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2689" y="-347"/>
+            <point key="canvasLocation" x="-3696" y="-600"/>
         </scene>
         <!--Root Account Login View Controller-->
         <scene sceneID="xJK-Mj-hxn">
@@ -476,7 +458,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OQL-5C-7jK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3073" y="-1097"/>
+            <point key="canvasLocation" x="-2615" y="-660"/>
         </scene>
         <!--Root Phone Reg View Controller-->
         <scene sceneID="t48-5c-oM3">
@@ -2296,7 +2278,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cBv-iY-qWh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-546" y="1401"/>
+            <point key="canvasLocation" x="-592" y="1423"/>
         </scene>
         <!--通讯录-->
         <scene sceneID="hWR-tu-oU3">
@@ -2563,7 +2545,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6CY-WY-DdP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="92" y="1007"/>
+            <point key="canvasLocation" x="211" y="943"/>
         </scene>
         <!--创建的聚会详情-->
         <scene sceneID="qDm-hP-tQZ">
@@ -3847,16 +3829,6 @@
                                 </connections>
                             </button>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="done" id="pKz-Gv-Yeo">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="o7T-6y-waG">
-                                <rect key="frame" x="451" y="7" width="50" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="Lantinghei SC" pointSize="13"/>
-                                <state key="normal" title="设置">
-                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
-                        </barButtonItem>
                     </navigationItem>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -4516,7 +4488,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zXE-Lm-j0x" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-546" y="2089"/>
+            <point key="canvasLocation" x="-592" y="2139"/>
         </scene>
         <!--绑定手机-->
         <scene sceneID="R37-5T-L7f">
@@ -4603,7 +4575,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CDU-AM-QhL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="123" y="2829"/>
+            <point key="canvasLocation" x="139" y="2847"/>
         </scene>
         <!--通讯录-->
         <scene sceneID="aFh-ZL-VYV">
@@ -4651,11 +4623,12 @@
                                             <color key="highlightedColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BD9-Av-xBB">
-                                            <rect key="frame" x="516" y="13" width="76" height="30"/>
+                                            <rect key="frame" x="516" y="15" width="76" height="30"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="76" id="AUh-Tn-no1"/>
                                                 <constraint firstAttribute="height" constant="30" id="mdp-S8-O3u"/>
                                             </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                             <state key="normal" title="发送">
                                                 <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </state>
@@ -4671,7 +4644,7 @@
                                         <constraint firstItem="w52-1o-wCu" firstAttribute="top" secondItem="8hQ-Rl-iKk" secondAttribute="topMargin" constant="-4" id="ORn-jd-43C"/>
                                         <constraint firstItem="w52-1o-wCu" firstAttribute="leading" secondItem="8hQ-Rl-iKk" secondAttribute="leadingMargin" id="TO1-Y0-Y9x"/>
                                         <constraint firstItem="BD9-Av-xBB" firstAttribute="leading" secondItem="H2f-mT-OCu" secondAttribute="trailing" constant="8" id="WCs-rh-EDz"/>
-                                        <constraint firstItem="BD9-Av-xBB" firstAttribute="top" secondItem="8hQ-Rl-iKk" secondAttribute="topMargin" constant="5" id="Z4P-UC-XQ4"/>
+                                        <constraint firstItem="BD9-Av-xBB" firstAttribute="top" secondItem="8hQ-Rl-iKk" secondAttribute="topMargin" constant="7" id="Z4P-UC-XQ4"/>
                                         <constraint firstItem="H2f-mT-OCu" firstAttribute="top" secondItem="8hQ-Rl-iKk" secondAttribute="top" constant="14" id="fU1-rU-fpn"/>
                                         <constraint firstItem="BD9-Av-xBB" firstAttribute="trailing" secondItem="8hQ-Rl-iKk" secondAttribute="trailingMargin" id="hEI-OU-9Jc"/>
                                         <constraint firstItem="3ep-1E-sLM" firstAttribute="leading" secondItem="w52-1o-wCu" secondAttribute="trailing" constant="8" id="ibX-LH-vuk"/>
@@ -4729,7 +4702,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Goi-cN-P4G" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="256" y="1695"/>
+            <point key="canvasLocation" x="211" y="1699"/>
         </scene>
         <!--选择地点-->
         <scene sceneID="Uxt-yP-vVa">
@@ -5511,7 +5484,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VL2-Tv-H42" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="794" y="3704"/>
+            <point key="canvasLocation" x="792" y="3761"/>
         </scene>
         <!--选择时间-->
         <scene sceneID="3sV-BH-LdE">
@@ -6302,14 +6275,13 @@
         <image name="agree_user_setting_avatar_backgroup" width="99" height="99"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="NNN-op-p3r"/>
         <segue reference="c42-zg-aVC"/>
-        <segue reference="RJO-fJ-VQq"/>
-        <segue reference="2j8-NZ-CvJ"/>
         <segue reference="t3l-Pa-TQa"/>
         <segue reference="NNa-bE-Gah"/>
+        <segue reference="NNN-op-p3r"/>
+        <segue reference="RJO-fJ-VQq"/>
+        <segue reference="2j8-NZ-CvJ"/>
         <segue reference="brR-kr-yPI"/>
-        <segue reference="yqs-6q-T6I"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.34901960780000002" green="0.81960784310000001" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
 </document>

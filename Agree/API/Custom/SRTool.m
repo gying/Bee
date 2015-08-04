@@ -8,6 +8,7 @@
 
 #import "SRTool.h"
 #import "Model_User.h"
+#define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
 
 @implementation SRTool
@@ -92,6 +93,13 @@
     } else {
         return NO;
     }
+}
+
++ (void)showProgressHUD {
+    [SVProgressHUD setBackgroundColor:[UIColor colorWithWhite:0.2 alpha:0.9]];
+    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD setForegroundColor: AgreeBlue];
+    [SVProgressHUD show];
 }
 
 

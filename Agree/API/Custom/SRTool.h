@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Model_Party.h"
+#import <SVProgressHUD.h>
 
 @interface SRTool : NSObject
 
@@ -25,4 +26,7 @@
 
 //判断聚会的支付者是否是自己
 + (BOOL)partyPayorIsSelf: (Model_Party *)party;
+
+//+ (void)showProgressHUD;
+
 @end

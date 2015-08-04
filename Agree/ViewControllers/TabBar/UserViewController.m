@@ -67,6 +67,7 @@
 }
 
 - (IBAction)pressedTheAccountSettingButton:(UIButton *)sender {
+    [SVProgressHUD show];
 }
 
 - (IBAction)pressedMyPartyButton:(UIButton *)sender {
@@ -126,26 +127,28 @@
     }
 }
 
-- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    if ([@"GoToMyParty" isEqualToString:identifier]) {
-        UIAlertView *logoutAlert = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                              message:@"我的聚会还未开放,我们将会很快的在下个版本开放它."
-                                                             delegate:self
-                                                    cancelButtonTitle:@"确定"
-                                                    otherButtonTitles:nil];
-        logoutAlert.tag = 2;
-        [logoutAlert show];
-
-        return NO;
-    }
-    return YES;
-}
+//- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+//    if ([@"GoToMyParty" isEqualToString:identifier]) {
+//        UIAlertView *logoutAlert = [[UIAlertView alloc] initWithTitle:@"提示"
+//                                                              message:@"我的聚会还未开放,我们将会很快的在下个版本开放它."
+//                                                             delegate:self
+//                                                    cancelButtonTitle:@"确定"
+//                                                    otherButtonTitles:nil];
+//        logoutAlert.tag = 2;
+//        [logoutAlert show];
+//
+//        return NO;
+//    }
+//    return YES;
+//}
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     if ([segue.identifier isEqualToString:@"AccountDetailFromAvatar"] || [segue.identifier isEqualToString:@"AccountDetailFromButtom"]) {
+        
         UserSettingViewController *childController = segue.destinationViewController;
         childController.rootViewController = self;
     }
