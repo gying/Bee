@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <MediaPlayer/MPMoviePlayerController.h>
+#import "Model_User.h"
+#import "WXApiObject.h"
+#import "WXApi.h"
 
-@interface RootViewController : UIViewController
+@interface RootViewController : UIViewController<WXApiDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *loginRegView;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
@@ -24,6 +27,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *weChatRegButton;
 
 @property (nonatomic, strong)MPMoviePlayerController *moviePlayer;
+
+
+@property (nonatomic , strong)NSString * codeStr;
 
 
 

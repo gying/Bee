@@ -81,8 +81,6 @@
 		F08B809D1A75F7110012E3D9 /* PartyDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F08B809C1A75F7110012E3D9 /* PartyDetailViewController.m */; };
 		F08B80A01A75FAB40012E3D9 /* GroupSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F08B809F1A75FAB40012E3D9 /* GroupSettingViewController.m */; };
 		F08E3B061A70CE970027625D /* SRImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F08E3B051A70CE970027625D /* SRImageManager.m */; };
-		F09007DA1B70A3EB000FEDDA /* beagree_test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F09007D91B70A3EB000FEDDA /* beagree_test.mp4 */; };
-		F09007DB1B70A3EB000FEDDA /* beagree_test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F09007D91B70A3EB000FEDDA /* beagree_test.mp4 */; };
 		F09F05541AB67FB50079D6DB /* Model_user_user.m in Sources */ = {isa = PBXBuildFile; fileRef = F09F05531AB67FB50079D6DB /* Model_user_user.m */; };
 		F09F05571AB693880079D6DB /* ContactsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F09F05561AB693880079D6DB /* ContactsTableViewController.m */; };
 		F0A592EC1AB9D9CB007C822A /* ContactsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0A592EB1AB9D9CB007C822A /* ContactsTableViewCell.m */; };
@@ -315,7 +313,6 @@
 		F08B809F1A75FAB40012E3D9 /* GroupSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GroupSettingViewController.m; path = ../GroupSettingViewController.m; sourceTree = "<group>"; };
 		F08E3B041A70CE970027625D /* SRImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRImageManager.h; sourceTree = "<group>"; };
 		F08E3B051A70CE970027625D /* SRImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRImageManager.m; sourceTree = "<group>"; };
-		F09007D91B70A3EB000FEDDA /* beagree_test.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = beagree_test.mp4; sourceTree = "<group>"; };
 		F09F05521AB67FB50079D6DB /* Model_user_user.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model_user_user.h; sourceTree = "<group>"; };
 		F09F05531AB67FB50079D6DB /* Model_user_user.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Model_user_user.m; sourceTree = "<group>"; };
 		F09F05551AB693880079D6DB /* ContactsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsTableViewController.h; sourceTree = "<group>"; };
@@ -772,7 +769,6 @@
 		F0F5C1C61A66CEBE0029BF7A /* Agree */ = {
 			isa = PBXGroup;
 			children = (
-				F09007D91B70A3EB000FEDDA /* beagree_test.mp4 */,
 				F0F5C2801A66F1620029BF7A /* Model */,
 				F0F5C2341A66F1490029BF7A /* API */,
 				F0F5C1F01A66D2A50029BF7A /* ViewControllers */,
@@ -1073,7 +1069,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F0F5C1DB1A66CEBE0029BF7A /* LaunchScreen.xib in Resources */,
-				F09007DA1B70A3EB000FEDDA /* beagree_test.mp4 in Resources */,
 				F02169F61A927F1500353879 /* LangTingGBK.TTF in Resources */,
 				F0D1A1181B32A677009A5B26 /* Media.xcassets in Resources */,
 				F07642EE1AF1DDFC0075E0C2 /* MainStoryBoard.storyboard in Resources */,
@@ -1087,7 +1082,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F09007DB1B70A3EB000FEDDA /* beagree_test.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
