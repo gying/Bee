@@ -55,11 +55,11 @@
     [regUser setDevice_id:_token];
     
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-    self.rootLoginViewController = [sb instantiateViewControllerWithIdentifier:@"rootAccountLogin"];
+    self.rootViewController = [sb instantiateViewControllerWithIdentifier:@"ROOTVIEWCONTROLLER"];
     self.rootLoginViewController.userInfo = regUser;
     //微信授权登陆注册
     [WXApi registerApp:@"wx9be30a70fcb480ae"];
-    [self.window setRootViewController:self.rootLoginViewController];
+    [self.window setRootViewController:self.rootViewController];
 }
 
 #pragma mark 极光推动帐号获取成功
