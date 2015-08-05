@@ -515,7 +515,8 @@
             }
         }
         if (chat) {
-            [self.chatArray addObject:chat];
+//            [self.chatArray addObject:chat];
+            [self.mchatArray addObject:chat];
         }
     }
     
@@ -585,17 +586,17 @@
     }else if( self.mchatArray.count == self.chatArray.count) {
         
     }
-
-    float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
+//
+//    float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
+//    
+//    if ((contentsizeH - contentoffsetY) < self.chatTableView.frame.size.height) {
+//        //超过了列表的最底端,关闭提示开始进行显示
+//        
+//        //超出列表拖移的长度
+//        float draggingLager = self.chatTableView.frame.size.height - (contentsizeH - contentoffsetY);
+//        //根据拖移的位置来更改label透明度
+//        _closelable.alpha = (draggingLager - self.navigationController.navigationBar.frame.size.height - 20)/(self.chatTableView.frame.size.height - draggingGetPoint - self.navigationController.navigationBar.frame.size.height - 20);
     
-    if ((contentsizeH - contentoffsetY) < self.chatTableView.frame.size.height) {
-        //超过了列表的最底端,关闭提示开始进行显示
-        
-        //超出列表拖移的长度
-        float draggingLager = self.chatTableView.frame.size.height - (contentsizeH - contentoffsetY);
-        //根据拖移的位置来更改label透明度
-        _closelable.alpha = (draggingLager - self.navigationController.navigationBar.frame.size.height - 20)/(self.chatTableView.frame.size.height - draggingGetPoint - self.navigationController.navigationBar.frame.size.height - 20);
-        
         
 //    } else {
 //        //如果没有超过最底端,则不进行提示展示
@@ -609,7 +610,7 @@
 //        _closelable.text = @"释放关闭当前页";
 //    } else {
 //        _closelable.text = @"继续上拉当前页";
-    }
+//    }
 }
 
 
