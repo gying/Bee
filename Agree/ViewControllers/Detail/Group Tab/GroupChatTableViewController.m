@@ -403,6 +403,9 @@
     }
     if (chat) {
         [self.chatArray addObject:chat];
+        
+        //注意
+        [self.mchatArray addObject:chat];
     }
     
     [_conversation markAllMessagesAsRead:YES];
@@ -517,7 +520,6 @@
             [self.chatArray addObject:chat];
         }
     }
-    
     [_conversation markAllMessagesAsRead:YES];
 }
 

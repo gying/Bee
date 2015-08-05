@@ -103,9 +103,6 @@
 #pragma mark 收到聊天信息
 - (void)didReceiveMessage:(EMMessage *)message {
     //这里收到了信息
-    
-    
-    
     if (message.messageType == eMessageTypeGroupChat) {
         //群聊
         if (self.chatDelegate) {
@@ -370,21 +367,19 @@
 //        _token = token;
 //        [regUser setDevice_id:_token];
         
-        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-        self.rootLoginViewController = [sb instantiateViewControllerWithIdentifier:@"rootAccountLogin"];
-        self.rootLoginViewController.userInfo = regUser;
+//        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+//        self.rootLoginViewController = [sb instantiateViewControllerWithIdentifier:@"rootAccountLogin"];
+//        self.rootLoginViewController.userInfo = regUser;
+//        
+//        [self.window setRootViewController:self.rootLoginViewController];
         
         
-        [self.window setRootViewController:self.rootLoginViewController];
+        UIStoryboard * sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+        [self.rootViewController setUserInfo:regUser];
+        self.rootViewController = [sb instantiateViewControllerWithIdentifier:@"ROOTVIEWCONTROLLER"];
+        [self.window setRootViewController:self.rootViewController];
     }
-
-    
-    
-//    UIStoryboard * sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-//    
-//    self.rootViewController = [sb instantiateViewControllerWithIdentifier:@"ROOTVIEWCONTROLLER"];
-//    [self.window setRootViewController:self.rootViewController];
-    
+ 
     return YES;
 }
 

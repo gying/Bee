@@ -31,6 +31,9 @@
 
 @property (nonatomic , strong)NSString * codeStr;
 
+@property (nonatomic, strong)Model_User *userInfo;
+
+
 
 
 

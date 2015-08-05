@@ -75,21 +75,18 @@
 
 }
 - (IBAction)loginButton:(id)sender {
-    
     NSLog(@"登陆");
     self.loginRegView.hidden = YES;
     self.loginView.hidden = NO;
 }
 - (IBAction)regButton:(id)sender {
-    
     NSLog(@"注册");
     self.loginRegView.hidden=YES;
     self.regView.hidden=NO;
 }
 
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     if ((self.loginRegView.hidden = YES)) {
         self.loginRegView.hidden = NO;
         self.loginView.hidden = YES;
@@ -288,25 +285,6 @@
                                 }];
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
