@@ -10,6 +10,7 @@
 #import "SRNet_Manager.h"
 #import <SVProgressHUD.h>
 #import "MJExtension.h"
+#import "SRImageManager.h"
 
 
 
@@ -71,36 +72,82 @@
     } else {
         //验证码确认
         if ([_code isEqualToString:self.self.numberTextfield.text]&&(self.sendButton.titleLabel.text = @"完成验证")) {
-            [SVProgressHUD showWithStatus:@"正在查找手机帐号,请稍后" maskType:SVProgressHUDMaskTypeGradient];
+            [SVProgressHUD show];
             
             //确认验证码完毕,保存到帐号信息
             //验证码确认完毕.
             self.userInfo.phone = _phoneNum;
             
-            Model_User *phoneAccount = [[Model_User alloc] init];
-            phoneAccount.phone = _phoneNum;
-            [SRNet_Manager requestNetWithDic:[SRNet_Manager getUserByPhoneDic:phoneAccount]
-                                    complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
-                                        if (jsonDic) {
-                                            //查到用户
-                                            Model_User *loadAccount = [[Model_User objectArrayWithKeyValuesArray:(NSArray *)jsonDic] firstObject];
-                                            [loadAccount saveToUserDefaults];
-                                            UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-                                            UITabBarController *rootController = [sb instantiateViewControllerWithIdentifier:@"rootTabbar"];
-                                            [self presentViewController:rootController animated:YES completion:nil];
-                                            [SVProgressHUD showSuccessWithStatus:@"查找到用户,正在进行登录" maskType:SVProgressHUDMaskTypeGradient];
-                                        } else {
-                                            //未查到用户
-                                            _checkPhoneNumDone = YES;
-                                            [self performSegueWithIdentifier:@"GoToReg" sender:self];
-                                            [SVProgressHUD showSuccessWithStatus:@"未查找到用户,进入注册" maskType:SVProgressHUDMaskTypeGradient];
+            if (self.regByWechat) {
+                //从微信登录注册,如果查找到手机号则直接完成
+                [SVProgressHUD showWithStatus:@"帐号创建中..." maskType:SVProgressHUDMaskTypeGradient];
+                //设置账户创建时间
+                [self.userInfo setSetup_time:[NSDate date]];
+                
+                //保存头像信息
+                [[SRImageManager initImageOSSData:self.avatarImage
+                                          withKey:self.userInfo.avatar_path]
+                 uploadWithUploadCallback:^(BOOL isSuccess, NSError *error) {
+                     if (isSuccess) {
+                         //图片在保存完成之后开始保存默认的帐号信息
+                         [SVProgressHUD showProgress:1.0 status:@"正在上传用户信息" maskType:SVProgressHUDMaskTypeGradient];
+                         [SRNet_Manager requestNetWithDic:[SRNet_Manager regUserDic:self.userInfo]
+                                                 complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                                     if (jsonDic) {
+                                                         //注册成功
+                                                         //保存帐号信息
+                                                         
+                                                         if ([jsonDic isKindOfClass:[NSNumber class]]) {
+                                                             self.userInfo.pk_user = (NSNumber *)jsonDic;
+                                                         }
+                                                         [self.userInfo saveToUserDefaults];
+                                                         //                [self dismissViewControllerAnimated:YES completion:nil];
+                                                         //                [self.rootController popToRootController];
+                                                         UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+                                                         UITabBarController *rootController = [sb instantiateViewControllerWithIdentifier:@"rootTabbar"];
+                                                         [self presentViewController:rootController animated:YES completion:nil];
+                                                         [SVProgressHUD showSuccessWithStatus:@"注册成功"];
+                                                     } else {
+                                                         //注册出现错误
+                                                     }
+                                                 } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                                     
+                                                 }];
+                         
+                     } else {
+                         NSLog(@"errorInfo_testDataDownloadWithProgress:%@", [error userInfo]);
+                     }
+                 } withProgressCallback:^(float progress) {
+                     NSLog(@"current get %f", progress);
+                     [SVProgressHUD showProgress:progress*0.9 status:@"正在上传头像图片" maskType:SVProgressHUDMaskTypeGradient];
+                 }];
+                
+                
+            } else {
+                Model_User *phoneAccount = [[Model_User alloc] init];
+                phoneAccount.phone = _phoneNum;
+                [SRNet_Manager requestNetWithDic:[SRNet_Manager getUserByPhoneDic:phoneAccount]
+                                        complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                            if (jsonDic) {
+                                                //查到用户
+                                                Model_User *loadAccount = [[Model_User objectArrayWithKeyValuesArray:(NSArray *)jsonDic] firstObject];
+                                                [loadAccount saveToUserDefaults];
+                                                UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+                                                UITabBarController *rootController = [sb instantiateViewControllerWithIdentifier:@"rootTabbar"];
+                                                [self presentViewController:rootController animated:YES completion:nil];
+                                                [SVProgressHUD showSuccessWithStatus:@"查找到用户,正在进行登录" maskType:SVProgressHUDMaskTypeGradient];
+                                            } else {
+                                                //未查到用户
+                                                _checkPhoneNumDone = YES;
+                                                [self performSegueWithIdentifier:@"GoToReg" sender:self];
+                                                [SVProgressHUD showSuccessWithStatus:@"未查找到用户,进入注册" maskType:SVProgressHUDMaskTypeGradient];
+                                            }
                                         }
-                                    }
-                                     failure:^(NSError *error, NSURLSessionDataTask *task) {
-
-                                     }];
-            phoneAccount = nil;
-            
+                                         failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                             
+                                         }];
+                phoneAccount = nil;
+            }
         } else {
             [self.numberLable setText:@"验证码错误,请重新输入"];
         }
@@ -157,7 +204,6 @@
     if ([@"GoToReg" isEqualToString:segue.identifier]) {
         RootAccountRegViewController *childController = segue.destinationViewController;
         [childController setUserInfo:self.userInfo];
-        [childController setRootController:self.rootController];
     }
 }
 

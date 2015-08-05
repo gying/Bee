@@ -15,7 +15,6 @@
 #import "ScheduleTableViewController.h"
 
 #import "WXApi.h"
-#import "RootAccountLoginViewController.h"
 #import "UserSettingViewController.h"
 
 #import <ALBB_OSS_IOS_SDK/ALBBOSSServiceProvider.h>
@@ -46,10 +45,6 @@
 @property (nonatomic, strong)NSString *jPushString;
 @property (nonatomic, strong)NSString *deviceToken;
 
-
-
-@property (strong, nonatomic) RootAccountLoginViewController *rootLoginViewController;
-//@property (strong ,nonatomic) UserSettingViewController * userSettingViewcontroller;
 
 @property(strong , nonatomic)RootViewController * rootViewController;
 

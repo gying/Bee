@@ -75,21 +75,18 @@
 
 }
 - (IBAction)loginButton:(id)sender {
-    
     NSLog(@"登陆");
     self.loginRegView.hidden = YES;
     self.loginView.hidden = NO;
 }
 - (IBAction)regButton:(id)sender {
-    
     NSLog(@"注册");
     self.loginRegView.hidden=YES;
     self.regView.hidden=NO;
 }
 
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     if ((self.loginRegView.hidden = YES)) {
         self.loginRegView.hidden = NO;
         self.loginView.hidden = YES;
@@ -281,7 +278,7 @@
                                     } else {
                                         //使用微信openid的账户不存在
                                         _wechatLoginDone = YES;
-                                        [self performSegueWithIdentifier:@"GoToReg" sender:self];
+                                        [self performSegueWithIdentifier:@"GoWechatToReg" sender:self];
                                     }
                                 } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                     
@@ -289,38 +286,29 @@
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    
+    if ([segue.identifier isEqual:@"GoWechatToReg"]) {
+        //微信注册
+        RootAccountRegViewController *childController = segue.destinationViewController;
+        childController.userInfo = _wechatUser;
+    }
+    if ([segue.identifier isEqual:@"GoPhoneReg"]) {
+        RootPhoneRegViewController *childController = segue.destinationViewController;
+        childController.userInfo = self.userInfo;
+    }
 }
-*/
+
 
 @end

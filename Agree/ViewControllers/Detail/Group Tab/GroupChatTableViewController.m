@@ -519,7 +519,6 @@
             [self.mchatArray addObject:chat];
         }
     }
-    
     [_conversation markAllMessagesAsRead:YES];
 }
 

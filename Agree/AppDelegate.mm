@@ -11,7 +11,6 @@
 #import "APService.h"
 #import "SRNet_Manager.h"
 #import <SVProgressHUD.h>
-#import "RootAccountLoginViewController.h"
 #import "UserSettingViewController.h"
 
 #import <BaiduMapAPI/BMapKit.h>
@@ -56,7 +55,7 @@
     
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
     self.rootViewController = [sb instantiateViewControllerWithIdentifier:@"ROOTVIEWCONTROLLER"];
-    self.rootLoginViewController.userInfo = regUser;
+    self.rootViewController.userInfo = regUser;
     //微信授权登陆注册
     [WXApi registerApp:@"wx9be30a70fcb480ae"];
     [self.window setRootViewController:self.rootViewController];
@@ -103,9 +102,6 @@
 #pragma mark 收到聊天信息
 - (void)didReceiveMessage:(EMMessage *)message {
     //这里收到了信息
-    
-    
-    
     if (message.messageType == eMessageTypeGroupChat) {
         //群聊
         if (self.chatDelegate) {
@@ -353,38 +349,36 @@
     //判断进入的界面
     //查找用户id
 //    NSNumber *user_id = [Model_User loadFromUserDefaults].pk_user;
-//    if ([Model_User loadFromUserDefaults]) {
-//        //拥有用户id
-//        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-//        self.rootController = [sb instantiateViewControllerWithIdentifier:@"rootTabbar"];
-//        [self.window setRootViewController:self.rootController];
-//        
-//    } else {
-//        _viewForLogin = TRUE;
-//        
-//        //如果未注册,则开始注册流程
-//        Model_User *regUser = [[Model_User alloc] init];
-//        //设置uuid作为账户唯一码
-////        [regUser setPk_user:[[[NSUUID alloc] init] UUIDString]];
-////        //设置串号id
-////        _token = token;
-////        [regUser setDevice_id:_token];
-//        
+    if ([Model_User loadFromUserDefaults]) {
+        //拥有用户id
+        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+        self.rootController = [sb instantiateViewControllerWithIdentifier:@"rootTabbar"];
+        [self.window setRootViewController:self.rootController];
+        
+    } else {
+        _viewForLogin = TRUE;
+        
+        //如果未注册,则开始注册流程
+        Model_User *regUser = [[Model_User alloc] init];
+        //设置uuid作为账户唯一码
+//        [regUser setPk_user:[[[NSUUID alloc] init] UUIDString]];
+//        //设置串号id
+//        _token = token;
+//        [regUser setDevice_id:_token];
+        
 //        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
 //        self.rootLoginViewController = [sb instantiateViewControllerWithIdentifier:@"rootAccountLogin"];
 //        self.rootLoginViewController.userInfo = regUser;
 //        
-//        
 //        [self.window setRootViewController:self.rootLoginViewController];
-//    }
-
-    
-    
-    UIStoryboard * sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-    
-    self.rootViewController = [sb instantiateViewControllerWithIdentifier:@"ROOTVIEWCONTROLLER"];
-    [self.window setRootViewController:self.rootViewController];
-    
+        
+        
+        UIStoryboard * sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+        [self.rootViewController setUserInfo:regUser];
+        self.rootViewController = [sb instantiateViewControllerWithIdentifier:@"ROOTVIEWCONTROLLER"];
+        [self.window setRootViewController:self.rootViewController];
+    }
+ 
     return YES;
 }
 

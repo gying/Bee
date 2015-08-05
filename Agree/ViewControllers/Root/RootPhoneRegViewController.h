@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "SRNet_Manager.h"
 #import "RootAccountRegViewController.h"
-#import "RootAccountLoginViewController.h"
 #import "Model_User.h"
 
 @interface RootPhoneRegViewController : UIViewController
@@ -20,8 +19,8 @@
 
 @property (nonatomic, strong)Model_User *userInfo;
 
-@property (nonatomic, strong)RootAccountLoginViewController *rootController;
-
+@property BOOL regByWechat;
+@property (nonatomic, strong)UIImage *avatarImage;
 
 
 @end
