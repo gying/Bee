@@ -11,7 +11,6 @@
 #import "APService.h"
 #import "SRNet_Manager.h"
 #import <SVProgressHUD.h>
-#import "RootAccountLoginViewController.h"
 #import "UserSettingViewController.h"
 
 #import <BaiduMapAPI/BMapKit.h>
@@ -56,7 +55,7 @@
     
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
     self.rootViewController = [sb instantiateViewControllerWithIdentifier:@"ROOTVIEWCONTROLLER"];
-    self.rootLoginViewController.userInfo = regUser;
+    self.rootViewController.userInfo = regUser;
     //微信授权登陆注册
     [WXApi registerApp:@"wx9be30a70fcb480ae"];
     [self.window setRootViewController:self.rootViewController];

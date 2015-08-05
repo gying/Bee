@@ -403,8 +403,6 @@
     }
     if (chat) {
         [self.chatArray addObject:chat];
-        
-        //注意
         [self.mchatArray addObject:chat];
     }
     
@@ -558,46 +556,46 @@
     }
 }
 #pragma mark -- 上下拉刷新
-//- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-//#pragma mark -- 下拉加载数据
-//
-//    float contentoffsetY = _chatTableView.contentOffset.y;
-//    
-//    float contentsizeH = self.chatTableView.contentSize.height;
-//
-//    //判断如果下拉超过限定 就加载数据
-//    if ((0 == (contentoffsetY))&&!(_mchatArray.count == _chatArray.count)) {
-//        _page++;
-//        [self subChatArray];
-//        [_chatTableView reloadData];
-//        
-//        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:_pageSize  inSection:0];
-//        [self.chatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
-//
-//        //在下拉加载时更改关闭提示的高度,以保持在列表最底端
-//        [_closelable setFrame:CGRectMake(0, self.chatTableView.contentSize.height + self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, 50)];
-//    }
-//    //默认一次为pagesize的大小 这是最后一次加载大于0小于10的个数
-//    else if( self.chatArray.count - self.mchatArray.count > 0 && self.chatArray.count - self.mchatArray.count < _pageSize  ){
-//        self.mchatArray = self.chatArray;
-//
-//        [_chatTableView reloadData];
-//
-//    }else if( self.mchatArray.count == self.chatArray.count) {
-//        
-//    }
-//
-//    float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
-//    
-//    if ((contentsizeH - contentoffsetY) < self.chatTableView.frame.size.height) {
-//        //超过了列表的最底端,关闭提示开始进行显示
-//        
-//        //超出列表拖移的长度
-//        float draggingLager = self.chatTableView.frame.size.height - (contentsizeH - contentoffsetY);
-//        //根据拖移的位置来更改label透明度
-//        _closelable.alpha = (draggingLager - self.navigationController.navigationBar.frame.size.height - 20)/(self.chatTableView.frame.size.height - draggingGetPoint - self.navigationController.navigationBar.frame.size.height - 20);
-//        
-//        
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+#pragma mark -- 下拉加载数据
+
+    float contentoffsetY = _chatTableView.contentOffset.y;
+    
+    float contentsizeH = self.chatTableView.contentSize.height;
+
+    //判断如果下拉超过限定 就加载数据
+    if ((0 == (contentoffsetY))&&!(_mchatArray.count == _chatArray.count)) {
+        _page++;
+        [self subChatArray];
+        [_chatTableView reloadData];
+        
+        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:_pageSize  inSection:0];
+        [self.chatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+
+        //在下拉加载时更改关闭提示的高度,以保持在列表最底端
+        [_closelable setFrame:CGRectMake(0, self.chatTableView.contentSize.height + self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, 50)];
+    }
+    //默认一次为pagesize的大小 这是最后一次加载大于0小于10的个数
+    else if( self.chatArray.count - self.mchatArray.count > 0 && self.chatArray.count - self.mchatArray.count < _pageSize  ){
+        self.mchatArray = self.chatArray;
+
+        [_chatTableView reloadData];
+
+    }else if( self.mchatArray.count == self.chatArray.count) {
+        
+    }
+
+    float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
+    
+    if ((contentsizeH - contentoffsetY) < self.chatTableView.frame.size.height) {
+        //超过了列表的最底端,关闭提示开始进行显示
+        
+        //超出列表拖移的长度
+        float draggingLager = self.chatTableView.frame.size.height - (contentsizeH - contentoffsetY);
+        //根据拖移的位置来更改label透明度
+        _closelable.alpha = (draggingLager - self.navigationController.navigationBar.frame.size.height - 20)/(self.chatTableView.frame.size.height - draggingGetPoint - self.navigationController.navigationBar.frame.size.height - 20);
+        
+        
 //    } else {
 //        //如果没有超过最底端,则不进行提示展示
 //        _closelable.alpha = 0.0;
@@ -610,10 +608,10 @@
 //        _closelable.text = @"释放关闭当前页";
 //    } else {
 //        _closelable.text = @"继续上拉当前页";
-//    }
-//}
-//
-//
+    }
+}
+
+
 //-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
 //    //根据屏幕的高度来自适应拖移关闭的高度
 //    float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;

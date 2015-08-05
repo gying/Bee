@@ -34,22 +34,22 @@
     self.loginView.hidden = YES;
     self.regView.hidden = YES;
     
-    NSBundle *bundle = [NSBundle mainBundle];
-    NSString *file = [bundle pathForResource:@"beagree_test" ofType:@"mp4"];
-    NSURL *url = [NSURL fileURLWithPath:file];
-    
-    self.moviePlayer =[[MPMoviePlayerController alloc] initWithContentURL:url];
-    
-    [self.moviePlayer setScalingMode:MPMovieScalingModeAspectFill];
-    self.moviePlayer.controlStyle = MPMovieControlStyleNone;
-    [self.moviePlayer setRepeatMode:MPMovieRepeatModeOne];
-    [self.moviePlayer setShouldAutoplay:YES];
-    [self.moviePlayer prepareToPlay];
-    [self.moviePlayer.view setFrame:self.view.bounds];  // player的尺寸
-//    [self.view addSubview: self.moviePlayer.view];
-    [self.view insertSubview:self.moviePlayer.view atIndex:0];
-    
-    self.moviePlayer.shouldAutoplay=YES;
+//    NSBundle *bundle = [NSBundle mainBundle];
+//    NSString *file = [bundle pathForResource:@"beagree_test" ofType:@"mp4"];
+//    NSURL *url = [NSURL fileURLWithPath:file];
+//    
+//    self.moviePlayer =[[MPMoviePlayerController alloc] initWithContentURL:url];
+//    
+//    [self.moviePlayer setScalingMode:MPMovieScalingModeAspectFill];
+//    self.moviePlayer.controlStyle = MPMovieControlStyleNone;
+//    [self.moviePlayer setRepeatMode:MPMovieRepeatModeOne];
+//    [self.moviePlayer setShouldAutoplay:YES];
+//    [self.moviePlayer prepareToPlay];
+//    [self.moviePlayer.view setFrame:self.view.bounds];  // player的尺寸
+////    [self.view addSubview: self.moviePlayer.view];
+//    [self.view insertSubview:self.moviePlayer.view atIndex:0];
+//    
+//    self.moviePlayer.shouldAutoplay=YES;
     
 //    UILabel *logoLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 200, 260, 100)];
 //    [logoLabel setTextColor:[UIColor whiteColor]];
@@ -278,7 +278,7 @@
                                     } else {
                                         //使用微信openid的账户不存在
                                         _wechatLoginDone = YES;
-                                        [self performSegueWithIdentifier:@"GoToReg" sender:self];
+                                        [self performSegueWithIdentifier:@"GoWechatToReg" sender:self];
                                     }
                                 } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                     
@@ -291,14 +291,24 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    
+    if ([segue.identifier isEqual:@"GoWechatToReg"]) {
+        //微信注册
+        RootAccountRegViewController *childController = segue.destinationViewController;
+        childController.userInfo = _wechatUser;
+    }
+    if ([segue.identifier isEqual:@"GoPhoneReg"]) {
+        RootPhoneRegViewController *childController = segue.destinationViewController;
+        childController.userInfo = self.userInfo;
+    }
 }
-*/
+
 
 @end

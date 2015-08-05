@@ -90,7 +90,6 @@
 		F0A971301ABC083B00829942 /* AddressBookTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0A9712F1ABC083B00829942 /* AddressBookTableViewCell.m */; };
 		F0A97FBF1A92165000FFA4F2 /* SRChatLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = F0A97FBE1A92165000FFA4F2 /* SRChatLabel.m */; };
 		F0A97FC21A92175F00FFA4F2 /* GroupChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0A97FC11A92175F00FFA4F2 /* GroupChatTableViewCell.m */; };
-		F0B4D7501AD1195C00401359 /* RootAccountLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0B4D74F1AD1195C00401359 /* RootAccountLoginViewController.m */; };
 		F0B5F4A91AAA97180013111F /* MJPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = F0B5F49A1AAA97180013111F /* MJPhoto.m */; };
 		F0B5F4AA1AAA97180013111F /* MJPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F0B5F49B1AAA97180013111F /* MJPhotoBrowser.bundle */; };
 		F0B5F4AB1AAA97180013111F /* MJPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = F0B5F49D1AAA97180013111F /* MJPhotoBrowser.m */; };
@@ -329,8 +328,6 @@
 		F0A97FBE1A92165000FFA4F2 /* SRChatLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRChatLabel.m; sourceTree = "<group>"; };
 		F0A97FC01A92175F00FFA4F2 /* GroupChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupChatTableViewCell.h; sourceTree = "<group>"; };
 		F0A97FC11A92175F00FFA4F2 /* GroupChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = GroupChatTableViewCell.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		F0B4D74E1AD1195C00401359 /* RootAccountLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootAccountLoginViewController.h; sourceTree = "<group>"; };
-		F0B4D74F1AD1195C00401359 /* RootAccountLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = RootAccountLoginViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		F0B5F4991AAA97180013111F /* MJPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJPhoto.h; sourceTree = "<group>"; };
 		F0B5F49A1AAA97180013111F /* MJPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPhoto.m; sourceTree = "<group>"; };
 		F0B5F49B1AAA97180013111F /* MJPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJPhotoBrowser.bundle; sourceTree = "<group>"; };
@@ -679,8 +676,6 @@
 			children = (
 				F0BED4B41AA32E1000801ED2 /* RootAccountRegViewController.h */,
 				F0BED4B51AA32E1000801ED2 /* RootAccountRegViewController.m */,
-				F0B4D74E1AD1195C00401359 /* RootAccountLoginViewController.h */,
-				F0B4D74F1AD1195C00401359 /* RootAccountLoginViewController.m */,
 				C60D3F221B4240E500E86E2D /* RootPhoneRegViewController.h */,
 				C60D3F231B4240E500E86E2D /* RootPhoneRegViewController.m */,
 				C69BC6161B704D1B003540DB /* RootViewController.h */,
@@ -1197,7 +1192,6 @@
 				C6B4DA031B5CD0A000EF9BE7 /* PrepayViewController.m in Sources */,
 				F0F5C2941A66F1620029BF7A /* Model_Group_User.m in Sources */,
 				F0B5F4AC1AAA97180013111F /* MJPhotoLoadingView.m in Sources */,
-				F0B4D7501AD1195C00401359 /* RootAccountLoginViewController.m in Sources */,
 				F050EED11AAD3C78002DD2C2 /* Model_Chat.m in Sources */,
 				F07F711E1A72AB92006208A1 /* JTCalendarDataCache.m in Sources */,
 				F03C258F1A72E9AA0043D1F6 /* GroupPartyTableViewController.m in Sources */,
