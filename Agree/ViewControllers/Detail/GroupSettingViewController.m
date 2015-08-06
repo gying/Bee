@@ -148,13 +148,10 @@
     return YES;
 }
 
-- (void)handleCopyCell:(id)sender
-{
-    NSLog(@"复制");
+- (void)handleCopyCell:(id)sender {
+
     UIPasteboard *pboard = [UIPasteboard generalPasteboard];
     pboard.string = self.codeButton.titleLabel.text;
-    NSLog(@"%@",pboard.string);
-    
 }
 - (IBAction)pressedTheExitButton:(id)sender {
     UIAlertView *warnImageAlert = [[UIAlertView alloc] initWithTitle:@"警告"
@@ -231,10 +228,11 @@
 
 - (IBAction)tapSaveButton:(id)sender {
     _saveForQuit = NO;
-    
+    [SVProgressHUD show];
     [SRNet_Manager requestNetWithDic:[SRNet_Manager updateGroupRelationShip:_relationship]
                             complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
                                 [self updateGroupRelationShipDone:jsonDic];
+                                [SVProgressHUD showSuccessWithStatus:@"设置保存成功"];
                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                 
                             }];
@@ -273,7 +271,6 @@
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
     //退出界面选择
     if (0 == buttonIndex) {
         //保存退出

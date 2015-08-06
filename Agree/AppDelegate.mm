@@ -374,8 +374,8 @@
         
         
         UIStoryboard * sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-        [self.rootViewController setUserInfo:regUser];
         self.rootViewController = [sb instantiateViewControllerWithIdentifier:@"ROOTVIEWCONTROLLER"];
+        [self.rootViewController setUserInfo:regUser];
         [self.window setRootViewController:self.rootViewController];
     }
  

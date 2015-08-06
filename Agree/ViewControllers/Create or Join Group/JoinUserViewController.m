@@ -139,6 +139,19 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    
+    NSString *titleStirng = [[NSString alloc] init];
+    if (self.choosePeopleArray && 0 != self.choosePeopleArray.count) {
+        titleStirng = [NSString stringWithFormat:@"您已经邀请了%lu个好友",(unsigned long)self.choosePeopleArray.count];
+    } else {
+        titleStirng = @"邀请好友加入小组";
+    }
+
+    
+    [self.joinButton setTitle:titleStirng forState:UIControlStateNormal];
+}
+
 
 #pragma mark - Navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

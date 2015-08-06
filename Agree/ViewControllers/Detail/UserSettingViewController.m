@@ -78,7 +78,7 @@
         [self.passwordButton setTitle:@"更改密码" forState:UIControlStateNormal];
     }
     
-    if (defAccount.wechat_id && [@"" isEqual:defAccount.wechat_id]) {
+    if (defAccount.wechat_id) {
         [self.weChatButton setTitle:@"重新绑定微信帐号" forState:UIControlStateNormal];
     }
 }
@@ -116,6 +116,13 @@
         default:
             break;
     }
+    
+    if (_userInfo.wechat_id) {
+        [self.weChatButton setTitle:@"重新绑定微信帐号" forState:UIControlStateNormal];
+    } else {
+        [self.weChatButton setTitle:@"绑定微信帐号" forState:UIControlStateNormal];
+    }
+    
 }
 
 - (IBAction)pressedTheAvatarButton:(id)sender {
@@ -515,7 +522,18 @@
                                             
                                             Model_User *userInfo = [Model_User loadFromUserDefaults];
                                             //更新用户昵称
-                                            userInfo.nickname = self.nicknameTextField.text;
+                                            if (self.nicknameTextField.text) {
+                                                userInfo.nickname = self.nicknameTextField.text;
+                                            }
+                                            if (_openid) {
+                                                userInfo.wechat_id = _openid;
+                                            }
+                                            if (_userInfo.sex) {
+                                                userInfo.sex = _userInfo.sex;
+                                            }
+                                            if (_password) {
+                                                userInfo.password = _password;
+                                            }
                                             [userInfo saveToUserDefaults];
                                             
                                             if (_isQuit) {
@@ -548,7 +566,18 @@
                                         
                                         Model_User *userInfo = [Model_User loadFromUserDefaults];
                                         //更新用户昵称
-                                        userInfo.nickname = self.nicknameTextField.text;
+                                        if (self.nicknameTextField.text) {
+                                            userInfo.nickname = self.nicknameTextField.text;
+                                        }
+                                        if (_userInfo.wechat_id) {
+                                            userInfo.wechat_id = _userInfo.wechat_id;
+                                        }
+                                        if (_userInfo.sex) {
+                                            userInfo.sex = _userInfo.sex;
+                                        }
+                                        if (_password) {
+                                            userInfo.password = _password;
+                                        }
                                         [userInfo saveToUserDefaults];
                                         
                                         if (_isQuit) {

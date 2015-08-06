@@ -1159,7 +1159,7 @@
                                 <rect key="frame" x="451" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                <state key="normal" title="设置">
+                                <state key="normal" title="成员">
                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -1857,7 +1857,35 @@
                             <constraint firstItem="OtY-2I-2CT" firstAttribute="top" secondItem="jdh-CR-vhu" secondAttribute="top" id="j08-g9-jO6"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="Sx0-FZ-eWR"/>
+                    <navigationItem key="navigationItem" id="Sx0-FZ-eWR">
+                        <barButtonItem key="leftBarButtonItem" style="done" id="4aW-z8-oC3">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="xNA-9B-Ecc">
+                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
+                                <state key="normal" title="返回">
+                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="tapBackButton:" destination="75R-C4-GW2" eventType="touchUpInside" id="qjb-fy-LzG"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" style="done" id="7eq-tc-USc">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="JF4-Iy-cNS">
+                                <rect key="frame" x="-23" y="-15" width="133" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <state key="normal" title="完成">
+                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="tapDoneButton:" destination="75R-C4-GW2" eventType="touchUpInside" id="89O-8d-yc1"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="choosefriendsTableview" destination="OtY-2I-2CT" id="yk8-Rd-XQX"/>
                     </connections>
@@ -2252,7 +2280,7 @@
                                     <segue destination="iCS-FZ-roa" kind="show" identifier="AccountDetailFromAvatar" id="Re4-1s-AtI"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="比聚号码:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TbX-6p-u87">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TbX-6p-u87">
                                 <rect key="frame" x="16" y="129" width="568" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="6mv-fc-UKV"/>
@@ -6188,14 +6216,14 @@
         <image name="agree_user_setting_avatar_backgroup" width="99" height="99"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="NNN-op-p3r"/>
-        <segue reference="c42-zg-aVC"/>
-        <segue reference="2j8-NZ-CvJ"/>
-        <segue reference="RJO-fJ-VQq"/>
         <segue reference="t3l-Pa-TQa"/>
+        <segue reference="yUl-vl-Sui"/>
+        <segue reference="xWd-dq-8Ci"/>
+        <segue reference="RJO-fJ-VQq"/>
+        <segue reference="2j8-NZ-CvJ"/>
         <segue reference="NNa-bE-Gah"/>
-        <segue reference="DNQ-uP-vDM"/>
         <segue reference="tDD-x4-9TM"/>
+        <segue reference="DNQ-uP-vDM"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.34901960780000002" green="0.81960784310000001" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
 </document>

@@ -206,8 +206,8 @@
 
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    if (2 >= self.groupNameTextField.text.length) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"错误" message:@"小组名称不能为空或者小于两个字符" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+    if (0 == self.groupNameTextField.text.length) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:@"小组名称不能为空" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [alertView show];
         return NO;
         

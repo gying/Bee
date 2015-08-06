@@ -205,8 +205,8 @@
                                         //添加为好友
                                         [_people.userInfo setRelationship:@1];
                                         [self.sendButton setTitle:@"请求已发送" forState:UIControlStateNormal];
-                                        
                                         [self updateRelation];
+                                        [SVProgressHUD showSuccessWithStatus:@"好友请求已发送"];
                                     } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                         
                                     }];
@@ -222,7 +222,6 @@
         controller.body = @"短信输入框默认内容";
         
         [self.contactsDetailTableVC presentViewController:controller animated:YES completion:nil];
-
 }
     
 }

@@ -19,6 +19,8 @@
 #import "CD_Group.h"
 #import <MJRefresh.h>
 
+#import <DQAlertView.h>
+
 @interface GroupViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate, IChatManagerDelegate> {
     NSUInteger _chooseIndexPath;
 }
@@ -67,6 +69,17 @@
     self.groupCollectionView.alwaysBounceVertical = YES;
     // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
     self.groupCollectionView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh:)];
+    
+    
+    
+//    CustomIOSAlertView *alertView = [[CustomIOSAlertView alloc] init];
+//    [alertView setUseMotionEffects:TRUE];
+//    [alertView show];
+    
+//    DQAlertView *alertView = [[DQAlertView alloc] initWithTitle:@"hi" message:@"hihih" cancelButtonTitle:@"hihih" otherButtonTitle:@"hihihi"];
+//    
+//    [alertView.cancelButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+//    [alertView show];
 }
 
 - (void)refresh: (id)sender {
