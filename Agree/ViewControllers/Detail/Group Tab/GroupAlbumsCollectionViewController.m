@@ -62,8 +62,7 @@
 
 -(void)loadPhotoData {
     
-    
-    
+
     if (!self.photoAry) {
         self.photoAry = [[NSMutableArray alloc] init];
     }

@@ -186,6 +186,7 @@
         
         if (chat) {
             [_mchatArray addObject:chat];
+            [_chatArray addObject:chat];
         }
 //        [self subChatArray];
         [self.userChatTableView reloadData];
@@ -661,7 +662,7 @@
 
     float contentoffsetY = _userChatTableView.contentOffset.y;
     
-    float contentsizeH = self.userChatTableView.contentSize.height;
+//    float contentsizeH = self.userChatTableView.contentSize.height;
 
     //判断如果下拉超过限定 就加载数据
     if (( 0 == (contentoffsetY))&&!(_mchatArray.count == _chatArray.count) ){
@@ -680,7 +681,7 @@
     //默认一次10个 这是最后一次加载大于0小于10的个数
     else if( _chatArray.count - _mchatArray.count > 0 && _chatArray.count - _mchatArray.count < 10  ){
 
-        _mchatArray = _chatArray;
+        _mchatArray = [[NSMutableArray alloc]initWithArray:_chatArray];
         [self.userChatTableView reloadData];
 
     }else if( _mchatArray.count == _chatArray.count )

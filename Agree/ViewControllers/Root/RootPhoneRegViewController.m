@@ -13,7 +13,7 @@
 #import "SRImageManager.h"
 
 
-
+#define kCountDownTime 31
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
@@ -22,9 +22,13 @@
     NSString *_phoneNum;
     NSString *_code;
     
+    NSString *sendBtnTitle;
+    
     RootAccountRegViewController * regViewController;
     
     BOOL _checkPhoneNumDone;
+    int _waitTime;
+    BOOL _isCodeDone;
 }
 @end
 
@@ -38,14 +42,44 @@
     // Do any additional setup after loading the view.
     [self.sendButton setAlpha:0.2];
     [self.sendButton setEnabled:NO];
-    
+    _waitTime = kCountDownTime;
     _checkPhoneNumDone = FALSE;
 
+
+}
+
+//倒计时
+-(void)countdown{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(countdown) object:nil];
+    
+    [self.sendButton  setTitle:[NSString stringWithFormat:@"%d秒后重新发送验证码",--_waitTime] forState:UIControlStateNormal];
+//    _waitTime--;
+    if (0 == _waitTime) {
+        
+        if (_isCodeDone) {
+            self.sendButton.enabled = YES;
+            [self.sendButton setTitle:@"完成验证" forState:UIControlStateNormal];
+            [self.sendButton setTitleColor:self.view.tintColor forState:UIControlStateNormal];
+            _sendCodeDone = YES;
+        } else {
+            self.sendButton.enabled = YES;
+            [self.sendButton setTitle:@"重新发送验证码" forState:UIControlStateNormal];
+            [self.sendButton setTitleColor:self.view.tintColor forState:UIControlStateNormal];
+            _sendCodeDone = NO;
+        }
+        
+        return;
+    }else {
+        self.sendButton .enabled = NO;
+        [self.sendButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        [self performSelector:@selector(countdown) withObject:nil afterDelay:1.0];
+    }
     
 }
 //发送验证码按钮
 - (IBAction)sendButton:(id)sender {
     if (!_sendCodeDone) {
+        _waitTime = kCountDownTime;
         _phoneNum = self.numberTextfield.text;
         [SVProgressHUD showWithStatus:@"验证码码发送中..." maskType:SVProgressHUDMaskTypeGradient];
         
@@ -60,6 +94,8 @@
                 [self.sendButton setTitle:@"完成验证" forState:UIControlStateNormal];
                 [self.sendButton setTitleColor:AgreeBlue forState:UIControlStateNormal];
                 [self.sendButton setEnabled:NO];
+                
+                [self countdown];
                 [SVProgressHUD showSuccessWithStatus:@"验证码发送成功"];
             } else {
                 [SVProgressHUD dismiss];
@@ -68,6 +104,7 @@
         } failure:^(NSError *error, NSURLSessionDataTask *task) {
 
         }];
+      
         
     } else {
         //验证码确认
@@ -168,6 +205,8 @@
         if (sender.text.length == 4) {
             [self.sendButton setAlpha:1.0];
             [self.sendButton setEnabled:YES];
+            _isCodeDone = YES;
+            _waitTime = 1;
         } else {
             [self.sendButton setAlpha:0.2];
             [self.sendButton setEnabled:NO];
