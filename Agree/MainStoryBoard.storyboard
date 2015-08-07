@@ -1149,12 +1149,35 @@
                                     <constraint firstAttribute="width" constant="600" id="sF4-7B-mBs"/>
                                 </constraints>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="efg-jr-Uh2">
-                                <rect key="frame" x="600" y="64" width="500" height="536"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="efg-jr-Uh2">
+                                <rect key="frame" x="0.0" y="64" width="500" height="536"/>
                                 <color key="backgroundColor" red="1" green="0.60152422309999998" blue="0.54861905919999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="500" id="Gaa-Wq-FmA"/>
                                 </constraints>
+                                <view key="tableHeaderView" contentMode="scaleToFill" id="Azz-p6-3YK" userLabel="headerView">
+                                    <rect key="frame" x="0.0" y="0.0" width="500" height="50"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PzB-uq-m1s">
+                                            <rect key="frame" x="0.0" y="0.0" width="500" height="50"/>
+                                            <color key="backgroundColor" red="0.66576229779999996" green="1" blue="0.78285329940000004" alpha="1" colorSpace="calibratedRGB"/>
+                                            <state key="normal" title="设置">
+                                                <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <segue destination="YRY-pL-6HV" kind="show" identifier="GroupSetting" id="99a-MH-eqh"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="PzB-uq-m1s" secondAttribute="trailing" id="9LS-3d-nUs"/>
+                                        <constraint firstItem="PzB-uq-m1s" firstAttribute="leading" secondItem="Azz-p6-3YK" secondAttribute="leading" id="ED7-e6-FMz"/>
+                                        <constraint firstItem="PzB-uq-m1s" firstAttribute="top" secondItem="Azz-p6-3YK" secondAttribute="top" id="Uqg-LO-bsH"/>
+                                        <constraint firstAttribute="bottom" secondItem="PzB-uq-m1s" secondAttribute="bottom" id="dl0-rm-idz"/>
+                                    </constraints>
+                                </view>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" restorationIdentifier="PEOPLECELL" selectionStyle="default" indentationWidth="10" reuseIdentifier="PEOPLECELL" id="Tq8-NL-lb8" userLabel="PeopleCell" customClass="GroupPeopleTableViewCell">
                                         <rect key="frame" x="0.0" y="0.0" width="500" height="44"/>
@@ -1281,6 +1304,7 @@
                         <outlet property="partyTableView" destination="EfY-yx-NDE" id="09N-xb-ouD"/>
                         <outlet property="peopleButton" destination="CBy-2H-HKj" id="XF4-tH-0fT"/>
                         <outlet property="peopleTableView" destination="efg-jr-Uh2" id="J40-Ao-NB9"/>
+                        <outlet property="peopleTableViewWidthCon" destination="Gaa-Wq-FmA" id="bfP-1P-dMd"/>
                         <outlet property="rightSideView" destination="uyW-3V-dPV" id="SRy-5T-SWG"/>
                         <outlet property="rightSideViewCon" destination="YkV-1i-j0p" id="1a3-pg-csI"/>
                         <outlet property="rightSideViewWidth" destination="sF4-7B-mBs" id="en4-Xk-l9s"/>
@@ -1585,7 +1609,7 @@
                                     <action selector="pressedTheExitButton:" destination="YRY-pL-6HV" eventType="touchUpInside" id="tH3-t6-gMZ"/>
                                 </connections>
                             </button>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0fV-rn-Zdx">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0fV-rn-Zdx">
                                 <rect key="frame" x="0.0" y="64" width="600" height="200"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -1629,7 +1653,7 @@
                                     <outlet property="delegate" destination="YRY-pL-6HV" id="fcI-IP-j2D"/>
                                 </connections>
                             </collectionView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N0U-A5-RdN">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N0U-A5-RdN">
                                 <rect key="frame" x="168" y="332" width="177" height="53"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="177" id="9nG-7m-dR0"/>
@@ -1642,7 +1666,7 @@
                                     <action selector="pressedThePartyButton:" destination="YRY-pL-6HV" eventType="touchUpInside" id="F9k-eu-5iC"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wHQ-RQ-wfS">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wHQ-RQ-wfS">
                                 <rect key="frame" x="168" y="395" width="177" height="53"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="177" id="vXH-BO-GKt"/>
@@ -1655,7 +1679,7 @@
                                     <action selector="pressedTheChatButton:" destination="YRY-pL-6HV" eventType="touchUpInside" id="j6K-Sb-efl"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="已开启" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G7p-kB-rdY">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="已开启" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G7p-kB-rdY">
                                 <rect key="frame" x="352" y="332" width="51" height="53"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="51" id="2hb-V9-vwe"/>
@@ -1664,7 +1688,7 @@
                                 <color key="textColor" red="0.43529411764705883" green="0.44313725490196076" blue="0.47450980392156861" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="已开启" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="svE-YU-JrN">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="已开启" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="svE-YU-JrN">
                                 <rect key="frame" x="352" y="395" width="51" height="53"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="51" id="HhT-Tq-Yln"/>
@@ -1673,7 +1697,7 @@
                                 <color key="textColor" red="0.43529411764705883" green="0.44313725490196076" blue="0.47450980392156861" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="94c-kY-mSa">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="94c-kY-mSa">
                                 <rect key="frame" x="168" y="458" width="177" height="53"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="177" id="7s2-xa-t4r"/>
@@ -1686,7 +1710,7 @@
                                     <action selector="pressedThePhoneButton:" destination="YRY-pL-6HV" eventType="touchUpInside" id="qOX-OC-da1"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="已公开" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Ni-V1-K9y">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="已公开" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Ni-V1-K9y">
                                 <rect key="frame" x="352" y="458" width="51" height="53"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="51" id="Dbe-f3-sFg"/>
@@ -1695,7 +1719,7 @@
                                 <color key="textColor" red="0.43529411764705883" green="0.44313725490196076" blue="0.47450980392156861" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" tag="1" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZmG-o9-8dP">
+                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZmG-o9-8dP">
                                 <rect key="frame" x="74" y="284" width="452" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="452" id="DFW-bD-HNJ"/>
@@ -1710,7 +1734,7 @@
                                     <action selector="pressedTheCodeButton:" destination="YRY-pL-6HV" eventType="touchUpInside" id="8DT-Xe-7FF"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="点击以生成小组邀请码并复制,将它发送给其他好友,让他们加入你们的小组" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mK2-6y-PBd">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="点击以生成小组邀请码并复制,将它发送给其他好友,让他们加入你们的小组" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mK2-6y-PBd">
                                 <rect key="frame" x="137" y="310" width="326" height="12"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="326" id="6k8-3p-h7I"/>

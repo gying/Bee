@@ -66,6 +66,9 @@
     // Do any additional setup after loading the view.
     self.rightSideView.alpha = 0;
     
+    
+    self.peopleTableViewWidthCon.constant = [UIScreen mainScreen].bounds.size.width/3*2;
+    
     self.rightSideViewWidth.constant = [UIScreen mainScreen].bounds.size.width;
     
     self.groupScrollView.bounces = NO;
@@ -452,6 +455,7 @@
         //进入小组设置
         [SVProgressHUD show];
         GroupSettingViewController *controller = (GroupSettingViewController *)segue.destinationViewController;
+        controller.rootController = self;
         controller.group = self.group;
     } else if ([@"PartyDetail" isEqual:segue.identifier]) {
         PartyDetailViewController *controller = (PartyDetailViewController *)segue.destinationViewController;
@@ -473,7 +477,7 @@
                              self.rightSideView.hidden = NO;
                              [self.rightSideView setAlpha:0.8];
                              
-                             [self.peopleTableView setFrame:CGRectMake(100, self.peopleTableView.frame.origin.y, self.peopleTableView.frame.size.width, self.peopleTableView.frame.size.height)];
+                             [self.peopleTableView setFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - self.peopleTableViewWidthCon.constant, self.peopleTableView.frame.origin.y, self.peopleTableView.frame.size.width, self.peopleTableView.frame.size.height)];
                          }];
             [self.peopleButton setTitle:@"关闭" forState:UIControlStateNormal];
         
@@ -488,7 +492,7 @@
                          }];
     }
     
-    swipe = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(closeview)];
+    swipe = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(tapCloseButton:)];
     swipe.direction = UISwipeGestureRecognizerDirectionRight;
     [self.peopleTableView addGestureRecognizer:swipe];
     
@@ -505,18 +509,18 @@
                          [self.peopleTableView setFrame:CGRectMake(600, self.peopleTableView.frame.origin.y, self.peopleTableView.frame.size.width, self.peopleTableView.frame.size.height)];
                      }];
 }
--(void)closeview
-{
-    if((self.peopleButton.titleLabel.text = @"关闭")) {
-        [self.peopleButton setTitle:@"成员" forState:UIControlStateNormal];
-    }
-    [UIView animateWithDuration:0.5
-                     animations:^{
-                         [self.rightSideView setAlpha:0];
-                         [self.peopleTableView setFrame:CGRectMake(600, self.peopleTableView.frame.origin.y, self.peopleTableView.frame.size.width, self.peopleTableView.frame.size.height)];
-                     }];
-    [self.peopleTableView removeGestureRecognizer:swipe];
-}
+//-(void)closeview
+//{
+//    if((self.peopleButton.titleLabel.text = @"关闭")) {
+//        [self.peopleButton setTitle:@"成员" forState:UIControlStateNormal];
+//    }
+//    [UIView animateWithDuration:0.5
+//                     animations:^{
+//                         [self.rightSideView setAlpha:0];
+//                         [self.peopleTableView setFrame:CGRectMake(600, self.peopleTableView.frame.origin.y, self.peopleTableView.frame.size.width, self.peopleTableView.frame.size.height)];
+//                     }];
+//    [self.peopleTableView removeGestureRecognizer:swipe];
+//}
 
 
 @end

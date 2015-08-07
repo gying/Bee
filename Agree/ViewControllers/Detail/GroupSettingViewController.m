@@ -265,6 +265,9 @@
         UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"小组信息已更改" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"保存退出" otherButtonTitles:@"不保存退出", nil];
         [sheet showInView:self.view];
     } else {
+        
+        [self.rootController tapCloseButton:nil];
+//        [self.rootController.rightSideView setAlpha:0.0];
         [self.navigationController popViewControllerAnimated:YES];
     }
   

@@ -74,6 +74,9 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *peopleTableView;
 
+- (IBAction)tapCloseButton:(id)sender;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *peopleTableViewWidthCon;
 
 
 
