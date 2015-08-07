@@ -14,6 +14,8 @@
 		C61D98511B564273005EF6DC /* MyPartyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C61D98501B564273005EF6DC /* MyPartyViewController.m */; };
 		C64F1D5E1B26881A0063C012 /* ChoosefriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C64F1D5D1B26881A0063C012 /* ChoosefriendsViewController.m */; };
 		C64F1D641B26CB9D0063C012 /* ChoosefriendsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C64F1D631B26CB9D0063C012 /* ChoosefriendsTableViewCell.m */; };
+		C6676F731B749B3700628C4E /* GroupPeopleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C6676F721B749B3700628C4E /* GroupPeopleTableViewCell.m */; };
+		C6676F761B749C4400628C4E /* GroupPeopleTableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C6676F751B749C4300628C4E /* GroupPeopleTableViewDelegate.m */; };
 		C6833E421B58F23500F5685A /* CreatedPartyDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6833E411B58F23500F5685A /* CreatedPartyDetailViewController.m */; };
 		C68EBEDD1B73045200A6F2E5 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C68EBEDC1B73045200A6F2E5 /* ScheduleViewController.m */; };
 		C69BC6181B704D1B003540DB /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C69BC6171B704D1B003540DB /* RootViewController.m */; };
@@ -192,6 +194,10 @@
 		C64F1D5D1B26881A0063C012 /* ChoosefriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosefriendsViewController.m; sourceTree = "<group>"; };
 		C64F1D621B26CB9D0063C012 /* ChoosefriendsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosefriendsTableViewCell.h; sourceTree = "<group>"; };
 		C64F1D631B26CB9D0063C012 /* ChoosefriendsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosefriendsTableViewCell.m; sourceTree = "<group>"; };
+		C6676F711B749B3700628C4E /* GroupPeopleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupPeopleTableViewCell.h; sourceTree = "<group>"; };
+		C6676F721B749B3700628C4E /* GroupPeopleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupPeopleTableViewCell.m; sourceTree = "<group>"; };
+		C6676F741B749C4300628C4E /* GroupPeopleTableViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupPeopleTableViewDelegate.h; sourceTree = "<group>"; };
+		C6676F751B749C4300628C4E /* GroupPeopleTableViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupPeopleTableViewDelegate.m; sourceTree = "<group>"; };
 		C6833E401B58F23500F5685A /* CreatedPartyDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreatedPartyDetailViewController.h; sourceTree = "<group>"; };
 		C6833E411B58F23500F5685A /* CreatedPartyDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreatedPartyDetailViewController.m; sourceTree = "<group>"; };
 		C68EBEDB1B73045200A6F2E5 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleViewController.h; sourceTree = "<group>"; };
@@ -740,6 +746,8 @@
 				F07642EB1AF1D91E0075E0C2 /* GroupPeopleCollectionViewCell.m */,
 				C64F1D621B26CB9D0063C012 /* ChoosefriendsTableViewCell.h */,
 				C64F1D631B26CB9D0063C012 /* ChoosefriendsTableViewCell.m */,
+				C6676F711B749B3700628C4E /* GroupPeopleTableViewCell.h */,
+				C6676F721B749B3700628C4E /* GroupPeopleTableViewCell.m */,
 			);
 			path = "Cutom Cell";
 			sourceTree = "<group>";
@@ -975,6 +983,8 @@
 				F03C258E1A72E9AA0043D1F6 /* GroupPartyTableViewController.m */,
 				F06A62B01A7EA016005C6155 /* GroupAlbumsCollectionViewController.h */,
 				F06A62B11A7EA016005C6155 /* GroupAlbumsCollectionViewController.m */,
+				C6676F741B749C4300628C4E /* GroupPeopleTableViewDelegate.h */,
+				C6676F751B749C4300628C4E /* GroupPeopleTableViewDelegate.m */,
 			);
 			path = "Group Tab";
 			sourceTree = "<group>";
@@ -1131,6 +1141,7 @@
 				F08E3B061A70CE970027625D /* SRImageManager.m in Sources */,
 				F0F5C2761A66F1490029BF7A /* MJIvar.m in Sources */,
 				F05EAC3D1AD13B1F006F505B /* AboutUsViewController.m in Sources */,
+				C6676F731B749B3700628C4E /* GroupPeopleTableViewCell.m in Sources */,
 				F0B5F4AF1AAA97180013111F /* MJPhotoView.m in Sources */,
 				F0DA151D1AC1373800FA6199 /* UserChatViewController.m in Sources */,
 				C68EBEDD1B73045200A6F2E5 /* ScheduleViewController.m in Sources */,
@@ -1198,6 +1209,7 @@
 				C6B4DA031B5CD0A000EF9BE7 /* PrepayViewController.m in Sources */,
 				F0F5C2941A66F1620029BF7A /* Model_Group_User.m in Sources */,
 				F0B5F4AC1AAA97180013111F /* MJPhotoLoadingView.m in Sources */,
+				C6676F761B749C4400628C4E /* GroupPeopleTableViewDelegate.m in Sources */,
 				F050EED11AAD3C78002DD2C2 /* Model_Chat.m in Sources */,
 				F07F711E1A72AB92006208A1 /* JTCalendarDataCache.m in Sources */,
 				F03C258F1A72E9AA0043D1F6 /* GroupPartyTableViewController.m in Sources */,

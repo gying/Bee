@@ -11,3 +11,7 @@ pod 'SDWebImage', '~>3.7'
 
 pod 'Shimmer'
 pod 'MJRefresh'
+
+pod 'DQAlertView', '~> 1.2.1'
+
+pod 'MMDrawerController', '~> 0.5.7'

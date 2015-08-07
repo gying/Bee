@@ -7,25 +7,17 @@
 //
 
 #import "ChoosefriendsViewController.h"
-
 #import "SRNet_Manager.h"
-
 #import "MJExtension.h"
-
 #import <SVProgressHUD.h>
 
 
 
 #import "ChoosefriendsTableViewCell.h"
 #import "SRAccountView.h"
-
 #import "UserChatViewController.h"
-
 #import "AppDelegate.h"
-
 #import "EaseMob.h"
-
-
 #import "SRMoveArray.h"
 
 
@@ -168,6 +160,12 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+- (IBAction)tapBackButton:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+- (IBAction)tapDoneButton:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 /*

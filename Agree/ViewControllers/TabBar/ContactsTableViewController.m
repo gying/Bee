@@ -157,16 +157,9 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"contact_update"] isEqualToNumber:@0]) {
+    if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"contact_update"] isEqualToNumber:@0] || ![[[NSUserDefaults standardUserDefaults] objectForKey:@"relation_update"] isEqualToNumber:@0]) {
         //信息有更新
         
-        if (_friendArray) {
-            [self.tableView reloadData];
-        }
-    }
-    
-    if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"relation_update"] isEqualToNumber:@0]) {
-        //关系有更新
         if (!_isfirstLoad) {
             [self loadDataFromNet];
         }

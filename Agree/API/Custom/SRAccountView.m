@@ -636,6 +636,7 @@
                                         } else {
                                             [self hiddenPhoneNum:YES];
                                             [self hiddenFriendHandleButton:YES];
+                                            [self updateRelation];
                                         }
                                         [SVProgressHUD dismiss];
                                     } failure:^(NSError *error, NSURLSessionDataTask *task) {
