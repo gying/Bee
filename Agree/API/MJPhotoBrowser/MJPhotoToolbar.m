@@ -66,12 +66,15 @@
     [self addSubview:_delImageBtn];
 }
 
-- (void)saveImage
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        MJPhoto *photo = _photos[_currentPhotoIndex];
-        UIImageWriteToSavedPhotosAlbum(photo.image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
-    });
+- (void)saveImage {
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                        message:@"是否将图片下载到相册"
+                                                       delegate:self
+                                              cancelButtonTitle:@"取消"
+                                              otherButtonTitles:@"确定", nil];
+    alertView.tag = 2;
+    
+    [alertView show];
 }
 
 - (void)delImage {
@@ -93,7 +96,6 @@
         photo.save = YES;
         _saveImageBtn.enabled = NO;
         [SVProgressHUD showSuccessWithStatus:@"成功保存到相册"];
-        
     }
 }
 
@@ -118,21 +120,40 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    switch (buttonIndex) {
-        case 0: {   //取消
-            
+    if (2 == alertView.tag) {
+        //点击保存
+        switch (buttonIndex) {
+            case 0: {   //取消
+                
+            }
+                break;
+            case 1: {   //确定
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    MJPhoto *photo = _photos[_currentPhotoIndex];
+                    UIImageWriteToSavedPhotosAlbum(photo.image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+                });
+            }
+                break;
+            default:
+                break;
         }
-            break;
-        case 1: {   //确定
-            [self.delegate hide];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                MJPhoto *photo = _photos[_currentPhotoIndex];
-                [photo.delegate deletePhoto:_currentPhotoIndex];
-            });
+    } else {
+        switch (buttonIndex) {
+            case 0: {   //取消
+                
+            }
+                break;
+            case 1: {   //确定
+                [self.delegate hide];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    MJPhoto *photo = _photos[_currentPhotoIndex];
+                    [photo.delegate deletePhoto:_currentPhotoIndex];
+                });
+            }
+                break;
+            default:
+                break;
         }
-            break;
-        default:
-            break;
     }
 }
 
