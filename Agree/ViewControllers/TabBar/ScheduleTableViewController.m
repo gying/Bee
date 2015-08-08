@@ -33,8 +33,6 @@
 @implementation ScheduleTableViewController
 
 #pragma mark - 界面操作
-
-
 - (void)viewDidLoad {
     
     [self backView];
@@ -74,8 +72,6 @@
         [_backView setHidden:YES];
     }
 }
-
-
 
 - (void)viewWillAppear:(BOOL)animated {
     if (_firstLoadingDone) {

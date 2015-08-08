@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		38688464E2D960851E81912B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B124D697D5B1D9DCE5C3CE49 /* libPods.a */; };
-		C603DC981B75AB3100A927AD /* GroupHistroyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C603DC971B75AB3100A927AD /* GroupHistroyTableViewController.m */; };
 		C60A755F1B2825C500707D84 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C60A755B1B2825C500707D84 /* libWeChatSDK.a */; };
 		C60A75601B2825C500707D84 /* read_me.txt in Resources */ = {isa = PBXBuildFile; fileRef = C60A755C1B2825C500707D84 /* read_me.txt */; };
 		C60D3F241B4240E500E86E2D /* RootPhoneRegViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C60D3F231B4240E500E86E2D /* RootPhoneRegViewController.m */; };
@@ -183,8 +182,6 @@
 		4F57D7C30B72292B090AF91B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		B124D697D5B1D9DCE5C3CE49 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFA0C9B5EF0862273C1170F8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		C603DC961B75AB3100A927AD /* GroupHistroyTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupHistroyTableViewController.h; sourceTree = "<group>"; };
-		C603DC971B75AB3100A927AD /* GroupHistroyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupHistroyTableViewController.m; sourceTree = "<group>"; };
 		C60A755B1B2825C500707D84 /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
 		C60A755C1B2825C500707D84 /* read_me.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = read_me.txt; sourceTree = "<group>"; };
 		C60A755D1B2825C500707D84 /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
@@ -988,8 +985,6 @@
 				F06A62B11A7EA016005C6155 /* GroupAlbumsCollectionViewController.m */,
 				C6676F741B749C4300628C4E /* GroupPeopleTableViewDelegate.h */,
 				C6676F751B749C4300628C4E /* GroupPeopleTableViewDelegate.m */,
-				C603DC961B75AB3100A927AD /* GroupHistroyTableViewController.h */,
-				C603DC971B75AB3100A927AD /* GroupHistroyTableViewController.m */,
 			);
 			path = "Group Tab";
 			sourceTree = "<group>";
@@ -1162,7 +1157,6 @@
 				C6E25B8D1B57B1FA0031A6B9 /* CreatedPartyTableViewCell.m in Sources */,
 				F07F711D1A72AB92006208A1 /* JTCalendarContentView.m in Sources */,
 				F0CC83E11B2E7D0400B73652 /* CD_Group.m in Sources */,
-				C603DC981B75AB3100A927AD /* GroupHistroyTableViewController.m in Sources */,
 				F0BED4B61AA32E1000801ED2 /* RootAccountRegViewController.m in Sources */,
 				C6833E421B58F23500F5685A /* CreatedPartyDetailViewController.m in Sources */,
 				F0F5C2751A66F1490029BF7A /* MJArgument.m in Sources */,
