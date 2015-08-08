@@ -20,7 +20,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     Model_Party *theParty = [self.schAry objectAtIndex:indexPath.row];
-    static NSString *CellIdentifier = @"HistoryPartyCell";
+    static NSString *CellIdentifier = @"HISTORYPATYCELL";
     
     GroupPartyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (nil == cell) {
@@ -38,8 +38,7 @@
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-//    self.myPartyVC.chooseRow = (int)indexPath.row;
-    self.rootController.chooseRow = (int)indexPath.row;
+    self.myPartyVC.chooseRow = (int)indexPath.row;
     return indexPath;
 }
 
@@ -52,24 +51,17 @@
                             complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
                                 if (jsonDic) {
                                     self.schAry = (NSMutableArray *)[Model_Party objectArrayWithKeyValuesArray:jsonDic];
-//                                    [self.myPartyVC reloadTipView:self.schAry.count withType:2];
-//                                    [self.myPartyVC.historyPartyTableView reloadData];
-                                    
-                                    [self.rootController reloadTipView:self.schAry.count withType:2];
-                                    [self.rootController.historyPartyTableView reloadData]; 
-                                    
+                                    [self.myPartyVC reloadTipView:self.schAry.count withType:2];
+                                    [self.myPartyVC.historyPartyTableView reloadData];
                                 } else {
                                     [self.schAry removeAllObjects];
-//                                    [self.myPartyVC.historyPartyTableView reloadData];
-                                    [self.rootController.historyPartyTableView reloadData];
+                                    [self.myPartyVC.historyPartyTableView reloadData];
                                 }
                                 
-//                                [self.myPartyVC.historyPartyTableView.header endRefreshing];
-                                [self.rootController.historyPartyTableView.header endRefreshing];
+                                [self.myPartyVC.historyPartyTableView.header endRefreshing];
                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                 
-//                                [self.myPartyVC.historyPartyTableView.header endRefreshing];
-                                [self.rootController.historyPartyTableView.header endRefreshing];
+                                [self.myPartyVC.historyPartyTableView.header endRefreshing];
                             }];
     
 }

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol SRPayDelegate <NSObject>
+@protocol PerpayDelegate <NSObject>
 
 @required
 - (void)inputAmount: (NSNumber *)amount;
@@ -19,6 +19,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *payTextField;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 
-@property id<SRPayDelegate> delegate;
+@property id<PerpayDelegate> delegate;
 
 @end

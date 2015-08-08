@@ -121,14 +121,17 @@
             break;
         case 1: {
             self.inLabel.text = @"请客";
+            
         }
             break;
         case 2: {
             self.inLabel.text = @"AA制";
+            
         }
             break;
         case 3: {
             self.inLabel.text = @"预付款";
+            
         }
             break;
         default:
@@ -137,7 +140,7 @@
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:NO animated:animated];
+    [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
 }
