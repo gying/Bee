@@ -16,8 +16,8 @@
 @protocol SRPartyDetailDelegate <NSObject>
 
 @required
-- (void)detailChange: (Model_Party *)party;
-- (void)cancelParty: (Model_Party *)party;
+- (void)detailChange: (Model_Party *)party with:(int)type;
+- (void)cancelParty: (Model_Party *)party with:(int)type;
 
 @end
 
@@ -51,5 +51,10 @@
 @property (weak, nonatomic) IBOutlet UIView *payDoneView;
 @property (weak, nonatomic) IBOutlet UILabel *moneyDone;
 @property (weak, nonatomic) IBOutlet UILabel *moneyAmount;
+@property (weak, nonatomic) IBOutlet UIButton *payButton;
+
+//1 日程
+//2 历史聚会
+@property int intoType;
 
 @end

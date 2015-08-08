@@ -131,6 +131,8 @@
                                     } else {
                                         ScheduleTableViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
                                         rootController.loadAgain = true;
+                                        
+                                        
                                         dispatch_async(dispatch_get_main_queue(), ^{
                                             [self.navigationController popToRootViewControllerAnimated:YES];
                                         });
@@ -247,11 +249,13 @@
             
         case 4: {
             //预支付完成按钮
-            [self.payFirstView setHidden:YES];
-            [self.payFirstMoneyTextField resignFirstResponder];
-            if (self.payFirstMoneyTextField.text) {
+            if (0 != self.payFirstMoneyTextField.text.length) {
+                [self.payFirstView setHidden:YES];
+                [self.payFirstMoneyTextField resignFirstResponder];
+                
                 self.party.pay_amount = [NSNumber numberWithFloat:[self.payFirstMoneyTextField.text floatValue]];
                 [self.payTypeLabel setText:[NSString stringWithFormat:@"预付费金额: %@", self.payFirstMoneyTextField.text]];
+//                [self.payTypeLabel setText:@"AAA"];
                 
                 self.payFirstMoneyTextField.text = nil;
             } else {
@@ -262,7 +266,6 @@
                                                           cancelButtonTitle:@"确定"
                                                           otherButtonTitles:nil];
                 [alertView show];
-
             }
         }
             break;
