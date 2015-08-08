@@ -186,6 +186,7 @@
         
         if (chat) {
             [_mchatArray addObject:chat];
+            [_chatArray addObject:chat];
         }
 //        [self subChatArray];
         [self.userChatTableView reloadData];
@@ -655,41 +656,41 @@
 }
 
 #pragma mark -- 上下拉刷新
-//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-//{
-//#pragma mark -- 下拉加载数据
-//
-//    float contentoffsetY = _userChatTableView.contentOffset.y;
-//    
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+#pragma mark -- 下拉加载数据
+
+    float contentoffsetY = _userChatTableView.contentOffset.y;
+    
 //    float contentsizeH = self.userChatTableView.contentSize.height;
-//
-//    //判断如果下拉超过限定 就加载数据
-//    if (( 0 == (contentoffsetY))&&!(_mchatArray.count == _chatArray.count) ){
-//        NSLog(@"下拉到顶刷新");
-//        _page++;
-//        [self subChatArray];
-//        [self.userChatTableView reloadData];
-//        
-//        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:10  inSection:0];
-//        [self.userChatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
-//        
-//        //在下拉加载时更改关闭提示的高度,以保持在列表最底端
-//        [_closelable setFrame:CGRectMake(0, self.userChatTableView.contentSize.height + self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, 50)];
-//        
-//    }
-//    //默认一次10个 这是最后一次加载大于0小于10的个数
-//    else if( _chatArray.count - _mchatArray.count > 0 && _chatArray.count - _mchatArray.count < 10  ){
-//
-//        _mchatArray = _chatArray;
-//        [self.userChatTableView reloadData];
-//
-//    }else if( _mchatArray.count == _chatArray.count )
-//    {
-//        NSLog(@"数组已经加载结束 停止加载");
-//
-//    }
-//    
-//    
+
+    //判断如果下拉超过限定 就加载数据
+    if (( 0 == (contentoffsetY))&&!(_mchatArray.count == _chatArray.count) ){
+        NSLog(@"下拉到顶刷新");
+        _page++;
+        [self subChatArray];
+        [self.userChatTableView reloadData];
+        
+        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:10  inSection:0];
+        [self.userChatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        
+        //在下拉加载时更改关闭提示的高度,以保持在列表最底端
+        [_closelable setFrame:CGRectMake(0, self.userChatTableView.contentSize.height + self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, 50)];
+        
+    }
+    //默认一次10个 这是最后一次加载大于0小于10的个数
+    else if( _chatArray.count - _mchatArray.count > 0 && _chatArray.count - _mchatArray.count < 10  ){
+
+        _mchatArray = [[NSMutableArray alloc]initWithArray:_chatArray];
+        [self.userChatTableView reloadData];
+
+    }else if( _mchatArray.count == _chatArray.count )
+    {
+        NSLog(@"数组已经加载结束 停止加载");
+
+    }
+    
+    
 //    float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
 //    
 //    if ((contentsizeH - contentoffsetY) < self.userChatTableView.frame.size.height) {
@@ -714,8 +715,8 @@
 //    } else {
 //        _closelable.text = @"继续上拉当前页";
 //    }
-//
-//}
+
+}
 //
 //- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
 //

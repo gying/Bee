@@ -56,7 +56,7 @@
     if (!self.chatArray) {
         self.chatArray = [[NSMutableArray alloc] init];
         _page = 1;
-        _pageSize = 20;
+        _pageSize = 10;
         
     }
     _relationship = [CD_Group_User getGroupUserFromCDByGroup:self.group];
@@ -98,7 +98,7 @@
                                     }
                                     
                                     NSIndexPath * indexPath = [NSIndexPath indexPathForRow:_mchatArray.count-1  inSection:0];
-                                    [self reloadTableViewIsScrollToBottom:NO withAnimated:NO];
+                                    [self reloadTableViewIsScrollToBottom:YES withAnimated:NO];
                                     
                                     if (!(0 >= indexPath.row)) {
                                         [self.chatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
@@ -314,38 +314,6 @@
 }
 
 
-
-- (void)reloadTableViewIsScrollToBottom: (BOOL) isScroll
-                           withAnimated: (BOOL)isAnimated {
-    
-    float headHight = 0;
-    for (EModel_Chat *message in _mchatArray) {
-        headHight += [self cellHeightFromMessage:message].floatValue;
-    }
-    
-    
-    headHight = self.chatTableView.frame.size.height - headHight;
-    if (headHight <= 0) {
-        headHight = 0;
-    }
-    
-    self.chatTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.chatTableView.frame.size.width, headHight)];
-
-    
-    [self.chatTableView reloadData];
-    if (isScroll) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSInteger s = [self.chatTableView numberOfSections];
-            if (s<1) return;
-            NSInteger r = [self.chatTableView numberOfRowsInSection:s-1];
-            if (r<1) return;
-            NSIndexPath *ip = [NSIndexPath indexPathForRow:r-1 inSection:s-1];
-            
-            [self.chatTableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionBottom animated:isAnimated];
-        });
-    }
-}
-
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     UIImagePickerControllerSourceType sourceType;
     
@@ -516,6 +484,7 @@
         }
         if (chat) {
             [self.chatArray addObject:chat];
+//            [self.mchatArray addObject:chat];
         }
     }
     [_conversation markAllMessagesAsRead:YES];
@@ -529,13 +498,15 @@
     }
 }
 
-- (void)tableViewIsScrollToBottom: (BOOL)isScroll
-                     withAnimated: (BOOL)isAnimated {
+- (void)reloadTableViewIsScrollToBottom: (BOOL) isScroll
+                           withAnimated: (BOOL)isAnimated {
     
     float headHight = 0;
     for (EModel_Chat *message in _mchatArray) {
         headHight += [self cellHeightFromMessage:message].floatValue;
     }
+    
+    NSLog(@"%f", headHight);
     
     headHight = self.chatTableView.frame.size.height - headHight;
     if (headHight <= 0) {
@@ -543,6 +514,9 @@
     }
     
     self.chatTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.chatTableView.frame.size.width, headHight)];
+    
+    
+    [self.chatTableView reloadData];
     if (isScroll) {
         dispatch_async(dispatch_get_main_queue(), ^{
             NSInteger s = [self.chatTableView numberOfSections];
@@ -555,6 +529,33 @@
         });
     }
 }
+
+//- (void)tableViewIsScrollToBottom: (BOOL)isScroll
+//                     withAnimated: (BOOL)isAnimated {
+//    
+//    float headHight = 0;
+//    for (EModel_Chat *message in _mchatArray) {
+//        headHight += [self cellHeightFromMessage:message].floatValue;
+//    }
+//    
+//    headHight = self.chatTableView.frame.size.height - headHight;
+//    if (headHight <= 0) {
+//        headHight = 0;
+//    }
+//    
+//    self.chatTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.chatTableView.frame.size.width, 100)];
+//    if (isScroll) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            NSInteger s = [self.chatTableView numberOfSections];
+//            if (s<1) return;
+//            NSInteger r = [self.chatTableView numberOfRowsInSection:s-1];
+//            if (r<1) return;
+//            NSIndexPath *ip = [NSIndexPath indexPathForRow:r-1 inSection:s-1];
+//            
+//            [self.chatTableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionBottom animated:isAnimated];
+//        });
+//    }
+//}
 #pragma mark -- 上下拉刷新
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 #pragma mark -- 下拉加载数据
@@ -577,24 +578,29 @@
     }
     //默认一次为pagesize的大小 这是最后一次加载大于0小于10的个数
     else if( self.chatArray.count - self.mchatArray.count > 0 && self.chatArray.count - self.mchatArray.count < _pageSize  ){
-        self.mchatArray = self.chatArray;
+        self.mchatArray = [[NSMutableArray alloc] initWithArray:self.chatArray];
+        
 
         [_chatTableView reloadData];
 
     }else if( self.mchatArray.count == self.chatArray.count) {
         
     }
-
-    float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
     
-    if ((contentsizeH - contentoffsetY) < self.chatTableView.frame.size.height) {
-        //超过了列表的最底端,关闭提示开始进行显示
-        
-        //超出列表拖移的长度
-        float draggingLager = self.chatTableView.frame.size.height - (contentsizeH - contentoffsetY);
-        //根据拖移的位置来更改label透明度
-        _closelable.alpha = (draggingLager - self.navigationController.navigationBar.frame.size.height - 20)/(self.chatTableView.frame.size.height - draggingGetPoint - self.navigationController.navigationBar.frame.size.height - 20);
-        
+    
+    
+    
+//
+//    float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
+//    
+//    if ((contentsizeH - contentoffsetY) < self.chatTableView.frame.size.height) {
+//        //超过了列表的最底端,关闭提示开始进行显示
+//        
+//        //超出列表拖移的长度
+//        float draggingLager = self.chatTableView.frame.size.height - (contentsizeH - contentoffsetY);
+//        //根据拖移的位置来更改label透明度
+//        _closelable.alpha = (draggingLager - self.navigationController.navigationBar.frame.size.height - 20)/(self.chatTableView.frame.size.height - draggingGetPoint - self.navigationController.navigationBar.frame.size.height - 20);
+    
         
 //    } else {
 //        //如果没有超过最底端,则不进行提示展示
@@ -608,7 +614,7 @@
 //        _closelable.text = @"释放关闭当前页";
 //    } else {
 //        _closelable.text = @"继续上拉当前页";
-    }
+//    }
 }
 
 
