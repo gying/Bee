@@ -254,6 +254,17 @@
                 [self.payTypeLabel setText:[NSString stringWithFormat:@"预付费金额: %@", self.payFirstMoneyTextField.text]];
                 
                 self.payFirstMoneyTextField.text = nil;
+<<<<<<< HEAD
+=======
+            } else {
+                //输入金额为空
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                    message:@"预付费聚会的金额不能为空"
+                                                                   delegate:self
+                                                          cancelButtonTitle:@"确定"
+                                                          otherButtonTitles:nil];
+                [alertView show];
+>>>>>>> Gaddle
             }
         }
             break;
