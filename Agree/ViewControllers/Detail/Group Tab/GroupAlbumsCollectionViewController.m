@@ -199,17 +199,15 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [picker dismissViewControllerAnimated:YES completion:nil];
     _pickImage = [info valueForKey:@"UIImagePickerControllerOriginalImage"];
+    //    [self uploadImage:_chatPickImage];
     
-    [SRTool showSRAlertViewWithTitle:@"确认"
-                             message:@"真的想要发送这张图片吗?"
-                   cancelButtonTitle:@"是的"
-                    otherButtonTitle:@"不,我再想想"
-                     tapCancelButton:^(NSString *msgString) {
-                         //确定发送
-                         [self sendImage];
-                     } tapOtherButton:^(NSString *msgString) {
-                         //取消发送
-                     }];
+    //初始化图片发送确认警告框
+    UIAlertView *sendImageAlert = [[UIAlertView alloc] initWithTitle:@"确认信息"
+                                                             message:@"是否确认发送图片?"
+                                                            delegate:self
+                                                   cancelButtonTitle:@"取消"
+                                                   otherButtonTitles:@"确认", nil];
+    [sendImageAlert show];
 }
 
 - (void)sendImage {
@@ -278,6 +276,16 @@
                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
 
                             }];
+}
+
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (0 == buttonIndex) {
+        //取消发送
+    } else {
+        //确认发送
+        [self sendImage];
+    }
 }
 
 @end

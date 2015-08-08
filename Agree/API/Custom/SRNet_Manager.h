@@ -81,7 +81,6 @@
 typedef void (^finishCallbackBlock)(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task);
 typedef void (^requestFailureBlock)(NSError *error, NSURLSessionDataTask *task);
 
-
 @interface SRNet_Manager : NSObject
 
 

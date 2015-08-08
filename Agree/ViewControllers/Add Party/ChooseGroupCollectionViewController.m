@@ -13,7 +13,6 @@
 #import "ChooseLoctaionViewController.h"
 #import <UIImageView+WebCache.h>
 #import "SRImageManager.h"
-#import "SRTool.h"
 
 @interface ChooseGroupCollectionViewController () {
     NSArray *_groupAry;
@@ -118,15 +117,11 @@ static NSString * const reuseIdentifier = @"GroupCollectionCell";
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     if (0 == _chooseIndexPath) {
         //添加公共聚会未开放
-        [SRTool showSRAlertViewWithTitle:@"提示"
-                                 message:@"我们的公开聚会功能还在每日每夜的赶工,请期待~"
-                       cancelButtonTitle:@"好的"
-                        otherButtonTitle:nil
-                         tapCancelButton:^(NSString *msgString) {
-                             
-                         } tapOtherButton:^(NSString *msgString) {
-                             
-                         }];
+        UIAlertView *warAlert = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                           message:@"添加公共聚会还未开放,敬请期待."
+                                                          delegate:self cancelButtonTitle:@"确定"
+                                                 otherButtonTitles: nil];
+        [warAlert show];
         return NO;
     }
     return YES;
