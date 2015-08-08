@@ -49,18 +49,6 @@
 
 }
 
-- (void)loadPartyData {
-    
-}
-
-- (void)detailChange:(Model_Party *)party with:(int)type {
-
-}
-
-- (void)cancelParty:(Model_Party *)party with:(int)type {
-    
-}
-
 
 -(void)backView
 {
