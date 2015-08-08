@@ -14,6 +14,7 @@
 #import "GroupDetailViewController.h"
 #import "ChooseLoctaionViewController.h"
 #import "ChooseDateViewController.h"
+#import "SRTool.h"
 
 @interface ConfirmPartyDetailViewController ()<UITextFieldDelegate, UITextViewDelegate> {
     int _payType;
@@ -260,12 +261,14 @@
                 self.payFirstMoneyTextField.text = nil;
             } else {
                 //输入金额为空
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                                    message:@"预付费聚会的金额不能为空"
-                                                                   delegate:self
-                                                          cancelButtonTitle:@"确定"
-                                                          otherButtonTitles:nil];
-                [alertView show];
+                [SRTool showSRAlertViewWithTitle:@"提示"
+                                         message:@"预付费的钱可不能为空哦~"
+                               cancelButtonTitle:@"好的"
+                                otherButtonTitle:nil tapCancelButton:^(NSString *msgString) {
+                                    
+                                } tapOtherButton:^(NSString *msgString) {
+                    
+                                }];
             }
         }
             break;
