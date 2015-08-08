@@ -10,7 +10,6 @@
 #import <SVProgressHUD.h>
 #import "AFNetworking.h"
 #import "MJExtension.h"
-#import <DQAlertView.h>
 
 @implementation SRNet_Manager
 
@@ -61,6 +60,8 @@
                       }
                   }
               }
+              
+              
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
                 //请求失败
                 if (netManager.failureBlock) {

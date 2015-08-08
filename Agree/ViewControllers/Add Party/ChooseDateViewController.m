@@ -8,9 +8,8 @@
 
 #import "ChooseDateViewController.h"
 #import "ConfirmPartyDetailViewController.h"
-#import "ChooseLoctaionViewController.h"
-#import "SRTool.h"
 
+#import "ChooseLoctaionViewController.h"
 
 
 @interface ChooseDateViewController () {
@@ -26,6 +25,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    
+    
     self.calendar = [[JTCalendar alloc] init];
 
     self.calendarMenuView = [[JTCalendarMenuView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 44)];
@@ -36,6 +37,9 @@
     [self.calendar setMenuMonthsView:self.calendarMenuView];
     [self.calendar setContentView:self.calendarContentView];
     [self.calendar setDataSource:self];
+    
+    
+    
     
     //设置从选择时间返回来得默认时间
     if (self.party.begin_time) {
@@ -77,18 +81,13 @@
         _chooseDate = [NSDate dateWithTimeIntervalSinceNow:60*60*2];
     }
     if ([[self buildDate] timeIntervalSinceDate:[NSDate date]] <= 60*60*2) {
-        //聚会未超过两个小时,显示警告        
-        [SRTool showSRAlertViewWithTitle:@"提示"
-                                 message:@"聚会的开始时间必须是在当前时间的三个小时后哦~"
-                       cancelButtonTitle:@"好的"
-                        otherButtonTitle:nil
-                         tapCancelButton:^(NSString *msgString) {
-                             
-                         } tapOtherButton:^(NSString *msgString) {
-                             
-                         }];
-        
-        
+        //聚会未超过两个小时,显示警告
+        UIAlertView *timeAlert = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                            message:@"聚会的开始时间必须是在当前时间的三个小时后"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"确定"
+                                                  otherButtonTitles:nil];
+        [timeAlert show];
         return NO;
     }
     
@@ -136,7 +135,12 @@
     ConfirmPartyDetailViewController *controller = (ConfirmPartyDetailViewController *)segue.destinationViewController;
     controller.party = self.party;
     controller.isGroupParty = self.isGroupParty;
+    
+    
+    
 
+    
+    
     NSLog(@"更新选择时间后跳转页面!");
 }
 

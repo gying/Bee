@@ -16,8 +16,7 @@
 #import "SRImageManager.h"
 #import "UIImageView+WebCache.h"
 
-//#import <DQAlertView.h>
-#import "SRTool.h"
+#import <DQAlertView.h>
 
 @interface CreateGroupViewController () <UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate> {
     Model_Group *_newGroup;
@@ -210,15 +209,30 @@
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     if (0 == self.groupNameTextField.text.length) {
-        [SRTool showSRAlertViewWithTitle:@"提示"
-                                 message:@"小组名称不能为空哦~"
-                       cancelButtonTitle:@"好的"
-                        otherButtonTitle:nil
-                         tapCancelButton:^(NSString *msgString) {
-                             
-                         } tapOtherButton:^(NSString *msgString) {
-                             
-                         }];
+//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:@"小组名称不能为空" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+//        [alertView show];
+        
+        
+        
+        
+        DQAlertView *alertView = [[DQAlertView alloc] initWithTitle:@"提示"
+                                                            message:@"小组名称不能为空哦~"
+                                                  cancelButtonTitle:@"好的"
+                                                   otherButtonTitle:nil];
+        
+//        [alertView.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:12]];
+        [alertView.titleLabel setFont:[UIFont boldSystemFontOfSize:16]];
+        [alertView.messageLabel setFont:[UIFont systemFontOfSize:12]];
+//        [alertView.messageLabel setFont:[UIFont systemFontOfSize:12]];
+        
+//        [UIFont preferredFontForTextStyle:uifonttext]
+        [alertView.messageLabel setTextColor:[UIColor darkGrayColor]];
+        
+        [alertView.titleLabel setTextColor:[UIColor darkGrayColor]];
+        
+        [alertView.cancelButton.titleLabel setFont:[UIFont systemFontOfSize:14]];
+        [alertView.cancelButton setTitleColor:self.view.tintColor forState:UIControlStateNormal];
+        [alertView show];
         return NO;
         
     } else {

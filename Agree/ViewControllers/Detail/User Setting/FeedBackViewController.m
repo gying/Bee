@@ -10,7 +10,6 @@
 #import "SRNet_Manager.h"
 
 #import <SVProgressHUD.h>
-#import "SRTool.h"
 
 @interface FeedBackViewController () <UIAlertViewDelegate>
 @end
@@ -45,19 +44,17 @@
                                     [self.navigationController popToRootViewControllerAnimated:YES];
                                 });
                                 
-                                [SRTool showSRAlertViewWithTitle:@"提示"
-                                                         message:@"谢谢亲的反馈,我们将会努力做的更好."
-                                               cancelButtonTitle:@"好的"
-                                                otherButtonTitle:nil
-                                                 tapCancelButton:^(NSString *msgString) {
-                                                     
-                                                 } tapOtherButton:^(NSString *msgString) {
-                                                     
-                                                 }];
+                                UIAlertView *feedBackAlert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"感谢您的反馈,我们将会努力做的更好." delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                                
+                                [feedBackAlert show];
                                 
                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                 
                             }];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
 }
 
 - (IBAction)tapBackButton:(id)sender {
