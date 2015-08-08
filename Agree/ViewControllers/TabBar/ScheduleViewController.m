@@ -14,7 +14,7 @@
 #import "HistoryPartyTableViewDelegate.h"
 
 #import "PartyDetailViewController.h"
-#import "HistoryPartyDetailViewController.h"
+#import "SchedulePartyTableViewDelegate.h"
 
 
 #import <MJRefresh.h>
@@ -22,12 +22,14 @@
 
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
-@interface ScheduleViewController ()<UITabBarDelegate,UIScrollViewDelegate> {
+@interface ScheduleViewController ()<UITabBarDelegate,UIScrollViewDelegate, SRPartyDetailDelegate> {
     NSDictionary *norDic;
     NSDictionary *selDic;
     
-    ScheduleTableViewController *_scheduleDelegate;
+    SchedulePartyTableViewDelegate *_scheduleDelegate;
     HistoryPartyTableViewDelegate *_historyPartyDelegate;
+    
+    BOOL _firstLoadingDone;
 }
 
 
@@ -40,11 +42,11 @@
     // Do any additional setup after loading the view.
     [self setupTabbar];
     
-//    _createdPartyDelegate = [[CreatedPartyTableViewDelegate alloc] init];
-//    _createdPartyDelegate.myPartyVC = self;
-//    self.createdPartyTableView.delegate = _createdPartyDelegate;
-//    self.createdPartyTableView.dataSource = _createdPartyDelegate;
-//    [_createdPartyDelegate loadPartyData];
+    _scheduleDelegate = [[SchedulePartyTableViewDelegate alloc] init];
+    _scheduleDelegate.rootController = self;
+    self.myScheduleTableView.delegate = _scheduleDelegate;
+    self.myScheduleTableView.dataSource = _scheduleDelegate;
+    [_scheduleDelegate loadPartyData];
     
     _historyPartyDelegate = [[HistoryPartyTableViewDelegate alloc] init];
     _historyPartyDelegate.rootController = self;
@@ -53,8 +55,8 @@
     [_historyPartyDelegate loadPartyData];
     
     // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
-//    self.createdPartyTableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:_createdPartyDelegate
-//                                                                         refreshingAction:@selector(loadPartyData)];
+    self.myScheduleTableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:_scheduleDelegate
+                                                                         refreshingAction:@selector(loadPartyData)];
     
     
     self.historyPartyTableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:_historyPartyDelegate
@@ -85,6 +87,29 @@
     }
     
 }
+
+- (void)viewWillAppear:(BOOL)animated {
+    if (_firstLoadingDone) {
+        NSNumber *pn = [[NSUserDefaults standardUserDefaults] objectForKey:@"party_update"];
+        if (pn && pn.intValue != 0) {
+            self.loadAgain = TRUE;
+        }
+        
+    }else {
+        _firstLoadingDone = TRUE;
+    }
+    [super viewWillAppear:YES];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    if (self.loadAgain) {
+        [_scheduleDelegate loadPartyData];
+        self.loadAgain = false;
+    }
+    [super viewDidAppear:YES];
+}
+
+
 
 - (void)setupTabbar {
     norDic = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -142,8 +167,7 @@
     }
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
     if (0.0 == scrollView.contentOffset.x) {
         
@@ -154,9 +178,7 @@
         }else{
             self.backView1.hidden = YES;
         }
-        
-        
-        
+
         
         //群聊界面
         [self.myPartyTabBar setSelectedItem:self.mySchedule];
@@ -183,30 +205,126 @@
     
 }
 
+- (void)reloadTipView: (NSInteger)aryCount withType:(int)inttype {
+    //1 创建的聚会
+    //2 聚会的历史记录
+    
+    if (0 == aryCount) {
+        switch (inttype) {
+            case 1: {
+                [self.backView1 setHidden:NO];
+            }
+                break;
+            case 2: {
+                [self.backView2 setHidden:NO];
+            }
+                break;
+            default:
+                break;
+        }
+    }else {
+        switch (inttype) {
+            case 1: {
+                [self.backView1 setHidden:YES];
+            }
+                break;
+            case 2: {
+                [self.backView2 setHidden:YES];
+            }
+                break;
+            default:
+                break;
+        }
+        [self.backView2 setHidden:YES];
+    }
+}
+
+- (void)detailChange:(Model_Party *)party with:(int)type {
+    switch (type) {
+        case 1: {
+            //日程
+            for (Model_Party *theParty in _scheduleDelegate.schAry) {
+                if ([theParty.pk_party isEqualToString:party.pk_party]) {
+                    theParty.relationship = party.relationship;
+                }
+            }
+            [self.myScheduleTableView reloadData];
+        }
+            break;
+        case 2: {
+            //历史聚会
+            for (Model_Party *theParty in _historyPartyDelegate.schAry) {
+                if ([theParty.pk_party isEqualToString:party.pk_party]) {
+                    theParty.relationship = party.relationship;
+                }
+            }
+            [self.historyPartyTableView reloadData];
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)cancelParty:(Model_Party *)party with:(int)type {
+    Model_Party *cancelParty;
+    switch (type) {
+        case 1: {
+            //日程
+            cancelParty = nil;
+            for (Model_Party *theParty in _scheduleDelegate.schAry) {
+                if ([theParty.pk_party isEqualToString:party.pk_party]) {
+                    cancelParty = theParty;
+                }
+            }
+            
+            if (cancelParty) {
+                [_scheduleDelegate.schAry removeObject:cancelParty];
+                [self reloadTipView:_scheduleDelegate.schAry.count withType:1];
+                [self.myScheduleTableView reloadData];
+            }
+        }
+            break;
+        case 2: {
+            //历史聚会
+            cancelParty = nil;
+            for (Model_Party *theParty in _historyPartyDelegate.schAry) {
+                if ([theParty.pk_party isEqualToString:party.pk_party]) {
+                    cancelParty = theParty;
+                }
+            }
+            
+            if (cancelParty) {
+                [_historyPartyDelegate.schAry removeObject:cancelParty];
+                [self reloadTipView:_historyPartyDelegate.schAry.count withType:2];
+                [self.historyPartyTableView reloadData];
+            }
+        }
+            break;
+        default:
+            break;
+    }
+}
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     
+    //1 日程
+    //2 历史聚会
+    //intoType
     if ([@"PartyDetail" isEqualToString:segue.identifier]) {
         PartyDetailViewController *childController = (PartyDetailViewController *)segue.destinationViewController;
         childController.party = [_scheduleDelegate.schAry objectAtIndex:self.chooseRow];
+        childController.intoType = 1;
+        childController.delegate = self;
         
-    }else if ([@"HISTORYPARTY" isEqualToString:segue.identifier])
-    {
-        HistoryPartyDetailViewController *childController = (HistoryPartyDetailViewController *)segue.destinationViewController;
+    }else if ([@"HistoryParty" isEqualToString:segue.identifier]) {
+        PartyDetailViewController *childController = (PartyDetailViewController *)segue.destinationViewController;
         childController.party = [_historyPartyDelegate.schAry objectAtIndex:self.chooseRow];
+        childController.intoType = 2;
+        childController.delegate = self;
     }
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -34,6 +34,7 @@
     
     //下载图片
     NSURL *imageUrl = [SRImageManager miniAvatarImageFromOSS:user.avatar_path];
+
     [self.avatarButton sd_setBackgroundImageWithURL:imageUrl forState:UIControlStateNormal];
     [self.nicknameLabel setText:user.nickname];
     
