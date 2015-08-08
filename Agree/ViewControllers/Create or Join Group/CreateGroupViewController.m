@@ -15,6 +15,8 @@
 #import "GroupViewController.h"
 #import "SRImageManager.h"
 #import "UIImageView+WebCache.h"
+
+//#import <DQAlertView.h>
 #import "SRTool.h"
 
 @interface CreateGroupViewController () <UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate> {

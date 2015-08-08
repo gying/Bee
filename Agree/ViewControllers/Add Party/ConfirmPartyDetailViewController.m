@@ -132,6 +132,8 @@
                                     } else {
                                         ScheduleTableViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
                                         rootController.loadAgain = true;
+                                        
+                                        
                                         dispatch_async(dispatch_get_main_queue(), ^{
                                             [self.navigationController popToRootViewControllerAnimated:YES];
                                         });
@@ -248,11 +250,13 @@
             
         case 4: {
             //预支付完成按钮
-            [self.payFirstView setHidden:YES];
-            [self.payFirstMoneyTextField resignFirstResponder];
-            if (self.payFirstMoneyTextField.text) {
+            if (0 != self.payFirstMoneyTextField.text.length) {
+                [self.payFirstView setHidden:YES];
+                [self.payFirstMoneyTextField resignFirstResponder];
+                
                 self.party.pay_amount = [NSNumber numberWithFloat:[self.payFirstMoneyTextField.text floatValue]];
                 [self.payTypeLabel setText:[NSString stringWithFormat:@"预付费金额: %@", self.payFirstMoneyTextField.text]];
+//                [self.payTypeLabel setText:@"AAA"];
                 
                 self.payFirstMoneyTextField.text = nil;
             } else {
@@ -263,7 +267,7 @@
                                 otherButtonTitle:nil tapCancelButton:^(NSString *msgString) {
                                     
                                 } tapOtherButton:^(NSString *msgString) {
-                                    
+                    
                                 }];
             }
         }
@@ -277,6 +281,9 @@
 //返回上一页
 - (IBAction)tapBackButton:(id)sender {
     if (self.isGroupParty) {
+//        UIViewController *viewController = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 3];
+//        [self.navigationController popToViewController:viewController animated:YES];
+        
         for (UIViewController *subController in self.navigationController.viewControllers) {
             
             if ([subController isKindOfClass:[GroupDetailViewController class]]) {
@@ -284,18 +291,28 @@
                 break;
             }
         }
+        
+        
     } else {
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
+    
+    
+    
+    NSLog(@"返回日程界面");
+    
 }
 //改变时间
 - (IBAction)changeDate:(id)sender {
+    
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
     ChooseDateViewController *childController = [sb instantiateViewControllerWithIdentifier:@"chooseDate"];
     childController.fromRoot = YES;
     childController.party = self.party;
     [self.navigationController showViewController:childController sender:self];
     [childController.tnextButton setTitle:@"完成修改" forState:UIControlStateNormal];
+
+    NSLog(@"返回到选择时间界面");
 }
 //改变地址
 - (IBAction)changeAddress:(id)sender {
@@ -305,6 +322,7 @@
     childController.party = self.party;
     childController.fromRoot = YES;
     [self.navigationController showViewController:childController sender:self];
+        NSLog(@"返回到选择地址界面");
     
     [childController.lnextButton setTitle:@"完成修改" forState:UIControlStateNormal];
 
