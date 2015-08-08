@@ -13,7 +13,6 @@
 
 #import "SRNet_Manager.h"
 
-#import "MyPartyViewController.h"
 #import "ScheduleViewController.h"
 
 
@@ -24,7 +23,6 @@
 
 @property (nonatomic, strong)NSMutableArray *schAry;
 @property (nonatomic, strong)Model_Group *group;
-@property (nonatomic,strong)MyPartyViewController * myPartyVC;
 @property (nonatomic,strong)ScheduleViewController *rootController;
 
 - (void)loadPartyData;
