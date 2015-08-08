@@ -2050,7 +2050,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cBv-iY-qWh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-592" y="1423"/>
+            <point key="canvasLocation" x="-609" y="1562"/>
         </scene>
         <!--通讯录-->
         <scene sceneID="hWR-tu-oU3">
@@ -2137,7 +2137,7 @@
                                     <segue destination="iCS-FZ-roa" kind="show" identifier="AccountDetailFromButtom" id="t3l-Pa-TQa"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E25-Ya-OUW">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E25-Ya-OUW">
                                 <rect key="frame" x="183" y="356" width="235" height="82"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="235" id="RMB-Gl-tqB"/>
@@ -2314,7 +2314,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oiJ-gh-rYQ">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="336"/>
                                 <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="结账金额" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="P5Y-rn-VRt">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="结账金额" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="P5Y-rn-VRt">
                                         <rect key="frame" x="46" y="119" width="508" height="104"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="40"/>
@@ -2606,7 +2606,7 @@
                                     <action selector="pressedThePasswordButton:" destination="iCS-FZ-roa" eventType="touchUpInside" id="7lx-0F-9nv"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cxK-aq-OfE">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cxK-aq-OfE">
                                 <rect key="frame" x="20" y="327" width="560" height="70"/>
                                 <fontDescription key="fontDescription" name="FZLTXHK--GBK1-0" family="FZLanTingHei-EL-GBK" pointSize="20"/>
                                 <state key="normal" title="性别">
@@ -4390,7 +4390,7 @@
                                             <action selector="tapPayButton:" destination="zEc-iu-1xD" eventType="touchUpInside" id="Z51-Xh-5H0"/>
                                         </connections>
                                     </button>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="预付金额" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="W7C-rD-hTC">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="预付金额" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="W7C-rD-hTC">
                                         <rect key="frame" x="46" y="106" width="508" height="90"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="40"/>
