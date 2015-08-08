@@ -1,94 +1,44 @@
 //
-//  PartyDetailViewController.m
+//  CreatedPartyDetailViewController.m
 //  Agree
 //
-//  Created by G4ddle on 15/1/26.
+//  Created by Agree on 15/7/17.
 //  Copyright (c) 2015年 superRabbit. All rights reserved.
 //
 
-#import "PartyDetailViewController.h"
+#import "CreatedPartyDetailViewController.h"
+
 #import "SRNet_Manager.h"
 #import "Model_Party_User.h"
 #import <SVProgressHUD.h>
 #import "MJExtension.h"
 #import "PartyPeopleListViewController.h"
 #import "PartyMapViewController.h"
-#import "AllPartyTableViewCell.h"
-#import "PeopleListTableViewCell.h"
-#import <BaiduMapAPI/BMapKit.h>
 
+#import "PrepayViewController.h"
+
+
+#import <BaiduMapAPI/BMapKit.h>
 #import "Model_Party.h"
 #import "SRTool.h"
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface PartyDetailViewController () <UIActionSheetDelegate,BMKLocationServiceDelegate,BMKMapViewDelegate> {
+@interface CreatedPartyDetailViewController ()<UIActionSheetDelegate,BMKLocationServiceDelegate,BMKMapViewDelegate, PerpayDelegate> {
     Model_Party_User *_relation;
     NSMutableArray *_relArray;
     int _showStatus;
     BMKMapView *_bdMapView;
-    
     UIButton * customButton;
-    
 }
 
 @end
 
-@implementation PartyDetailViewController
+@implementation CreatedPartyDetailViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-//    [self.navigationItem setTitle:self.party.name];
-    
-    //类型的边框与圆弧
-    self.payType.layer.cornerRadius = self.payType.frame.size.height/4;
-//    self.payType.layer.borderColor = AgreeBlue.CGColor;
-    self.payType.layer.borderColor = [UIColor colorWithWhite:0.8 alpha:1.0].CGColor;
-    self.payType.layer.borderWidth = 1.0;
-    self.payType.textColor = AgreeBlue;
-    self.payType.alpha = 0.7;
-    
-    [self.money setText:[NSString stringWithFormat:@"¥%@", self.party.pay_amount]];
-    
-    switch (self.party.pay_type.intValue) {
-        case 1: {
-            //请客
-            [self.payType setText:@"请客"];
-        }
-            
-            break;
-        case 2: {
-            //AA
-            [self.payType setText:@"AA制"];
-        }
-            
-            break;
-        case 3: {
-            //预付
-            [self.payType setText:@"预付款"];
-        }
-            
-            break;
-        default: {
-            [self.payType setText:@"未指定"];
-        }
-            break;
-    }
-
-    if ([@1 isEqual:self.party.relationship]) {
-        [self.money setTextColor:[UIColor whiteColor]];
-        [self.inLabel setTextColor:[UIColor whiteColor]];
-    } else {
-        [self.money setTextColor:[UIColor lightGrayColor]];
-        [self.inLabel setTextColor:[UIColor lightGrayColor]];
-    }
-    
-    if (![@3  isEqual: self.party.pay_type]) {
-        self.money.hidden = YES;
-        self.inLabel.hidden = YES;
-        [self.yesButton setTitle:@"参与" forState:UIControlStateNormal];
-    }
     
     if (self.party.longitude && self.party.latitude) {
         //如果存在经纬度数据
@@ -96,7 +46,7 @@
         _bdMapView = [[BMKMapView alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width - 16, [[UIScreen mainScreen] bounds].size.height - 410)];
         
         self.mapConHeight.constant = CGRectGetHeight(_bdMapView.bounds);
-//        [self.locationMapView addSubview:_bdMapView];
+        //        [self.locationMapView addSubview:_bdMapView];
         [self.locationMapView insertSubview:_bdMapView atIndex:0];
         [_bdMapView setDelegate:self];
         
@@ -109,7 +59,91 @@
         [_bdMapView addAnnotation:_chooseAnnotation];
         [_bdMapView setZoomLevel:15];
         [_bdMapView setCenterCoordinate:partyCoor];
-    }\
+    }
+    
+    
+    //类型的边框与圆弧
+    self.payType.layer.cornerRadius = self.payType.frame.size.height/4;
+    //    self.payType.layer.borderColor = AgreeBlue.CGColor;
+    self.payType.layer.borderColor = [UIColor colorWithWhite:0.8 alpha:1.0].CGColor;
+    self.payType.layer.borderWidth = 1.0;
+    self.payType.textColor = AgreeBlue;
+    self.payType.alpha = 0.7;
+
+    
+    switch (self.party.pay_type.intValue) {
+        case 1: {
+            //请客
+            [self.payType setText:@"请客"];
+            [self.cheakButton setHidden:YES];
+        }
+            
+            break;
+        case 2: {
+            //AA
+            [self.payType setText:@"AA制"];
+            if (self.party.pay_amount) {
+                //已经结账的AA制聚会
+                if ([SRTool partyPayorIsSelf:self.party]) {
+                    //聚会的付款人为本人
+                    [self.cheakButton setHidden:YES];
+                    [self.payDoneView setHidden:NO];
+                    
+                    self.moneyAmount.text = [NSString stringWithFormat:@"总额 %d", self.party.pay_amount.intValue];
+                    self.moneyDone.text = @"已收 正在计算...";
+                } else {
+                    switch (self.party.user_pay_type.intValue) {
+                        case 1: {
+                            //未支付
+                        }
+                            break;
+                        case 2: {
+                            //已支付
+                            //已支付 - 显示付款的详情内容
+                            [self.cheakButton setHidden:YES];
+                            [self.payDoneView setHidden:NO];
+                            
+                            self.moneyAmount.text = [NSString stringWithFormat:@"总额 %d", self.party.pay_amount.intValue];
+                            self.moneyDone.text = @"已收 正在计算...";
+                            
+                        }
+                            break;
+                        case 3: {
+                            //支持代付
+                        }
+                            break;
+                        default: {
+                            //默认为空为未付
+                        }
+                            break;
+                    }
+                }
+            } else {
+                
+            }
+        }
+            
+            break;
+        case 3: {
+            //预付
+            [self.payType setText:@"预付款"];
+            [self.cheakButton setHidden:YES];
+            
+            [self.payDoneView setHidden:NO];
+            
+            self.moneyAmount.text = @"参与人数";
+            self.moneyDone.text = @"付款人数";
+            
+        }
+            
+            break;
+        default: {
+            [self.payType setText:@"未指定"];
+            [self.cheakButton setHidden:YES];
+        }
+            break;
+    }
+    
     
     //判断是否是创建者本身.
     if ([[Model_User loadFromUserDefaults].pk_user isEqualToNumber:self.party.fk_user]) {
@@ -125,6 +159,7 @@
     }
     
     self.nameLabel.text = self.party.name;
+    
     _relation = [[Model_Party_User alloc] init];
     _relation.pk_party_user = self.party.pk_party_user;
     _relation.relationship = self.party.relationship;
@@ -132,11 +167,10 @@
     _relation.fk_party = self.party.pk_party;
     _relation.fk_user = [Model_User loadFromUserDefaults].pk_user;
     
-    [self.yesButton.layer setCornerRadius:self.yesButton.frame.size.height/2];
-    [self.yesButton.layer setMasksToBounds:YES];
-    
-    [self.noButton.layer setCornerRadius:self.noButton.frame.size.height/2];
-    [self.noButton.layer setMasksToBounds:YES];
+    [self.cheakButton.layer setCornerRadius:self.cheakButton.frame.size.height/2];
+    [self.cheakButton.layer setMasksToBounds:YES];
+    self.cheakButton.backgroundColor = AgreeBlue;
+    [self.cheakButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
     [self.addressLabel setText:self.party.location];
     
@@ -153,6 +187,7 @@
     if (self.party) {
         [SRNet_Manager requestNetWithDic:[SRNet_Manager getPartyRelationshipDic:sendParty]
                                 complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                    //进入 读取关系与详情
                                     if (jsonDic) {
                                         _relArray = (NSMutableArray *)[Model_User objectArrayWithKeyValuesArray:[jsonDic objectForKey:@"relation"]];
                                         self.party = [[Model_Party objectArrayWithKeyValuesArray:[jsonDic objectForKey:@"party"]] objectAtIndex:0];
@@ -161,55 +196,15 @@
                                 } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                     
                                 }];
-        
-    }
-    
-    if (nil == self.party.relationship) {
-        //在与聚会未产生关系时(第一次进入聚会详情),建立与聚会关系
-        _relation.relationship = @0;
-        //设置加入时候为未支付状态
-        _relation.pay_type = @0;
-        if ([self.party.fk_user isEqualToNumber:[Model_User loadFromUserDefaults].pk_user]) {
-            _relation.type = @2;
-        } else {
-            _relation.type = @1;
-        }
-        [SRNet_Manager requestNetWithDic:[SRNet_Manager createRelationshipForPartyDic:_relation]
-                                complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
-                                    if (jsonDic) {
-                                        _relation.pk_party_user = (NSNumber *)jsonDic;
-                                        self.party.relationship = @0;
-                                        [self reloadPeopleNum];
-                                        [self.delegate detailChange:self.party];
-                                    }
-                                } failure:^(NSError *error, NSURLSessionDataTask *task) {
-                                    
-                                }];
-
-    } else if ([@3 isEqual:self.party.pay_type]) {
-        
-        //这里为预付款聚会
-        if ((nil != self.party.relationship) && ([@1  isEqual: self.party.relationship])) {
-            //用户的标识为参与
-            //这里为预付款聚会已参与
-            self.yesButton.enabled = NO;
-            self.noButton.enabled = NO;
-            
-            if ([SRTool partyPayorIsSelf:self.party]) {
-                //查看聚会的付款人是否为自己
-                //如果自己为付款人则显示人数数据
-                self.yesButton.hidden = YES;
-                self.noButton.hidden = YES;
-                
-                [self.payDoneView setHidden:NO];
-                
-                self.moneyAmount.text = @"参与人数";
-                self.moneyDone.text = @"付款人数";
-            }
-        }   
     }
     
     [self setParticipateStatus];
+    
+    if (0 == self.party.inNum.intValue) {
+        //无人参与聚会
+        [self.payDoneView setHidden:YES];
+        [self.cheakButton setHidden:YES];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -217,100 +212,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)pressedYesButton:(id)sender {
 
-    if ([@3 isEqual: self.party.pay_type]) {
-        NSLog(@"弹出AlertView");
-        UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"确定要参加聚会吗" message:@"该聚会为预付款聚会,如果确认参与之后,将无法取消参与该聚会." delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-        alertView.tag = 3;
-        [alertView show];
-    } else {
-        if (1 == [_relation.relationship intValue]) {
-            //取消选中状态
-            
-            _relation.relationship = @0;
-            self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] - 1];
-            [SVProgressHUD showWithStatus:@"正在取消参与请求"];
-            [self.money setTextColor:[UIColor lightGrayColor]];
-            [self.inLabel setTextColor:[UIColor lightGrayColor]];
-            
-        } else {
-            _relation.relationship = @1;
-            self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] + 1];
-            [SVProgressHUD showWithStatus:@"正在确认参与请求"];
-            [self.money setTextColor:[UIColor whiteColor]];
-            [self.inLabel setTextColor:[UIColor whiteColor]];
-        }
-
-        [SRNet_Manager requestNetWithDic:[SRNet_Manager updateScheduleDic:_relation]
-                                complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
-                                    if (jsonDic) {
-                                        [self updateScheduleDicDone:jsonDic];
-                                    }
-                                } failure:^(NSError *error, NSURLSessionDataTask *task) {
-                                    
-                                }];
-    }
-    
-    
-    
-    
-}
-
-- (IBAction)pressedNoButton:(id)sender {
-    if (2 == [_relation.relationship intValue]) {
-        //取消选中状态
-        _relation.relationship = @0;
-        [SVProgressHUD showWithStatus:@"正在取消拒绝请求"];
-        [self.money setTextColor:[UIColor lightGrayColor]];
-        [self.inLabel setTextColor:[UIColor lightGrayColor]];
-    } else {
-        
-        if (1 == _relation.relationship.intValue ) {
-            self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] - 1];
-        }
-        _relation.relationship = @2;
-        [SVProgressHUD showWithStatus:@"正在确认拒绝请求"];
-    }
-    [SRNet_Manager requestNetWithDic:[SRNet_Manager updateScheduleDic:_relation]
-                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
-                                if (jsonDic) {
-                                    [self updateScheduleDicDone:jsonDic];
-                                }
-                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
-                                
-                            }];
-    
-    [self.money setTextColor:[UIColor lightGrayColor]];
-    [self.inLabel setTextColor:[UIColor lightGrayColor]];
-}
-
-- (void)updateScheduleDicDone: (id)jsonDic {
-    [SVProgressHUD showSuccessWithStatus:@"参与信息发送成功"];
-    
-    //更新上级聚会数组的关系状态
-    self.party.relationship = _relation.relationship;
-    [self setParticipateStatus];
-    BOOL userInAry = NO;
-    
-    for (Model_User *user in _relArray) {
-        if ([user.pk_user isEqualToNumber:[Model_User loadFromUserDefaults].pk_user]) {
-            user.relationship = _relation.relationship;
-            userInAry = YES;
-        }
-    }
-    
-    if (!userInAry) {
-        //用户并不在数组中,是初次加入的关系
-        Model_User *newUser = [Model_User loadFromUserDefaults];
-        newUser.relationship = _relation.relationship;
-        [_relArray addObject:newUser];
-    }
-    [self reloadPeopleNum];
-    [self.delegate detailChange:self.party];
-    
-    [SRTool addPartyUpdateTip:1];
-}
 
 - (void)reloadPeopleNum {
     
@@ -323,13 +225,13 @@
     int payNum = 0;
     
     for (Model_User *user in _relArray) {
-        
         //这里顺便对已付的款项进行计算
         
         if (user.pay_type && 1 != user.pay_type.intValue && 0 != user.pay_type.intValue) {
             moneyDoneSum = moneyDoneSum + user.pay_amount.intValue;
             payNum++;
         }
+        
         
         switch ([user.relationship intValue]) {
             case 0: {
@@ -351,16 +253,15 @@
                 break;
         }
     }
+
     
     //更新参与人数的标签
     self.inNumLabel.text = [NSString stringWithFormat:@"%d", inNum];
-//    NSLog(@"%@",self.inNumLabel.text);
+    //    NSLog(@"%@",self.inNumLabel.text);
     self.outNumLabel.text = [NSString stringWithFormat:@"%d", outNum];
-//    NSLog(@"%@",self.outNumLabel.text);
+    //    NSLog(@"%@",self.outNumLabel.text);
     self.unkownLabel.text = [NSString stringWithFormat:@"%d", unNum];
-//    NSLog(@"%@",self.unkownLabel.text);
-    
-    
+    //    NSLog(@"%@",self.unkownLabel.text);
     
     switch (self.party.pay_type.intValue) {
         case 1: {
@@ -372,7 +273,7 @@
         case 2: {
             //AA
             //这里获取到已付款的数量,并做展示
-//            self.moneyDone.text = [NSString stringWithFormat:@"已收 %d", moneyDoneSum];
+            self.moneyDone.text = [NSString stringWithFormat:@"已收 %d", moneyDoneSum];
         }
             
             break;
@@ -395,29 +296,17 @@
     switch ([_relation.relationship intValue]) {
         case 0: {
             //未选择
-            self.yesButton.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
-            [self.yesButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-            
-            self.noButton.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
-            [self.noButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+
         }
             break;
         case 1: {
             //同意
-            self.yesButton.backgroundColor = AgreeBlue;
-            [self.yesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-            
-            self.noButton.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
-            [self.noButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+
         }
             break;
         case 2: {
             //拒绝
-            self.yesButton.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0];
-            [self.yesButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-            
-            self.noButton.backgroundColor = AgreeBlue;
-            [self.noButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+
         }
             break;
         default:
@@ -426,11 +315,8 @@
 }
 
 - (IBAction)pressedTheCanelButton:(id)sender {
-
-    //如果是创建者
-    if ([[Model_User loadFromUserDefaults].pk_user isEqualToNumber:self.party.fk_user])
-        
-    {
+    
+    if ([SRTool partyCreatorIsSelf:self.party]) {
         UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择操作类型"
                                                            delegate:self
                                                   cancelButtonTitle:@"取消"
@@ -442,16 +328,15 @@
         UIActionSheet * sheet = [[UIActionSheet alloc]initWithTitle:@"选择操作类型" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"分享",@"添加到系统日历", nil];
         [sheet showInView:self.view];
     }
+    
 }
 
-
 - (IBAction)tapBackButton:(id)sender {
-       [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
-    if ([[Model_User loadFromUserDefaults].pk_user isEqualToNumber:self.party.fk_user]) {
+    if ([SRTool partyCreatorIsSelf:self.party]) {
         switch (buttonIndex) {
             case 0: {
                 //取消聚会
@@ -462,6 +347,7 @@
                                                           otherButtonTitles:@"确定", nil];
                 alertView.tag = 1;
                 [alertView show];
+                
             }
                 break;
             case 1: {
@@ -490,7 +376,6 @@
                 
             case 2: {
                 //添加到日程
-                NSLog(@"添加到日程");
                 //事件市场
                 EKEventStore *eventStore = [[EKEventStore alloc] init];
                 
@@ -567,8 +452,9 @@
 
     }else
     {
+        
         switch (buttonIndex) {
-    case 0: {
+    case 1: {
         //分享聚会
         [SRNet_Manager requestNetWithDic:[SRNet_Manager sharePartyDic:self.party]
                                 complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
@@ -592,9 +478,8 @@
     }
         break;
         
-    case 1: {
+    case 2: {
         //添加到日程
-        NSLog(@"添加到日程");
         //事件市场
         EKEventStore *eventStore = [[EKEventStore alloc] init];
         
@@ -667,8 +552,8 @@
         break;
     default:
         break;
-    }
-    
+        
+        }
     }
 }
 
@@ -688,7 +573,6 @@
                                                 if (jsonDic) {
                                                     //聚会取消成功
                                                     [self.navigationController popViewControllerAnimated:YES];
-                                                    [self.delegate cancelParty:self.party];
                                                 }
                                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                                 
@@ -705,74 +589,14 @@
             //分享聚会
         }
             break;
-        case 3: {
-            switch (buttonIndex) {
-                case 0:{
-                    //取消
-                }
-                    break;
-                    
-                case 1:{
-                    //确定参加聚会
-                    NSLog(@"确定参加聚会");
-                    if (1 == [_relation.relationship intValue]) {
-                        //取消选中状态
-                        _relation.relationship = @0;
-                        self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] - 1];
-                        [SVProgressHUD showWithStatus:@"正在取消参与请求"];
-                        
-                        [self.money setTextColor:[UIColor lightGrayColor]];
-                        [self.inLabel setTextColor:[UIColor lightGrayColor]];
-                        
-                    } else {
-                        _relation.relationship = @1;
-                        self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] + 1];
-                        [SVProgressHUD showWithStatus:@"正在确认参与请求"];
-                        
-                        [self.money setTextColor:[UIColor whiteColor]];
-                        [self.inLabel setTextColor:[UIColor whiteColor]];
-                        //将聚会关系的状态设置为2 以便服务端识别为预付款聚会
-                        _relation.pay_amount = self.party.pay_amount;
-                        
-                        //这里因为版本兼容关系,如果预付聚会没有收款人,则将收款人设置为创建者.
-                        if (self.party.pay_fk_user) {
-                            _relation.pay_fk_user = self.party.pay_fk_user;
-                        } else {
-                            _relation.pay_fk_user = self.party.fk_user;
-                        }
-                        
-                        _relation.pay_fk_user = self.party.pay_fk_user;
-                        _relation.status = @2;
-                    }
-                    [SRNet_Manager requestNetWithDic:[SRNet_Manager updateScheduleDic:_relation]
-                                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
-                                                if (jsonDic) {
-                                                    [self updateScheduleDicDone:jsonDic];
-                                                }
-                                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
-                                                
-                                            }];
-                    
-                    self.yesButton.enabled = NO;
-                    self.noButton.enabled = NO;
-                }
-                    break;
-                    
-                default:
-                    break;
-            }
-        }
-            break;
             
         default:
             break;
     }
 }
 
-- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation
-{
-    
-    
+
+- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation {
     BMKPinAnnotationView *newAnnotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil];
     
     [newAnnotationView setFrame:CGRectMake(newAnnotationView.frame.origin.x, newAnnotationView.frame.origin.y,35,35)];
@@ -781,20 +605,36 @@
     [newAnnotationView setContentMode:UIViewContentModeScaleAspectFit];
     customButton = [[UIButton alloc]initWithFrame:CGRectMake(-6.55,-3,45,45)];
     customButton.backgroundColor = [UIColor clearColor];
-    [customButton addTarget:self action:@selector(daohang) forControlEvents:UIControlEventTouchUpInside];
+//    [customButton addTarget:self action:@selector(daohang) forControlEvents:UIControlEventTouchUpInside];
     [customButton setImage:[UIImage imageNamed:@"sr_map_point"] forState:UIControlStateNormal];
     //    BMKActionPaopaoView * paopaoView = [[BMKActionPaopaoView alloc]initWithCustomView:customButton];
     //    newAnnotationView.paopaoView = paopaoView;
     newAnnotationView.backgroundColor = [UIColor clearColor];
     [newAnnotationView addSubview:customButton];
     return newAnnotationView;
-    
-}
--(void)daohang
-{
-    NSLog(@"导航");
 }
 
+
+- (IBAction)CheakButton:(id)sender {
+    NSLog(@"结账");
+}
+
+- (void)inputAmount:(NSNumber *)amount {
+    self.party.pay_amount = amount;
+    //只发送修改的关键部分
+    Model_Party *sendParty = [[Model_Party alloc] init];
+    sendParty.pk_party = self.party.pk_party;
+    sendParty.pay_amount = amount;
+    sendParty.pay_fk_user = [Model_User loadFromUserDefaults].pk_user;
+    //输入结账完成,这里将做结账处理
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager settleParty:sendParty] complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+        //返回结账信息成功.
+        
+    } failure:^(NSError *error, NSURLSessionDataTask *task) {
+        //结账信息输入失败.
+        
+    }];
+}
 
 #pragma mark - Navigation
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -803,11 +643,13 @@
     // Pass the selected object to the new view controller.
     if ([segue.identifier isEqualToString:@"MapView"]) {
         //进入地图
-        PartyMapViewController *childController = (PartyMapViewController *)segue.destinationViewController;
+        PartyMapViewController * childController = (PartyMapViewController *)segue.destinationViewController;
         childController.party = self.party;
-    } else if([segue.identifier isEqualToString:@"INBUTTON"]) {
-        NSLog(@"进入参与界面");
-        
+    } else if([segue.identifier isEqualToString:@"PREPAY"]){
+        PrepayViewController * childController = (PrepayViewController *)segue.destinationViewController;
+        [childController setDelegate:self];
+//       [childController.payTextField becomeFirstResponder];
+    }else{
         UIButton *pressedButton = (UIButton *)sender;
         PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
         childController.party = self.party;
@@ -815,32 +657,7 @@
         childController.isPayor = [SRTool partyPayorIsSelf:self.party];
         childController.showStatus = (int)pressedButton.tag;
         childController.relationArray = _relArray;
-    }else if ([segue.identifier isEqualToString:@"OUTBUTTON"]) {
-        NSLog(@"进入拒绝界面");
-        UIButton *pressedButton = (UIButton *)sender;
-        PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
-        childController.party = self.party;
-        childController.isCreator = [SRTool partyCreatorIsSelf:self.party];
-        childController.isPayor = [SRTool partyPayorIsSelf:self.party];
-        childController.showStatus = (int)pressedButton.tag;
-        childController.relationArray = _relArray;
-
-        
-    }else if([segue.identifier isEqualToString:@"UNKNOWBUTTON"]) {
-        NSLog(@"进入不确定界面");
-        UIButton *pressedButton = (UIButton *)sender;
-        PartyPeopleListViewController *childController = (PartyPeopleListViewController *)[segue destinationViewController];
-        childController.party = self.party;
-        childController.isCreator = [SRTool partyCreatorIsSelf:self.party];
-        childController.isPayor = [SRTool partyPayorIsSelf:self.party];
-        childController.showStatus = (int)pressedButton.tag;
-        childController.relationArray = _relArray;
-
-    }else
-    {
-
     }
 }
-
 
 @end

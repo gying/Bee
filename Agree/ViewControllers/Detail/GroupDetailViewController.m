@@ -24,6 +24,8 @@
 #import <EaseMob.h>
 #import <MJRefresh.h>
 
+#import "GroupPeopleTableViewDelegate.h"
+
 #import "SRKeyboard.h"
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
@@ -44,7 +46,9 @@
     
     EMConversation *_conversation;
     
-
+    UISwipeGestureRecognizer * swipe;
+    
+    GroupPeopleTableViewDelegate *_peopleTableDelegate;
     
 }
 
@@ -60,6 +64,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.rightSideView.alpha = 0;
+    
+    
+    self.peopleTableViewWidthCon.constant = [UIScreen mainScreen].bounds.size.width/3*2;
+    
+    self.rightSideViewWidth.constant = [UIScreen mainScreen].bounds.size.width;
     
     self.groupScrollView.bounces = NO;
     [self.groupTabBar setSelectedItem:self.groupTalk];
@@ -162,6 +172,21 @@
         self.backView3.hidden = YES;
     }
     
+    [self.view bringSubviewToFront:self.rightSideView];
+    [self.view bringSubviewToFront:self.peopleTableView];
+    
+    if (!_peopleTableDelegate) {
+        _peopleTableDelegate = [[GroupPeopleTableViewDelegate alloc] init];
+    }
+    
+    
+    self.peopleTableView.dataSource = _peopleTableDelegate;
+    self.peopleTableView.delegate = _peopleTableDelegate;
+    
+    [_peopleTableDelegate setRootController:self];
+    
+    [_peopleTableDelegate loadPeopleDataWithGroup:self.group];
+    
 }
 
 
@@ -233,6 +258,9 @@
         [self.groupTabBar setSelectedItem:self.groupTalk];
         [_srKeyboard.mBackView setHidden:NO];
         [self setkeyBoard];
+        
+        [self.view bringSubviewToFront:self.rightSideView];
+        [self.view bringSubviewToFront:self.peopleTableView];
         
 
         
@@ -427,6 +455,7 @@
         //进入小组设置
         [SVProgressHUD show];
         GroupSettingViewController *controller = (GroupSettingViewController *)segue.destinationViewController;
+        controller.rootController = self;
         controller.group = self.group;
     } else if ([@"PartyDetail" isEqual:segue.identifier]) {
         PartyDetailViewController *controller = (PartyDetailViewController *)segue.destinationViewController;
@@ -438,6 +467,62 @@
 }
 
 
+#pragma mark -- 侧边栏
+//侧边栏
+- (IBAction)peopleButton:(id)sender
+{
+    if (![@"关闭"  isEqual: self.peopleButton.titleLabel.text]) {
+        [UIView animateWithDuration:0.5
+                         animations:^{
+                             self.rightSideView.hidden = NO;
+                             [self.rightSideView setAlpha:0.8];
+                             
+                             [self.peopleTableView setFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - self.peopleTableViewWidthCon.constant, self.peopleTableView.frame.origin.y, self.peopleTableView.frame.size.width, self.peopleTableView.frame.size.height)];
+                         }];
+            [self.peopleButton setTitle:@"关闭" forState:UIControlStateNormal];
+        
+
+    }
+    else {
+        [self.peopleButton setTitle:@"成员" forState:UIControlStateNormal];
+        
+        [UIView animateWithDuration:0.5
+                         animations:^{
+                             [self.rightSideView setAlpha:0];
+                             [self.peopleTableView setFrame:CGRectMake(600, self.peopleTableView.frame.origin.y, self.peopleTableView.frame.size.width, self.peopleTableView.frame.size.height)];
+                         }];
+    }
+    
+    swipe = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(tapCloseButton:)];
+    swipe.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.peopleTableView addGestureRecognizer:swipe];
+
+
+}
+- (IBAction)tapCloseButton:(id)sender
+{
+    if((self.peopleButton.titleLabel.text = @"关闭")) {
+        [self.peopleButton setTitle:@"成员" forState:UIControlStateNormal];
+    }
+    
+    [UIView animateWithDuration:0.5
+                     animations:^{
+                         [self.rightSideView setAlpha:0];
+                         [self.peopleTableView setFrame:CGRectMake(600, self.peopleTableView.frame.origin.y, self.peopleTableView.frame.size.width, self.peopleTableView.frame.size.height)];
+                     }];
+}
+//-(void)closeview
+//{
+//    if((self.peopleButton.titleLabel.text = @"关闭")) {
+//        [self.peopleButton setTitle:@"成员" forState:UIControlStateNormal];
+//    }
+//    [UIView animateWithDuration:0.5
+//                     animations:^{
+//                         [self.rightSideView setAlpha:0];
+//                         [self.peopleTableView setFrame:CGRectMake(600, self.peopleTableView.frame.origin.y, self.peopleTableView.frame.size.width, self.peopleTableView.frame.size.height)];
+//                     }];
+//    [self.peopleTableView removeGestureRecognizer:swipe];
+//}
 
 
 @end

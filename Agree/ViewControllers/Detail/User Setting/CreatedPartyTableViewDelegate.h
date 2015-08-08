@@ -9,17 +9,20 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "Model_Group.h"
+
 #import "SRNet_Manager.h"
-#import "ScheduleViewController.h"
+
+#import "MyPartyViewController.h"
 
 
 
 
-@interface SchedulePartyTableViewDelegate : NSObject<UITableViewDataSource, UITableViewDelegate>
+
+@interface CreatedPartyTableViewDelegate : NSObject<UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong)NSMutableArray *schAry;
 @property (nonatomic, strong)Model_Group *group;
-@property (nonatomic, strong)ScheduleViewController *rootController;
+@property (nonatomic,strong)MyPartyViewController * myPartyVC;
 - (void)loadPartyData;
 
 @end
