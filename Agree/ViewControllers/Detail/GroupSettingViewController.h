@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Model_Group.h"
+#import "GroupDetailViewController.h"
 
 @interface GroupSettingViewController : UIViewController
 
@@ -28,5 +29,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *quitButton;
 @property (weak, nonatomic) IBOutlet UICollectionView *peopleCollectionView;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
+
+@property (nonatomic, strong)GroupDetailViewController *rootController;
 
 @end

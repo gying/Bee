@@ -33,6 +33,8 @@
 @implementation ScheduleTableViewController
 
 #pragma mark - 界面操作
+
+
 - (void)viewDidLoad {
     
     [self backView];
@@ -49,18 +51,6 @@
 
 }
 
-- (void)loadPartyData {
-    
-}
-
-- (void)detailChange:(Model_Party *)party with:(int)type {
-
-}
-
-- (void)cancelParty:(Model_Party *)party with:(int)type {
-    
-}
-
 
 -(void)backView
 {
@@ -69,7 +59,7 @@
     [self.view addSubview:_backView];
     _textLabel = [[UILabel alloc]initWithFrame:CGRectMake(self.view.frame.size.width/2 - 50, self.view.frame.size.height - 180, 100, 40)];
     _textLabel.backgroundColor = [UIColor clearColor];
-    _textLabel.text = @"请添加日程";
+    _textLabel.text = @"暂无日程";
     _textLabel.textAlignment = NSTextAlignmentCenter;
     _textLabel.font = [UIFont systemFontOfSize:14];
     _textLabel.textColor = AgreeBlue;
@@ -84,6 +74,8 @@
         [_backView setHidden:YES];
     }
 }
+
+
 
 - (void)viewWillAppear:(BOOL)animated {
     if (_firstLoadingDone) {
@@ -232,5 +224,9 @@
     }
 }
 
+- (IBAction)tapBackButton:(id)sender {
+    
+     [self.navigationController popViewControllerAnimated:YES];
+}
 
 @end

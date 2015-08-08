@@ -265,6 +265,9 @@
         UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"小组信息已更改" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"保存退出" otherButtonTitles:@"不保存退出", nil];
         [sheet showInView:self.view];
     } else {
+        
+        [self.rootController tapCloseButton:nil];
+//        [self.rootController.rightSideView setAlpha:0.0];
         [self.navigationController popViewControllerAnimated:YES];
     }
   
@@ -288,6 +291,17 @@
     } else {
         return;
     }
+    
+    if((self.rootController.peopleButton.titleLabel.text = @"关闭")) {
+        [self.rootController.peopleButton setTitle:@"成员" forState:UIControlStateNormal];
+    }
+    
+    [UIView animateWithDuration:0.5
+                     animations:^{
+                         [self.rootController.rightSideView setAlpha:0];
+                         [self.rootController.peopleTableView setFrame:CGRectMake(600, self.rootController.peopleTableView.frame.origin.y, self.rootController.peopleTableView.frame.size.width, self.rootController.peopleTableView.frame.size.height)];
+                     }];
+
     
 }
 

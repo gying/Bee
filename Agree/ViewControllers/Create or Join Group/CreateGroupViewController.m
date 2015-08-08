@@ -16,9 +16,6 @@
 #import "SRImageManager.h"
 #import "UIImageView+WebCache.h"
 
-//#import <DQAlertView.h>
-#import "SRTool.h"
-
 @interface CreateGroupViewController () <UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate> {
     Model_Group *_newGroup;
     UIImagePickerController *_imagePicker;
@@ -210,15 +207,8 @@
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     if (0 == self.groupNameTextField.text.length) {
-        [SRTool showSRAlertViewWithTitle:@"提示"
-                                 message:@"小组名称不能为空哦~"
-                       cancelButtonTitle:@"好的"
-                        otherButtonTitle:nil
-                         tapCancelButton:^(NSString *msgString) {
-                             
-                         } tapOtherButton:^(NSString *msgString) {
-                             
-                         }];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:@"小组名称不能为空" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        [alertView show];
         return NO;
         
     } else {
