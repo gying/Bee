@@ -1,31 +1,32 @@
 //
-//  HistoryPartyTableViewDelegate.m
+//  CreatedPartyTableViewDelegate.m
 //  Agree
 //
 //  Created by Agree on 15/7/16.
 //  Copyright (c) 2015年 superRabbit. All rights reserved.
 //
 
-#import "HistoryPartyTableViewDelegate.h"
-
+#import "CreatedPartyTableViewDelegate.h"
 #import "Model_Party.h"
 #import "GroupPartyTableViewCell.h"
-
 #import "MJExtension.h"
 #import <MJRefresh.h>
 
+#import "CreatedPartyDetailViewController.h"
 
-@implementation HistoryPartyTableViewDelegate
+
+@implementation CreatedPartyTableViewDelegate
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     Model_Party *theParty = [self.schAry objectAtIndex:indexPath.row];
-    static NSString *CellIdentifier = @"HISTORYPATYCELL";
+    static NSString *CellIdentifier = @"CREATEDPARTYCEll";
     
     GroupPartyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (nil == cell) {
         cell = [[GroupPartyTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
+    
     [cell initWithParty:theParty];
     return cell;
 };
@@ -46,25 +47,22 @@
 - (void)loadPartyData {
     Model_User *user = [[Model_User alloc] init];
     user.pk_user = [Model_User loadFromUserDefaults].pk_user;
-    
-    [SRNet_Manager requestNetWithDic:[SRNet_Manager getPartyHistoryByUserDic:user]
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager getCreatedPartyByUserDic:user]
                             complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
                                 if (jsonDic) {
                                     self.schAry = (NSMutableArray *)[Model_Party objectArrayWithKeyValuesArray:jsonDic];
-                                    [self.myPartyVC reloadTipView:self.schAry.count withType:2];
-                                    [self.myPartyVC.historyPartyTableView reloadData];
+                                    [self.myPartyVC reloadTipView:self.schAry.count withType:1];
+                                    [self.myPartyVC.createdPartyTableView reloadData];
                                 } else {
                                     [self.schAry removeAllObjects];
-                                    [self.myPartyVC.historyPartyTableView reloadData];
+                                    [self.myPartyVC.createdPartyTableView reloadData];
                                 }
                                 
-                                [self.myPartyVC.historyPartyTableView.header endRefreshing];
-                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
-                                
-                                [self.myPartyVC.historyPartyTableView.header endRefreshing];
-                            }];
-    
+                                [self.myPartyVC.createdPartyTableView.header endRefreshing];
+                            }
+                             failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                 [self.myPartyVC.createdPartyTableView.header endRefreshing];
+                             }];
 }
-
 
 @end
