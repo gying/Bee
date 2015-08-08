@@ -25,7 +25,6 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)TapBackButton:(id)sender {
-    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -41,8 +40,6 @@
 
 - (IBAction)tapPayButton:(id)sender {
     [self.delegate inputAmount:[NSNumber numberWithFloat:[self.payTextField.text floatValue]]];
-    
-    
     [self.navigationController popViewControllerAnimated:YES];
 }
 

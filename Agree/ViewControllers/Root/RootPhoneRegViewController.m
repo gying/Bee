@@ -30,13 +30,10 @@
     int _waitTime;
     BOOL _isCodeDone;
     Model_User *_phoneAccount;
-
 }
 @end
 
 @implementation RootPhoneRegViewController
-
-
 
 
 - (void)viewDidLoad {
@@ -102,7 +99,6 @@
             } else {
                 [SVProgressHUD dismiss];
             }
-            
         } failure:^(NSError *error, NSURLSessionDataTask *task) {
 
         }];
@@ -126,11 +122,6 @@
                                             if (jsonDic) {
                                                 //查到用户
                                                 _phoneAccount = [[Model_User objectArrayWithKeyValuesArray:(NSArray *)jsonDic] firstObject];
-//                                                [loadAccount saveToUserDefaults];
-//                                                UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-//                                                UITabBarController *rootController = [sb instantiateViewControllerWithIdentifier:@"rootTabbar"];
-//                                                [self presentViewController:rootController animated:YES completion:nil];
-//                                                [SVProgressHUD showSuccessWithStatus:@"查找到用户,正在进行登录" maskType:SVProgressHUDMaskTypeGradient];
                                                 
                                                 //已经存在用户,则跳出提示,是否使用帐号进行登录
                                                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
