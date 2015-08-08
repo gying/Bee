@@ -9,6 +9,11 @@
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
+		<key>Pods-DQAlertView.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>8</integer>
+		</dict>
 		<key>Pods-EaseMobSDK.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -18,6 +23,11 @@
 		<dict>
 			<key>orderHint</key>
 			<integer>6</integer>
+		</dict>
+		<key>Pods-MMDrawerController.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>9</integer>
 		</dict>
 		<key>Pods-SDWebImage.xcscheme</key>
 		<dict>
@@ -42,6 +52,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>014267632DFBA4875289D16B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>067BB6773604782538F0A01A</key>
 		<dict>
 			<key>primary</key>
@@ -82,12 +97,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>3A2861BF75849F2628B70A07</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>3D64B8F1B3C615FD6EA67A1F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>5009FB0FA8E60CF02C66365B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>5A71487453EF3A6EE4AC1BD2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -107,6 +132,21 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>7C00120837FEBEB6BE8DC4E3</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>809955DDC11D4C7F0276D6D5</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>813F43ECF12A076B8FC522BA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>8B991B05CAB4E4B3987EA05D</key>
 		<dict>
 			<key>primary</key>
@@ -118,6 +158,11 @@
 			<true/>
 		</dict>
 		<key>9E9E4FA8E8B9C3D6C3354A5D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C15EAAF7D834547610B048F7</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -148,6 +193,11 @@
 			<true/>
 		</dict>
 		<key>D7E21FD887F836F3899C7BBD</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F15C51BB1351662FCA16F2C8</key>
 		<dict>
 			<key>primary</key>
 			<true/>
