@@ -14,6 +14,7 @@
 #import "GroupDetailViewController.h"
 #import "ChooseLoctaionViewController.h"
 #import "ChooseDateViewController.h"
+#import "SRTool.h"
 
 @interface ConfirmPartyDetailViewController ()<UITextFieldDelegate, UITextViewDelegate> {
     int _payType;
@@ -131,6 +132,8 @@
                                     } else {
                                         ScheduleTableViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
                                         rootController.loadAgain = true;
+                                        
+                                        
                                         dispatch_async(dispatch_get_main_queue(), ^{
                                             [self.navigationController popToRootViewControllerAnimated:YES];
                                         });
@@ -247,22 +250,25 @@
             
         case 4: {
             //预支付完成按钮
-            [self.payFirstView setHidden:YES];
-            [self.payFirstMoneyTextField resignFirstResponder];
-            if (self.payFirstMoneyTextField.text) {
+            if (0 != self.payFirstMoneyTextField.text.length) {
+                [self.payFirstView setHidden:YES];
+                [self.payFirstMoneyTextField resignFirstResponder];
+                
                 self.party.pay_amount = [NSNumber numberWithFloat:[self.payFirstMoneyTextField.text floatValue]];
                 [self.payTypeLabel setText:[NSString stringWithFormat:@"预付费金额: %@", self.payFirstMoneyTextField.text]];
+//                [self.payTypeLabel setText:@"AAA"];
                 
                 self.payFirstMoneyTextField.text = nil;
-
             } else {
                 //输入金额为空
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                                    message:@"预付费聚会的金额不能为空"
-                                                                   delegate:self
-                                                          cancelButtonTitle:@"确定"
-                                                          otherButtonTitles:nil];
-                [alertView show];
+                [SRTool showSRAlertViewWithTitle:@"提示"
+                                         message:@"预付费的钱可不能为空哦~"
+                               cancelButtonTitle:@"好的"
+                                otherButtonTitle:nil tapCancelButton:^(NSString *msgString) {
+                                    
+                                } tapOtherButton:^(NSString *msgString) {
+                    
+                                }];
             }
         }
             break;

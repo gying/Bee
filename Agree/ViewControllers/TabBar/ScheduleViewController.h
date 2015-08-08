@@ -22,6 +22,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *view1Width;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *view2Width;
 @property (weak, nonatomic) IBOutlet UIView *backView1;
+
 @property (weak, nonatomic) IBOutlet UITableView *myScheduleTableView;
 @property (weak, nonatomic) IBOutlet UITableView *historyPartyTableView;
 
@@ -32,5 +33,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *textLabel2;
 
 @property int chooseRow;
+
+- (void)reloadTipView: (NSInteger)aryCount withType:(int)inttype;
+
+@property BOOL loadAgain;
 
 @end
