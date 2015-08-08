@@ -292,6 +292,17 @@
         return;
     }
     
+    if((self.rootController.peopleButton.titleLabel.text = @"关闭")) {
+        [self.rootController.peopleButton setTitle:@"成员" forState:UIControlStateNormal];
+    }
+    
+    [UIView animateWithDuration:0.5
+                     animations:^{
+                         [self.rootController.rightSideView setAlpha:0];
+                         [self.rootController.peopleTableView setFrame:CGRectMake(600, self.rootController.peopleTableView.frame.origin.y, self.rootController.peopleTableView.frame.size.width, self.rootController.peopleTableView.frame.size.height)];
+                     }];
+
+    
 }
 
 - (void)updateGroupRelationShipDone: (id)jsonDic {

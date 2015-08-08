@@ -471,7 +471,7 @@
 //侧边栏
 - (IBAction)peopleButton:(id)sender
 {
-    if (self.peopleTableView.frame.origin.x != 100) {
+    if (![@"关闭"  isEqual: self.peopleButton.titleLabel.text]) {
         [UIView animateWithDuration:0.5
                          animations:^{
                              self.rightSideView.hidden = NO;
@@ -482,9 +482,10 @@
             [self.peopleButton setTitle:@"关闭" forState:UIControlStateNormal];
         
 
-    }else if ((self.peopleButton.titleLabel.text = @"关闭"))
-    {
-            [self.peopleButton setTitle:@"成员" forState:UIControlStateNormal];
+    }
+    else {
+        [self.peopleButton setTitle:@"成员" forState:UIControlStateNormal];
+        
         [UIView animateWithDuration:0.5
                          animations:^{
                              [self.rightSideView setAlpha:0];
@@ -495,7 +496,8 @@
     swipe = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(tapCloseButton:)];
     swipe.direction = UISwipeGestureRecognizerDirectionRight;
     [self.peopleTableView addGestureRecognizer:swipe];
-    
+
+
 }
 - (IBAction)tapCloseButton:(id)sender
 {
