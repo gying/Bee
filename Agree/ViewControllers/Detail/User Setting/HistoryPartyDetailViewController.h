@@ -1,8 +1,8 @@
 //
-//  PartyDetailViewController.h
+//  HistoryPartyDetailViewController.h
 //  Agree
 //
-//  Created by G4ddle on 15/1/26.
+//  Created by Agree on 15/7/20.
 //  Copyright (c) 2015年 superRabbit. All rights reserved.
 //
 
@@ -11,21 +11,21 @@
 
 #import <EventKit/EventKit.h>
 
-@protocol SRPartyDetailDelegate <NSObject>
+//@protocol SRPartyDetailDelegate <NSObject>
+//
+//@required
+//- (void)detailChange: (Model_Party *)party;
+//- (void)cancelParty: (Model_Party *)party;
+//
+//@end
 
-@required
-- (void)detailChange: (Model_Party *)party;
-- (void)cancelParty: (Model_Party *)party;
-
-@end
-
-@interface PartyDetailViewController : UIViewController
+@interface HistoryPartyDetailViewController : UIViewController
 
 @property (nonatomic, strong)Model_Party *party;
+//@property (nonatomic, strong)id<SRPartyDetailDelegate> delegate;
+
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
-@property (weak, nonatomic) IBOutlet UIButton *yesButton;
-@property (weak, nonatomic) IBOutlet UIButton *noButton;
-@property (weak, nonatomic) IBOutlet UILabel *payType;
+
 
 
 @property (weak, nonatomic) IBOutlet UILabel *inNumLabel;
@@ -37,14 +37,14 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UITextView *remarkTextView;
+@property (weak, nonatomic) IBOutlet UIButton *payButton;
 
-@property (nonatomic, strong)id<SRPartyDetailDelegate> delegate;
+
+
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *conHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *mapConHeight;
-@property (weak, nonatomic) IBOutlet UIButton *cancelPartyButton;
-@property (weak, nonatomic) IBOutlet UILabel *money;
-@property (weak, nonatomic) IBOutlet UILabel *inLabel;
 
+@property (weak, nonatomic) IBOutlet UILabel *payType;
 
 @property (weak, nonatomic) IBOutlet UIView *payDoneView;
 @property (weak, nonatomic) IBOutlet UILabel *moneyDone;

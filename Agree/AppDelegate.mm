@@ -21,7 +21,6 @@
 #import "SRTool.h"
 
 
-
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
 @interface AppDelegate () <EMChatManagerDelegate ,WXApiDelegate>
@@ -275,6 +274,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+ 
 
     //清理sdimage
 //    [[SDImageCache sharedImageCache] clearDisk];
@@ -340,6 +340,11 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
+    
+    //侧边栏
+
+
+    
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
