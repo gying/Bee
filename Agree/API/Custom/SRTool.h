@@ -12,6 +12,13 @@
 
 @interface SRTool : NSObject
 
+
+typedef void (^tapCancelButton)(NSString *msgString);
+typedef void (^tapOtherButton)(NSString *msgString);
+
+@property (strong)tapCancelButton tapCancelBlock;
+@property (strong)tapOtherButton tapOtherBlock;
+
 + (NSString *)dateToString: (NSDate *)date;
 //+ (NSDate *)stringToDate: (NSString *)string;
 + (NSString *)dateStringForPartyListCell: (NSDate *)date;
@@ -28,5 +35,13 @@
 + (BOOL)partyPayorIsSelf: (Model_Party *)party;
 
 //+ (void)showProgressHUD;
+
+
++ (void)showSRAlertViewWithTitle:(NSString *)title
+                         message:(NSString *)message
+               cancelButtonTitle:(NSString *)cancelTitle
+                otherButtonTitle:(NSString *)otherButtonTitle
+                 tapCancelButton:(tapCancelButton)tapCancelBlock
+                  tapOtherButton:(tapOtherButton)tapOtherBlock;
 
 @end

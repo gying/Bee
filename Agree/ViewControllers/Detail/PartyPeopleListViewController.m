@@ -67,11 +67,6 @@
         default:
             break;
     }
-    
-//    [[NSMutableArray alloc] initWithArray:_inArray];
-//     [[NSMutableArray alloc] initWithArray:_inArray copyItems:YES];
-//    _tempInArray = [[NSMutableArray alloc] init];
-    
 }
 
 - (void)setRelationData {
@@ -111,15 +106,7 @@
     }
 }
 
-
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    
-    
-}
-
 - (IBAction)pressedTheInButton:(id)sender {
-    
     self.showStatus = 1;
     
     [self resetAllButton];
@@ -156,7 +143,6 @@
     [self.inButton setBackgroundColor:[UIColor clearColor]];
     [self.inButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self.inLabel setTextColor:AgreeBlue];
-    
     
     [self.outButton setBackgroundColor:[UIColor clearColor]];
     [self.outButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
@@ -197,7 +183,6 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)tapBackButton:(id)sender {
-    
     //首先做是否更改状态的判断
     for (Model_User *tempUser in _tempInArray) {
         for (Model_User *user in _inArray) {
@@ -247,7 +232,6 @@
                                     for (Model_User *user in _inArray) {
                                         if ([user.pk_user isEqualToNumber:tempUser.pk_user]) {
                                             tempUser.pay_type = [NSNumber numberWithInteger:user.pay_type.integerValue];
-                                            
                                         }
                                     }
                                 }
@@ -283,6 +267,7 @@
                                     complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
                                         //保存操作成功
                                         [SVProgressHUD showSuccessWithStatus:@"保存成功"];
+                                        [self.navigationController popViewControllerAnimated:YES];
                                     } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                         [self.navigationController popViewControllerAnimated:YES];
                                     }];
@@ -298,7 +283,6 @@
                     }
                 }
             }
-            
             [self.navigationController popViewControllerAnimated:YES];
         }
             break;

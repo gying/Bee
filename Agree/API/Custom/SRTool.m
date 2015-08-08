@@ -8,6 +8,7 @@
 
 #import "SRTool.h"
 #import "Model_User.h"
+#import <DQAlertView.h>
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
 
@@ -101,6 +102,45 @@
     [SVProgressHUD setForegroundColor: AgreeBlue];
     [SVProgressHUD show];
 }
+
++ (void)showSRAlertViewWithTitle:(NSString *)title
+                         message:(NSString *)message
+               cancelButtonTitle:(NSString *)cancelTitle
+                otherButtonTitle:(NSString *)otherButtonTitle
+                 tapCancelButton:(tapCancelButton)tapCancelBlock
+                  tapOtherButton:(tapOtherButton)tapOtherBlock {
+    
+    DQAlertView *alertView = [[DQAlertView alloc] initWithTitle:title
+                                                        message:message
+                                              cancelButtonTitle:cancelTitle
+                                               otherButtonTitle:otherButtonTitle];
+    
+    SRTool *delegate = [[SRTool alloc] init];
+    delegate.tapCancelBlock = tapCancelBlock;
+    delegate.tapOtherBlock = tapOtherBlock;
+    
+    [alertView.titleLabel setFont:[UIFont boldSystemFontOfSize:16]];
+    [alertView.messageLabel setFont:[UIFont systemFontOfSize:12]];
+    
+    [alertView.messageLabel setTextColor:[UIColor darkGrayColor]];
+    
+    [alertView.titleLabel setTextColor:[UIColor darkGrayColor]];
+    
+    [alertView.cancelButton.titleLabel setFont:[UIFont systemFontOfSize:14]];
+    [alertView.cancelButton setTitleColor:AgreeBlue forState:UIControlStateNormal];
+    
+    [alertView.otherButton.titleLabel setFont:[UIFont systemFontOfSize:14]];
+    [alertView.otherButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    
+    [alertView actionWithBlocksCancelButtonHandler:^{
+        delegate.tapCancelBlock(@"点击取消按钮");
+    } otherButtonHandler:^{
+        delegate.tapOtherBlock(@"点击其他按钮");
+    }];
+    
+    [alertView show];
+}
+
 
 
 @end

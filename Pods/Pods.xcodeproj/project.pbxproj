@@ -114,7 +114,6 @@
 		B52BB5417FE760601D2AB692 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBCBDD867913A77451CC18C7 /* Foundation.framework */; };
 		B6E98509022ABFCC12CB89C5 /* UIViewController+MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9564377B6CAA43F239BD88F /* UIViewController+MMDrawerController.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		B929BACCC5887E4250EA6543 /* UIImageView+HighlightedWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FC322C6E4912EB6B89CE1C9 /* UIImageView+HighlightedWebCache.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
-		BB66CFE065CDB5CBBFF9E4F6 /* MMDrawerController+Subclass.h in Headers */ = {isa = PBXBuildFile; fileRef = B46DF40373A061323D7EEF1D /* MMDrawerController+Subclass.h */; };
 		BC468BEDA14C296A560CFCF0 /* SDWebImageDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 35E49CC7B2E81D31BCD40B8B /* SDWebImageDecoder.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		BE9CBB76EC94E5006A0C109E /* MJRefreshBackFooter.h in Headers */ = {isa = PBXBuildFile; fileRef = F142AE9A8FE227265414274E /* MJRefreshBackFooter.h */; };
 		BF9863EA6814E2C3D0FD2654 /* UIButton+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 19B44BFEF8E782726B7C94CE /* UIButton+AFNetworking.h */; };
@@ -1218,7 +1217,6 @@
 			files = (
 				87DCFBCB0C8D13F788FFC79F /* MMDrawerBarButtonItem.h in Headers */,
 				451936511AC4413661682029 /* MMDrawerController+Subclass.h in Headers */,
-				BB66CFE065CDB5CBBFF9E4F6 /* MMDrawerController+Subclass.h in Headers */,
 				CB057D5D1BEE6A4C37B740BD /* MMDrawerController.h in Headers */,
 				07B245E21B87C1D5546393B1 /* MMDrawerVisualState.h in Headers */,
 				928E4D127BBDAE7E304EB6A0 /* UIViewController+MMDrawerController.h in Headers */,
