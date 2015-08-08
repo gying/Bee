@@ -13,7 +13,6 @@
 #import "SRAccountView.h"
 //#import "GroupChatTableViewCell.h"
 
-#import <MMDrawerController.h>
 
 
 
@@ -21,7 +20,6 @@
 @interface GroupDetailViewController : UIViewController <UIScrollViewDelegate>
 
 @property (nonatomic, strong)Model_Group *group;
-@property (weak, nonatomic) IBOutlet UINavigationItem *bar;
 @property (weak, nonatomic) IBOutlet UITabBar *groupTabBar;
 @property (weak, nonatomic) IBOutlet UITabBarItem *groupTalk;
 @property (weak, nonatomic) IBOutlet UITabBarItem *groupSchedule;
@@ -65,19 +63,5 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *selectLineWidth;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *selectConLeft;
-@property (weak, nonatomic) IBOutlet UIButton *peopleButton;
-@property (weak, nonatomic) IBOutlet UIView *rightSideView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *rightSideViewCon;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *rightSideViewWidth;
-
-@property (weak, nonatomic) IBOutlet UIButton *tapCloseButton;
-
-@property (weak, nonatomic) IBOutlet UITableView *peopleTableView;
-
-- (IBAction)tapCloseButton:(id)sender;
-
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *peopleTableViewWidthCon;
-
-
 
 @end

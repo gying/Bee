@@ -15,14 +15,18 @@
 #import "PartyMapViewController.h"
 #import "AllPartyTableViewCell.h"
 #import "PeopleListTableViewCell.h"
+
+#import "PrepayViewController.h"
+
 #import <BaiduMapAPI/BMapKit.h>
 
 #import "Model_Party.h"
 #import "SRTool.h"
 
+
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface PartyDetailViewController () <UIActionSheetDelegate,BMKLocationServiceDelegate,BMKMapViewDelegate> {
+@interface PartyDetailViewController () <UIActionSheetDelegate,BMKLocationServiceDelegate,BMKMapViewDelegate, SRPayDelegate> {
     Model_Party_User *_relation;
     NSMutableArray *_relArray;
     int _showStatus;
@@ -41,6 +45,8 @@
     // Do any additional setup after loading the view.
 //    [self.navigationItem setTitle:self.party.name];
     
+    [self.payButton setHidden:YES];
+    
     //类型的边框与圆弧
     self.payType.layer.cornerRadius = self.payType.frame.size.height/4;
 //    self.payType.layer.borderColor = AgreeBlue.CGColor;
@@ -51,30 +57,7 @@
     
     [self.money setText:[NSString stringWithFormat:@"¥%@", self.party.pay_amount]];
     
-    switch (self.party.pay_type.intValue) {
-        case 1: {
-            //请客
-            [self.payType setText:@"请客"];
-        }
-            
-            break;
-        case 2: {
-            //AA
-            [self.payType setText:@"AA制"];
-        }
-            
-            break;
-        case 3: {
-            //预付
-            [self.payType setText:@"预付款"];
-        }
-            
-            break;
-        default: {
-            [self.payType setText:@"未指定"];
-        }
-            break;
-    }
+    
 
     if ([@1 isEqual:self.party.relationship]) {
         [self.money setTextColor:[UIColor whiteColor]];
@@ -109,14 +92,8 @@
         [_bdMapView addAnnotation:_chooseAnnotation];
         [_bdMapView setZoomLevel:15];
         [_bdMapView setCenterCoordinate:partyCoor];
-    }\
-    
-    //判断是否是创建者本身.
-    if ([[Model_User loadFromUserDefaults].pk_user isEqualToNumber:self.party.fk_user]) {
-        [self.cancelButton setHidden:NO];
-    } else {
-        [self.cancelButton setHidden:NO];
     }
+    
     
     self.conHeight.constant = (CGRectGetHeight([UIScreen mainScreen].applicationFrame)-44)*2;
     
@@ -137,6 +114,9 @@
     
     [self.noButton.layer setCornerRadius:self.noButton.frame.size.height/2];
     [self.noButton.layer setMasksToBounds:YES];
+    
+    [self.payButton.layer setCornerRadius:self.payButton.frame.size.height/2];
+    [self.payButton.layer setMasksToBounds:YES];
     
     [self.addressLabel setText:self.party.location];
     
@@ -161,7 +141,6 @@
                                 } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                     
                                 }];
-        
     }
     
     if (nil == self.party.relationship) {
@@ -180,34 +159,152 @@
                                         _relation.pk_party_user = (NSNumber *)jsonDic;
                                         self.party.relationship = @0;
                                         [self reloadPeopleNum];
-                                        [self.delegate detailChange:self.party];
+                                        [self.delegate detailChange:self.party with:self.intoType];
                                     }
                                 } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                     
                                 }];
 
-    } else if ([@3 isEqual:self.party.pay_type]) {
-        
-        //这里为预付款聚会
-        if ((nil != self.party.relationship) && ([@1  isEqual: self.party.relationship])) {
-            //用户的标识为参与
-            //这里为预付款聚会已参与
-            self.yesButton.enabled = NO;
-            self.noButton.enabled = NO;
-            
-            if ([SRTool partyPayorIsSelf:self.party]) {
-                //查看聚会的付款人是否为自己
-                //如果自己为付款人则显示人数数据
-                self.yesButton.hidden = YES;
-                self.noButton.hidden = YES;
-                
-                [self.payDoneView setHidden:NO];
-                
-                self.moneyAmount.text = @"参与人数";
-                self.moneyDone.text = @"付款人数";
-            }
-        }   
     }
+    
+    if (2 == self.intoType) {
+        //如果为历史聚会,聚会的参与情况将不能变动,则将参与的按钮全部隐藏处理
+        [self.yesButton setHidden:YES];
+        [self.noButton setHidden:YES];
+    }
+    
+    
+    switch (self.party.pay_type.intValue) {
+        case 1: {
+            //请客
+            [self.payType setText:@"请客"];
+            
+            
+        }
+            break;
+        case 2: {
+            //AA
+            [self.payType setText:@"AA制"];
+            //AA制只有进入历史聚会了之后才让结账
+            if (2 == self.intoType) {
+                //历史聚会
+                if (self.party.pay_amount) {
+                    //如果历史聚会已经结账完成,开始判断个人是否支付
+                    [self.payButton setTitle:@"支付" forState:UIControlStateNormal];
+                    [self.payButton setHidden:NO];
+                    
+                    //首先判断支付者是否为本人
+                    if ([SRTool partyPayorIsSelf:self.party]) {
+                        //聚会的付款人为本人
+                        [self.payButton setHidden:YES];
+                        [self.payDoneView setHidden:NO];
+                        
+                        self.moneyAmount.text = [NSString stringWithFormat:@"总额 %d", self.party.pay_amount.intValue];
+                        self.moneyDone.text = @"已收 正在计算...";
+                    } else {
+                        switch (self.party.user_pay_type.intValue) {
+                            case 1: {
+                                //未支付
+                            }
+                                break;
+                            case 2: {
+                                //已支付
+                                //已支付 - 显示付款的详情内容
+                                [self.payButton setHidden:YES];
+                                [self.payDoneView setHidden:NO];
+                                
+                                self.moneyAmount.text = [NSString stringWithFormat:@"总额 %d", self.party.pay_amount.intValue];
+                                self.moneyDone.text = @"已收 正在计算...";
+                                
+                            }
+                                break;
+                            case 3: {
+                                //支持代付
+                            }
+                                break;
+                            default: {
+                                //默认为空为未付
+                            }
+                                break;
+                        }
+                    }
+                    
+                } else {
+                    //如果历史聚会还为结账,则出现结账按钮
+                    [self.payButton setTitle:@"结账" forState:UIControlStateNormal];
+                    [self.payButton setHidden:NO];
+                }
+            }
+        }
+            break;
+            
+        case 3: {
+            //预付
+            [self.payType setText:@"预付款"];
+            if (2 == self.intoType) {
+                //历史聚会
+                
+            } else {
+                //日程中
+                //预付款聚会如果已经参与,则变为支付按钮 或者 参与人数提示
+                //这里为预付款聚会 & 已经参与
+                if ((nil != self.party.relationship) && ([@1  isEqual: self.party.relationship])) {
+                    //用户的标识为参与
+                    //这里为预付款聚会已参与
+                    self.yesButton.hidden = YES;
+                    self.noButton.hidden = YES;
+                    
+                    if ([SRTool partyPayorIsSelf:self.party]) {
+                        //查看聚会的付款人是否为自己
+                        //如果自己为付款人则显示人数数据
+                        [self.payDoneView setHidden:NO];
+                        
+                        self.moneyAmount.text = @"参与人数";
+                        self.moneyDone.text = @"付款人数";
+                    } else {
+                        //如果付款者并非自己,则开始分析支付情况
+                        switch (self.party.user_pay_type.intValue) {
+                            case 0: {
+                                //未支付
+                                [self.payDoneView setHidden:YES];
+                                self.payButton.hidden = NO;
+                            }
+                                break;
+                            case 2: {
+                                //已支付
+                                //已支付 - 显示付款的详情内容
+                                [self.payButton setHidden:YES];
+                                [self.payDoneView setHidden:NO];
+                                
+                                self.moneyAmount.text = @"参与人数";
+                                self.moneyDone.text = @"付款人数";
+                            }
+                                break;
+                            case 3: {
+                                //支持代付
+                            }
+                                break;
+                            default: {
+                                //默认为空为未付
+                                [self.payDoneView setHidden:YES];
+                                self.payButton.hidden = NO;
+                            }
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+            
+            break;
+        default: {
+            [self.payType setText:@"未指定"];
+        }
+            break;
+    }
+    
+    
+    
     
     [self setParticipateStatus];
 }
@@ -218,7 +315,6 @@
 }
 
 - (IBAction)pressedYesButton:(id)sender {
-
     if ([@3 isEqual: self.party.pay_type]) {
         NSLog(@"弹出AlertView");
         UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"确定要参加聚会吗" message:@"该聚会为预付款聚会,如果确认参与之后,将无法取消参与该聚会." delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
@@ -251,10 +347,6 @@
                                     
                                 }];
     }
-    
-    
-    
-    
 }
 
 - (IBAction)pressedNoButton:(id)sender {
@@ -307,7 +399,7 @@
         [_relArray addObject:newUser];
     }
     [self reloadPeopleNum];
-    [self.delegate detailChange:self.party];
+    [self.delegate detailChange:self.party with:self.intoType];
     
     [SRTool addPartyUpdateTip:1];
 }
@@ -360,19 +452,15 @@
     self.unkownLabel.text = [NSString stringWithFormat:@"%d", unNum];
 //    NSLog(@"%@",self.unkownLabel.text);
     
-    
-    
     switch (self.party.pay_type.intValue) {
         case 1: {
             //请客
-            
         }
-            
             break;
         case 2: {
             //AA
             //这里获取到已付款的数量,并做展示
-//            self.moneyDone.text = [NSString stringWithFormat:@"已收 %d", moneyDoneSum];
+            self.moneyDone.text = [NSString stringWithFormat:@"已收 %d", moneyDoneSum];
         }
             
             break;
@@ -426,7 +514,6 @@
 }
 
 - (IBAction)pressedTheCanelButton:(id)sender {
-
     //如果是创建者
     if ([[Model_User loadFromUserDefaults].pk_user isEqualToNumber:self.party.fk_user])
         
@@ -673,7 +760,6 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
     switch (alertView.tag) {
         case 1: {
             //取消聚会
@@ -688,7 +774,7 @@
                                                 if (jsonDic) {
                                                     //聚会取消成功
                                                     [self.navigationController popViewControllerAnimated:YES];
-                                                    [self.delegate cancelParty:self.party];
+                                                    [self.delegate cancelParty:self.party with:self.intoType];
                                                 }
                                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                                 
@@ -706,6 +792,7 @@
         }
             break;
         case 3: {
+            //预付款聚会
             switch (buttonIndex) {
                 case 0:{
                     //取消
@@ -733,6 +820,8 @@
                         [self.inLabel setTextColor:[UIColor whiteColor]];
                         //将聚会关系的状态设置为2 以便服务端识别为预付款聚会
                         _relation.pay_amount = self.party.pay_amount;
+                        
+                        _relation.pay_type = @0;
                         
                         //这里因为版本兼容关系,如果预付聚会没有收款人,则将收款人设置为创建者.
                         if (self.party.pay_fk_user) {
@@ -769,8 +858,7 @@
     }
 }
 
-- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation
-{
+- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation {
     
     
     BMKPinAnnotationView *newAnnotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil];
@@ -795,6 +883,35 @@
     NSLog(@"导航");
 }
 
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    if ([@"GoToPay" isEqualToString:identifier]) {
+        if (self.party.pay_amount) {
+            return NO;
+        } else {
+            return YES;
+        }
+    }
+    return YES;
+}
+
+- (void)inputAmount:(NSNumber *)amount {
+    [SVProgressHUD showSuccessWithStatus:@"正在处理付款信息" maskType:SVProgressHUDMaskTypeGradient];
+    self.party.pay_amount = amount;
+    //只发送修改的关键部分
+    Model_Party *sendParty = [[Model_Party alloc] init];
+    sendParty.pk_party = self.party.pk_party;
+    sendParty.pay_amount = amount;
+    sendParty.pay_fk_user = [Model_User loadFromUserDefaults].pk_user;
+    //输入结账完成,这里将做结账处理
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager settleParty:sendParty] complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+        //返回结账信息成功.
+        [SVProgressHUD showSuccessWithStatus:@"标注支付完成"];
+        
+    } failure:^(NSError *error, NSURLSessionDataTask *task) {
+        //结账信息输入失败.
+    }];
+}
 
 #pragma mark - Navigation
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -836,9 +953,9 @@
         childController.showStatus = (int)pressedButton.tag;
         childController.relationArray = _relArray;
 
-    }else
-    {
-
+    }else if([segue.identifier isEqualToString:@"GoToPay"]){
+        PrepayViewController *childController = (PrepayViewController *)segue.destinationViewController;
+        [childController setDelegate:self];
     }
 }
 
