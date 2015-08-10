@@ -145,7 +145,7 @@
 #pragma mark 应用内收取推送信息
 - (void)networkDidReceiveMessage:(NSNotification *)notification {
     
-    NSDictionary * userInfo = [notification userInfo];
+    NSDictionary *userInfo = [notification userInfo];
     NSDictionary *extras = [userInfo valueForKey:@"extras"];
     
     //    NSString *content = [userInfo valueForKey:@"content"];

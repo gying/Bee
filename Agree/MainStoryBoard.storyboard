@@ -137,7 +137,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="sr_stared" translatesAutoresizingMaskIntoConstraints="NO" id="amr-VZ-MHU">
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="sr_stared" translatesAutoresizingMaskIntoConstraints="NO" id="amr-VZ-MHU">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ewk-Gr-Q7b" userLabel="LoginRegView" customClass="rootvi">
@@ -369,7 +369,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6h4-yP-eyM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1975" y="-1529"/>
+            <point key="canvasLocation" x="-2079" y="-1557"/>
         </scene>
         <!--Root Phone Reg View Controller-->
         <scene sceneID="t48-5c-oM3">
@@ -558,7 +558,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qLd-Zp-lzg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1025" y="-1529"/>
+            <point key="canvasLocation" x="-1129" y="-1557"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="M8T-e8-l6Z">
@@ -1951,9 +1951,9 @@
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="ydE-ds-og7"/>
+                                        <exclude reference="M9b-WU-Dqy"/>
                                         <exclude reference="Xow-yB-BbO"/>
                                         <exclude reference="vWa-js-9s3"/>
-                                        <exclude reference="M9b-WU-Dqy"/>
                                     </mask>
                                 </variation>
                             </view>

@@ -127,12 +127,15 @@
     [alertView.titleLabel setTextColor:[UIColor darkGrayColor]];
     [alertView.cancelButton.titleLabel setFont:[UIFont systemFontOfSize:14]];
     
-    
+//    [alertView.cancelButton setTitleShadowColor:[UIColor clearColor] forState:UIControlStateNormal];
+//    [alertView.otherButton setTitleShadowColor:[UIColor clearColor] forState:UIControlStateNormal];
     if (otherButtonTitle) {
         //根据按钮的数量来确定按钮颜色
         [alertView.cancelButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         [alertView.otherButton setTitleColor:AgreeBlue forState:UIControlStateNormal];
         [alertView.otherButton.titleLabel setFont:[UIFont boldSystemFontOfSize:14]];
+        
+        
     } else {
         [alertView.cancelButton setTitleColor:AgreeBlue forState:UIControlStateNormal];
         [alertView.otherButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
