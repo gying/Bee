@@ -13,6 +13,8 @@
 		C60D3F241B4240E500E86E2D /* RootPhoneRegViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C60D3F231B4240E500E86E2D /* RootPhoneRegViewController.m */; };
 		C64F1D5E1B26881A0063C012 /* ChoosefriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C64F1D5D1B26881A0063C012 /* ChoosefriendsViewController.m */; };
 		C64F1D641B26CB9D0063C012 /* ChoosefriendsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C64F1D631B26CB9D0063C012 /* ChoosefriendsTableViewCell.m */; };
+		C6749BAC1B787AB9002F4D6E /* GroupHistroyPartyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6749BAB1B787AB9002F4D6E /* GroupHistroyPartyViewController.m */; };
+		C6749BAF1B787E09002F4D6E /* GroupHistroyPartyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6749BAE1B787E09002F4D6E /* GroupHistroyPartyTableViewController.m */; };
 		C68EBEDD1B73045200A6F2E5 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C68EBEDC1B73045200A6F2E5 /* ScheduleViewController.m */; };
 		C69BC6181B704D1B003540DB /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C69BC6171B704D1B003540DB /* RootViewController.m */; };
 		C6B4DA031B5CD0A000EF9BE7 /* PrepayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B4DA021B5CD0A000EF9BE7 /* PrepayViewController.m */; };
@@ -187,6 +189,10 @@
 		C64F1D5D1B26881A0063C012 /* ChoosefriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosefriendsViewController.m; sourceTree = "<group>"; };
 		C64F1D621B26CB9D0063C012 /* ChoosefriendsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosefriendsTableViewCell.h; sourceTree = "<group>"; };
 		C64F1D631B26CB9D0063C012 /* ChoosefriendsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosefriendsTableViewCell.m; sourceTree = "<group>"; };
+		C6749BAA1B787AB9002F4D6E /* GroupHistroyPartyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupHistroyPartyViewController.h; sourceTree = "<group>"; };
+		C6749BAB1B787AB9002F4D6E /* GroupHistroyPartyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupHistroyPartyViewController.m; sourceTree = "<group>"; };
+		C6749BAD1B787E09002F4D6E /* GroupHistroyPartyTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupHistroyPartyTableViewController.h; sourceTree = "<group>"; };
+		C6749BAE1B787E09002F4D6E /* GroupHistroyPartyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupHistroyPartyTableViewController.m; sourceTree = "<group>"; };
 		C68EBEDB1B73045200A6F2E5 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleViewController.h; sourceTree = "<group>"; };
 		C68EBEDC1B73045200A6F2E5 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleViewController.m; sourceTree = "<group>"; };
 		C69BC6161B704D1B003540DB /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
@@ -962,6 +968,10 @@
 				F03C258E1A72E9AA0043D1F6 /* GroupPartyTableViewController.m */,
 				F06A62B01A7EA016005C6155 /* GroupAlbumsCollectionViewController.h */,
 				F06A62B11A7EA016005C6155 /* GroupAlbumsCollectionViewController.m */,
+				C6749BAA1B787AB9002F4D6E /* GroupHistroyPartyViewController.h */,
+				C6749BAB1B787AB9002F4D6E /* GroupHistroyPartyViewController.m */,
+				C6749BAD1B787E09002F4D6E /* GroupHistroyPartyTableViewController.h */,
+				C6749BAE1B787E09002F4D6E /* GroupHistroyPartyTableViewController.m */,
 			);
 			name = Group;
 			path = "Group Tab";
@@ -1138,6 +1148,7 @@
 				F0F5C2751A66F1490029BF7A /* MJArgument.m in Sources */,
 				F0EC50611A85697B000417BA /* UserSettingViewController.m in Sources */,
 				F0CC83E41B2ECF4500B73652 /* CD_Photo.m in Sources */,
+				C6749BAC1B787AB9002F4D6E /* GroupHistroyPartyViewController.m in Sources */,
 				F07F36D61B3001A100D76D4C /* CD_User.m in Sources */,
 				F0F5C2791A66F1490029BF7A /* MJType.m in Sources */,
 				F080742F1AB948830046EA0C /* SelectFriendViewController.m in Sources */,
@@ -1175,6 +1186,7 @@
 				F0F5C2981A66F1620029BF7A /* Model_User.m in Sources */,
 				F08B809D1A75F7110012E3D9 /* PartyDetailViewController.m in Sources */,
 				F0A97FC21A92175F00FFA4F2 /* GroupChatTableViewCell.m in Sources */,
+				C6749BAF1B787E09002F4D6E /* GroupHistroyPartyTableViewController.m in Sources */,
 				F036D2721AB492C3002C3B81 /* BandingPhoneViewController.m in Sources */,
 				F0F5C2721A66F1490029BF7A /* SRNet_Manager.m in Sources */,
 				F07BBDAE1A9EE48A00B44C65 /* PeopleListTableViewCell.m in Sources */,
