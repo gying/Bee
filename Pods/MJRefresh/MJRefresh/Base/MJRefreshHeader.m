@@ -45,7 +45,7 @@
     [super placeSubviews];
     
     // 设置y值(当自己的高度发生改变了，肯定要重新调整Y值，所以放到placeSubviews方法中设置y值)
-    self.mj_y = - self.mj_h;
+    self.mj_y = - self.mj_h - self.ignoredScrollViewContentInsetTop;
 }
 
 - (void)scrollViewContentOffsetDidChange:(NSDictionary *)change
@@ -106,7 +106,7 @@
             self.scrollView.mj_insetT -= self.mj_h;
             
             // 自动调整透明度
-            if (self.isAutoChangeAlpha) self.alpha = 0.0;
+            if (self.isAutomaticallyChangeAlpha) self.alpha = 0.0;
         } completion:^(BOOL finished) {
             self.pullingPercent = 0.0;
         }];

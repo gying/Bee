@@ -18,6 +18,10 @@
 - (void)initWithUser: (Model_User *)user;
 @property (weak, nonatomic) IBOutlet UILabel *countLabel;
 
+@property (weak, nonatomic) IBOutlet UILabel *surplusLabel;
+@property (weak, nonatomic) IBOutlet UILabel *overdraftLabel;
+
+
 @property (weak, nonatomic)ContactsTableViewController *topViewController;
 
 @end

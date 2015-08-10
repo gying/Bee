@@ -9,13 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "Model_User.h"
 #import "SRNet_Manager.h"
-
-#import "TXYDownloader.h"
 @protocol SRAccountViewDelegate <NSObject>
 
 @end
 
-@interface SRAccountView : UIView <SRNetManagerDelegate, UIAlertViewDelegate>
+@interface SRAccountView : UIView
 
 @property (nonatomic, strong)UIView *msgView;
 @property (nonatomic, strong)UIButton *backButton;

@@ -9,13 +9,14 @@
 #import "IChatManagerChat.h"
 #import "IChatManagerEncryption.h"
 #import "IChatManagerConversation.h"
-#import "IChatManagerMedia.h"
 #import "IChatManagerUtil.h"
 #import "IChatManagerLogin.h"
 #import "IChatManagerBuddy.h"
 #import "IChatManagerGroup.h"
 #import "IChatManagerSettingOptions.h"
 #import "IChatManagerPushNotification.h"
+#import "IChatManagerChatroom.h"
+#import "IChatManagerRobot.h"
 
 /*!
  @protocol
@@ -27,12 +28,13 @@
                         IChatManagerLogin,
                         IChatManagerConversation,
                         IChatManagerEncryption,
-                        IChatManagerMedia,
                         IChatManagerUtil,
                         IChatManagerGroup, 
                         IChatManagerBuddy,
                         IChatManagerSettingOptions,
-                        IChatManagerPushNotification>
+                        IChatManagerPushNotification,
+                        IChatManagerChatroom,
+                        IChatManagerRobot>
 
 @required
 

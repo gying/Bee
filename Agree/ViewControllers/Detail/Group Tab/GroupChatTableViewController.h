@@ -39,6 +39,8 @@
 //- (void)loadChatFromNet;
 //- (void)setkeyBoard: (UIViewController *)viewController;
 - (void)subChatArray;
+//发送信息
+- (void)sendMessageFromString: (NSString *)text;
 
 
 @end

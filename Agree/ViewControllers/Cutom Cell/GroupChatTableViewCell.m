@@ -111,7 +111,8 @@
                 self.chatMessageTextLabel_self.text = ((EMTextMessageBody *)msgBody).text;
                 [self.chatDateLabel_self setText:dateString];
                 
-                [self.avatarButton_self sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:message.avatar_path_from] forState:UIControlStateNormal];
+                [self.avatarButton_self sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromOSS:message.avatar_path_from]
+                                                            forState:UIControlStateNormal];
                 
             } else {
                 //他人发的信息
@@ -136,7 +137,7 @@
                 
                 //处理头像信息
                 
-                [self.avatarButton sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:message.avatar_path_from] forState:UIControlStateNormal];
+                [self.avatarButton sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromOSS:message.avatar_path_from] forState:UIControlStateNormal];
             }
             
         }
@@ -153,7 +154,7 @@
                 _isImageDataIsSelf = TRUE;
                 
                 [self.chatDateLabel_self setText:dateString];
-                [self.avatarButton_self sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:message.avatar_path_from] forState:UIControlStateNormal];
+                [self.avatarButton_self sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromOSS:message.avatar_path_from] forState:UIControlStateNormal];
                 
                 if (body.thumbnailLocalPath) {
                     //如果本地文件存在
@@ -176,7 +177,7 @@
                 
                 //处理头像信息
                 
-                [self.avatarButton sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromTXYFieldID:message.avatar_path_from] forState:UIControlStateNormal];
+                [self.avatarButton sd_setBackgroundImageWithURL:[SRImageManager miniAvatarImageFromOSS:message.avatar_path_from] forState:UIControlStateNormal];
                 
                 
                 if (body.thumbnailLocalPath) {
@@ -319,9 +320,9 @@
     [browser show];
 }
 
-
+//点击好友头像
 - (IBAction)pressedTheAvatarButton:(id)sender {
-    
+    NSLog(@"好友资料");
     if (![_chat.fk_user isEqual:[Model_User loadFromUserDefaults].pk_user]) {
         [self.topViewController.accountView show];
         Model_User *sendUser = [[Model_User alloc] init];
@@ -331,13 +332,11 @@
         sendUser.avatar_path = _chat.avatar_path_from;
         [self.topViewController.accountView loadWithUser:sendUser withGroup:self.topViewController.group];
     }
-    
-    
+
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
 //    [super setSelected:selected animated:animated];
-
     // Configure the view for the selected state
 }
 

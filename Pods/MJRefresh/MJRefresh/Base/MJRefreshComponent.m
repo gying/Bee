@@ -133,7 +133,9 @@
 #pragma mark 进入刷新状态
 - (void)beginRefreshing
 {
-    self.alpha = 1.0;
+    [UIView animateWithDuration:MJRefreshFastAnimationDuration animations:^{
+        self.alpha = 1.0;
+    }];
     self.pullingPercent = 1.0;
     // 只要正在刷新，就完全显示
     if (self.window) {
@@ -160,12 +162,18 @@
 #pragma mark 自动切换透明度
 - (void)setAutoChangeAlpha:(BOOL)autoChangeAlpha
 {
-    _autoChangeAlpha = autoChangeAlpha;
+    self.automaticallyChangeAlpha = autoChangeAlpha;
+}
+
+- (void)setAutomaticallyChangeAlpha:(BOOL)automaticallyChangeAlpha
+{
+    _automaticallyChangeAlpha = automaticallyChangeAlpha;
+    
     
     if (self.isRefreshing) return;
     
-    if (autoChangeAlpha) {
-         self.alpha = self.pullingPercent;
+    if (automaticallyChangeAlpha) {
+        self.alpha = self.pullingPercent;
     } else {
         self.alpha = 1.0;
     }
@@ -178,7 +186,7 @@
     
     if (self.isRefreshing) return;
     
-    if (self.isAutoChangeAlpha) {
+    if (self.isAutomaticallyChangeAlpha) {
         self.alpha = pullingPercent;
     }
 }
@@ -191,7 +199,7 @@
             self.refreshingBlock();
         }
         if ([self.refreshingTarget respondsToSelector:self.refreshingAction]) {
-            msgSend(msgTarget(self.refreshingTarget), self.refreshingAction, self);
+            MJRefreshMsgSend(MJRefreshMsgTarget(self.refreshingTarget), self.refreshingAction, self);
         }
     });
 }

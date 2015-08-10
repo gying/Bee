@@ -11,7 +11,7 @@
 #import "Model_Group_User.h"
 #import "SRNet_Manager.h"
 
-@interface JoinUserViewController : UIViewController <SRNetManagerDelegate>
+@interface JoinUserViewController : UIViewController
 
 @property (nonatomic, strong)Model_Group *theGroup;
 @property (nonatomic, strong)UIImage *groupCover;

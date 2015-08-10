@@ -13,6 +13,7 @@
 @class EMGroup;
 @class EMError;
 @class EMGroupStyleSetting;
+@class EMCursorResult;
 
 /*!
  @protocol
@@ -540,52 +541,6 @@
                                          EMError *error))completion
                        onQueue:(dispatch_queue_t)aQueue;
 
-#pragma mark - accept invitation
-
-/*!
- @method
- @brief 接受并加入群组
- @param groupId 所接受的群组ID
- @param pError  错误信息
- @result 返回所加入的群组对象
- */
-- (EMGroup *)acceptInvitationFromGroup:(NSString *)groupId
-                                 error:(EMError **)pError;
-
-/*!
- @method
- @brief 异步方法, 接受并加入群组
- @param groupId 所接受的群组ID
- @discussion
-        函数执行后, didAcceptInvitationFromGroup:error:回调会被触发
- */
-- (void)asyncAcceptInvitationFromGroup:(NSString *)groupId;
-
-/*!
- @method
- @brief 异步方法, 接受并加入群组
- @param groupId    所接受的群组ID
- @param completion 消息完成后的回调
- @param aQueue     回调执行时的线程
- */
-- (void)asyncAcceptInvitationFromGroup:(NSString *)groupId
-                            completion:(void (^)(EMGroup *group,
-                                                 EMError *error))completion
-                               onQueue:(dispatch_queue_t)aQueue;
-
-#pragma mark - reject invitation
-
-/*!
- @method
- @brief 拒绝一个加入群组的邀请
- @param groupId  被拒绝的群组ID
- @param username 被拒绝的人
- @param reason   拒绝理由
- */
-- (void)rejectInvitationForGroup:(NSString *)groupId
-                       toInviter:(NSString *)username
-                          reason:(NSString *)reason;
-
 
 #pragma mark - accept join group apply
 
@@ -834,6 +789,31 @@
 - (void)asyncFetchAllPublicGroupsWithCompletion:(void (^)(NSArray *groups,
                                                           EMError *error))completion
                                         onQueue:(dispatch_queue_t)aQueue;
+
+/*!
+ @method
+ @brief 获取指定范围内的公开群
+ @param cursor   获取公开群的cursor，首次调用传空即可
+ @param pageSize 期望结果的数量, 如果 < 0 则一次返回所有结果
+ @param pError   出错信息
+ @return         获取的公开群结果
+ @discussion
+ 这是一个阻塞方法，用户应当在一个独立线程中执行此方法，用户可以连续调用此方法以获得所有的公开群
+ */
+- (EMCursorResult *)fetchPublicGroupsFromServerWithCursor:(NSString *)cursor
+                                                 pageSize:(NSInteger)pageSize
+                                                 andError:(EMError **)pError;
+
+/*!
+ @method
+ @brief 异步方法, 获取指定范围的公开群
+ @param cursor      获取公开群的cursor，首次调用传空即可
+ @param pageSize    期望结果的数量, 如果 < 0 则一次返回所有结果
+ @param completion  完成回调，回调会在主线程调用
+ */
+- (void)asyncFetchPublicGroupsFromServerWithCursor:(NSString *)cursor
+                                     pageSize:(NSInteger)pageSize
+                                andCompletion:(void (^)(EMCursorResult *result, EMError *error))completion;
 
 #pragma mark - join public group
 
@@ -1234,5 +1214,50 @@
                                                            EMError *error))completion
                                          onQueue:(dispatch_queue_t)aQueue EM_DEPRECATED_IOS(2_0_0, 2_0_2, "Use -asyncMyGroupsListWithCompletion:onQueue:");
 
+#pragma mark - accept invitation, will be abolished
+
+/*!
+ @method
+ @brief 接受并加入群组
+ @param groupId 所接受的群组ID
+ @param pError  错误信息
+ @result 返回所加入的群组对象
+ */
+- (EMGroup *)acceptInvitationFromGroup:(NSString *)groupId
+                                 error:(EMError **)pError EM_DEPRECATED_IOS(2_0_3, 2_1_8, "Delete");
+
+/*!
+ @method
+ @brief 异步方法, 接受并加入群组
+ @param groupId 所接受的群组ID
+ @discussion
+        函数执行后, didAcceptInvitationFromGroup:error:回调会被触发
+ */
+- (void)asyncAcceptInvitationFromGroup:(NSString *)groupId EM_DEPRECATED_IOS(2_0_3, 2_1_8, "Delete");
+
+/*!
+ @method
+ @brief 异步方法, 接受并加入群组
+ @param groupId    所接受的群组ID
+ @param completion 消息完成后的回调
+ @param aQueue     回调执行时的线程
+ */
+- (void)asyncAcceptInvitationFromGroup:(NSString *)groupId
+                            completion:(void (^)(EMGroup *group,
+                                                 EMError *error))completion
+                               onQueue:(dispatch_queue_t)aQueue EM_DEPRECATED_IOS(2_0_3, 2_1_8, "Delete");
+
+#pragma mark - reject invitation, will be abolished
+
+/*!
+ @method
+ @brief 拒绝一个加入群组的邀请
+ @param groupId  被拒绝的群组ID
+ @param username 被拒绝的人
+ @param reason   拒绝理由
+ */
+- (void)rejectInvitationForGroup:(NSString *)groupId
+                       toInviter:(NSString *)username
+                          reason:(NSString *)reason EM_DEPRECATED_IOS(2_0_3, 2_1_8, "Delete");
 
 @end

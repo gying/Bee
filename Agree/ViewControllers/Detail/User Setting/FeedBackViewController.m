@@ -10,11 +10,9 @@
 #import "SRNet_Manager.h"
 
 #import <SVProgressHUD.h>
+#import "SRTool.h"
 
-@interface FeedBackViewController ()<SRNetManagerDelegate> {
-    SRNet_Manager *_netManager;
-}
-
+@interface FeedBackViewController ()
 @end
 
 @implementation FeedBackViewController
@@ -32,37 +30,34 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)tapFeedBackButton:(id)sender {
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
-    
+
     Model_Feedback *feedback = [[Model_Feedback alloc] init];
     [feedback setContent:self.feedBackTextView.text];
     [feedback setFk_user:[Model_User loadFromUserDefaults].pk_user];
     [feedback setDate:[NSDate date]];
-    [_netManager feedBackMessage:feedback];
-}
-
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
     
-    switch (interfaceType) {
-        case kFeedBackMessage: {    //反馈信息
-            [SVProgressHUD showSuccessWithStatus:@"反馈成功"];
-            //    [self.navigationController popToViewController:self animated:YES];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.navigationController popToRootViewControllerAnimated:YES];
-            });
-        }
-            break;
-            
-        default:
-            break;
-    }
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD dismiss];
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager feedBackMessageDic:feedback]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                [SVProgressHUD dismiss];
+                                
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    //        [self.feedBackTextView resignFirstResponder];
+                                    [self.navigationController popToRootViewControllerAnimated:YES];
+                                });
+                                
+                                [SRTool showSRAlertViewWithTitle:@"提示"
+                                                         message:@"谢谢亲的反馈,我们将会努力做的更好."
+                                               cancelButtonTitle:@"好的"
+                                                otherButtonTitle:nil
+                                           tapCancelButtonHandle:^(NSString *msgString) {
+                                                     
+                                           } tapOtherButtonHandle:^(NSString *msgString) {
+                                                     
+                                                 }];
+                                
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
 }
 
 - (IBAction)tapBackButton:(id)sender {

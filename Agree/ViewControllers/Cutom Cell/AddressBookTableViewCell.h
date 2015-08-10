@@ -9,16 +9,20 @@
 #import <UIKit/UIKit.h>
 #import "People.h"
 #import "SRNet_Manager.h"
-#import "TXYDownloader.h"
+#import "ContactsDetailTableViewController.h"
 
 
+#import <MessageUI/MFMessageComposeViewController.h>
 
-@interface AddressBookTableViewCell : UITableViewCell <SRNetManagerDelegate>
+
+@interface AddressBookTableViewCell : UITableViewCell<MFMessageComposeViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *avatarImageView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *nicknameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *addressBookNameLabel;
 @property (weak, nonatomic) IBOutlet UIButton *sendButton;
+
+@property ( strong, nonatomic )ContactsDetailTableViewController * contactsDetailTableVC;
 
 - (void)initWithPeople: (People *)adPeople;
 

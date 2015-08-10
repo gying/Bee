@@ -16,11 +16,12 @@
 #import "SRImageManager.h"
 #import "UIImageView+WebCache.h"
 
-@interface CreateGroupViewController () <UITextFieldDelegate, SRNetManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, SRImageManagerDelegate> {
+//#import <DQAlertView.h>
+#import "SRTool.h"
+
+@interface CreateGroupViewController () <UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate> {
     Model_Group *_newGroup;
-    SRNet_Manager *_netManager;
     UIImagePickerController *_imagePicker;
-    SRImageManager *_imageManager;
     
     UIImage *_groupCoverImage;
     Model_Group *_joinGroup;
@@ -55,12 +56,43 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if ([@"CodeField" isEqual:textField.restorationIdentifier]) {
         //验证码输入界面
-        if (!_netManager) {
-            _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-        }
         Model_Group_Code *newCode = [[Model_Group_Code alloc] init];
         newCode.pk_group_code = textField.text;
-        [_netManager joinTheGroupByCode:newCode];
+        
+        [SRNet_Manager requestNetWithDic:[SRNet_Manager joinTheGroupByCodeDic:newCode]
+                                complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                    if (jsonDic) {
+                                        [SVProgressHUD showSuccessWithStatus:@"找到小组"];
+                                        _joinGroup = [[Model_Group objectArrayWithKeyValuesArray:jsonDic] firstObject];
+                                        
+                                        //显示要加入的小组
+                                        [self.groupCoverImageView setHidden:NO];
+                                        [self.groupNameLabel setHidden:NO];
+                                        [self.recodeButton setHidden:NO];
+                                        [self.joinButton setHidden:NO];
+                                        [self.publicPhoneLabel setHidden:NO];
+                                        [self.publicPhoneSeg setHidden:NO];
+                                        
+                                        [self.codeInputTextField setHidden:YES];
+                                        [self.groupCoverButton setHidden:YES];
+                                        [self.remarkLabel setHidden:YES];
+                                        
+                                        [self.groupNameLabel setText:_joinGroup.name];
+                                        
+                                        //下载图片
+                                        NSURL *imageUrl = [SRImageManager groupFrontCoverImageImageFromOSS:_joinGroup.avatar_path];
+                                        [self.groupCoverImageView sd_setImageWithURL:imageUrl];
+                                        
+                                    }
+                                    else {
+                                        [SVProgressHUD showErrorWithStatus:@"未找到相关数据"];
+                                        //未找到小组的相关数据
+                                        [self.remarkLabel setText:@"未找到小组信息,请再次确认输入"];
+                                        [self.codeInputTextField becomeFirstResponder];
+                                    }
+                                } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                    
+                                }];
     } else if([self.groupNameTextField.restorationIdentifier isEqualToString:textField.restorationIdentifier]) {
         //输入小组名称
         _newGroup.name = textField.text;
@@ -77,34 +109,38 @@
         _imagePicker.delegate = self;
         _imagePicker.allowsEditing = YES;
         _imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        //判断是否有摄像头
-        if(![UIImagePickerController isSourceTypeAvailable:_imagePicker.sourceType]) {
-            _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        }
     }
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择图片来源" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"拍照" otherButtonTitles:@"图片库", nil];
-        [sheet showInView:self.view];
+        [SRTool showSRSheetInView:self.view withTitle:@"选择图片来源" message:nil
+                  withButtonArray:@[@"拍照", @"相册"]
+                  tapButtonHandle:^(int buttonIndex) {
+                      UIImagePickerControllerSourceType sourceType;
+                      switch (buttonIndex) {
+                          case 0: {
+                              //拍照
+                              sourceType = UIImagePickerControllerSourceTypeCamera;
+                          }
+                              break;
+                          case 1: {
+                              //相册
+                              sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                          }
+                              break;
+                          default:
+                              break;
+                      }
+                      _imagePicker.sourceType = sourceType;
+                      [self presentViewController:_imagePicker animated:YES completion:nil];
+                  } tapCancelHandle:^{
+                      
+                  }];
+    } else {
+        _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [self presentViewController:_imagePicker animated:YES completion:nil];
     }
-    
-    NSLog(@"现在操作图片按钮");
 }
 
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    UIImagePickerControllerSourceType sourceType;
-    if (0 == buttonIndex) {
-        //直接拍照
-        sourceType = UIImagePickerControllerSourceTypeCamera;
-    } else if (1 == buttonIndex) {
-        //使用相册
-        sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    } else {
-        return;
-    }
-    _imagePicker.sourceType = sourceType;
-    [self presentViewController:_imagePicker animated:YES completion:nil];
-}
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [picker dismissViewControllerAnimated:YES completion:nil];
@@ -114,10 +150,6 @@
     [picker dismissViewControllerAnimated:YES completion:nil];
     
     UIImage *pickImage = [info valueForKey:@"UIImagePickerControllerOriginalImage"];
-    
-    if (!_imageManager) {
-        _imageManager = [[SRImageManager alloc] initWithDelegate:self];
-    }
     
     _groupCoverImage = [SRImageManager getSubImage:pickImage withRect:CGRectMake(0, 0, self.groupCoverButton.frame.size.width * 2, self.groupCoverButton.frame.size.height * 2)];
     
@@ -179,9 +211,16 @@
 
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    if (2 >= self.groupNameTextField.text.length) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"错误" message:@"小组名称不能为空或者小于两个字符" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-        [alertView show];
+    if (0 == self.groupNameTextField.text.length) {
+        [SRTool showSRAlertViewWithTitle:@"提示"
+                                 message:@"小组名称不能为空哦~"
+                       cancelButtonTitle:@"好的"
+                        otherButtonTitle:nil
+                   tapCancelButtonHandle:^(NSString *msgString) {
+                             
+                   } tapOtherButtonHandle:^(NSString *msgString) {
+                             
+                         }];
         return NO;
         
     } else {
@@ -189,53 +228,6 @@
     }
 }
 
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    switch (interfaceType) {
-        case kJoinTheGroupByCode: {
-            if (jsonDic) {
-                [SVProgressHUD showSuccessWithStatus:@"找到小组"];
-                _joinGroup = [[Model_Group objectArrayWithKeyValuesArray:jsonDic] firstObject];
-                
-                //显示要加入的小组
-                [self.groupCoverImageView setHidden:NO];
-                [self.groupNameLabel setHidden:NO];
-                [self.recodeButton setHidden:NO];
-                [self.joinButton setHidden:NO];
-                [self.publicPhoneLabel setHidden:NO];
-                [self.publicPhoneSeg setHidden:NO];
-                
-                [self.codeInputTextField setHidden:YES];
-                [self.groupCoverButton setHidden:YES];
-                [self.remarkLabel setHidden:YES];
-                
-                [self.groupNameLabel setText:_joinGroup.name];
-//                [self.groupCoverImageView sd_setImageWithURL:[SRImageManager groupFrontCoverImageFromTXYFieldID:_joinGroup.avatar_path]];
-                
-                //下载图片
-                NSURL *imageUrl = [SRImageManager groupFrontCoverImageFromTXYFieldID:_joinGroup.avatar_path];
-                NSString * urlstr = [imageUrl absoluteString];
-                
-                [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:self.groupCoverImageView succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-                    [self.groupCoverImageView setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
-                } failBlock:nil progressBlock:nil param:nil];
-            } else {
-                [SVProgressHUD showErrorWithStatus:@"未找到相关数据"];
-                //未找到小组的相关数据
-                [self.remarkLabel setText:@"未找到小组信息,请再次确认输入"];
-                [self.codeInputTextField becomeFirstResponder];
-            }
-        }
-            break;
-            
-        default:
-            break;
-    }
-    [SVProgressHUD dismiss];
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD dismiss];
-}
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }

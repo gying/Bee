@@ -12,21 +12,21 @@
 #import "GroupDetailViewController.h"
 #import "GroupViewController.h"
 #import "UserChatViewController.h"
-#import "ScheduleTableViewController.h"
-#import "TXYUploadManager.h"
-#import "TXYDownloader.h"
 
 #import "WXApi.h"
-#import "RootAccountLoginViewController.h"
 #import "UserSettingViewController.h"
+
+#import <ALBB_OSS_IOS_SDK/ALBBOSSServiceProvider.h>
+#import <ALBB_OSS_IOS_SDK/OSSTool.h>
+
+
+#import "RootViewController.h"
+
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
-
-
 @property (strong, nonatomic) UIWindow *window;
-
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
@@ -37,19 +37,18 @@
 @property (nonatomic, weak)UserChatViewController *userChatDelegate;
 @property (nonatomic, weak)GroupViewController *groupDelegate;
 @property (nonatomic, weak)ContactsTableViewController *contactsDelegate;
-@property (nonatomic, weak)ScheduleTableViewController *scheduleDelegate;
 
 @property (nonatomic, strong)UITabBarController *rootController;
 
 @property (nonatomic, strong)NSString *jPushString;
 @property (nonatomic, strong)NSString *deviceToken;
 
-@property (nonatomic, strong)TXYUploadManager *uploadManager;
 
+@property(strong , nonatomic)RootViewController * rootViewController;
 
+@property (nonatomic, strong)id<ALBBOSSServiceProtocol> ossService;
 
-@property (strong, nonatomic) RootAccountLoginViewController *rootLoginViewController;
-@property (strong ,nonatomic) UserSettingViewController * userSettingViewcontroller;
+@property (nonatomic, strong)UIViewController<WXApiDelegate> *wechatViewController;
 
 
 

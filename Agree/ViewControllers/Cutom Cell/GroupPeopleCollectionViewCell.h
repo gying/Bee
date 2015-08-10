@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "Model_Group_User.h"
-#import "TXYDownloader.h"
 
 @interface GroupPeopleCollectionViewCell : UICollectionViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *avatarImageView;

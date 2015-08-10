@@ -15,9 +15,7 @@
 #import "ChoosefriendsViewController.h"
 
 
-@interface JoinUserViewController () <SRImageManagerDelegate> {
-    SRNet_Manager *_netManager;
-    SRImageManager *_imageManager;
+@interface JoinUserViewController () {
     NSMutableArray *_groupMembers;
     
     ChoosefriendsViewController * choosefriendsVC;
@@ -48,14 +46,6 @@
     [self createEMGroup];
 }
 
--(void)imageUploading:(float)proFloat
-{
-    
-    [SVProgressHUD showProgress:proFloat*0.9 maskType:SVProgressHUDMaskTypeGradient];
-//    [SVProgressHUD showProgress:proFloat*0.9];
-    NSLog(@"小组正在创建");
-}
-
 - (void)createEMGroup {
 //    [SVProgressHUD showWithStatus:@"正在建立小组"];
 //    [SVProgressHUD showProgress:1.0 maskType:SVProgressHUDMaskTypeGradient];
@@ -69,10 +59,6 @@
         NSLog(@"创建成功 -- %@",group);
         
         //完成小组创建
-        if (!_netManager) {
-            _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-        }
-        
         self.theGroup.setup_time = [NSDate date];
         self.theGroup.last_post_message = @"小组成立啦!";
         self.theGroup.last_post_time = [NSDate date];
@@ -97,13 +83,51 @@
         }
         
         if (self.groupCover) {
-            if (!_imageManager) {
-                _imageManager = [[SRImageManager alloc] initWithDelegate:self];
-            }
-            [_imageManager updateImageToTXY:self.groupCover];
+            self.theGroup.avatar_path = [NSUUID UUID].UUIDString;
+            [[SRImageManager initImageOSSData:self.groupCover
+                                     withKey:self.theGroup.avatar_path] uploadWithUploadCallback:^(BOOL isSuccess, NSError *error) {
+                if (isSuccess) {
+                    //图片上传成功
+                    [SRNet_Manager requestNetWithDic:[SRNet_Manager addGroupDic:self.theGroup withMembers:_groupMembers]
+                                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                                if (jsonDic) {
+                                                    [SVProgressHUD showSuccessWithStatus:@"小组创建成功"];
+                                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                                        GroupViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
+                                                        [rootController loadUserGroupRelationship];
+                                                        [self.navigationController popToRootViewControllerAnimated:YES];
+                                                    });
+                                                }
+                                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                                
+                                            }];
+                    
+                } else {
+                    //上传失败
+                    
+                }
+            } withProgressCallback:^(float progress) {
+                [SVProgressHUD showProgress: progress*0.9
+                                   maskType:SVProgressHUDMaskTypeGradient];
+            }];
+
+            
             self.groupCover = nil;
+            
         } else {
-            [_netManager addGroup:self.theGroup withMembers:_groupMembers];
+            [SRNet_Manager requestNetWithDic:[SRNet_Manager addGroupDic:self.theGroup withMembers:_groupMembers]
+                                    complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                        if (jsonDic) {
+                                            [SVProgressHUD showSuccessWithStatus:@"小组创建成功"];
+                                            dispatch_async(dispatch_get_main_queue(), ^{
+                                                GroupViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
+                                                [rootController loadUserGroupRelationship];
+                                                [self.navigationController popToRootViewControllerAnimated:YES];
+                                            });
+                                        }
+                                    } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                        
+                                    }];
         }
     }else {
         NSLog(@"创建错误: %@", error);
@@ -111,46 +135,21 @@
 }
 
 
-- (void)interfaceReturnDataSuccess:(NSMutableDictionary *)jsonDic with:(int)interfaceType {
-    //群组创建成功
-    
-//    [SVProgressHUD showProgress:1.0];
-    
-    
-    switch (interfaceType) {
-        case kAddGroup: {
-            if (jsonDic) {
-                [SVProgressHUD showSuccessWithStatus:@"小组创建成功"];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    GroupViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
-                    [rootController loadUserGroupRelationship];
-                    [self.navigationController popToRootViewControllerAnimated:YES];
-                });
-            }
-        }
-            break;
-            
-        default:
-            break;
-    }
-}
-
-
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD showErrorWithStatus:@"网络错误"];
-}
-
-- (void)imageUploadDoneWithFieldID:(NSString *)fieldID {
-    self.theGroup.avatar_path = fieldID;
-    [_netManager addGroup:self.theGroup withMembers:_groupMembers];
-}
-
-- (void)imageUpladError {
-    
-}
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    
+    NSString *titleStirng = [[NSString alloc] init];
+    if (self.choosePeopleArray && 0 != self.choosePeopleArray.count) {
+        titleStirng = [NSString stringWithFormat:@"您已经邀请了%lu个好友",(unsigned long)self.choosePeopleArray.count];
+    } else {
+        titleStirng = @"邀请好友加入小组";
+    }
+
+    
+    [self.joinButton setTitle:titleStirng forState:UIControlStateNormal];
 }
 
 

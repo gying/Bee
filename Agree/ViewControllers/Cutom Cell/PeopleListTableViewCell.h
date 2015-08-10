@@ -9,15 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "Model_User.h"
 
-
-#import "TXYDownloader.h"
-
 @interface PeopleListTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *avatarImageView;
 @property (weak, nonatomic) IBOutlet UILabel *nicknameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 
-- (void)initWithUser: (Model_User *)user;
+@property (weak, nonatomic) IBOutlet UISwitch *tapSwitch;
+@property (weak, nonatomic) IBOutlet UILabel *payLabel;
+
+
+- (void)initWithUser: (Model_User *)user withShowStatus: (int)showStatus isCreator: (BOOL) isCreator isPayor:(BOOL)isPayor ;
 
 @end

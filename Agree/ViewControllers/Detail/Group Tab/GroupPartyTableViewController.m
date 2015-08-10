@@ -15,41 +15,71 @@
 #import "CD_Party.h"
 #import <MJRefresh.h>
 
-@interface GroupPartyTableViewController () <SRNetManagerDelegate> {
-    SRNet_Manager *_netManager;
-}
+
+
+@interface GroupPartyTableViewController ()
+
 
 @end
 
 @implementation GroupPartyTableViewController
 
-//- (void)viewDidLoad {
-//    [super viewDidLoad];
-//    
-//    // Uncomment the following line to preserve selection between presentations.
-//    // self.clearsSelectionOnViewWillAppear = NO;
-//    
-//    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-//    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-//}
+
 
 - (void)reloadPartyData {
     [self.partyTableView reloadData];
 }
 
+- (void)reloadTipView: (NSInteger)aryCount {
+    if (0 == aryCount) {
+        [self.delegate.backView2 setHidden:NO];
+        
+    }else {
+        [self.delegate.backView2 setHidden:YES];
+    }
+}
+
 - (void)loadPartyData {
     self.partyArray = [CD_Party getPartyFromCDByGroup:self.group];
+    [self reloadTipView:self.partyArray.count];
     [self.partyTableView reloadData];
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
+
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager getScheduleByGroupIDDic:self.group.pk_group
+                                                                 withUserID:[Model_User loadFromUserDefaults].pk_user
+                                                                  withRelID:self.group.pk_group_user]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                if (jsonDic) {
+                                    //                [SVProgressHUD showSuccessWithStatus:@"读取数据成功"];
+                                    [CD_Party removePartyFromCDByGroup:self.group];
+                                    self.partyArray = (NSMutableArray *)[Model_Party objectArrayWithKeyValuesArray:jsonDic];
+                                    [self reloadTipView:self.partyArray.count];
+                                    [self.partyTableView reloadData];
+                                    
+                                    for (Model_Party *party in self.partyArray) {
+                                        [CD_Party savePartyToCD:party];
+                                    }
+                                } else {
+                                    [CD_Party removePartyFromCDByGroup:self.group];
+                                    [self.partyArray removeAllObjects];
+                                    [self.partyTableView reloadData];
+                                    
+                                }
+                                [self.partyTableView.header endRefreshing];
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
     
-    [_netManager getScheduleByGroupID:self.group.pk_group withUserID:[Model_User loadFromUserDefaults].pk_user withRelID:self.group.pk_group_user];
     [self.group setParty_update:@0];
     
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate.groupDelegate setDataChange:TRUE];
     
+    
+    
+    
+
+
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -66,38 +96,6 @@
         return 0;
     }
 }
-
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    
-    switch (interfaceType) {
-        case kGetScheduleByGroupID: {
-            if (jsonDic) {
-//                [SVProgressHUD showSuccessWithStatus:@"读取数据成功"];
-                [CD_Party removePartyFromCDByGroup:self.group];
-                self.partyArray = (NSMutableArray *)[Model_Party objectArrayWithKeyValuesArray:jsonDic];
-                [self.partyTableView reloadData];
-
-                for (Model_Party *party in self.partyArray) {
-                    [CD_Party savePartyToCD:party];
-                }
-            } else {
-                [CD_Party removePartyFromCDByGroup:self.group];
-                [self.partyArray removeAllObjects];
-                [self.partyTableView reloadData];
-                
-            }
-            [self.partyTableView.header endRefreshing];
-        }
-            break;
-        default:
-            break;
-    }
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD showErrorWithStatus:@"网络错误"];
-}
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *kCellIdentifier = @"GroupScheduleCell";
@@ -116,7 +114,11 @@
     return indexPath;
 }
 
-- (void)DetailChange:(Model_Party *)party {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.partyTableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void)detailChange:(Model_Party *)party with:(int)type {
     for (Model_Party *theParty in self.partyArray) {
         if ([theParty.pk_party isEqualToString:party.pk_party]) {
             theParty.relationship = party.relationship;
@@ -125,7 +127,7 @@
     [self.partyTableView reloadData];
 }
 
-- (void)cancelParty:(Model_Party *)party {
+- (void)cancelParty:(Model_Party *)party with:(int)type {
     Model_Party *cancelParty;
     for (Model_Party *theParty in self.partyArray) {
         if ([theParty.pk_party isEqualToString:party.pk_party]) {
@@ -133,8 +135,11 @@
         }
     }
     [self.partyArray removeObject:cancelParty];
+    //
+    [self reloadTipView:self.partyArray.count];
     [self.partyTableView reloadData];
 }
+
 
 
 @end

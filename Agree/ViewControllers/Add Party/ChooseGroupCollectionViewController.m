@@ -11,6 +11,9 @@
 #import "AppDelegate.h"
 #import "Model_Group.h"
 #import "ChooseLoctaionViewController.h"
+#import <UIImageView+WebCache.h>
+#import "SRImageManager.h"
+#import "SRTool.h"
 
 @interface ChooseGroupCollectionViewController () {
     NSArray *_groupAry;
@@ -53,29 +56,27 @@ static NSString * const reuseIdentifier = @"GroupCollectionCell";
 //CELL内容
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     GroupCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    
     // Configure the cell
-//    if (indexPath.row == _groupAry.count) {
-//        //最后一条信息
-//        //添加聚会按钮
-//        [cell initAddView];
-//    } else {
-//        Model_Group *theGroup = [_groupAry objectAtIndex:indexPath.row];
-//
         if (indexPath.row == 0) {
             //第一条信息
             //添加聚会按钮
-            [cell initAddView];
+            [cell initCellWithGroup:nil isAddView:YES];
             cell.groupNameLabel.text = @"添加公共聚会";
+            
         } else {
             Model_Group *theGroup = [_groupAry objectAtIndex:indexPath.row-1];
 
-        
-//        EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:theGroup.em_id isGroup:YES];
-        [theGroup setChat_update:[NSNumber numberWithInteger:0]];
-        [cell initCellWithGroup:theGroup];
+//          EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:theGroup.em_id isGroup:YES];
+            [theGroup setChat_update:[NSNumber numberWithInteger:0]];
+            [cell initCellWithGroup:theGroup isAddView:NO];
             
-    }
+            NSURL *imageUrl = [SRImageManager groupFrontCoverImageImageFromOSS:theGroup.avatar_path];
+            [cell.groupImageView sd_setImageWithURL:imageUrl
+                                          completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                                              [self setGroupAvatar:image atIndex:indexPath];
+                                          }];
+            
+        }
 
     return cell;
 }
@@ -90,6 +91,12 @@ static NSString * const reuseIdentifier = @"GroupCollectionCell";
     float cellSize = ([UIScreen mainScreen].bounds.size.width - 3)/2;
     return CGSizeMake(cellSize, cellSize);
 }
+
+- (void)setGroupAvatar: (UIImage *)image atIndex: (NSIndexPath *)indexPath {
+    GroupCollectionViewCell *cell = (GroupCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+    [cell.groupImageView setImage:image];
+}
+
 
 
 #pragma mark - Navigation
@@ -111,11 +118,15 @@ static NSString * const reuseIdentifier = @"GroupCollectionCell";
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     if (0 == _chooseIndexPath) {
         //添加公共聚会未开放
-        UIAlertView *warAlert = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                           message:@"添加公共聚会还未开放,敬请期待."
-                                                          delegate:self cancelButtonTitle:@"确定"
-                                                 otherButtonTitles: nil];
-        [warAlert show];
+        [SRTool showSRAlertViewWithTitle:@"提示"
+                                 message:@"我们的公开聚会功能还在每日每夜的赶工,请期待~"
+                       cancelButtonTitle:@"好的"
+                        otherButtonTitle:nil
+                   tapCancelButtonHandle:^(NSString *msgString) {
+                             
+                   } tapOtherButtonHandle:^(NSString *msgString) {
+                             
+                   }];
         return NO;
     }
     return YES;

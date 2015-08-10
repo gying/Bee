@@ -10,114 +10,69 @@
 #import <SVProgressHUD.h>
 #import "AFNetworking.h"
 #import "MJExtension.h"
+#import <DQAlertView.h>
 
-@implementation SRNet_Manager {
-    UIViewController *_theDelegate;
-}
+@implementation SRNet_Manager
 
-- (id)initWithDelegate: (id<SRNetManagerDelegate>)delegate {
-    self.delegate = delegate;
-    return [super init];
-}
+@synthesize completeBlock;
+@synthesize failureBlock;
 
-- (BOOL)requestNetorkWithDic:(NSMutableDictionary *)sendDic {
-    
-//    [SVProgressHUD showWithStatus:@"正在读取中"];
-    
-    if ([self.delegate isKindOfClass:[UIViewController class]]) {
-        if ([_theDelegate isKindOfClass:[UIViewController class]]) {
-            _theDelegate = (UIViewController *)self.delegate;
-            _theDelegate.view.userInteractionEnabled = NO;
-            _theDelegate.navigationController.view.userInteractionEnabled = NO;
-            _theDelegate.tabBarController.view.userInteractionEnabled = NO;
-        }
-    }
++ (void)requestNetWithDic:(NSMutableDictionary *)sendDic
+                 complete:(finishCallbackBlock)completeBlock
+                  failure:(requestFailureBlock)failureBlock {
     
     NSString *urlString = [NSString stringWithFormat:@"%@%@", kBaseUrlString, kInterfaceUrlString];
     
-    
-//        NSLog(string);
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    manager.requestSerializer.timeoutInterval = 20;
-    
-//    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",nil];
-//    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    [manager.responseSerializer setAcceptableContentTypes:[NSSet setWithObject:@"text/html"]];
     
     
-    [manager POST:urlString parameters:sendDic success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
-        NSMutableDictionary *dic = responseObject;
-        if (!responseObject) {
-            //如果返回对象不存在
-        }
-        
-        if (![dic  objectForKey:@"statusMsg"]) {
-            //如果返回信息码不存在
-        } else {
-            NSNumber *statusNum = [dic  objectForKey:@"statusMsg"];
-            if (0 == statusNum.intValue) {
-                [self.delegate interfaceReturnDataSuccess:nil with:[(NSNumber *)[dic  objectForKey:@"interface"] intValue]];
-            } else {
-                if ([dic objectForKey:@"returnData"]) {
-                    //返回数据存在
-                    [self.delegate interfaceReturnDataSuccess:[dic objectForKey:@"returnData"]  with:[(NSNumber *)[dic  objectForKey:@"interface"] intValue]];
-                }else {
-                    //返回数据不存在
-                }                
+    SRNet_Manager *netManager = [[SRNet_Manager alloc] init];
+    netManager.completeBlock = completeBlock;
+    netManager.failureBlock = failureBlock;
+    
+    
+    [manager POST:urlString
+       parameters:sendDic
+          success:^(NSURLSessionDataTask *task, id responseObject) {
+              //返回成功
+              if (netManager.completeBlock) {
+                  
+                  NSMutableDictionary *dic = responseObject;
+                  int interfaceType = [[dic  objectForKey:@"interface"] intValue];
+                  id returnData = [dic objectForKey:@"returnData"];
+                  
+                  if (![dic  objectForKey:@"statusMsg"]) {
+                      //如果返回信息码不存在
+                      netManager.completeBlock(@"返回信息码不存在", nil, interfaceType, task);
+                  } else {
+                      //返回信息码存在
+                      NSNumber *statusNum = [dic  objectForKey:@"statusMsg"];
+                      if (0 == statusNum.intValue) {
+                          netManager.completeBlock(@"返回信息码为0", nil, interfaceType, task);
+                      } else {
+                          if (returnData) {
+                              //返回数据存在
+                              netManager.completeBlock(@"接口返回成功", returnData, interfaceType, task);
+                          }else {
+                              //返回数据不存在
+                              netManager.completeBlock(@"接口返回成功,但是数据为空", nil, interfaceType, task);
+                          }
+                      }
+                  }
+              }
+            } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                //请求失败
+                if (netManager.failureBlock) {
+                    [SVProgressHUD showErrorWithStatus:@"网络错误"];
+                    netManager.failureBlock(error, task);
+                }
             }
-        }
-        
-        
-        if ([self.delegate isKindOfClass:[UIViewController class]]) {
-            _theDelegate.view.userInteractionEnabled = YES;
-            _theDelegate.navigationController.view.userInteractionEnabled = YES;
-            _theDelegate.tabBarController.view.userInteractionEnabled = YES;
-        }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        [self.delegate interfaceReturnDataError: [(NSNumber *)[sendDic objectForKey:@"request_type"] intValue]];
-        if ([self.delegate isKindOfClass:[UIViewController class]]) {
-            _theDelegate.view.userInteractionEnabled = YES;
-            _theDelegate.navigationController.view.userInteractionEnabled = YES;
-            _theDelegate.tabBarController.view.userInteractionEnabled = YES;
-        }
-//        [SVProgressHUD showErrorWithStatus:@"网络错误"];
-    }];
-    return TRUE;
-    
-//    NSURL *postUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kBaseUrlString, kInterfaceUrlString]];
-//    
-//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc]initWithURL:postUrl
-//                                                               cachePolicy:NSURLRequestUseProtocolCachePolicy
-//                                                           timeoutInterval:10];
-//    [request setHTTPMethod:@"post"];
-//    
-//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:sendDic
-//                                                       options:NSJSONWritingPrettyPrinted
-//                                                         error:nil];
-//    [request setHTTPBody:jsonData];
-//    
-////    NSURLConnection *connection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
-//    
-//    
-//    NSURLResponse * response;
-//    NSError * error;
-//    NSData * backData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-//    
-//    if (error) {
-//        NSLog(@"error : %@",[error localizedDescription]);
-//    }else{
-//        NSLog(@"response : %@",response);
-//        NSLog(@"backData : %@",[[NSString alloc]initWithData:backData encoding:NSUTF8StringEncoding]);
-//    }
-    
-    
-    return TRUE;
+     ];
 }
 
 // 将字典或者数组转化为JSON串
-- (NSData *)toJSONData:(id)theData{
++ (NSData *)toJSONData:(id)theData{
     NSError *error = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:theData
                                                        options:0
@@ -129,22 +84,22 @@
     }
 }
 
-- (NSMutableDictionary *)toRequestDicWithData: (id)requestData andRequestType:(int)requestType {
++ (NSMutableDictionary *)toRequestDicWithData: (id)requestData andRequestType:(int)requestType {
     NSMutableDictionary *requestDic = [[NSMutableDictionary alloc] init];
     
     [requestDic setObject:[NSNumber numberWithInt:requestType] forKey:@"request_type"];
     if ([requestData isKindOfClass:[NSDictionary class]]) {
         //如果数据为数组
-        [requestDic setObject:[[NSString alloc] initWithData:[self toJSONData:requestData] encoding:NSUTF8StringEncoding] forKey:@"request_data"];
+        [requestDic setObject:[[NSString alloc] initWithData:[SRNet_Manager toJSONData:requestData] encoding:NSUTF8StringEncoding] forKey:@"request_data"];
     } else {
         //如果数据为字符串 (暂定二重判断)
-        [requestDic setObject:[[NSString alloc] initWithData:[self toJSONData:requestData] encoding:NSUTF8StringEncoding] forKey:@"request_data"];
+        [requestDic setObject:[[NSString alloc] initWithData:[SRNet_Manager toJSONData:requestData] encoding:NSUTF8StringEncoding] forKey:@"request_data"];
     }
     
     return requestDic;
 }
 //增加小组
-- (BOOL)addGroup: (Model_Group *)newGroup withMembers: (NSMutableArray *)members {
++ (NSMutableDictionary *)addGroupDic: (Model_Group *)newGroup withMembers: (NSMutableArray *)members {
     
     NSMutableDictionary *newGroupDic = [[NSMutableDictionary alloc] init];
     [newGroupDic setValue:newGroup.keyValues forKey:@"group"];
@@ -155,239 +110,259 @@
     }
     [newGroupDic setValue:newUserAry forKey:@"member"];
     
-    return [self requestNetorkWithDic:[self toRequestDicWithData:newGroupDic andRequestType:31]];
+    return [SRNet_Manager toRequestDicWithData:newGroupDic andRequestType:kAddGroup];
 }
 
 //注册用户
-- (BOOL)regUser: (Model_User *)newUser {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:newUser.keyValues
-                                                  andRequestType:11]];
++ (NSMutableDictionary *)regUserDic: (Model_User *)newUser {
+    return [SRNet_Manager toRequestDicWithData:newUser.keyValues
+                                andRequestType:kRegUser];
 }
 
 //获取用户的小组信息
-- (BOOL)getUserGroups: (Model_User *)user {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:user.keyValues
-                                                  andRequestType:32]];
-}
-
-
-//获取小组的聊天信息
-- (BOOL)getChatMessageByGroup: (Model_Group *)group {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:group.keyValues
-                                                  andRequestType:51]];
++ (NSMutableDictionary *)getUserGroupsDic: (Model_User *)user {
+    return [SRNet_Manager toRequestDicWithData:user.keyValues
+                                andRequestType:kGetUserGroups];
 }
 
 //增加一条聊天信息
-- (BOOL)addChatMessageToGroup: (Model_Chat *)chat {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:chat.keyValues
-                                                  andRequestType:52]];
++ (NSMutableDictionary *)addChatMessageToGroupDic: (Model_Chat *)chat {
+    return [SRNet_Manager toRequestDicWithData:chat.keyValues
+                                andRequestType:kAddChatMessageToGroup];
 }
 
 //添加一条行程
-- (BOOL)addSchedule: (Model_Party *)party {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:party.keyValues
-                                                  andRequestType:47]];
++ (NSMutableDictionary *)addScheduleDic: (Model_Party *)party {
+    return [SRNet_Manager toRequestDicWithData:party.keyValues
+                                andRequestType:kAddSchedule];
 }
 
 //读取用户下所有的聚会信息
-- (BOOL)getAllScheduleByUser: (Model_User *)user {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:user.keyValues
-                                                  andRequestType:41]];
++ (NSMutableDictionary *)getAllScheduleByUserDic: (Model_User *)user {
+    return [SRNet_Manager toRequestDicWithData:user.keyValues
+                                andRequestType:kGetAllScheduleByUser];
 }
 
 //返回小组邀请码
-- (BOOL)generationCodeByGroup: (Model_Group *)group {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:group.keyValues
-                                                  andRequestType:37]];
++ (NSMutableDictionary *)generationCodeByGroupDic: (Model_Group *)group {
+    return [SRNet_Manager toRequestDicWithData:group.keyValues
+                                andRequestType:kGenerationCodeByGroup];
 }
 
 //使用邀请码加入小组
-- (BOOL)joinTheGroupByCode: (Model_Group_Code *)code {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:code.keyValues
-                                                  andRequestType:38]];
++ (NSMutableDictionary *)joinTheGroupByCodeDic: (Model_Group_Code *)code {
+    return [SRNet_Manager toRequestDicWithData:code.keyValues
+                                andRequestType:kJoinTheGroupByCode];
 }
 
 //读取小组聚会列表
-- (BOOL)getScheduleByGroupID: (NSNumber *)group_id withUserID: (NSNumber *)user_id withRelID: (NSNumber *)pk_group_user {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:[[NSDictionary alloc] initWithObjectsAndKeys: group_id,@"group_id",  user_id, @"user_id", pk_group_user, @"pk_group_user", nil]
-                                                  andRequestType:43]];
++ (NSMutableDictionary *)getScheduleByGroupIDDic: (NSNumber *)group_id
+                  withUserID: (NSNumber *)user_id
+                   withRelID: (NSNumber *)pk_group_user {
+    return [SRNet_Manager toRequestDicWithData:[[NSDictionary alloc] initWithObjectsAndKeys: group_id,@"group_id",  user_id, @"user_id", pk_group_user, @"pk_group_user", nil]
+                                andRequestType:kGetScheduleByGroupID];
 }
 
 //更新聚会的参与信息
-- (BOOL)updateSchedule: (Model_Party_User *)relation {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:relation.keyValues
-                                                  andRequestType:45]];
++ (NSMutableDictionary *)updateScheduleDic: (Model_Party_User *)relation {
+    return [SRNet_Manager toRequestDicWithData:relation.keyValues
+                                andRequestType:kUpdateSchedule];
 }
 
+
 //读取聚会所有的参与信息
-- (BOOL)getPartyRelationship: (Model_Party *)party {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:party.keyValues
-                                                  andRequestType:48]];
++ (NSMutableDictionary *)getPartyRelationshipDic: (Model_Party *)party {
+    return [SRNet_Manager toRequestDicWithData:party.keyValues
+                                andRequestType:kGetPartyRelationship];
 }
 
 //保存上传图片信息
-- (BOOL)addImageToGroup: (Model_Photo *)photo {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:photo.keyValues
-                                                  andRequestType:62]];
++ (NSMutableDictionary *)addImageToGroupDic: (Model_Photo *)photo {
+    return [SRNet_Manager toRequestDicWithData:photo.keyValues
+                                andRequestType:kAddImageToGroup];
 }
 
 //读取群相册
-- (BOOL)getPhotoByGroup: (Model_Group *)group {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:group.keyValues
-                                                  andRequestType:61]];
++ (NSMutableDictionary *)getPhotoByGroupDic: (Model_Group *)group {
+    return [SRNet_Manager toRequestDicWithData:group.keyValues
+                                andRequestType:kGetPhotoByGroup];
 }
 
 //加入小组
-- (BOOL)joinGroup: (Model_Group_User *)rel {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:rel.keyValues
-                                                  andRequestType:39]];
++ (NSMutableDictionary *)joinGroupDic: (Model_Group_User *)rel {
+    return [SRNet_Manager toRequestDicWithData:rel.keyValues
+                                andRequestType:kJoinGroup];
 }
 
 //更新与小组关系
-- (BOOL)updateGroupRelationShip: (Model_Group_User *)rel {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:rel.keyValues
-                                                  andRequestType:34]];
++ (NSMutableDictionary *)updateGroupRelationShip: (Model_Group_User *)rel {
+    return [SRNet_Manager toRequestDicWithData:rel.keyValues
+                                andRequestType:kUpdateGroupRelationShip];
 }
 
 //读取用户的小组关系
-- (BOOL)getGroupRelationship: (Model_Group_User *)rel {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:rel.keyValues
-                                                  andRequestType:33]];
++ (NSMutableDictionary *)getGroupRelationshipDic: (Model_Group_User *)rel {
+    return [SRNet_Manager toRequestDicWithData:rel.keyValues
+                                andRequestType:kGetGroupRelationship];
 }
 
 //读取用户信息
-- (BOOL)getUserInfo: (Model_User *)user {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:user.keyValues
-                                                  andRequestType:17]];
++ (NSMutableDictionary *)getUserInfoDic: (Model_User *)user {
+    return [SRNet_Manager toRequestDicWithData:user.keyValues
+                                andRequestType:kGetUserInfo];
 }
 
 //保存用户信息
-- (BOOL)updateUserInfo: (Model_User *)user {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:user.keyValues
-                                                  andRequestType:15]];
++ (NSMutableDictionary *)updateUserInfoDic: (Model_User *)user {
+    return [SRNet_Manager toRequestDicWithData:user.keyValues
+                                andRequestType:kUpdateUserInfo];
 }
 
+
 //读取小组中的所有成员关系
-- (BOOL)getAllRelationFromGroup: (Model_Group *)group {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:group.keyValues
-                                                  andRequestType:36]];
++ (NSMutableDictionary *)getAllRelationFromGroupDic: (Model_Group *)group {
+    return [SRNet_Manager toRequestDicWithData:group.keyValues
+                                andRequestType:kGetAllRelationFromGroup];
 }
 
 //请求服务器发送验证码
-- (BOOL)sendVerificationCode: (NSString *)phoneNum {
-    return [self requestNetorkWithDic:
-            [self toRequestDicWithData:[[NSDictionary alloc] initWithObjectsAndKeys: phoneNum, @"phone", nil]
-                                                                     andRequestType:18]];
++ (NSMutableDictionary *)sendVerificationCodeDic: (NSString *)phoneNum {
+    return [SRNet_Manager toRequestDicWithData:[[NSDictionary alloc] initWithObjectsAndKeys: phoneNum, @"phone", nil]
+                                 andRequestType:kSendVerificationCode];
 }
 
 //根据手机号码查找好友
-- (BOOL)getUserByPhone: (Model_User *)user {
-    
-    return [self requestNetorkWithDic:[self toRequestDicWithData:user.keyValues
-                                                  andRequestType:19]];
++ (NSMutableDictionary *)getUserByPhoneDic: (Model_User *)user {
+    return [SRNet_Manager toRequestDicWithData:user.keyValues
+                                andRequestType:kGetUserByPhone];
 }
 
 //添加好友
-- (BOOL)addFriend: (Model_user_user *)userRelation {
-    if ([userRelation.fk_user_to isEqualToNumber:[Model_User loadFromUserDefaults].pk_user]) {
-        //自己加自己 则直接返回
-        return FALSE;
-    } else {
-        return [self requestNetorkWithDic:[self toRequestDicWithData:userRelation.keyValues
-                                                      andRequestType:71]];
-    }
++ (NSMutableDictionary *)addFriendDic: (Model_user_user *)userRelation {
+    return [SRNet_Manager toRequestDicWithData:userRelation.keyValues
+                                andRequestType:kAddFriend];
 }
+
 
 //读取好友关系
-- (BOOL)getFriendList: (Model_User *)user {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:user.keyValues
-                                                  andRequestType:72]];
++ (NSMutableDictionary *)getFriendListDic: (Model_User *)user {
+    return [SRNet_Manager toRequestDicWithData:user.keyValues
+                                andRequestType:kGetFriendList];
 }
 
-- (BOOL)matchPhones: (NSMutableArray *)phones {
-    return [self requestNetorkWithDic:
-            [self toRequestDicWithData:
++ (NSMutableDictionary *)matchPhonesDic: (NSMutableArray *)phones {
+    return [SRNet_Manager toRequestDicWithData:
              [[NSDictionary alloc] initWithObjectsAndKeys: phones, @"phones",
-              [Model_User loadFromUserDefaults].pk_user, @"user_id", nil] andRequestType:73]];
+              [Model_User loadFromUserDefaults].pk_user, @"user_id", nil]
+                                andRequestType:kMatchPhones];
 }
 
-- (BOOL)becomeFriend: (Model_user_user *)userRelation {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:userRelation.keyValues
-                                                  andRequestType:74]];
++ (NSMutableDictionary *)becomeFriendDic: (Model_user_user *)userRelation {
+    return [SRNet_Manager toRequestDicWithData:userRelation.keyValues
+                                andRequestType:kBecomeFriend];
 }
 
-- (BOOL)checkRelation: (Model_user_user *)userRelation {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:userRelation.keyValues
-                                                  andRequestType:75]];
++ (NSMutableDictionary *)checkRelationDic: (Model_user_user *)userRelation {
+    return [SRNet_Manager toRequestDicWithData:userRelation.keyValues
+                                andRequestType:kCheckRelation];
 }
 
-- (BOOL)addUserChat: (Model_User_Chat *)userChat {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:userChat.keyValues
-                                                  andRequestType:81]];
++ (NSMutableDictionary *)addUserChatDic: (Model_User_Chat *)userChat {
+    return [SRNet_Manager toRequestDicWithData:userChat.keyValues
+                                andRequestType:kAddUserChat];
 }
 
-- (BOOL)getUserChat: (Model_user_user *)userRelation {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:userRelation.keyValues
-                                                  andRequestType:82]];
++ (NSMutableDictionary *)getUserChat: (Model_user_user *)userRelation {
+    return [SRNet_Manager toRequestDicWithData:userRelation.keyValues
+                                andRequestType:kGetUserChat];
 }
 
 //检查昵称重复性
-- (BOOL)checkAccount: (Model_User *)user {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:user.keyValues
-                                                  andRequestType:111]];
++ (NSMutableDictionary *)checkAccountDic: (Model_User *)user {
+    return [SRNet_Manager toRequestDicWithData:user.keyValues
+                                andRequestType:kCheckAccount];
 }
 
-- (BOOL)loginAccount: (Model_User *)user {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:user.keyValues
-                                                  andRequestType:12]];
++ (NSMutableDictionary *)loginAccountDic: (Model_User *)user {
+    return [SRNet_Manager toRequestDicWithData:user.keyValues
+                                andRequestType:kLoginAccount];
 }
 
 //用户回馈
-- (BOOL)feedBackMessage: (Model_Feedback *)feedback {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:feedback.keyValues
-                                                  andRequestType:91]];
++ (NSMutableDictionary *)feedBackMessageDic: (Model_Feedback *)feedback {
+    return [SRNet_Manager toRequestDicWithData:feedback.keyValues
+                                andRequestType:kFeedBackMessage];
 }
 //删除用户关系
-- (BOOL)removeFriend: (Model_user_user *)relation {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:relation.keyValues
-                                                  andRequestType:76]];
++ (NSMutableDictionary *)removeFriendDic: (Model_user_user *)relation {
+    return [SRNet_Manager toRequestDicWithData:relation.keyValues
+                                andRequestType:kRemoveFriend];
 }
 
 //删除图片
-- (BOOL)removePhoto: (Model_Photo *)photo {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:photo.keyValues
-                                                  andRequestType:63]];
-}
-
-- (BOOL)createRelationshipForParty: (Model_Party_User *)relation {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:relation.keyValues
-                                                  andRequestType:49]];
-}
-
-- (BOOL)cancelParty: (Model_Party *)party {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:party.keyValues
-                                                  andRequestType:kCancelParty]];
-}
-
-- (BOOL)shareParty: (Model_Party *)party {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:party.keyValues
-                                                  andRequestType:kShareParty]];
-}
-
-- (BOOL)imageManagerSign {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:[NSDictionary dictionaryWithObjectsAndKeys:@"a",@"b",nil]
-                                                  andRequestType:kImageManagerSign]];
++ (NSMutableDictionary *)removePhotoDic: (Model_Photo *)photo {
+    return [SRNet_Manager toRequestDicWithData:photo.keyValues
+                                andRequestType:kRemovePhoto];
 }
 
 
-- (BOOL)testInterface {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:[NSDictionary dictionaryWithObjectsAndKeys:@"jim",@"name",nil]
-                                                  andRequestType:kTestInterface]];
++ (NSMutableDictionary *)createRelationshipForPartyDic: (Model_Party_User *)relation {
+    return [SRNet_Manager toRequestDicWithData:relation.keyValues
+                                andRequestType:kCreateRelationForParty];
 }
 
-- (BOOL)getUserInfoByWechat: (Model_User *)user {
-    return [self requestNetorkWithDic:[self toRequestDicWithData:user.keyValues
-                                                  andRequestType:kGetUserInfoByWechat]];
+
++ (NSMutableDictionary *)cancelPartyDic: (Model_Party *)party {
+    return [SRNet_Manager toRequestDicWithData:party.keyValues
+                                andRequestType:kCancelParty];
+}
+
+
++ (NSMutableDictionary *)sharePartyDic: (Model_Party *)party {
+    return [SRNet_Manager toRequestDicWithData:party.keyValues
+                                andRequestType:kShareParty];
+}
+
++ (NSMutableDictionary *)imageManagerSignDic {
+    return [SRNet_Manager toRequestDicWithData:[NSDictionary dictionaryWithObjectsAndKeys:@"a",@"b",nil]
+                                andRequestType:kImageManagerSign];
+}
+
+
++ (NSMutableDictionary *)testInterfaceDic {
+    return [SRNet_Manager toRequestDicWithData:[NSDictionary dictionaryWithObjectsAndKeys:@"jim",@"name",nil]
+                                andRequestType:kTestInterface];
+}
+
++ (NSMutableDictionary *)getUserInfoByWechatDic: (Model_User *)user {
+    return [SRNet_Manager toRequestDicWithData:user.keyValues
+                                andRequestType:kGetUserInfoByWechat];
+}
+
++ (NSMutableDictionary *)getCreatedPartyByUserDic: (Model_User *)user {
+    return [SRNet_Manager toRequestDicWithData:user.keyValues
+                                andRequestType:kGetCreatedParty];
+}
+
++ (NSMutableDictionary *)getPartyHistoryByUserDic: (Model_User *)user {
+    return [SRNet_Manager toRequestDicWithData:user.keyValues
+                                andRequestType:kGetPartyHistory];
+}
+
++ (NSMutableDictionary *)updatePartyRelationships: (NSMutableArray *)partyRelationAry {
+    NSMutableArray *relationAry = [[NSMutableArray alloc] init];
+    for (Model_Party_User *relation in partyRelationAry) {
+        [relationAry addObject:relation.keyValues];
+    }
+    return [SRNet_Manager toRequestDicWithData:
+            [[NSDictionary alloc] initWithObjectsAndKeys: relationAry, @"partyRelationships",
+             [Model_User loadFromUserDefaults].pk_user, @"user_id", nil]
+                                andRequestType:kUpdatePartyRelationships];
+}
+
++ (NSMutableDictionary *)settleParty: (Model_Party *)party {
+    return [SRNet_Manager toRequestDicWithData:party.keyValues
+                                andRequestType:kSettleParty] ;
 }
 
 @end

@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TXYDownloader.h"
 
 @interface SelectFriendViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UILabel *remarkLabel;

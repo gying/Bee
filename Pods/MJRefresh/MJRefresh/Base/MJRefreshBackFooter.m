@@ -21,7 +21,7 @@
     [super scrollViewContentOffsetDidChange:change];
     
     // 如果正在刷新，直接返回
-    if (self.state == MJRefreshStateRefreshing || self.state == MJRefreshStateNoMoreData) return;
+    if (self.state == MJRefreshStateRefreshing) return;
     
     _scrollViewOriginalInset = self.scrollView.contentInset;
     
@@ -33,6 +33,13 @@
     if (currentOffsetY <= happenOffsetY) return;
     
     CGFloat pullingPercent = (currentOffsetY - happenOffsetY) / self.mj_h;
+    
+    // 如果已全部加载，仅设置pullingPercent，然后返回
+    if (self.state == MJRefreshStateNoMoreData) {
+        self.pullingPercent = pullingPercent;
+        return;
+    }
+    
     if (self.scrollView.isDragging) {
         self.pullingPercent = pullingPercent;
         // 普通 和 即将刷新 的临界点
@@ -58,9 +65,9 @@
     [super scrollViewContentSizeDidChange:change];
     
     // 内容的高度
-    CGFloat contentHeight = self.scrollView.mj_contentH;
+    CGFloat contentHeight = self.scrollView.mj_contentH + self.ignoredScrollViewContentInsetBottom;
     // 表格的高度
-    CGFloat scrollHeight = self.scrollView.mj_h - self.scrollViewOriginalInset.top - self.scrollViewOriginalInset.bottom;
+    CGFloat scrollHeight = self.scrollView.mj_h - self.scrollViewOriginalInset.top - self.scrollViewOriginalInset.bottom + self.ignoredScrollViewContentInsetBottom;
     // 这里一定是用：self.scrollView.mj_insetT 和 self.scrollViewOriginalInset.bottom;
     // 设置位置和尺寸
     self.mj_y = MAX(contentHeight, scrollHeight);
@@ -78,7 +85,7 @@
                 self.scrollView.mj_insetB -= self.lastBottomDelta;
                 
                 // 自动调整透明度
-                if (self.isAutoChangeAlpha) self.alpha = 0.0;
+                if (self.isAutomaticallyChangeAlpha) self.alpha = 0.0;
             } completion:^(BOOL finished) {
                 self.pullingPercent = 0.0;
             }];

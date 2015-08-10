@@ -24,6 +24,8 @@
 #import <EaseMob.h>
 #import <MJRefresh.h>
 
+#import "GroupPeopleTableViewDelegate.h"
+
 #import "SRKeyboard.h"
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
@@ -43,6 +45,11 @@
     GroupChatTableViewCell *cell;
     
     EMConversation *_conversation;
+    
+    UISwipeGestureRecognizer * swipe;
+    
+    GroupPeopleTableViewDelegate *_peopleTableDelegate;
+    
 }
 
 @end
@@ -51,20 +58,26 @@
 
 
 - (void)viewDidLayoutSubviews {
-    NSLog(@"%f", self.chatTableView.contentSize.height);
     [_chatDelegate.closelable setFrame:CGRectMake(0, self.chatTableView.contentSize.height + self.navigationController.navigationBar.frame.size.height-30, self.view.frame.size.width, 50)];
 }
-
-
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.rightSideView.alpha = 0;
+    
+    
+    self.peopleTableViewWidthCon.constant = [UIScreen mainScreen].bounds.size.width/3*2;
+    
+    self.rightSideViewWidth.constant = [UIScreen mainScreen].bounds.size.width;
+    
+    self.groupScrollView.bounces = NO;
     [self.groupTabBar setSelectedItem:self.groupTalk];
   
     [self.navigationItem setTitle:self.group.name];
+    
     [self.selectLineWidth setConstant:[[UIScreen mainScreen] bounds].size.width/3];
+    
     
     norDic = [NSDictionary dictionaryWithObjectsAndKeys:
               [UIColor grayColor],
@@ -117,9 +130,6 @@
 //    [self subChatArray];
     
     
-
-    
-    
     self.view.backgroundColor =[UIColor groupTableViewBackgroundColor];
     
     _albumsDelegate = [[GroupAlbumsCollectionViewController alloc] init];
@@ -136,12 +146,53 @@
     _albumsDelegate.rootController = self;
     
     [self setkeyBoard];
+    
+    
+
+    self.view2Label.backgroundColor = [UIColor clearColor];
+    self.view2Label.text = @"请添加日程";
+    self.view2Label.textColor = AgreeBlue;
+    self.view2Label.textAlignment = NSTextAlignmentCenter;
+    self.view2Label.font = [UIFont systemFontOfSize:14];
+    
+    
+    self.view3Label.backgroundColor = [UIColor clearColor];
+    self.view3Label.text = @"请添加照片";
+    self.view3Label.textColor = AgreeBlue;
+    self.view3Label.textAlignment = NSTextAlignmentCenter;
+    self.view3Label.font = [UIFont systemFontOfSize:14];
+    
+    if (0 != _partyDelegate.partyArray.count) {
+        NSLog(@"当有日程的时候不显示LABEL");
+        self.backView2.hidden = YES;
+    }
+    
+    if (0 != _albumsDelegate.photoAry.count) {
+        NSLog(@"当有照片的时候不显示LABEL");
+        self.backView3.hidden = YES;
+    }
+    
+    [self.view bringSubviewToFront:self.rightSideView];
+    [self.view bringSubviewToFront:self.peopleTableView];
+    
+    if (!_peopleTableDelegate) {
+        _peopleTableDelegate = [[GroupPeopleTableViewDelegate alloc] init];
+    }
+    
+    
+    self.peopleTableView.dataSource = _peopleTableDelegate;
+    self.peopleTableView.delegate = _peopleTableDelegate;
+    
+    [_peopleTableDelegate setRootController:self];
+    
+    [_peopleTableDelegate loadPeopleDataWithGroup:self.group];
+    
 }
 
 
 
 - (void)didReceiveMemoryWarning {
-    
+    [super didReceiveMemoryWarning];
 }
 
 - (void)setkeyBoard {
@@ -151,6 +202,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate setChatDelegate:self];
     
@@ -167,6 +219,7 @@
 - (void)viewDidDisappear:(BOOL)animated {
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [delegate setChatDelegate:nil];
+    [super viewDidDisappear:animated];
 }
 
 - (void)showImageAtIndexPath:(int)indexPath withImageArray: (NSMutableArray *)imageViewArray {
@@ -205,7 +258,16 @@
         [self.groupTabBar setSelectedItem:self.groupTalk];
         [_srKeyboard.mBackView setHidden:NO];
         [self setkeyBoard];
+        
+        [self.view bringSubviewToFront:self.rightSideView];
+        [self.view bringSubviewToFront:self.peopleTableView];
+        
+
+        
+        
     } else if (CGRectGetWidth([UIScreen mainScreen].bounds) == scrollView.contentOffset.x) {
+
+    
         
         [self.selectConLeft setConstant:[[UIScreen mainScreen] bounds].size.width/3];
         
@@ -225,11 +287,19 @@
             // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
             self.partyTableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:_partyDelegate refreshingAction:@selector(loadPartyData)];
             [_partyDelegate loadPartyData];
-            //            [self.partyTableView reloadData];
+
         }
-    } else if (CGRectGetWidth([UIScreen mainScreen].bounds) * 2 == scrollView.contentOffset.x) {
-        //相册界面
+        if (0 == _partyDelegate.partyArray.count) {
+            self.backView2.hidden = NO;
+        }else{
+            self.backView2.hidden = YES;
+        }
+
         
+    } else if (CGRectGetWidth([UIScreen mainScreen].bounds) * 2 == scrollView.contentOffset.x) {
+        
+       
+        //相册界面
         [self.selectConLeft setConstant:[[UIScreen mainScreen] bounds].size.width/3 * 2];
         
         [self.groupTabBar setSelectedItem:self.groupPhotos];
@@ -239,6 +309,16 @@
             [_albumsDelegate loadPhotoData];
             _albumsDelegate.albumsLoadingDone = TRUE;
         }
+        
+        if (0 == _albumsDelegate.photoAry.count) {
+            self.backView3.hidden = NO;
+
+        }else{
+            self.backView3.hidden = YES;
+        }
+        
+
+        
     }
     else {
         
@@ -320,22 +400,35 @@
 
     UIPasteboard *pboard = [UIPasteboard generalPasteboard];
     
-    if (cell.chatMessageTextLabel_self) {
+    if (!cell.chatMessageTextLabel_self.isHidden) {
         pboard.string = cell.chatMessageTextLabel_self.text;
-    }else if
-        (cell.chatMessageTextLabel)
+    }else
     {
         pboard.string = cell.chatMessageTextLabel.text;
     }
     
     //复制出的内容
-    NSLog(@"%@",cell.chatMessageTextLabel_self.text);
-    NSLog(@"%@",cell.chatMessageTextLabel.text);
+    NSLog(@"%@",pboard.string);
     
 }
-
-- (void)handleResendCell:(id)sender {
-    NSLog(@"handle resend cell");
+- (void)handleResendCell:(id)sender
+{
+    NSLog(@"再次发送");
+    
+    
+    UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+    
+    if (!cell.chatMessageTextLabel_self.isHidden) {
+        pboard.string = cell.chatMessageTextLabel_self.text;
+    }else {
+        pboard.string = cell.chatMessageTextLabel.text;
+    }
+    
+    //复制出的内容
+    NSLog(@"%@",pboard.string);
+    
+    [_chatDelegate sendMessageFromString:pboard.string];
+    
 }
 
 
@@ -360,7 +453,9 @@
         controller.isGroupParty = TRUE;
     } else if ([@"GroupSetting" isEqual:segue.identifier]) {
         //进入小组设置
+        [SVProgressHUD show];
         GroupSettingViewController *controller = (GroupSettingViewController *)segue.destinationViewController;
+        controller.rootController = self;
         controller.group = self.group;
     } else if ([@"PartyDetail" isEqual:segue.identifier]) {
         PartyDetailViewController *controller = (PartyDetailViewController *)segue.destinationViewController;
@@ -372,6 +467,63 @@
 }
 
 
+#pragma mark -- 侧边栏
+//侧边栏
+- (IBAction)peopleButton:(id)sender
+{
+    if (![@"关闭"  isEqual: self.peopleButton.titleLabel.text]) {
+        [UIView animateWithDuration:0.5
+                         animations:^{
+                             self.rightSideView.hidden = NO;
+                             [self.rightSideView setAlpha:0.8];
+                             
+                             [self.peopleTableView setFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - self.peopleTableViewWidthCon.constant, self.peopleTableView.frame.origin.y, self.peopleTableView.frame.size.width, self.peopleTableView.frame.size.height)];
+                         }];
+            [self.peopleButton setTitle:@"关闭" forState:UIControlStateNormal];
+        
+
+    }
+    else {
+        [self.peopleButton setTitle:@"成员" forState:UIControlStateNormal];
+        
+        [UIView animateWithDuration:0.5
+                         animations:^{
+                             [self.rightSideView setAlpha:0];
+                             [self.peopleTableView setFrame:CGRectMake(600, self.peopleTableView.frame.origin.y, self.peopleTableView.frame.size.width, self.peopleTableView.frame.size.height)];
+                         }];
+    }
+    
+    swipe = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(tapCloseButton:)];
+    swipe.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.peopleTableView addGestureRecognizer:swipe];
+
+
+}
+- (IBAction)tapCloseButton:(id)sender
+{
+    if((self.peopleButton.titleLabel.text = @"关闭")) {
+        [self.peopleButton setTitle:@"成员" forState:UIControlStateNormal];
+    }
+    
+    [UIView animateWithDuration:0.5
+                     animations:^{
+                         [self.rightSideView setAlpha:0];
+                         [self.peopleTableView setFrame:CGRectMake(600, self.peopleTableView.frame.origin.y, self.peopleTableView.frame.size.width, self.peopleTableView.frame.size.height)];
+                     }];
+}
+
+//-(void)closeview
+//{
+//    if((self.peopleButton.titleLabel.text = @"关闭")) {
+//        [self.peopleButton setTitle:@"成员" forState:UIControlStateNormal];
+//    }
+//    [UIView animateWithDuration:0.5
+//                     animations:^{
+//                         [self.rightSideView setAlpha:0];
+//                         [self.peopleTableView setFrame:CGRectMake(600, self.peopleTableView.frame.origin.y, self.peopleTableView.frame.size.width, self.peopleTableView.frame.size.height)];
+//                     }];
+//    [self.peopleTableView removeGestureRecognizer:swipe];
+//}
 
 
 @end

@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "Model_Group.h"
-#import "TXYDownloader.h"
 
 @interface GroupCollectionViewCell : UICollectionViewCell
 
@@ -19,7 +18,10 @@
 @property (weak, nonatomic) IBOutlet UIView *statusView;
 @property (weak, nonatomic) IBOutlet UIView *lineView;
 
-- (void)initCellWithGroup: (Model_Group *)group;
+@property BOOL initDone;
+@property BOOL chatUpdate;
+
+- (void)initCellWithGroup: (Model_Group *)group isAddView: (BOOL)isAddView;
 - (void)initAddView;
 
 @end

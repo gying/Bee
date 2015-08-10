@@ -8,6 +8,10 @@
 
 #import "ChooseDateViewController.h"
 #import "ConfirmPartyDetailViewController.h"
+#import "ChooseLoctaionViewController.h"
+#import "SRTool.h"
+
+
 
 @interface ChooseDateViewController () {
     NSDate *_chooseDate;
@@ -33,7 +37,13 @@
     [self.calendar setContentView:self.calendarContentView];
     [self.calendar setDataSource:self];
     
-    [self.datePicker setDate:[NSDate dateWithTimeIntervalSinceNow:60*60*2] animated:TRUE];
+    //设置从选择时间返回来得默认时间
+    if (self.party.begin_time) {
+        [self.datePicker setDate:self.party.begin_time];
+        [self.calendar setCurrentDateSelected:self.party.begin_time];
+    } else {
+        [self.datePicker setDate:[NSDate dateWithTimeIntervalSinceNow:60*60*2] animated:TRUE];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -67,16 +77,36 @@
         _chooseDate = [NSDate dateWithTimeIntervalSinceNow:60*60*2];
     }
     if ([[self buildDate] timeIntervalSinceDate:[NSDate date]] <= 60*60*2) {
-        //聚会未超过两个小时,显示警告
-        UIAlertView *timeAlert = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                            message:@"聚会的开始时间必须是在当前时间的两个小时后"
-                                                           delegate:self
-                                                  cancelButtonTitle:@"确定"
-                                                  otherButtonTitles:nil];
-        [timeAlert show];
+        //聚会未超过两个小时,显示警告        
+        [SRTool showSRAlertViewWithTitle:@"提示"
+                                 message:@"聚会的开始时间必须是在当前时间的三个小时后哦~"
+                       cancelButtonTitle:@"好的"
+                        otherButtonTitle:nil
+                   tapCancelButtonHandle:^(NSString *msgString) {
+                             
+                 } tapOtherButtonHandle:^(NSString *msgString) {
+                             
+                         }];
+        
+        
         return NO;
     }
+    
+
+    if (self.fromRoot) {
+        ConfirmPartyDetailViewController *rootController = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
+        
+        rootController.party.begin_time = _chooseDate;
+        [rootController reloadView];
+        
+        [self.navigationController popViewControllerAnimated:YES];
+
+        return NO;
+    }
+    
+    
     return YES;
+    
 }
 
 - (NSDate *)buildDate {
@@ -106,6 +136,8 @@
     ConfirmPartyDetailViewController *controller = (ConfirmPartyDetailViewController *)segue.destinationViewController;
     controller.party = self.party;
     controller.isGroupParty = self.isGroupParty;
+
+    NSLog(@"更新选择时间后跳转页面!");
 }
 
 

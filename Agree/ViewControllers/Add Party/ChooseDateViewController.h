@@ -19,7 +19,10 @@
 
 @property (strong, nonatomic) JTCalendar *calendar;
 @property (weak, nonatomic) IBOutlet UIDatePicker *datePicker;
+@property (weak, nonatomic) IBOutlet UIButton *tnextButton;
 
 @property BOOL isGroupParty;
+
+@property BOOL fromRoot;
 
 @end

@@ -39,6 +39,9 @@
     
     // 设置为默认状态
     self.automaticallyRefresh = YES;
+    
+    // 默认是自动隐藏
+    self.automaticallyHidden = YES;
 }
 
 - (void)scrollViewContentSizeDidChange:(NSDictionary *)change
@@ -57,9 +60,21 @@
     
     if (_scrollView.mj_insetT + _scrollView.mj_contentH > _scrollView.mj_h) { // 内容超过一个屏幕
         // 这里的_scrollView.mj_contentH替换掉self.mj_y更为合理
-        if (_scrollView.mj_offsetY > _scrollView.mj_contentH - _scrollView.mj_h + self.mj_h * self.appearencePercentTriggerAutoRefresh + _scrollView.mj_insetB - self.mj_h) {
+        if (_scrollView.mj_offsetY >= _scrollView.mj_contentH - _scrollView.mj_h + self.mj_h * self.appearencePercentTriggerAutoRefresh + _scrollView.mj_insetB - self.mj_h) {
+            // 防止手松开时连续调用
+            CGPoint old = [change[@"old"] CGPointValue];
+            CGPoint new = [change[@"new"] CGPointValue];
+            if (new.y <= old.y) return;
+            
             // 当底部刷新控件完全出现时，才刷新
             [self beginRefreshing];
+            
+            // 如果正在减速，并且希望阻止连续刷新
+            if (self.scrollView.isDecelerating && self.preventContinuousRefreshing) {
+                CGPoint offset = self.scrollView.contentOffset;
+                offset.y = _scrollView.mj_contentH - _scrollView.mj_h + self.mj_h + _scrollView.mj_insetB - self.mj_h;
+                [self.scrollView setContentOffset:offset animated:YES];
+            }
         }
     }
 }
@@ -72,11 +87,11 @@
     
     if (_scrollView.panGestureRecognizer.state == UIGestureRecognizerStateEnded) {// 手松开
         if (_scrollView.mj_insetT + _scrollView.mj_contentH <= _scrollView.mj_h) {  // 不够一个屏幕
-            if (_scrollView.mj_offsetY > - _scrollView.mj_insetT) { // 向上拽
+            if (_scrollView.mj_offsetY >= - _scrollView.mj_insetT) { // 向上拽
                 [self beginRefreshing];
             }
         } else { // 超出一个屏幕
-            if (_scrollView.mj_offsetY > _scrollView.mj_contentH + _scrollView.mj_insetB - _scrollView.mj_h) {
+            if (_scrollView.mj_offsetY >= _scrollView.mj_contentH + _scrollView.mj_insetB - _scrollView.mj_h) {
                 [self beginRefreshing];
             }
         }
@@ -88,10 +103,7 @@
     MJRefreshCheckState
     
     if (state == MJRefreshStateRefreshing) {
-        // 这里延迟是防止惯性导致连续上拉
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self executeRefreshingCallback];
-        });
+        [self executeRefreshingCallback];
     }
 }
 

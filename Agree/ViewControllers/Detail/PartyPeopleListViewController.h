@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Model_Party.h"
 
 @interface PartyPeopleListViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UIButton *inButton;
@@ -16,10 +17,16 @@
 @property (weak, nonatomic) IBOutlet UILabel *unknowLabel;
 @property (weak, nonatomic) IBOutlet UILabel *outLabel;
 @property (weak, nonatomic) IBOutlet UITableView *peoplesTableview;
+@property (weak, nonatomic) IBOutlet UIView *backView;
+
+@property (nonatomic, strong)Model_Party *party;
+
 
 @property int showStatus;
 
-@property (nonatomic, strong)NSArray *relationArray;
+@property (nonatomic, strong)NSMutableArray *relationArray;
+@property BOOL isCreator;
+@property BOOL isPayor;
 
 @end
 

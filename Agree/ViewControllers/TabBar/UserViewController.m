@@ -16,10 +16,11 @@
 #import "CD_Party.h"
 #import "CD_Group_User.h"
 #import "CD_Photo.h"
+#import "SRTool.h"
 
 #import <SVProgressHUD.h>
 
-@interface UserViewController () <UIAlertViewDelegate>{
+@interface UserViewController () {
     NSString *_imageName;
     UIImageView *_backImageViwe;
 }
@@ -32,6 +33,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+
+    
+    
     //头像区
     _backImageViwe = [[UIImageView alloc] initWithFrame:CGRectMake(4.5, 4.5, 90, 90)];
     
@@ -41,17 +45,21 @@
     [self resetAvatar];
     
     //BB号
-    [self.accountLabel setText:[NSString stringWithFormat:@"BB号:  %@",[Model_User loadFromUserDefaults].pk_user.stringValue]];
+    //[self.accountLabel setText:[NSString stringWithFormat:@"BB号:  %@",[Model_User loadFromUserDefaults].pk_user.stringValue]];
 }
+
 
 - (void)resetAvatar {
     //下载图片
-    NSURL *imageUrl = [SRImageManager avatarImageFromTXYFieldID:[Model_User loadFromUserDefaults].avatar_path];
-    NSString * urlstr = [imageUrl absoluteString];
-    
-    [[TXYDownloader sharedInstanceWithPersistenceId:nil]download:urlstr target:_backImageViwe succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-        [_backImageViwe setImage:[UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]]];
-    } failBlock:nil progressBlock:nil param:nil];
+
+    [_backImageViwe sd_setImageWithURL:[SRImageManager avatarImageFromOSS:[Model_User loadFromUserDefaults].avatar_path]
+                             completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                                 if (!error) {
+                                     [_backImageViwe setImage:image];
+                                 } else {
+                                 
+                                 }
+                             }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -60,6 +68,11 @@
 }
 
 - (IBAction)pressedTheAccountSettingButton:(UIButton *)sender {
+    [SVProgressHUD show];
+}
+
+- (IBAction)pressedMyPartyButton:(UIButton *)sender {
+
 }
 
 - (IBAction)pressedTheFeedbackButton:(UIButton *)sender {
@@ -69,54 +82,43 @@
 }
 
 - (IBAction)tapLogoutButton:(id)sender {
-    UIAlertView *logoutAlert = [[UIAlertView alloc] initWithTitle:@"警告"
-                                                          message:@"确定要登出帐号,您在手机中的帐号信息将会被清空"
-                                                         delegate:self
-                                                cancelButtonTitle:@"取消"
-                                                otherButtonTitles:@"确定", nil];
-    [logoutAlert show];
+    [SRTool showSRAlertViewWithTitle:@"警告" message:@"确定要登出帐号吗?\n保存的资料将会被清空哦~"
+                   cancelButtonTitle:@"我再想想" otherButtonTitle:@"是的"
+               tapCancelButtonHandle:^(NSString *msgString) {
+                   
+               } tapOtherButtonHandle:^(NSString *msgString) {
+                   [SVProgressHUD showWithStatus:@"正在退出帐号"];
+                   //将用户资料清空
+                   [[NSUserDefaults standardUserDefaults] removeObjectForKey:kDefUser];
+                   
+                   //退出环信
+                   EMError *error = nil;
+                   NSDictionary *info = [[EaseMob sharedInstance].chatManager logoffWithUnbindDeviceToken:YES error:&error];
+                   if (!error && info) {
+                       NSLog(@"退出帐号成功");
+                   }
+                   
+                   //移除用户资料
+                   [CD_Group removeAllGroupFromCD];
+                   [CD_Party removeAllPartyFromCD];
+                   [CD_Group_User removeAllGroupUserFromCD];
+                   [CD_Photo removeAllPhotoFromCD];
+                   
+                   //设置代理,弹出视图控制器
+                   AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                   [delegate logout];
+                   [SVProgressHUD showSuccessWithStatus:@"退出成功"];
+               }];
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    switch (buttonIndex) {
-        case 0: {   //取消
-            
-        }
-            break;
-        case 1: {   //确定
-            [SVProgressHUD showWithStatus:@"正在退出帐号"];
-            //将用户资料清空
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:kDefUser];
-            
-            //退出环信
-            EMError *error = nil;
-            NSDictionary *info = [[EaseMob sharedInstance].chatManager logoffWithUnbindDeviceToken:YES error:&error];
-            if (!error && info) {
-                NSLog(@"退出帐号成功");
-            }
-            
-            //移除用户资料
-            [CD_Group removeAllGroupFromCD];
-            [CD_Party removeAllPartyFromCD];
-            [CD_Group_User removeAllGroupUserFromCD];
-            [CD_Photo removeAllPhotoFromCD];
-            
-            //设置代理,弹出视图控制器
-            AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-            [delegate logout];
-            [SVProgressHUD showSuccessWithStatus:@"退出成功"];
-        }
-            break;
-        default:
-            break;
-    }
-}
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     if ([segue.identifier isEqualToString:@"AccountDetailFromAvatar"] || [segue.identifier isEqualToString:@"AccountDetailFromButtom"]) {
+        
         UserSettingViewController *childController = segue.destinationViewController;
         childController.rootViewController = self;
     }

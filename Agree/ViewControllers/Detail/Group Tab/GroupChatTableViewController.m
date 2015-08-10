@@ -26,13 +26,13 @@
 #import "GroupChatTableViewCell.h"
 #import "CD_Group_User.h"
 
+#import "SRTool.h"
 
 
-@interface GroupChatTableViewController () <SRNetManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, SRImageManagerDelegate, UIAlertViewDelegate, EMChatManagerDelegate, SRNetManagerDelegate> {
-    SRNet_Manager *_netManager;
+
+@interface GroupChatTableViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, EMChatManagerDelegate> {
     UIImagePickerController *_imagePicker;
     UIImage *_chatPickImage;
-    SRImageManager *_imageManager;
     NSString *_imageName;
     Model_Chat *_sendChat;
     
@@ -43,7 +43,6 @@
     NSArray *_relationship;
     
     EMConversation *_conversation;
-
 
     //初始加载消息页数以及条数
     int _page;
@@ -59,7 +58,7 @@
     if (!self.chatArray) {
         self.chatArray = [[NSMutableArray alloc] init];
         _page = 1;
-        _pageSize = 20;
+        _pageSize = 10;
         
     }
     _relationship = [CD_Group_User getGroupUserFromCDByGroup:self.group];
@@ -68,13 +67,48 @@
     [self repackMessage:_relationship];
     [self.chatTableView reloadData];
 
-    
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
     Model_Group *sendGroup = [[Model_Group alloc] init];
     [sendGroup setPk_group:self.group.pk_group];
-    [_netManager getAllRelationFromGroup:sendGroup];
+    
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager getAllRelationFromGroupDic:sendGroup]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                if (jsonDic) {
+                                    //读取信息
+                                    if (!_relationship) {
+                                        _relationship = [[NSMutableArray alloc] init];
+                                    }
+                                    _relationship = [Model_Group_User objectArrayWithKeyValuesArray:jsonDic];
+                                    
+                                    //建立并清理缓存
+                                    [CD_Group_User removeGroupUserFromCDByGroup:self.group];
+                                    for (Model_Group_User *groupUser in _relationship) {
+                                        [CD_Group_User saveGroupUserToCD:groupUser];
+                                    }
+                                    [self.chatArray removeAllObjects];
+                                    [self repackMessage:_relationship];
+                                    
+                                    [self subChatArray];
+                                    
+                                    
+                                    //清空小组的提示
+                                    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                                    [delegate.groupDelegate setDataChange:TRUE];
+                                    
+                                    //聊天信息切换到最底层显示
+                                    if (self.chatArray.count == 0) {
+                                        return;
+                                    }
+                                    
+                                    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:_mchatArray.count-1  inSection:0];
+                                    [self reloadTableViewIsScrollToBottom:YES withAnimated:NO];
+                                    
+                                    if (!(0 >= indexPath.row)) {
+                                        [self.chatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                                    }
+                                }
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
     
 #pragma mark -- 创建上拉关闭的LABLE
     //创建在TABLEVIEW上
@@ -204,12 +238,16 @@
 - (void)talkBtnClick:(UITextView *)textViewGet {
     
     if (0 != textViewGet.text.length) {
-        [self sendMessageDone:[EMSendMessageHepler sendTextMessageWithString:textViewGet.text
-                                                                  toUsername:self.group.em_id
-                                                                 isChatGroup:YES
-                                                           requireEncryption:NO
-                                                                         ext:nil]];
+        [self sendMessageFromString:textViewGet.text];
     } 
+}
+
+- (void)sendMessageFromString: (NSString *)text {
+    [self sendMessageDone:[EMSendMessageHepler sendTextMessageWithString:text
+                                                              toUsername:self.group.em_id
+                                                             isChatGroup:YES
+                                                       requireEncryption:NO
+                                                                     ext:nil]];
 }
 
 #pragma mark -- 发送消息结束
@@ -228,9 +266,6 @@
 
     [self reloadTableViewIsScrollToBottom:YES withAnimated:YES];
     
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
     Model_Chat *newChat = [[Model_Chat alloc] init];
     [newChat setFk_user:[Model_User loadFromUserDefaults].pk_user];
     [newChat setFk_group:self.group.pk_group];
@@ -250,7 +285,12 @@
             break;
     }
 
-    [_netManager addChatMessageToGroup:newChat];
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager addChatMessageToGroupDic:newChat]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                [SVProgressHUD dismiss];
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
 }
 
 - (void)imageBtnClick {
@@ -259,69 +299,36 @@
         _imagePicker = [[UIImagePickerController alloc] init];
         _imagePicker.delegate = self;
         _imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        //判断是否有摄像头
-        if(![UIImagePickerController isSourceTypeAvailable:_imagePicker.sourceType]) {
-            _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        }
     }
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择图片来源"
-                                                           delegate:self
-                                                  cancelButtonTitle:@"取消"
-                                             destructiveButtonTitle:@"拍照"
-                                                  otherButtonTitles:@"图片库", nil];
-        [sheet showInView:self.rootController.view];
-    }
-}
-
-
-
-- (void)reloadTableViewIsScrollToBottom: (BOOL) isScroll
-                           withAnimated: (BOOL)isAnimated {
-    
-    float headHight = 0;
-    for (EModel_Chat *message in _mchatArray) {
-        headHight += [self cellHeightFromMessage:message].floatValue;
-    }
-    
-    
-    headHight = self.chatTableView.frame.size.height - headHight;
-    if (headHight <= 0) {
-        headHight = 0;
-    }
-    
-    self.chatTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.chatTableView.frame.size.width, headHight)];
-
-    
-    [self.chatTableView reloadData];
-    if (isScroll) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSInteger s = [self.chatTableView numberOfSections];
-            if (s<1) return;
-            NSInteger r = [self.chatTableView numberOfRowsInSection:s-1];
-            if (r<1) return;
-            NSIndexPath *ip = [NSIndexPath indexPathForRow:r-1 inSection:s-1];
-            
-            [self.chatTableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionBottom animated:isAnimated];
-        });
-    }
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    UIImagePickerControllerSourceType sourceType;
-    
-    if (0 == buttonIndex) {
-        //直接拍照
-        sourceType = UIImagePickerControllerSourceTypeCamera;
-    } else if (1 == buttonIndex) {
-        //使用相册
-        sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [SRTool showSRSheetInView:self.rootController.view withTitle:@"选择图片来源" message:nil
+                  withButtonArray:@[@"拍照", @"相册"]
+                  tapButtonHandle:^(int buttonIndex) {
+                      UIImagePickerControllerSourceType sourceType;
+                      switch (buttonIndex) {
+                          case 0: {
+                              //拍照
+                              sourceType = UIImagePickerControllerSourceTypeCamera;
+                          }
+                              break;
+                          case 1: {
+                              //相册
+                              sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                          }
+                              break;
+                          default:
+                              break;
+                      }
+                      _imagePicker.sourceType = sourceType;
+                      [self.rootController presentViewController:_imagePicker animated:YES completion:nil];
+                  } tapCancelHandle:^{
+                      
+                  }];
     } else {
-        return;
+        _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [self.rootController presentViewController:_imagePicker animated:YES completion:nil];
     }
-    _imagePicker.sourceType = sourceType;
-    [self.rootController presentViewController:_imagePicker animated:YES completion:nil];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -334,12 +341,13 @@
     _chatPickImage = [info valueForKey:@"UIImagePickerControllerOriginalImage"];
     
     //初始化图片发送确认警告框
-    UIAlertView *sendImageAlert = [[UIAlertView alloc] initWithTitle:@"确认信息"
-                                                             message:@"是否确认发送图片?"
-                                                            delegate:self
-                                                   cancelButtonTitle:@"取消"
-                                                   otherButtonTitles:@"确认", nil];
-    [sendImageAlert show];
+    [SRTool showSRAlertViewWithTitle:@"确认" message:@"你真的扼要发送这张图片吗?"
+                   cancelButtonTitle:@"我再想想" otherButtonTitle:@"是的"
+               tapCancelButtonHandle:^(NSString *msgString) {
+                   
+               } tapOtherButtonHandle:^(NSString *msgString) {
+                   [self sendImage];
+               }];
 }
 
 - (void)sendImage {
@@ -365,6 +373,7 @@
     }
     if (chat) {
         [self.chatArray addObject:chat];
+        [self.mchatArray addObject:chat];
     }
     
     [_conversation markAllMessagesAsRead:YES];
@@ -373,15 +382,6 @@
 
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (0 == buttonIndex) {
-        //取消发送
-    } else {
-        //确认发送
-        [self sendImage];
-    }
-    
-}
 
 - (NSNumber *)cellHeightFromMessage:(EModel_Chat *)message {
     id<IEMMessageBody> msgBody = message.message.messageBodies.firstObject;
@@ -459,7 +459,7 @@
 
 - (void)repackMessage: (NSArray *)relationAry {
     //读取私信的消息列表
-    _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:self.group.em_id isGroup:YES];
+    _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:self.group.em_id conversationType:eConversationTypeGroupChat];
     NSArray *messages = [_conversation loadAllMessages];
     
     for (EMMessage *message in messages) {
@@ -477,60 +477,10 @@
         }
         if (chat) {
             [self.chatArray addObject:chat];
+//            [self.mchatArray addObject:chat];
         }
     }
-    
     [_conversation markAllMessagesAsRead:YES];
-}
-
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    switch (interfaceType) {
-        case kGetAllRelationFromGroup: {
-            if (jsonDic) {
-                //读取信息
-                if (!_relationship) {
-                    _relationship = [[NSMutableArray alloc] init];
-                }
-                    _relationship = [Model_Group_User objectArrayWithKeyValuesArray:jsonDic];
-                    
-                    //建立并清理缓存
-                    [CD_Group_User removeGroupUserFromCDByGroup:self.group];
-                    for (Model_Group_User *groupUser in _relationship) {
-                        [CD_Group_User saveGroupUserToCD:groupUser];
-                    }
-                    [self.chatArray removeAllObjects];
-                    [self repackMessage:_relationship];
-
-                    [self subChatArray];
-
-                    
-                    //清空小组的提示
-                    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-                    [delegate.groupDelegate setDataChange:TRUE];
-                    
-                    //聊天信息切换到最底层显示
-                    if (self.chatArray.count == 0) {
-                        return;
-                    }
-                    
-                    NSIndexPath * indexPath = [NSIndexPath indexPathForRow:_mchatArray.count-1  inSection:0];
-                    [self reloadTableViewIsScrollToBottom:NO withAnimated:NO];
-                    
-                    if (!(0 >= indexPath.row)) {
-                        [self.chatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-                    }
-            }
-        }
-            break;
-        case kAddChatMessageToGroup: {
-            [SVProgressHUD dismiss];
-        }
-            break;
-        default:
-            break;
-    }
-    
-    [SVProgressHUD dismiss];
 }
 
 - (void)subChatArray {
@@ -541,13 +491,15 @@
     }
 }
 
-- (void)tableViewIsScrollToBottom: (BOOL)isScroll
-                     withAnimated: (BOOL)isAnimated {
+- (void)reloadTableViewIsScrollToBottom: (BOOL) isScroll
+                           withAnimated: (BOOL)isAnimated {
     
     float headHight = 0;
     for (EModel_Chat *message in _mchatArray) {
         headHight += [self cellHeightFromMessage:message].floatValue;
     }
+    
+    NSLog(@"%f", headHight);
     
     headHight = self.chatTableView.frame.size.height - headHight;
     if (headHight <= 0) {
@@ -555,6 +507,9 @@
     }
     
     self.chatTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.chatTableView.frame.size.width, headHight)];
+    
+    
+    [self.chatTableView reloadData];
     if (isScroll) {
         dispatch_async(dispatch_get_main_queue(), ^{
             NSInteger s = [self.chatTableView numberOfSections];
@@ -568,18 +523,17 @@
     }
 }
 
+#pragma mark -- 上下拉刷新
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 #pragma mark -- 下拉加载数据
 
     float contentoffsetY = _chatTableView.contentOffset.y;
     
-    float contentsizeH = self.chatTableView.contentSize.height;
+//    float contentsizeH = self.chatTableView.contentSize.height;
 
     //判断如果下拉超过限定 就加载数据
     if ((0 == (contentoffsetY))&&!(_mchatArray.count == _chatArray.count)) {
-        NSLog(@"下拉如果超过-110realoadata");
         _page++;
-        NSLog(@"%d",_page);
         [self subChatArray];
         [_chatTableView reloadData];
         
@@ -591,55 +545,16 @@
     }
     //默认一次为pagesize的大小 这是最后一次加载大于0小于10的个数
     else if( self.chatArray.count - self.mchatArray.count > 0 && self.chatArray.count - self.mchatArray.count < _pageSize  ){
-        self.mchatArray = self.chatArray;
+        self.mchatArray = [[NSMutableArray alloc] initWithArray:self.chatArray];
+        
 
         [_chatTableView reloadData];
 
     }else if( self.mchatArray.count == self.chatArray.count) {
-        NSLog(@"数组已经加载结束 停止加载");
-    }
-
-    float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
-    
-    if ((contentsizeH - contentoffsetY) < self.chatTableView.frame.size.height) {
-        //超过了列表的最底端,关闭提示开始进行显示
         
-        //超出列表拖移的长度
-        float draggingLager = self.chatTableView.frame.size.height - (contentsizeH - contentoffsetY);
-        //根据拖移的位置来更改label透明度
-        _closelable.alpha = (draggingLager - self.navigationController.navigationBar.frame.size.height - 20)/(self.chatTableView.frame.size.height - draggingGetPoint - self.navigationController.navigationBar.frame.size.height - 20);
-        
-        
-    } else {
-        //如果没有超过最底端,则不进行提示展示
-        _closelable.alpha = 0.0;
-        
-        _closelable.text = @"继续上拉当前页";
-    }
-    
-    if ((self.chatTableView.contentSize.height - self.chatTableView.contentOffset.y) < draggingGetPoint) {
-        //如果拖移位置超过预定点,更改提示文字
-        _closelable.text = @"释放关闭当前页";
-    } else {
-        _closelable.text = @"继续上拉当前页";
     }
 }
 
-
--(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    //根据屏幕的高度来自适应拖移关闭的高度
-    float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
-    
-    if ((self.chatTableView.contentSize.height - self.chatTableView.contentOffset.y) < draggingGetPoint) {
-        //如果拖移位置超过预定点,则推出视图 
-        NSLog(@"上拉关闭");
-        [self.rootController popController];
-    }
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD dismiss];
-}
 
 /*
 #pragma mark - Navigation

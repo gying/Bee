@@ -72,20 +72,30 @@
         [self.mTextView setText:@""];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self initTextViewFrame];
+            
+            //点击SEND隐藏选取照片的按钮和图片
+            self.mImageBtn.hidden = YES;
+            self.sendPicImg.hidden = YES;
+            
         });
-        
-        
         //        [self.mTextView resignFirstResponder];
         return NO; //这里返回NO，就代表return键值失效，即页面上按下return，不会出现换行，如果为yes，则输入页面会换行
+
     }
     return YES;
+    
+
 }
 
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
     
     return YES;
+    
+    
+    
 }
+
 
 - (void)forImage {
     [self.mDelegate imageBtnClick];
@@ -183,6 +193,11 @@
         self.sendPicImg.hidden = YES;
     }];
     
+
+    
+    
+    
+    
 }
 
 
@@ -213,7 +228,14 @@
 //    self.mTextView.scrollIndicatorInsets.bottom = self.mTextView.contentInset.bottom;
     [self.mTextView scrollRangeToVisible:self.mTextView.selectedRange];
     }];
+    
+
+    
 }
+
+
+
+
 
 - (void)dealloc //移除通知
 {
@@ -221,5 +243,12 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
 }
+
+//-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+//{
+//    if ((self.mTextView.text = @"")) {
+//        return NO;
+//    }
+//}
 
 @end

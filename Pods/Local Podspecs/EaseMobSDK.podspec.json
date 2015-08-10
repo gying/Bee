@@ -1,6 +1,6 @@
 {
   "name": "EaseMobSDK",
-  "version": "2.1.6",
+  "version": "2.1.9",
   "license": "MIT",
   "summary": "An Objective-C client for IM service",
   "homepage": "https://github.com/easemob/sdk-ios-cocoapods",
@@ -9,7 +9,7 @@
   },
   "source": {
     "git": "https://github.com/easemob/sdk-ios-cocoapods.git",
-    "tag": "2.1.6"
+    "tag": "2.1.9"
   },
   "source_files": "EaseMobSDK/**/*.{h}",
   "platforms": {
@@ -42,7 +42,7 @@
   "vendored_libraries": [
     "EaseMobSDK/lib/libEaseMobClientSDKLite_armv7.a",
     "EaseMobSDK/lib/libEaseMobClientSDKLite_armv7s.a",
-    "EaseMobSDK/lib/libEaseMobClientSDKLite_armv64.a",
+    "EaseMobSDK/lib/libEaseMobClientSDKLite_arm64.a",
     "EaseMobSDK/lib/libEaseMobClientSDKLite_i386.a",
     "EaseMobSDK/lib/libEaseMobClientSDKLite_x86_64.a"
   ],

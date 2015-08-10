@@ -21,4 +21,10 @@
 @property (nonatomic, strong)NSDate *create_date;
 @property (nonatomic, strong)NSNumber *status;
 
+#pragma  mark ver2
+//结余
+@property (nonatomic, strong)NSNumber *surplus;
+//拖欠
+@property (nonatomic, strong)NSNumber *overdraft;
+
 @end

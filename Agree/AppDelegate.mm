@@ -7,35 +7,35 @@
 //
 
 #import "AppDelegate.h"
-#import "ScheduleTableViewController.h"
 #import "APService.h"
 #import "SRNet_Manager.h"
 #import <SVProgressHUD.h>
-#import "RootAccountLoginViewController.h"
 #import "UserSettingViewController.h"
 
-#import "BMapKit.h"
+#import <BaiduMapAPI/BMapKit.h>
 #import "SDImageCache.h"
 
 #import "EaseMob.h"
 #import "WXApi.h"
 #import "SRTool.h"
 
+
+
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface AppDelegate () <EMChatManagerDelegate, SRNetManagerDelegate,WXApiDelegate>
+@interface AppDelegate () <EMChatManagerDelegate ,WXApiDelegate>
 
 @end
 
 @implementation AppDelegate {
-    SRNet_Manager *_netManager;
     BMKMapManager *_mapManager;
     NSString *_token;
     
     BOOL _viewForLogin;
 }
 
-
+#pragma mark - 业务逻辑
+#pragma mark 登出操作
 - (void)logout {
     for(UIViewController *viewController in self.rootController.viewControllers)
     {
@@ -53,37 +53,55 @@
     [regUser setDevice_id:_token];
     
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-    self.rootLoginViewController = [sb instantiateViewControllerWithIdentifier:@"rootAccountLogin"];
-    self.rootLoginViewController.userInfo = regUser;
+    self.rootViewController = [sb instantiateViewControllerWithIdentifier:@"ROOTVIEWCONTROLLER"];
+    self.rootViewController.userInfo = regUser;
     //微信授权登陆注册
-//    self.rootLoginViewController = [[RootAccountLoginViewController alloc]init];
     [WXApi registerApp:@"wx9be30a70fcb480ae"];
-    
-    [self.window setRootViewController:self.rootLoginViewController];
+    [self.window setRootViewController:self.rootViewController];
 }
 
-//环信接收到了离线的数据
-- (void)didFinishedReceiveOfflineMessages:(NSArray *)offlineMessages {
-    NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"contact_update"];
-    for (EMMessage *message in offlineMessages) {
-        if (message.isGroup) {
-            //小组信息
-        } else {
-            //私聊信息
-            updateValue = [NSNumber numberWithInt: updateValue.intValue + 1];
-            [[NSUserDefaults standardUserDefaults] setObject:updateValue forKey:@"contact_update"];
-        }
-    }
+#pragma mark 极光推动帐号获取成功
+- (void)jPushLoginDone {
+    //jpush的串号获取成功
+    self.jPushString = [APService registrationID];
     
-    if (updateValue) {
-        //更新小组标识
-        [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = updateValue.stringValue;
+    if (_viewForLogin) {    //登录流程
+        
+    } else {    //直接进入流程,更新用户资料
+        Model_User *updateUser = [[Model_User alloc] init];
+        updateUser.pk_user = [Model_User loadFromUserDefaults].pk_user;
+        updateUser.device_id = self.deviceToken;
+        updateUser.jpush_id = self.jPushString;
+        
+        [SRNet_Manager requestNetWithDic:[SRNet_Manager updateUserInfoDic:updateUser]
+                                complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                    
+                                } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                    
+                                }];
     }
 }
 
+#pragma mark 注册阿里OSS
+- (void)regAliOSS {
+    self.ossService = [ALBBOSSServiceProvider getService];
+    NSString *accessKey = @"HyDprHu2BQHp7edn"; // 实际使用中，AK/SK不应明文保存在代码中
+    NSString *secretKey = @"loWKqemVvcWH7u2RSn4EncVCkRuQcJ";
+    [self.ossService setGenerateToken:^(NSString *method, NSString *md5, NSString *type, NSString *date, NSString *xoss, NSString *resource) {
+        NSString *signature = nil;
+        NSString *content = [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@%@", method, md5, type, date, xoss, resource];
+        signature = [OSSTool calBase64Sha1WithData:content withKey:secretKey];
+        signature = [NSString stringWithFormat:@"OSS %@:%@", accessKey, signature];
+        NSLog(@"signature:%@", signature);
+        return signature;
+    }];
+}
+
+#pragma mark - 通知
+#pragma mark 收到聊天信息
 - (void)didReceiveMessage:(EMMessage *)message {
     //这里收到了信息
-    if (message.isGroup) {
+    if (message.messageType == eMessageTypeGroupChat) {
         //群聊
         if (self.chatDelegate) {
             //处于某小组的详情界面中
@@ -124,22 +142,135 @@
     }
 }
 
-
-
-#pragma mark -- 微信授权登陆注册
-- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
+#pragma mark 应用内收取推送信息
+- (void)networkDidReceiveMessage:(NSNotification *)notification {
     
-//    return [WXApi handleOpenURL:url delegate:self.userSettingViewcontroller];
+    NSDictionary * userInfo = [notification userInfo];
+    NSDictionary *extras = [userInfo valueForKey:@"extras"];
     
+    //    NSString *content = [userInfo valueForKey:@"content"];
+    //    NSString *customizeField1 = [extras valueForKey:@"customizeField1"]; //自定义参数，key是自己定义的
     
+    /*
+     typeTag 的定义:
+     
+     1.聊天推送     (已经取消,被环信所替代)
+     2.聚会信息推送
+     3.相册图片推送
+     
+     5.关系更新推送
+     */
+    NSNumber *typeTag = [extras objectForKey:@"type_tag"];
+    
+    switch (typeTag.intValue) {
+        case 2: {   //聚会信息推送消息
+            NSNumber *pk_group = [extras objectForKey:@"pk_group"];
+            if (self.chatDelegate) {
+                if ([pk_group isEqualToNumber:self.chatDelegate.group.pk_group]) {
+                    //处于同一小组的界面中,进行刷新
+                    [self.chatDelegate receiveParty];
+                    
+                } else {
+                    //处于不同小组
+                    [self.groupDelegate addGroupPartyUpdateStatus:pk_group];
+                }
+                
+                //标注主日程更新
+                [SRTool addPartyUpdateTip:1];
+                
+//            }
+//            else if (self.scheduleDelegate) {
+//                //如果在主日程界面
+//                //则在主日程进行刷新操作
+//                [self.scheduleDelegate refresh:nil];
+            } else {
+                [self.groupDelegate addGroupPartyUpdateStatus:pk_group];
+                
+                //标注主日程更新
+                [SRTool addPartyUpdateTip:1];
+            }
+        }
+            break;
+        case 3: {   //小组相册更新
+            
+        }
+            break;
+            
+        case 5: {   //用户关系更新
+            if (self.contactsDelegate) {
+                [self.contactsDelegate loadDataFromNet];
+            } else {
+                NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"relation_update"];
+                updateValue = [NSNumber numberWithInt: updateValue.intValue + 1];
+                [[NSUserDefaults standardUserDefaults] setObject:updateValue forKey:@"relation_update"];
+                
+                //                if (updateValue) {
+                //                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = updateValue.stringValue;
+                //                }
+                
+                int badgeNum = [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue.intValue;
+                if (badgeNum) {
+                    badgeNum += 1;
+                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = [NSNumber numberWithInt:badgeNum].stringValue;
+                } else {
+                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = @"1";
+                }
+            }
+        }
+            break;
+        case 6: {   //好友请求获得通过,只需要刷新好友列表
+            if (self.contactsDelegate) {
+                [self.contactsDelegate loadDataFromNet];
+            } else {
+                int badgeNum = [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue.intValue;
+                if (badgeNum) {
+                    badgeNum += 1;
+                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = [NSNumber numberWithInt:badgeNum].stringValue;
+                } else {
+                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = @"1";
+                }
+            }
+        }
+            break;
+        default:
+            break;
+    }
     
 }
 
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
+#pragma mark 环信登录收取离线信息
+- (void)didFinishedReceiveOfflineMessages:(NSArray *)offlineMessages {
+    NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"contact_update"];
+    for (EMMessage *message in offlineMessages) {
+        if (message.messageType == eMessageTypeGroupChat) {
+            //小组信息
+        } else {
+            //私聊信息
+            updateValue = [NSNumber numberWithInt: updateValue.intValue + 1];
+            [[NSUserDefaults standardUserDefaults] setObject:updateValue forKey:@"contact_update"];
+        }
+    }
+    
+    if (updateValue) {
+        //更新小组标识
+        [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = updateValue.stringValue;
+    }
+}
 
-//    return  [WXApi handleOpenURL:url delegate:self.userSettingViewcontroller];
+
+
+#pragma mark - 系统运行
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+    //微信授权登陆注册
+//    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
+    return [WXApi handleOpenURL:url delegate:self.wechatViewController];
+}
+
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+//    return  [WXApi handleOpenURL:url delegate:self.rootLoginViewController];
+    
+    return [WXApi handleOpenURL:url delegate:self.wechatViewController];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -148,6 +279,11 @@
     //清理sdimage
 //    [[SDImageCache sharedImageCache] clearDisk];
 //    [[SDImageCache sharedImageCache] clearMemory];
+    
+    //设置等待HUD界面
+    [SVProgressHUD setBackgroundColor:[UIColor colorWithWhite:0.2 alpha:0.9]];
+    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD setForegroundColor: AgreeBlue];
     
     //registerSDKWithAppKey:注册的appKey，详细见下面注释。
     //apnsCertName:推送证书名(不需要加后缀)，详细见下面注释。
@@ -174,11 +310,7 @@
     [APService setBadge:0];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
-    //腾讯云
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-        [_netManager imageManagerSign];
-    }
+    [self regAliOSS];
 
     //推送设置
     // Required
@@ -234,17 +366,19 @@
 //        _token = token;
 //        [regUser setDevice_id:_token];
         
-        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-        self.rootLoginViewController = [sb instantiateViewControllerWithIdentifier:@"rootAccountLogin"];
-        self.rootLoginViewController.userInfo = regUser;
+//        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+//        self.rootLoginViewController = [sb instantiateViewControllerWithIdentifier:@"rootAccountLogin"];
+//        self.rootLoginViewController.userInfo = regUser;
+//        
+//        [self.window setRootViewController:self.rootLoginViewController];
         
-        //微信授权登陆注册
-//        self.rootLoginViewController = [[RootAccountLoginViewController alloc]init];
         
-        [self.window setRootViewController:self.rootLoginViewController];
-
+        UIStoryboard * sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+        self.rootViewController = [sb instantiateViewControllerWithIdentifier:@"ROOTVIEWCONTROLLER"];
+        [self.rootViewController setUserInfo:regUser];
+        [self.window setRootViewController:self.rootViewController];
     }
-
+ 
     return YES;
 }
 
@@ -288,37 +422,16 @@
     
     //获取到设备串号,开始注册帐号
     //处理串号格式
-    NSString *token = [[NSString alloc] init];
-    token = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
-    token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
-    
-    self.deviceToken = token;
-    
-    
+    self.deviceToken = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+    self.deviceToken = [self.deviceToken stringByReplacingOccurrencesOfString:@" " withString:@""];
+
     // Required
     //根据串号注册极光推送
     [APService registerDeviceToken:deviceToken];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jPushLoginDone) name:kJPFNetworkDidLoginNotification object:nil];
 }
 
-- (void)jPushLoginDone {
-    //jpush的串号获取成功
-    self.jPushString = [APService registrationID];
-    
-    if (_viewForLogin) {    //登录流程
-        
-    } else {    //直接进入流程,更新用户资料
-        Model_User *updateUser = [[Model_User alloc] init];
-        updateUser.pk_user = [Model_User loadFromUserDefaults].pk_user;
-        updateUser.device_id = self.deviceToken;
-        updateUser.jpush_id = self.jPushString;
-        
-        if (!_netManager) {
-            _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-        }
-        [_netManager updateUserInfo:updateUser];
-    }
-}
+
 
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
@@ -334,99 +447,6 @@
     
 }
 
-//自定义消息的回调方法
-//应用内
-- (void)networkDidReceiveMessage:(NSNotification *)notification {
-    NSDictionary * userInfo = [notification userInfo];
-//    NSString *content = [userInfo valueForKey:@"content"];
-    
-    /*
-     1.聊天推送
-     2.聚会信息推送
-     3.相册图片推送
-     
-     5.关系更新推送
-     */
-    
-    
-    NSDictionary *extras = [userInfo valueForKey:@"extras"];
-    //    NSString *customizeField1 = [extras valueForKey:@"customizeField1"]; //自定义参数，key是自己定义的
-    
-    NSNumber *typeTag = [extras objectForKey:@"type_tag"];
-    
-    switch (typeTag.intValue) {
-        case 2: {   //聚会信息推送消息
-            NSNumber *pk_group = [extras objectForKey:@"pk_group"];
-            if (self.chatDelegate) {
-                if ([pk_group isEqualToNumber:self.chatDelegate.group.pk_group]) {
-                    //处于同一小组的界面中,进行刷新
-                    [self.chatDelegate receiveParty];
-                    
-                } else {
-                    //处于不同小组
-                    [self.groupDelegate addGroupPartyUpdateStatus:pk_group];
-                }
-                
-                //标注主日程更新
-                [SRTool addPartyUpdateTip:1];
-                
-            } else if (self.scheduleDelegate) { //如果在主日程界面
-                //则在主日程进行刷新
-                [self.scheduleDelegate refresh:nil];
-            } else {
-                [self.groupDelegate addGroupPartyUpdateStatus:pk_group];
-                
-                //标注主日程更新
-                [SRTool addPartyUpdateTip:1];
-            }
-        }
-            break;
-        case 3: {   //小组相册更新
-            
-        }
-            break;
-            
-        case 5: {   //用户关系更新
-            if (self.contactsDelegate) {
-                [self.contactsDelegate loadDataFromNet];
-            } else {
-                NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"relation_update"];
-                updateValue = [NSNumber numberWithInt: updateValue.intValue + 1];
-                [[NSUserDefaults standardUserDefaults] setObject:updateValue forKey:@"relation_update"];
-                
-//                if (updateValue) {
-//                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = updateValue.stringValue;
-//                }
-                
-                int badgeNum = [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue.intValue;
-                if (badgeNum) {
-                    badgeNum += 1;
-                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = [NSNumber numberWithInt:badgeNum].stringValue;
-                } else {
-                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = @"1";
-                }
-            }
-        }
-            break;
-        case 6: {   //好友请求获得通过,只需要刷新好友列表
-            if (self.contactsDelegate) {
-                [self.contactsDelegate loadDataFromNet];
-            } else {
-                int badgeNum = [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue.intValue;
-                if (badgeNum) {
-                    badgeNum += 1;
-                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = [NSNumber numberWithInt:badgeNum].stringValue;
-                } else {
-                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = @"1";
-                }
-            }
-        }
-            break;
-        default:
-            break;
-    }
-    
-}
 
 //应用外的推送信息
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
@@ -436,8 +456,6 @@
     [APService handleRemoteNotification:userInfo];
     completionHandler(UIBackgroundFetchResultNewData);
 }
-
-
 
 #pragma mark - Core Data stack
 
@@ -488,7 +506,6 @@
     return _persistentStoreCoordinator;
 }
 
-
 - (NSManagedObjectContext *)managedObjectContext {
     // Returns the managed object context for the application (which is already bound to the persistent store coordinator for the application.)
     if (_managedObjectContext != nil) {
@@ -518,34 +535,6 @@
         }
     }
 }
-
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    [SVProgressHUD dismiss];
-    switch (interfaceType) {
-        case kUpdateUserInfo: {
-        
-        }
-            break;
-        case kImageManagerSign: {
-            if (jsonDic) {
-                //注册腾讯云的万象图片
-                [TXYUploadManager authorize:@"201139" userId:[Model_User loadFromUserDefaults].pk_user.stringValue sign:(NSString *)jsonDic];
-                [TXYDownloader authorize:@"201139" userId:[Model_User loadFromUserDefaults].pk_user.stringValue];
-
-                self.uploadManager = [[TXYUploadManager alloc] initWithPersistenceId: @"persistenceId"];
-            }
-            
-        }
-        default:
-            break;
-    }
-}
-
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD dismiss];
-}
-
 
 
 

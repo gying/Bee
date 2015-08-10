@@ -19,10 +19,9 @@
 #import "SelectFriendViewController.h"
 
 
-@interface ContactsDetailTableViewController () <SRNetManagerDelegate> {
+@interface ContactsDetailTableViewController (){
     NSMutableArray *_contactArray;
     NSMutableArray *_checkPhoneArray;
-    SRNet_Manager *_netManager;
     NSMutableArray *_matchUserArray;
     SRAccountView *_accountView;
 }
@@ -32,6 +31,7 @@
 @implementation ContactsDetailTableViewController
 
 - (void)viewDidLoad {
+    [super viewDidLoad];
     [[NSUserDefaults standardUserDefaults] setObject:@0 forKey:@"relation_update"];
     
     // Uncomment the following line to preserve selection between presentations.
@@ -43,8 +43,6 @@
     _accountView = [[SRAccountView alloc] init];
     [_accountView setHidden:YES];
     [self getAddressBook];
-    
-    [super viewDidLoad];
 }
 
 - (void)getAddressBook {
@@ -84,6 +82,7 @@
         
         if ((__bridge id)abFullName != nil) {
             nameString = (__bridge NSString *)abFullName;
+            
         } else {
             if ((__bridge id)abLastName != nil)
             {
@@ -103,6 +102,7 @@
                 newPeople.phoneAry = [[NSMutableArray alloc] init];
             }
             NSString *phoneString = (__bridge NSString *)phone;
+            
             phoneString = [phoneString stringByReplacingOccurrencesOfString:@"+86" withString:@""];
             phoneString = [phoneString stringByReplacingOccurrencesOfString:@" " withString:@""];
             phoneString = [phoneString stringByReplacingOccurrencesOfString:@"(" withString:@""];
@@ -111,10 +111,8 @@
             
             
             [newPeople.phoneAry addObject:phoneString];
-//            NSLog(@"Phone: %@\n", phone);
             [_checkPhoneArray addObject:phoneString];
         }
-        
         [_contactArray addObject:newPeople];
     }
     
@@ -122,10 +120,17 @@
 }
 
 - (void)matchAddressBook {
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
-    [_netManager matchPhones:_checkPhoneArray];
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager matchPhonesDic:_checkPhoneArray]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                if (jsonDic) {
+                                    //找到匹配的项目
+                                    _matchUserArray = (NSMutableArray *)[Model_User objectArrayWithKeyValuesArray:jsonDic];
+                                    [self matchAddressBookByUserArray];
+                                }
+                                [SVProgressHUD dismiss];
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -147,7 +152,7 @@
     if (nil == cell) {
         cell = [[AddressBookTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AddressBookCell"];
     }
-    
+    cell.contactsDetailTableVC = self;
     [cell initWithPeople:[_contactArray objectAtIndex:indexPath.row]];
     
     // Configure the cell...
@@ -204,31 +209,31 @@
     [self.tableView reloadData];
 }
 
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    switch (interfaceType) {
-        case kMatchPhones: {
-            if (jsonDic) {
-                //找到匹配的项目
-                _matchUserArray = (NSMutableArray *)[Model_User objectArrayWithKeyValuesArray:jsonDic];
-                [self matchAddressBookByUserArray];
-            }
-        }
-            break;
-            
-        default:
-            break;
-    }
-    
-    [SVProgressHUD dismiss];
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD showErrorWithStatus:@"网络错误"];
-}
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+
+//MFMESSAGE的协议方法
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
+{
+    
+    switch (result) {
+        case MessageComposeResultCancelled:
+            NSLog(@"取消");
+            break;
+        case MessageComposeResultFailed:
+            NSLog(@"发送短信错误");
+            break;
+        case MessageComposeResultSent:
+            break;
+        default:
+            break;
+    }
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    NSLog(@"退出");
+}
 
 #pragma mark - Navigation
 // In a storyboard-based application, you will often want to do a little preparation before navigation

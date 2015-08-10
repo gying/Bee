@@ -21,16 +21,15 @@
 #import <SVProgressHUD.h>
 #import <MJRefresh.h>
 
-@interface GroupAlbumsCollectionViewController () <SRImageManagerDelegate, UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRNetManagerDelegate, SRPhotoManagerDelegate> {
+@interface GroupAlbumsCollectionViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRPhotoManagerDelegate> {
     
     UIImagePickerController *_imagePicker;
     UIImage *_pickImage;
-    SRImageManager *_imageManager;
     
     NSMutableArray *_imageViewAry;
     NSMutableDictionary *_imageViewDic;
-    SRNet_Manager *_netManager;
     Model_Photo *_removePhoto;
+    NSString *_imagePath;
 }
 
 @end
@@ -52,21 +51,51 @@
 }
 */
 
+- (void)reloadTipView: (NSInteger)aryCount {
+    if (0 == aryCount) {
+        [self.rootController.backView3 setHidden:NO];
+        
+    }else {
+        [self.rootController.backView3 setHidden:YES];
+    }
+}
+
 -(void)loadPhotoData {
     
+
     if (!self.photoAry) {
         self.photoAry = [[NSMutableArray alloc] init];
     }
+    
     //先读取缓存中的图片信息
     self.photoAry = [CD_Photo getPhotoFromCDByGroup:self.group];
+    [self reloadTipView:self.photoAry.count];
     [self.albumsCollectionView reloadData];
+
     
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
     Model_Group *sendGroup = [[Model_Group alloc] init];
     [sendGroup setPk_group:self.group.pk_group];
-    [_netManager getPhotoByGroup:sendGroup];
+    
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager getPhotoByGroupDic:sendGroup]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                if (jsonDic) {
+                                    [CD_Photo removePhotoFromCDByGroup:self.group];
+                                    self.photoAry = (NSMutableArray *)[Model_Photo objectArrayWithKeyValuesArray:jsonDic];
+                                    
+                                    for (Model_Photo *photo in self.photoAry) {
+                                        [CD_Photo savePhotoToCD:photo];
+                                    }
+                                    [self reloadTipView:self.photoAry.count];
+                                    [self.albumsCollectionView reloadData];
+                                    
+                                } else {
+                                    
+                                }
+                                [self.albumsCollectionView.header endRefreshing];
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+
+                            }];
+    
 }
 
 #pragma mark <UICollectionViewDataSource>
@@ -91,18 +120,10 @@
     [cell setBackgroundColor:[UIColor lightGrayColor]];
     
     //下载图片
-    NSURL *imageUrl = [SRImageManager albumThumbnailImageFromTXYFieldID:newPhoto.pk_photo];
-    NSString * urlstr = [imageUrl absoluteString];
-
-    [[TXYDownloader sharedInstanceWithPersistenceId:nil] download:urlstr
-                                                           target:cell.cellImageView
-                                                        succBlock:^(NSString *url, NSData *data, NSDictionary *info) {
-        UIImage *testImage = [UIImage imageWithContentsOfFile:[info objectForKey:@"filePath"]];
-        [cell.cellImageView setImage:testImage];
-        
-        //将图片转化成MJPhoto并加入数组
+    NSURL *imageUrl = [SRImageManager albumThumbnailImageFromOSS:newPhoto.pk_photo];
+    [cell.cellImageView sd_setImageWithURL:imageUrl completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         MJPhoto *photo = [[MJPhoto alloc] init];
-        photo.url = [SRImageManager originalImageFromTXYFieldID:newPhoto.pk_photo]; // 图片路径
+        photo.url = [SRImageManager originalImageFromOSS:newPhoto.pk_photo]; // 图片路径
         photo.srcImageView = cell.cellImageView; // 来源于哪个UIImageView
         if ([newPhoto.fk_user isEqual:[Model_User loadFromUserDefaults].pk_user] || [self.rootController.group.creater isEqual:[Model_User loadFromUserDefaults].pk_user] ) {
             //如果为群主或者为图片的上传者,则可以设置删除图片代理
@@ -110,8 +131,7 @@
         }
         //按照数序放入字典
         [_imageViewDic setObject:photo forKey:[NSNumber numberWithInteger:indexPath.row]];
-        
-    } failBlock:nil progressBlock:nil param:nil];
+    }];
     
 
 
@@ -146,32 +166,36 @@
     if (!_imagePicker) {
         _imagePicker = [[UIImagePickerController alloc] init];
         _imagePicker.delegate = self;
-        UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
-        //判断是否有摄像头
-        if(![UIImagePickerController isSourceTypeAvailable:sourceType]) {
-            sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        }
     }
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择图片来源" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"拍照" otherButtonTitles:@"图片库", nil];
-        [sheet showInView:self.rootController.view];
-    }
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    UIImagePickerControllerSourceType sourceType;
-    if (0 == buttonIndex) {
-        //直接拍照
-        sourceType = UIImagePickerControllerSourceTypeCamera;
-    } else if (1 == buttonIndex) {
-        //使用相册
-        sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [SRTool showSRSheetInView:self.rootController.view withTitle:@"选择图片来源" message:nil
+                  withButtonArray:@[@"拍照", @"相册"]
+                  tapButtonHandle:^(int buttonIndex) {
+                      UIImagePickerControllerSourceType sourceType;
+                      switch (buttonIndex) {
+                          case 0: {
+                              //拍照
+                              sourceType = UIImagePickerControllerSourceTypeCamera;
+                          }
+                              break;
+                          case 1: {
+                              //相册
+                              sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                          }
+                              break;
+                          default:
+                              break;
+                      }
+                      _imagePicker.sourceType = sourceType;
+                      [self.rootController presentViewController:_imagePicker animated:YES completion:nil];
+                  } tapCancelHandle:^{
+                      
+                  }];
     } else {
-        return;
+        _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [self.rootController presentViewController:_imagePicker animated:YES completion:nil];
     }
-    _imagePicker.sourceType = sourceType;
-    [self.rootController presentViewController:_imagePicker animated:YES completion:nil];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -181,138 +205,86 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [picker dismissViewControllerAnimated:YES completion:nil];
     _pickImage = [info valueForKey:@"UIImagePickerControllerOriginalImage"];
-    //    [self uploadImage:_chatPickImage];
     
-    //初始化图片发送确认警告框
-    UIAlertView *sendImageAlert = [[UIAlertView alloc] initWithTitle:@"确认信息"
-                                                             message:@"是否确认发送图片?"
-                                                            delegate:self
-                                                   cancelButtonTitle:@"取消"
-                                                   otherButtonTitles:@"确认", nil];
-    [sendImageAlert show];
+    [SRTool showSRAlertViewWithTitle:@"确认"
+                             message:@"真的想要发送这张图片吗?"
+                   cancelButtonTitle:@"不,我再想想"
+                    otherButtonTitle:@"是的"
+               tapCancelButtonHandle:^(NSString *msgString) {
+                   //取消发送
+                         
+               } tapOtherButtonHandle:^(NSString *msgString) {
+                   //取消发送
+                   [self sendImage];
+               }];
 }
 
 - (void)sendImage {
-    if (!_imageManager) {
-        _imageManager = [[SRImageManager alloc] initWithDelegate:self];
-    }
-    
     _pickImage = [SRImageManager getSubImage:_pickImage withRect:CGRectMake(0, 0, 1280 , 1280)];
-    [_imageManager updateImageToTXY:_pickImage];
+    _imagePath = [NSUUID UUID].UUIDString;
+    
+    [[SRImageManager initImageOSSData:_pickImage
+                             withKey:_imagePath] uploadWithUploadCallback:^(BOOL isSuccess, NSError *error) {
+        if (isSuccess) {
+            //图片上传成功
+            Model_Photo *newPhoto = [[Model_Photo alloc] init];
+            [newPhoto setCreate_time:[NSDate date]];
+            [newPhoto setFk_group:self.rootController.group.pk_group];
+            [newPhoto setFk_user:[Model_User loadFromUserDefaults].pk_user];
+            [newPhoto setPk_photo:_imagePath];
+            [newPhoto setStatus:@1];
+            
+            [self.photoAry insertObject:newPhoto atIndex:0];
+            
+            [SRNet_Manager requestNetWithDic:[SRNet_Manager addImageToGroupDic:newPhoto]
+                                    complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                        [SVProgressHUD showProgress:1.0 status:@"上传图片数据"];
+                                        if (jsonDic) {
+                                            //清除原先数组中的元素
+                                            [_imageViewAry removeAllObjects];
+                                            _imageViewAry = nil;
+                                            [_imageViewDic removeAllObjects];
+                                            _imageViewDic = nil;
+                                            [self.albumsCollectionView reloadData];
+                                            [self reloadTipView:self.photoAry.count];
+                                        } else {
+                                            
+                                        }
+                                        [SVProgressHUD showSuccessWithStatus:@"成功"];
+                                    } failure:^(NSError *error, NSURLSessionDataTask *task) {
+
+                                    }];
+        } else {
+            
+        }
+        
+    } withProgressCallback:^(float progress) {
+        [SVProgressHUD showProgress:progress*0.9 status:@"正在上传图片"];
+    }];
+    
 }
 
 
 - (void)deletePhoto:(NSUInteger)index {
     _removePhoto = [self.photoAry objectAtIndex:index];
-    if (!_imageManager) {
-        _imageManager = [[SRImageManager alloc] initWithDelegate:self];
-    }
     
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
-    [_netManager removePhoto:[self.photoAry objectAtIndex:index]];
-}
-
-
-- (void)imageDelError {
-    //图片删除错误
-}
-
-- (void)imageUploadDoneWithFieldID:(NSString *)fieldID {
-    Model_Photo *newPhoto = [[Model_Photo alloc] init];
-    [newPhoto setCreate_time:[NSDate date]];
-    [newPhoto setFk_group:self.rootController.group.pk_group];
-    [newPhoto setFk_user:[Model_User loadFromUserDefaults].pk_user];
-    [newPhoto setPk_photo:fieldID];
-    [newPhoto setStatus:@1];
     
-    [self.photoAry insertObject:newPhoto atIndex:0];
-    [self saveImageData:newPhoto];
-}
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager removePhotoDic:_removePhoto]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                if (jsonDic) {
+                                    [self.photoAry removeObject:_removePhoto];
+                                    [_imageViewAry removeAllObjects];
+                                    _imageViewAry = nil;
+                                    [_imageViewDic removeAllObjects];
+                                    _imageViewDic = nil;
+                                    [self.albumsCollectionView reloadData];
+                                    [self reloadTipView:self.photoAry.count];
+                                } else {
+                                    
+                                }
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
 
-- (void)saveImageData: (Model_Photo *)photo {
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
-    [_netManager addImageToGroup:photo];
+                            }];
 }
-
--(void)imageUploading:(float)proFloat {
-    [SVProgressHUD showProgress:proFloat*0.9 status:@"正在上传图片"];
-}
-
-- (void)imageUpladError {
-    
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (0 == buttonIndex) {
-        //取消发送
-    } else {
-        //确认发送
-        [self sendImage];
-    }
-}
-
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    
-    switch (interfaceType) {
-        case kRemovePhoto: {
-            if (jsonDic) {
-                [self.photoAry removeObject:_removePhoto];
-                [_imageViewAry removeAllObjects];
-                _imageViewAry = nil;
-                [_imageViewDic removeAllObjects];
-                _imageViewDic = nil;
-                [self.albumsCollectionView reloadData];
-            } else {
-            
-            }
-        }
-            break;
-        
-        case kGetPhotoByGroup: {
-            if (jsonDic) {
-                [CD_Photo removePhotoFromCDByGroup:self.group];
-                self.photoAry = (NSMutableArray *)[Model_Photo objectArrayWithKeyValuesArray:jsonDic];
-                
-                for (Model_Photo *photo in self.photoAry) {
-                    [CD_Photo savePhotoToCD:photo];
-                }
-                [self.albumsCollectionView reloadData];
-            } else {
-                
-            }
-            [self.albumsCollectionView.header endRefreshing];
-        }
-            break;
-        
-        case kAddImageToGroup: {
-            [SVProgressHUD showProgress:1.0 status:@"上传图片数据"];
-          
-            if (jsonDic) {
-                //清除原先数组中的元素
-                [_imageViewAry removeAllObjects];
-                _imageViewAry = nil;
-                [_imageViewDic removeAllObjects];
-                _imageViewDic = nil;
-                [self.albumsCollectionView reloadData];
-            } else {
-                
-            }
-            [SVProgressHUD showSuccessWithStatus:@"成功"];
-        }
-            break;
-            
-        default:
-            break;
-    }
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    [SVProgressHUD showErrorWithStatus:@"网络错误"];
-}
-
 
 @end

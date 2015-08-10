@@ -30,6 +30,20 @@
 @property (nonatomic, strong)NSNumber *chat_update;
 @property (nonatomic, strong)NSNumber *relationship_update;
 
+#pragma mark v2
+@property (nonatomic, strong)NSNumber *pay_count;
+@property (nonatomic, strong)NSNumber *pay_amount;
+//付款状态(1.未付, 2.已付, 3.代付(多人状态))
+@property (nonatomic, strong)NSNumber *pay_type;
+
+@property (nonatomic, strong)NSNumber *pk_party_user;
+
+//财务
+@property (nonatomic, strong)NSNumber *surplus;
+@property (nonatomic, strong)NSNumber *overdraft;
+
+
+
 - (void)saveToUserDefaults;
 + (Model_User *)loadFromUserDefaults;
 

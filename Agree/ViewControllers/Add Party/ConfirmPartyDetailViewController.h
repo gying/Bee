@@ -14,12 +14,33 @@
 @property (nonatomic, strong)Model_Party *party;
 
 @property BOOL isGroupParty;
+
+//地址BUTTON
 @property (weak, nonatomic) IBOutlet UIButton *addressButton;
+//时间BUTTON
 @property (weak, nonatomic) IBOutlet UIButton *dateButton;
+
 @property (weak, nonatomic) IBOutlet UITextField *partyNameTextField;
 @property (weak, nonatomic) IBOutlet UITextView *remarkTextView;
-@property (weak, nonatomic) IBOutlet UIButton *feedBackButton;
-@property (weak, nonatomic) IBOutlet UILabel *feedBackLabel;
+
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
+
+
+@property (weak, nonatomic) IBOutlet UIView *payFirstView;
+@property (weak, nonatomic) IBOutlet UITextField *payFirstMoneyTextField;
+@property (weak, nonatomic) IBOutlet UIButton *payFirstDoneButton;
+
+
+@property (weak, nonatomic) IBOutlet UIButton *imRichButton;
+@property (weak, nonatomic) IBOutlet UIButton *aaButton;
+@property (weak, nonatomic) IBOutlet UIButton *payFirstButton;
+@property (weak, nonatomic) IBOutlet UILabel *payTypeLabel;
+
+- (void)reloadView;
+
+
+
+
+
 
 @end

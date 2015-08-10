@@ -18,6 +18,7 @@
 #import "EModel_User_Chat.h"
 #import "EMSendMessageHepler.h"
 #import "SRKeyboard.h"
+#import "SRTool.h"
 
 #import <MJRefresh.h>
 
@@ -25,15 +26,12 @@
 #define kLoadChatData       1
 #define kSendMessage        2
 
-@interface UserChatViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIAlertViewDelegate, EMChatManagerDelegate,UITableViewDelegate,UIScrollViewDelegate, SRNetManagerDelegate> {
-    SRNet_Manager *_netManager;
-    int _netStatus;
+@interface UserChatViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, EMChatManagerDelegate,UITableViewDelegate,UIScrollViewDelegate> {
     
     SRKeyboard *_srKeyBoard;
     UIImagePickerController *_imagePicker;
     
     UIImage *_chatPickImage;
-    SRImageManager *_imageManager;
     NSString *_imageName;
     
     Model_User_Chat *_userChat;
@@ -42,7 +40,6 @@
     NSMutableArray * _mchatArray;
     
     
-    UIAlertView *_sendImageAlert;
     EMConversation *_conversation;
     
     
@@ -99,8 +96,7 @@
     
     
     //读取私信的消息列表
-    _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:self.user.pk_user.stringValue isGroup:NO];
-    
+    _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:self.user.pk_user.stringValue conversationType:(eConversationTypeChat)];
     NSArray *messages = [_conversation loadAllMessages];
     
     [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
@@ -125,19 +121,11 @@
     
     [self subChatArray];
 
+    
+    
+#pragma mark -- 导航栏标题
     [self.navigationItem setTitle:self.user.nickname];
     
-    //初始化图片发送确认警告框
-    _sendImageAlert = [[UIAlertView alloc] initWithTitle:@"确认信息"
-                                                 message:@"是否确认发送图片?"
-                                                delegate:self
-                                       cancelButtonTitle:@"取消"
-                                       otherButtonTitles:@"确认", nil];
-
-
-//  [self.userChatTableView reloadData];
-    
-
     //聊天信息切换到最底层显示
     
     if (messages.count == 0) {
@@ -162,6 +150,7 @@
 
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     _srKeyBoard = [[SRKeyboard alloc] init];
     [_srKeyBoard textViewShowView:self
            customKeyboardDelegate:self
@@ -169,6 +158,7 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
     _srKeyBoard = nil;
 }
 
@@ -186,6 +176,7 @@
         
         if (chat) {
             [_mchatArray addObject:chat];
+            [_chatArray addObject:chat];
         }
 //        [self subChatArray];
         [self.userChatTableView reloadData];
@@ -359,11 +350,8 @@
 - (void)talkBtnClick:(UITextView *)textViewGet {
     
     if (0 != textViewGet.text.length) {
-        [self sendMessageDone:[EMSendMessageHepler sendTextMessageWithString:textViewGet.text
-                                                                  toUsername:self.user.pk_user.stringValue
-                                                                 isChatGroup:NO
-                                                           requireEncryption:NO
-                                                                         ext:nil]];
+        [self sendMessageFromString:textViewGet.text];
+        
     }
 }
 
@@ -375,33 +363,37 @@
         _imagePicker = [[UIImagePickerController alloc] init];
         [_imagePicker setDelegate:self];
         _imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        //判断是否有摄像头
-        if(![UIImagePickerController isSourceTypeAvailable:_imagePicker.sourceType]) {
-            _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        }
+
     }
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择图片来源" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"拍照" otherButtonTitles:@"图片库", nil];
-        [sheet showInView:self.view];
-    }
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    UIImagePickerControllerSourceType sourceType;
-    
-    if (0 == buttonIndex) {
-        //直接拍照
-        sourceType = UIImagePickerControllerSourceTypeCamera;
-    } else if (1 == buttonIndex) {
-        //使用相册
-        sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [SRTool showSRSheetInView:self.view withTitle:@"选择图片来源" message:nil
+                  withButtonArray:@[@"拍照", @"相册"]
+                  tapButtonHandle:^(int buttonIndex) {
+                      UIImagePickerControllerSourceType sourceType;
+                      switch (buttonIndex) {
+                          case 0: {
+                              //拍照
+                              sourceType = UIImagePickerControllerSourceTypeCamera;
+                          }
+                              break;
+                          case 1: {
+                              //相册
+                              sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                          }
+                              break;
+                          default:
+                              break;
+                      }
+                      _imagePicker.sourceType = sourceType;
+                      [self presentViewController:_imagePicker animated:YES completion:nil];
+                  } tapCancelHandle:^{
+                      
+                  }];
     } else {
-        return;
+        _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [self presentViewController:_imagePicker animated:YES completion:nil];
     }
-    _imagePicker.sourceType = sourceType;
-    [self presentViewController:_imagePicker animated:YES completion:nil];
-    
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -410,9 +402,17 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [picker dismissViewControllerAnimated:YES completion:nil];
-    
     _chatPickImage = [info valueForKey:@"UIImagePickerControllerOriginalImage"];
-    [_sendImageAlert show];
+    
+    [SRTool showSRAlertViewWithTitle:@"提示"
+                             message:@"真的要发送这张图片吗?"
+                   cancelButtonTitle:@"我再想想"
+                    otherButtonTitle:@"是的"
+               tapCancelButtonHandle:^(NSString *msgString) {
+                   
+               } tapOtherButtonHandle:^(NSString *msgString) {
+                   [self sendImage];
+               }];
 }
 
 - (void)sendImage {
@@ -423,13 +423,21 @@
                                                                      ext:nil]];
 }
 
+
+- (void)sendMessageFromString: (NSString *)text {
+
+    
+    [self sendMessageDone:[EMSendMessageHepler sendTextMessageWithString:text
+                                                              toUsername:self.user.pk_user.stringValue
+                                                             isChatGroup:NO
+                                                       requireEncryption:NO
+                                                                     ext:nil]];
+
+}
+
 - (void)sendMessageDone:(EMMessage *)message {
     //自己发的信息
-//    Model_User *user = [[Model_User alloc] init];
-//    user.pk_user = [Model_User loadFromUserDefaults].pk_user;
-//    user.nickname = [Model_User loadFromUserDefaults].nickname;
-//    user.avatar_path = [Model_User loadFromUserDefaults].avatar_path;
-    
+
     Model_User *selfAccount = [Model_User loadFromUserDefaults];
     
     //将信息输入数组,并刷新
@@ -439,9 +447,6 @@
     [self.userChatTableView reloadData];
     [self tableViewIsScrollToBottom:YES withAnimated:YES];
     
-    if (!_netManager) {
-        _netManager = [[SRNet_Manager alloc] initWithDelegate:self];
-    }
     
     Model_User_Chat *newChat = [[Model_User_Chat alloc] init];
     [newChat setFk_user_from:selfAccount.pk_user];
@@ -462,7 +467,14 @@
         default:
             break;
     }
-    [_netManager addUserChat:newChat];
+    
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager addUserChatDic:newChat]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
+    
 }
 
 - (void)tableViewIsScrollToBottom: (BOOL) isScroll
@@ -495,21 +507,37 @@
 
 //详情BUTTON
 - (IBAction)tapDetailButton:(id)sender {
+    [SRTool showSRSheetInView:self.view
+                    withTitle:@"详细" message:@"选择想要做的操作"
+              withButtonArray:@[@"好友资料", @"支付款项"]
+              tapButtonHandle:^(int buttonIndex) {
+                  switch (buttonIndex) {
+                      case 0: {
+                          if (![self.user.pk_user isEqual:[Model_User loadFromUserDefaults].pk_user]) {
+                              [self.accountView loadWithUser:self.user withGroup:nil];
+                              [self.accountView show];
+                          }
+                      }
+                          break;
+                      case 1: {
+                          [SRTool showSRAlertViewWithTitle:@"提示"
+                                                   message:@"我们很快将会开通资金支付的功能,请各位小伙伴耐心等待哦~"
+                                         cancelButtonTitle:@"好的"
+                                          otherButtonTitle:nil
+                                     tapCancelButtonHandle:^(NSString *msgString) {
+                                         
+                                     } tapOtherButtonHandle:^(NSString *msgString) {
+                                         
+                                     }];
+                      }
+                          break;
+                      default:
+                          break;
+                  }
+              } tapCancelHandle:^{
+                  
+              }];
     
-    if (![self.user.pk_user isEqual:[Model_User loadFromUserDefaults].pk_user]) {
-        [self.accountView loadWithUser:self.user withGroup:nil];
-        [self.accountView show];
-    }
-    
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (0 == buttonIndex) {
-        //取消发送
-    } else {
-        //确认发送
-        [self sendImage];
-    }
 }
 
 
@@ -570,29 +598,38 @@
 {
     NSLog(@"复制");
 
-   
 
-    
-    
     UIPasteboard *pboard = [UIPasteboard generalPasteboard];
     
-    if (_longTapCell.chatMessageTextLabel_self) {
+    if (!_longTapCell.chatMessageTextLabel_self.isHidden ) {
         pboard.string = _longTapCell.chatMessageTextLabel_self.text;
-    }else if
-        (_longTapCell.chatMessageTextLabel)
+    }else
     {
         pboard.string = _longTapCell.chatMessageTextLabel.text;
     }
     
     //复制出的内容
-    NSLog(@"%@",_longTapCell.chatMessageTextLabel_self.text);
-    
-    NSLog(@"%@",_longTapCell.chatMessageTextLabel.text);
+    NSLog(@"%@",pboard.string);
  
 }
 
 - (void)handleResendCell:(id)sender {
     NSLog(@"handle resend cell");
+    
+    UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+    
+    if (!_longTapCell.chatMessageTextLabel_self.isHidden ) {
+        pboard.string = _longTapCell.chatMessageTextLabel_self.text;
+    }else
+    {
+        pboard.string = _longTapCell.chatMessageTextLabel.text;
+    }
+   
+    
+    [self sendMessageFromString:pboard.string];
+    
+    //复制出的内容
+    NSLog(@"%@",pboard.string);
 }
 
 
@@ -600,14 +637,14 @@
     return YES;
 }
 
-
+#pragma mark -- 上下拉刷新
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
 #pragma mark -- 下拉加载数据
 
     float contentoffsetY = _userChatTableView.contentOffset.y;
     
-    float contentsizeH = self.userChatTableView.contentSize.height;
+//    float contentsizeH = self.userChatTableView.contentSize.height;
 
     //判断如果下拉超过限定 就加载数据
     if (( 0 == (contentoffsetY))&&!(_mchatArray.count == _chatArray.count) ){
@@ -626,7 +663,7 @@
     //默认一次10个 这是最后一次加载大于0小于10的个数
     else if( _chatArray.count - _mchatArray.count > 0 && _chatArray.count - _mchatArray.count < 10  ){
 
-        _mchatArray = _chatArray;
+        _mchatArray = [[NSMutableArray alloc]initWithArray:_chatArray];
         [self.userChatTableView reloadData];
 
     }else if( _mchatArray.count == _chatArray.count )
@@ -636,59 +673,43 @@
     }
     
     
-    float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
-    
-    if ((contentsizeH - contentoffsetY) < self.userChatTableView.frame.size.height) {
-        //超过了列表的最底端,关闭提示开始进行显示
-        
-        //超出列表拖移的长度
-        float draggingLager = self.userChatTableView.frame.size.height - (contentsizeH - contentoffsetY);
-        //根据拖移的位置来更改label透明度
-        _closelable.alpha = (draggingLager - self.navigationController.navigationBar.frame.size.height - 20)/(self.userChatTableView.frame.size.height - draggingGetPoint - self.navigationController.navigationBar.frame.size.height - 20);
-        
-        
-    } else {
-        //如果没有超过最底端,则不进行提示展示
-        _closelable.alpha = 0.0;
-        
-        _closelable.text = @"继续上拉当前页";
-    }
-    
-    if ((self.userChatTableView.contentSize.height - self.userChatTableView.contentOffset.y) <  draggingGetPoint) {
-        //如果拖移位置超过预定点,更改提示文字
-        _closelable.text = @"释放关闭当前页";
-    } else {
-        _closelable.text = @"继续上拉当前页";
-    }
+//    float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
+//    
+//    if ((contentsizeH - contentoffsetY) < self.userChatTableView.frame.size.height) {
+//        //超过了列表的最底端,关闭提示开始进行显示
+//        
+//        //超出列表拖移的长度
+//        float draggingLager = self.userChatTableView.frame.size.height - (contentsizeH - contentoffsetY);
+//        //根据拖移的位置来更改label透明度
+//        _closelable.alpha = (draggingLager - self.navigationController.navigationBar.frame.size.height - 20)/(self.userChatTableView.frame.size.height - draggingGetPoint - self.navigationController.navigationBar.frame.size.height - 20);
+//        
+//        
+//    } else {
+//        //如果没有超过最底端,则不进行提示展示
+//        _closelable.alpha = 0.0;
+//        
+//        _closelable.text = @"继续上拉当前页";
+//    }
+//    
+//    if ((self.userChatTableView.contentSize.height - self.userChatTableView.contentOffset.y) <  draggingGetPoint) {
+//        //如果拖移位置超过预定点,更改提示文字
+//        _closelable.text = @"释放关闭当前页";
+//    } else {
+//        _closelable.text = @"继续上拉当前页";
+//    }
 
 }
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-
-    //根据屏幕的高度来自适应拖移关闭的高度
-    float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
-          
-    if ((self.userChatTableView.contentSize.height - self.userChatTableView.contentOffset.y) <  draggingGetPoint) {
-        //如果拖移位置超过预定点,则推出视图
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-}
-
-- (void)interfaceReturnDataSuccess:(id)jsonDic with:(int)interfaceType {
-    switch (interfaceType) {
-        case kAddUserChat: {
-            
-        }
-            break;
-            
-        default:
-            break;
-    }
-}
-
-- (void)interfaceReturnDataError:(int)interfaceType {
-    
-}
+//
+//- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+//
+//    //根据屏幕的高度来自适应拖移关闭的高度
+//    float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
+//          
+//    if ((self.userChatTableView.contentSize.height - self.userChatTableView.contentOffset.y) <  draggingGetPoint) {
+//        //如果拖移位置超过预定点,则推出视图
+//        [self.navigationController popViewControllerAnimated:YES];
+//    }
+//}
 
 /*
  #pragma mark - Navigation
