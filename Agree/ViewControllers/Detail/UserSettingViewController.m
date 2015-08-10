@@ -35,8 +35,6 @@
     BOOL _firstInputCheck;
     
     NSString *_openid;
-    
-    
 }
 
 @end
