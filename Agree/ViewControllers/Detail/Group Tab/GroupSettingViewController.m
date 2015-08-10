@@ -19,6 +19,8 @@
 #import "SRImageManager.h"
 #import "SRTool.h"
 
+
+
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
 @interface GroupSettingViewController ()<UICollectionViewDelegate> {
@@ -311,6 +313,8 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    
+
     
 }
 
