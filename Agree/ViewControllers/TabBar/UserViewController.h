@@ -10,10 +10,14 @@
 
 
 
-@interface UserViewController : UIViewController
+@interface UserViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *avatarButton;
-@property (weak, nonatomic) IBOutlet UILabel *accountLabel;
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+@property (weak, nonatomic) IBOutlet UITableView *settingTableVIew;
+@property (weak, nonatomic) IBOutlet UIView *upView;
+
+
 
 - (void)resetAvatar;
 
