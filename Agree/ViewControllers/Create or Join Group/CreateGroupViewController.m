@@ -16,12 +16,10 @@
 #import "SRImageManager.h"
 #import "UIImageView+WebCache.h"
 
-<<<<<<< HEAD
-=======
-#import <DQAlertView.h>
+//#import <DQAlertView.h>
+#import "SRTool.h"
 
->>>>>>> Gaddle
-@interface CreateGroupViewController () <UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate> {
+@interface CreateGroupViewController () <UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate> {
     Model_Group *_newGroup;
     UIImagePickerController *_imagePicker;
     
@@ -111,36 +109,38 @@
         _imagePicker.delegate = self;
         _imagePicker.allowsEditing = YES;
         _imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        //判断是否有摄像头
-        if(![UIImagePickerController isSourceTypeAvailable:_imagePicker.sourceType]) {
-            _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        }
     }
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择图片来源" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"拍照" otherButtonTitles:@"图片库", nil];
-        [sheet showInView:self.view];
+        [SRTool showSRSheetInView:self.view withTitle:@"选择图片来源" message:nil
+                  withButtonArray:@[@"拍照", @"相册"]
+                  tapButtonHandle:^(int buttonIndex) {
+                      UIImagePickerControllerSourceType sourceType;
+                      switch (buttonIndex) {
+                          case 0: {
+                              //拍照
+                              sourceType = UIImagePickerControllerSourceTypeCamera;
+                          }
+                              break;
+                          case 1: {
+                              //相册
+                              sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                          }
+                              break;
+                          default:
+                              break;
+                      }
+                      _imagePicker.sourceType = sourceType;
+                      [self presentViewController:_imagePicker animated:YES completion:nil];
+                  } tapCancelHandle:^{
+                      
+                  }];
+    } else {
+        _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [self presentViewController:_imagePicker animated:YES completion:nil];
     }
-    
-    NSLog(@"现在操作图片按钮");
 }
 
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    UIImagePickerControllerSourceType sourceType;
-    
-    
-    if (0 == buttonIndex) {
-        //直接拍照
-        sourceType = UIImagePickerControllerSourceTypeCamera;
-    } else if (1 == buttonIndex) {
-        //使用相册
-        sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    } else {
-        return;
-    }
-    _imagePicker.sourceType = sourceType;
-    [self presentViewController:_imagePicker animated:YES completion:nil];
-}
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [picker dismissViewControllerAnimated:YES completion:nil];
@@ -212,34 +212,15 @@
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     if (0 == self.groupNameTextField.text.length) {
-<<<<<<< HEAD
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:@"小组名称不能为空" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-=======
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:@"小组名称不能为空" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-//        [alertView show];
-        
-        
-        
-        
-        DQAlertView *alertView = [[DQAlertView alloc] initWithTitle:@"提示"
-                                                            message:@"小组名称不能为空哦~"
-                                                  cancelButtonTitle:@"好的"
-                                                   otherButtonTitle:nil];
-        
-//        [alertView.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:12]];
-        [alertView.titleLabel setFont:[UIFont boldSystemFontOfSize:16]];
-        [alertView.messageLabel setFont:[UIFont systemFontOfSize:12]];
-//        [alertView.messageLabel setFont:[UIFont systemFontOfSize:12]];
-        
-//        [UIFont preferredFontForTextStyle:uifonttext]
-        [alertView.messageLabel setTextColor:[UIColor darkGrayColor]];
-        
-        [alertView.titleLabel setTextColor:[UIColor darkGrayColor]];
-        
-        [alertView.cancelButton.titleLabel setFont:[UIFont systemFontOfSize:14]];
-        [alertView.cancelButton setTitleColor:self.view.tintColor forState:UIControlStateNormal];
->>>>>>> Gaddle
-        [alertView show];
+        [SRTool showSRAlertViewWithTitle:@"提示"
+                                 message:@"小组名称不能为空哦~"
+                       cancelButtonTitle:@"好的"
+                        otherButtonTitle:nil
+                   tapCancelButtonHandle:^(NSString *msgString) {
+                             
+                   } tapOtherButtonHandle:^(NSString *msgString) {
+                             
+                         }];
         return NO;
         
     } else {

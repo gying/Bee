@@ -11,7 +11,7 @@
 #import "GroupDetailViewController.h"
 #import "EModel_Chat.h"
 
-@interface GroupChatTableViewCell : UITableViewCell <UIActionSheetDelegate>
+@interface GroupChatTableViewCell : UITableViewCell 
 @property (weak, nonatomic) IBOutlet UILabel *chatMessageTextLabel;
 @property (weak, nonatomic) IBOutlet UIView *chatMessageBackground;
 @property (weak, nonatomic) IBOutlet UILabel *chatNicknameLabel;

@@ -12,6 +12,7 @@
 #import "MJExtension.h"
 #import "UIImageView+WebCache.h"
 #import "SRImageManager.h"
+#import "SRTool.h"
 
 
 @interface SelectFriendViewController () {
@@ -90,12 +91,7 @@
         if (0 == _relationStatus) {
             if ([_user.pk_user isEqualToNumber:[Model_User loadFromUserDefaults].pk_user]) {
                 //出现自己添加自己的情况
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                                    message:@"无法添加您自己的帐号,请重新查找帐号"
-                                                                   delegate:self
-                                                          cancelButtonTitle:@"确定"
-                                                          otherButtonTitles: nil];
-                [alertView show];
+                [SRTool showSRAlertOnlyTipWithTitle:@"提示" message:@"自己无法添加自己哦~"];
             } else {
                 //如果用户并不存在好友关系
                 //添加用户

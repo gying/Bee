@@ -11,7 +11,7 @@
 #import "EModel_User_Chat.h"
 
 
-@interface UserChatTableViewCell : UITableViewCell<UIActionSheetDelegate>
+@interface UserChatTableViewCell : UITableViewCell
 
 
 @property (weak, nonatomic) IBOutlet UIButton *messageBackgroundButton;

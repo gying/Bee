@@ -63,23 +63,11 @@
                                                               } onQueue:nil];
         }
     }
-    //    [[EaseMob sharedInstance].chatManager setIsAutoLoginEnabled:NO];
     
     //设置初始可滚动,这样才能激活刷新的方法
     self.groupCollectionView.alwaysBounceVertical = YES;
     // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
     self.groupCollectionView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh:)];
-    
-    
-    
-//    CustomIOSAlertView *alertView = [[CustomIOSAlertView alloc] init];
-//    [alertView setUseMotionEffects:TRUE];
-//    [alertView show];
-    
-//    DQAlertView *alertView = [[DQAlertView alloc] initWithTitle:@"hi" message:@"hihih" cancelButtonTitle:@"hihih" otherButtonTitle:@"hihihi"];
-//    
-//    [alertView.cancelButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-//    [alertView show];
 }
 
 - (void)refresh: (id)sender {
@@ -214,6 +202,7 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     GroupCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"GroupCollectionCell" forIndexPath:indexPath];
+
     if (indexPath.row == self.groupAry.count) {
         //最后一条信息
         //添加聚会按钮
@@ -221,19 +210,12 @@
     } else {
         
         Model_Group *theGroup = [self.groupAry objectAtIndex:indexPath.row];
-        EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:theGroup.em_id conversationType:eConversationTypeGroupChat];
-        [theGroup setChat_update:[NSNumber numberWithInteger:conversation.unreadMessagesCount]];
+        if (!cell.chatUpdate) {
+            cell.chatUpdate = YES;
+            EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:theGroup.em_id conversationType:eConversationTypeGroupChat];
+            [theGroup setChat_update:[NSNumber numberWithInteger:conversation.unreadMessagesCount]];
+        }
         [cell initCellWithGroup:theGroup isAddView:NO];
-        
-        //下载图片
-        NSURL *imageUrl = [SRImageManager groupFrontCoverImageImageFromOSS:theGroup.avatar_path];
-        
-        
-        [cell.groupImageView sd_setImageWithURL:imageUrl
-                                      completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-                                          [self setGroupAvatar:image atIndex:indexPath];
-                                      }];
-        
     }
     return cell;
 }

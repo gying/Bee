@@ -26,9 +26,11 @@
 #import "GroupChatTableViewCell.h"
 #import "CD_Group_User.h"
 
+#import "SRTool.h"
 
 
-@interface GroupChatTableViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIAlertViewDelegate, EMChatManagerDelegate> {
+
+@interface GroupChatTableViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, EMChatManagerDelegate> {
     UIImagePickerController *_imagePicker;
     UIImage *_chatPickImage;
     NSString *_imageName;
@@ -297,37 +299,36 @@
         _imagePicker = [[UIImagePickerController alloc] init];
         _imagePicker.delegate = self;
         _imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        //判断是否有摄像头
-        if(![UIImagePickerController isSourceTypeAvailable:_imagePicker.sourceType]) {
-            _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        }
     }
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择图片来源"
-                                                           delegate:self
-                                                  cancelButtonTitle:@"取消"
-                                             destructiveButtonTitle:@"拍照"
-                                                  otherButtonTitles:@"图片库", nil];
-        [sheet showInView:self.rootController.view];
-    }
-}
-
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    UIImagePickerControllerSourceType sourceType;
-    
-    if (0 == buttonIndex) {
-        //直接拍照
-        sourceType = UIImagePickerControllerSourceTypeCamera;
-    } else if (1 == buttonIndex) {
-        //使用相册
-        sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [SRTool showSRSheetInView:self.rootController.view withTitle:@"选择图片来源" message:nil
+                  withButtonArray:@[@"拍照", @"相册"]
+                  tapButtonHandle:^(int buttonIndex) {
+                      UIImagePickerControllerSourceType sourceType;
+                      switch (buttonIndex) {
+                          case 0: {
+                              //拍照
+                              sourceType = UIImagePickerControllerSourceTypeCamera;
+                          }
+                              break;
+                          case 1: {
+                              //相册
+                              sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                          }
+                              break;
+                          default:
+                              break;
+                      }
+                      _imagePicker.sourceType = sourceType;
+                      [self.rootController presentViewController:_imagePicker animated:YES completion:nil];
+                  } tapCancelHandle:^{
+                      
+                  }];
     } else {
-        return;
+        _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [self.rootController presentViewController:_imagePicker animated:YES completion:nil];
     }
-    _imagePicker.sourceType = sourceType;
-    [self.rootController presentViewController:_imagePicker animated:YES completion:nil];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -340,12 +341,13 @@
     _chatPickImage = [info valueForKey:@"UIImagePickerControllerOriginalImage"];
     
     //初始化图片发送确认警告框
-    UIAlertView *sendImageAlert = [[UIAlertView alloc] initWithTitle:@"确认信息"
-                                                             message:@"是否确认发送图片?"
-                                                            delegate:self
-                                                   cancelButtonTitle:@"取消"
-                                                   otherButtonTitles:@"确认", nil];
-    [sendImageAlert show];
+    [SRTool showSRAlertViewWithTitle:@"确认" message:@"你真的扼要发送这张图片吗?"
+                   cancelButtonTitle:@"我再想想" otherButtonTitle:@"是的"
+               tapCancelButtonHandle:^(NSString *msgString) {
+                   
+               } tapOtherButtonHandle:^(NSString *msgString) {
+                   [self sendImage];
+               }];
 }
 
 - (void)sendImage {
@@ -380,15 +382,6 @@
 
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (0 == buttonIndex) {
-        //取消发送
-    } else {
-        //确认发送
-        [self sendImage];
-    }
-    
-}
 
 - (NSNumber *)cellHeightFromMessage:(EModel_Chat *)message {
     id<IEMMessageBody> msgBody = message.message.messageBodies.firstObject;
@@ -530,39 +523,13 @@
     }
 }
 
-//- (void)tableViewIsScrollToBottom: (BOOL)isScroll
-//                     withAnimated: (BOOL)isAnimated {
-//    
-//    float headHight = 0;
-//    for (EModel_Chat *message in _mchatArray) {
-//        headHight += [self cellHeightFromMessage:message].floatValue;
-//    }
-//    
-//    headHight = self.chatTableView.frame.size.height - headHight;
-//    if (headHight <= 0) {
-//        headHight = 0;
-//    }
-//    
-//    self.chatTableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.chatTableView.frame.size.width, 100)];
-//    if (isScroll) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            NSInteger s = [self.chatTableView numberOfSections];
-//            if (s<1) return;
-//            NSInteger r = [self.chatTableView numberOfRowsInSection:s-1];
-//            if (r<1) return;
-//            NSIndexPath *ip = [NSIndexPath indexPathForRow:r-1 inSection:s-1];
-//            
-//            [self.chatTableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionBottom animated:isAnimated];
-//        });
-//    }
-//}
 #pragma mark -- 上下拉刷新
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 #pragma mark -- 下拉加载数据
 
     float contentoffsetY = _chatTableView.contentOffset.y;
     
-    float contentsizeH = self.chatTableView.contentSize.height;
+//    float contentsizeH = self.chatTableView.contentSize.height;
 
     //判断如果下拉超过限定 就加载数据
     if ((0 == (contentoffsetY))&&!(_mchatArray.count == _chatArray.count)) {
@@ -586,47 +553,8 @@
     }else if( self.mchatArray.count == self.chatArray.count) {
         
     }
-    
-    
-    
-    
-//
-//    float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
-//    
-//    if ((contentsizeH - contentoffsetY) < self.chatTableView.frame.size.height) {
-//        //超过了列表的最底端,关闭提示开始进行显示
-//        
-//        //超出列表拖移的长度
-//        float draggingLager = self.chatTableView.frame.size.height - (contentsizeH - contentoffsetY);
-//        //根据拖移的位置来更改label透明度
-//        _closelable.alpha = (draggingLager - self.navigationController.navigationBar.frame.size.height - 20)/(self.chatTableView.frame.size.height - draggingGetPoint - self.navigationController.navigationBar.frame.size.height - 20);
-    
-        
-//    } else {
-//        //如果没有超过最底端,则不进行提示展示
-//        _closelable.alpha = 0.0;
-//        
-//        _closelable.text = @"继续上拉当前页";
-//    }
-//    
-//    if ((self.chatTableView.contentSize.height - self.chatTableView.contentOffset.y) < draggingGetPoint) {
-//        //如果拖移位置超过预定点,更改提示文字
-//        _closelable.text = @"释放关闭当前页";
-//    } else {
-//        _closelable.text = @"继续上拉当前页";
-//    }
 }
 
-
-//-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-//    //根据屏幕的高度来自适应拖移关闭的高度
-//    float draggingGetPoint = [UIScreen mainScreen].bounds.size.height - 220;
-//    
-//    if ((self.chatTableView.contentSize.height - self.chatTableView.contentOffset.y) < draggingGetPoint) {
-//        //如果拖移位置超过预定点,则推出视图
-//        [self.rootController popController];
-//    }
-//}
 
 /*
 #pragma mark - Navigation

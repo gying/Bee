@@ -18,6 +18,9 @@
 @property (weak, nonatomic) IBOutlet UIView *statusView;
 @property (weak, nonatomic) IBOutlet UIView *lineView;
 
+@property BOOL initDone;
+@property BOOL chatUpdate;
+
 - (void)initCellWithGroup: (Model_Group *)group isAddView: (BOOL)isAddView;
 - (void)initAddView;
 

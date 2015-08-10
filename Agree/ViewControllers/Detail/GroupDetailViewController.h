@@ -11,9 +11,6 @@
 #import "Model_Party.h"
 #import "Model_Photo.h"
 #import "SRAccountView.h"
-//#import "GroupChatTableViewCell.h"
-
-#import <MMDrawerController.h>
 
 
 
@@ -43,11 +40,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *view3Label;
 
 @property (weak, nonatomic) IBOutlet UIView *backView2;
-
-
 @property (weak, nonatomic) IBOutlet UIView *backView3;
-
-
 
 @property (nonatomic, strong)Model_Party *chooseParty;
 @property (nonatomic, strong)SRAccountView *accountView;

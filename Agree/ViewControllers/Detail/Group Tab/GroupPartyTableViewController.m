@@ -118,7 +118,7 @@
     [self.partyTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (void)detailChange:(Model_Party *)party {
+- (void)detailChange:(Model_Party *)party with:(int)type {
     for (Model_Party *theParty in self.partyArray) {
         if ([theParty.pk_party isEqualToString:party.pk_party]) {
             theParty.relationship = party.relationship;
@@ -127,7 +127,7 @@
     [self.partyTableView reloadData];
 }
 
-- (void)cancelParty:(Model_Party *)party {
+- (void)cancelParty:(Model_Party *)party with:(int)type {
     Model_Party *cancelParty;
     for (Model_Party *theParty in self.partyArray) {
         if ([theParty.pk_party isEqualToString:party.pk_party]) {
@@ -139,6 +139,7 @@
     [self reloadTipView:self.partyArray.count];
     [self.partyTableView reloadData];
 }
+
 
 
 @end

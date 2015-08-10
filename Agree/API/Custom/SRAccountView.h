@@ -13,7 +13,7 @@
 
 @end
 
-@interface SRAccountView : UIView <UIAlertViewDelegate>
+@interface SRAccountView : UIView
 
 @property (nonatomic, strong)UIView *msgView;
 @property (nonatomic, strong)UIButton *backButton;

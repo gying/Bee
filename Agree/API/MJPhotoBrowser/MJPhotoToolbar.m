@@ -10,8 +10,9 @@
 #import "MJPhoto.h"
 #import <SVProgressHUD.h>
 //#import "MBProgressHUD+Add.h"
+#import "SRTool.h"
 
-@interface MJPhotoToolbar() <UIAlertViewDelegate>
+@interface MJPhotoToolbar()
 {
     // 显示页码
     UILabel *_indexLabel;
@@ -66,26 +67,40 @@
     [self addSubview:_delImageBtn];
 }
 
-- (void)saveImage
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        MJPhoto *photo = _photos[_currentPhotoIndex];
-        UIImageWriteToSavedPhotosAlbum(photo.image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
-    });
+- (void)saveImage {
+    [SRTool showSRAlertViewWithTitle:@"提示"
+                             message:@"真的要把图片保存到自己的手机相册中吗?"
+                   cancelButtonTitle:@"不,我再想想"
+                    otherButtonTitle:@"是的"
+               tapCancelButtonHandle:^(NSString *msgString) {
+                   
+               } tapOtherButtonHandle:^(NSString *msgString) {
+                   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                       MJPhoto *photo = _photos[_currentPhotoIndex];
+                       UIImageWriteToSavedPhotosAlbum(photo.image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+                   });
+               }];
+    
 }
 
 - (void)delImage {
     //图片删除确认警告框
-    UIAlertView *sendImageAlert = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                             message:@"是否确认删除图片?"
-                                                            delegate:self
-                                                   cancelButtonTitle:@"取消"
-                                                   otherButtonTitles:@"确认", nil];
-    [sendImageAlert show];
+    [SRTool showSRAlertViewWithTitle:@"提示"
+                             message:@"真的要把这张图片删掉?"
+                   cancelButtonTitle:@"不,我再想想"
+                    otherButtonTitle:@"是的"
+               tapCancelButtonHandle:^(NSString *msgString) {
+                   
+               } tapOtherButtonHandle:^(NSString *msgString) {
+                   [self.delegate hide];
+                   dispatch_async(dispatch_get_main_queue(), ^{
+                       MJPhoto *photo = _photos[_currentPhotoIndex];
+                       [photo.delegate deletePhoto:_currentPhotoIndex];
+                   });
+               }];
 }
 
-- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
-{
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
     if (error) {
         [SVProgressHUD showErrorWithStatus:@"保存失败"];
     } else {
@@ -93,12 +108,10 @@
         photo.save = YES;
         _saveImageBtn.enabled = NO;
         [SVProgressHUD showSuccessWithStatus:@"成功保存到相册"];
-        
     }
 }
 
-- (void)setCurrentPhotoIndex:(NSUInteger)currentPhotoIndex
-{
+- (void)setCurrentPhotoIndex:(NSUInteger)currentPhotoIndex {
     _currentPhotoIndex = currentPhotoIndex;
     
     // 更新页码
@@ -114,25 +127,6 @@
         _delImageBtn.enabled = NO;
     } else {
         _delImageBtn.enabled = YES;
-    }
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    switch (buttonIndex) {
-        case 0: {   //取消
-            
-        }
-            break;
-        case 1: {   //确定
-            [self.delegate hide];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                MJPhoto *photo = _photos[_currentPhotoIndex];
-                [photo.delegate deletePhoto:_currentPhotoIndex];
-            });
-        }
-            break;
-        default:
-            break;
     }
 }
 

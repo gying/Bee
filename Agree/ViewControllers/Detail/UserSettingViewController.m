@@ -16,10 +16,11 @@
 #import "SRImageManager.h"
 
 #import "AppDelegate.h"
+#import "SRTool.h"
 
 
 
-@interface UserSettingViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UITextFieldDelegate, UIAlertViewDelegate> {
+@interface UserSettingViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate> {
     Model_User *_userInfo;
     UIImagePickerController *_imagePicker;
     
@@ -158,13 +159,8 @@
             } else {
                 //两次密码输入不一样
                 _password = nil;
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                                    message:@"您输入的两次密码并不相同,请重新进行输入."
-                                                                   delegate:self
-                                                          cancelButtonTitle:@"确定"
-                                                          otherButtonTitles:nil];
+                [SRTool showSRAlertOnlyTipWithTitle:@"提示" message:@"你输入的两次密码是不一样的\n为了保证安全,请重新输入~"];
                 self.passwordRemarkLabel.text = @"请输入想要设置的密码";
-                [alertView show];
                 [self.passwordTextField becomeFirstResponder];
                 self.passwordTextField.text = nil;
                 _firstInputCheck = TRUE;
@@ -178,13 +174,8 @@
 
             _firstInputCheck = TRUE;
         }else {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                                message:@"您输入的密码不正确,请重新输入."
-                                                               delegate:self
-                                                      cancelButtonTitle:@"确定"
-                                                      otherButtonTitles:nil];
+            [SRTool showSRAlertOnlyTipWithTitle:@"提示" message:@"密码不对,重新输入.."];
             self.passwordRemarkLabel.text = @"请输入原密码";
-            [alertView show];
             self.passwordTextField.text = nil;
             [self.passwordTextField resignFirstResponder];
             _firstInputCheck = FALSE;
@@ -199,47 +190,37 @@
         _imagePicker.delegate = self;
         _imagePicker.allowsEditing = YES;
         _imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        //判断是否有摄像头
-        if(![UIImagePickerController isSourceTypeAvailable:_imagePicker.sourceType]) {
-            _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        }
     }
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择图片来源" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"拍照" otherButtonTitles:@"图片库", nil];
-        [sheet showInView:self.view];
-    }
-    
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
-    if (2 == actionSheet.tag) {
-        //退出界面选择
-        if (0 == buttonIndex) {
-            //保存退出
-            _isQuit = TRUE;
-            [self saveAccountData];
-        } else if (1 == buttonIndex) {
-            //直接退出
-            [self.navigationController popViewControllerAnimated:YES];
-        } else {
-            return;
-        }
+        [SRTool showSRSheetInView:self.view withTitle:@"选择图片来源" message:nil
+                  withButtonArray:@[@"拍照", @"相册"]
+                  tapButtonHandle:^(int buttonIndex) {
+                      UIImagePickerControllerSourceType sourceType;
+                      switch (buttonIndex) {
+                          case 0: {
+                              //拍照
+                              sourceType = UIImagePickerControllerSourceTypeCamera;
+                          }
+                              break;
+                          case 1: {
+                              //相册
+                              sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                          }
+                              break;
+                          default:
+                              break;
+                      }
+                      _imagePicker.sourceType = sourceType;
+                      [self presentViewController:_imagePicker animated:YES completion:nil];
+                  } tapCancelHandle:^{
+                      
+                  }];
     } else {
-        UIImagePickerControllerSourceType sourceType;
-        if (0 == buttonIndex) {
-            //直接拍照
-            sourceType = UIImagePickerControllerSourceTypeCamera;
-        } else if (1 == buttonIndex) {
-            //使用相册
-            sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        } else {
-            return;
-        }
-        _imagePicker.sourceType = sourceType;
+        _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [self presentViewController:_imagePicker animated:YES completion:nil];
     }
+    
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -323,45 +304,13 @@
     //发送消息到客户端执行的方法
     NSLog(@"发送消息到客户端！！！！！！！！！！！！！！！！！！！！！");
     
-    if([req isKindOfClass:[GetMessageFromWXReq class]])
-    {
-        //        GetMessageFromWXReq *temp = (GetMessageFromWXReq *)req;
-        //
-        //        // 微信请求App提供内容， 需要app提供内容后使用sendRsp返回
-        //        NSString *strTitle = [NSString stringWithFormat:@"微信请求App提供内容"];
-        //        NSString *strMsg = [NSString stringWithFormat:@"openID: %@", temp.openID];
-        //
-        //        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        //        alert.tag = 1000;
-        //        [alert show];
+    if([req isKindOfClass:[GetMessageFromWXReq class]]) {
+
         
-    }
-    else if([req isKindOfClass:[ShowMessageFromWXReq class]])
-    {
-        //        ShowMessageFromWXReq* temp = (ShowMessageFromWXReq*)req;
-        //        WXMediaMessage *msg = temp.message;
-        //
-        //        //显示微信传过来的内容
-        //        WXAppExtendObject *obj = msg.mediaObject;
-        //
-        //        NSString *strTitle = [NSString stringWithFormat:@"微信请求App显示内容"];
-        //        NSString *strMsg = [NSString stringWithFormat:@"openID: %@, 标题：%@ \n内容：%@ \n附带信息：%@ \n缩略图:%u bytes\n附加消息:%@\n", temp.openID, msg.title, msg.description, obj.extInfo, msg.thumbData.length, msg.messageExt];
-        //
-        //        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        //        [alert show];
+    } else if([req isKindOfClass:[ShowMessageFromWXReq class]]) {
+
         
-    }
-    else if([req isKindOfClass:[LaunchFromWXReq class]])
-    {
-        //        LaunchFromWXReq *temp = (LaunchFromWXReq *)req;
-        //        WXMediaMessage *msg = temp.message;
-        //
-        //        //从微信启动App
-        //        NSString *strTitle = [NSString stringWithFormat:@"从微信启动"];
-        //        NSString *strMsg = [NSString stringWithFormat:@"openID: %@, messageExt:%@", temp.openID, msg.messageExt];
-        //
-        //        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        //        [alert show];
+    } else if([req isKindOfClass:[LaunchFromWXReq class]]) {
         
     }
 }
@@ -435,13 +384,7 @@
         
         if ([_userInfo.wechat_id isEqualToString:openid]) {
             //重复绑定
-            UIAlertView *wechatAlertView = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                                      message:@"您已经绑定了当前的微信号码"
-                                                                     delegate:self
-                                                            cancelButtonTitle:@"确定"
-                                                            otherButtonTitles:nil];
-            wechatAlertView.tag = 2;
-            [wechatAlertView show];
+            [SRTool showSRAlertOnlyTipWithTitle:@"提示" message:@"你已经绑定了该微信号码..."];
         } else {
             Model_User *checkWechatUser = [[Model_User alloc] init];
             checkWechatUser.wechat_id = [uidDataDic objectForKey:@"openid"];
@@ -451,13 +394,15 @@
                                         if (jsonDic) {
                                             //使用微信openid的账户存在
                                             _openid = openid;
-                                            UIAlertView *wechatAlertView2 = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                                                                       message:@"当前微信号码已经绑定了其他必聚帐号,是否要解绑其他帐号,以绑定到当前帐号?"
-                                                                                                      delegate:self
-                                                                                             cancelButtonTitle:@"取消"
-                                                                                             otherButtonTitles:@"确定", nil];
-                                            wechatAlertView2.tag = 3;
-                                            [wechatAlertView2 show];
+                                            [SRTool showSRAlertViewWithTitle:@"提示" message:@"该微信已经绑定了其他帐号\n是否解绑来绑定到这个帐号呢?"
+                                                           cancelButtonTitle:@"我再想想"
+                                                            otherButtonTitle:@"是的"
+                                                       tapCancelButtonHandle:^(NSString *msgString) {
+                                                           
+                                                       } tapOtherButtonHandle:^(NSString *msgString) {
+                                                           _userInfo.wechat_id = _openid;
+                                                           _isUpdateData = YES;
+                                                       }];
                                             
                                         } else {
                                             //使用微信openid的账户不存在
@@ -603,74 +548,46 @@
 - (IBAction)pressedTheBackButton:(id)sender {
     if (_isUpdateData || _isUpdateAvatar) {
         //资料已更改
-        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"用户资料已更改" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"保存退出" otherButtonTitles:@"不保存退出", nil];
-        sheet.tag = 2;
-        [sheet showInView:self.view];
+        [SRTool showSRSheetInView:self.view withTitle:@"提示"
+                          message:@"用户资料已经被更改"
+                  withButtonArray:@[@"保存退出", @"不保存,直接退出"]
+                  tapButtonHandle:^(int buttonIndex) {
+                      switch (buttonIndex) {
+                          case 0: {
+                              //保存退出
+                              _isQuit = TRUE;
+                              [self saveAccountData];
+                          }
+                              break;
+                          case 1: {
+                              //直接退出
+                              [self.navigationController popViewControllerAnimated:YES];
+                          }
+                              break;
+                          default:
+                              break;
+                      }
+                  } tapCancelHandle:^{
+                      
+                  }];
+        
     } else {
         //资料未更改
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    //tag:
-    //1.绑定手机
-    
-    switch (alertView.tag) {
-        case 1: {
-            //绑定手机
-            switch (buttonIndex) {
-                case 0: {   //取消
-                    
-                }
-                    break;
-                case 1: {   //确定
-                    [self performSegueWithIdentifier:@"BandPhone" sender:self];
-                }
-                    break;
-                default:
-                    break;
-            }
-        }
-            break;
-        case 2: {
-            //微信重复绑定提示
-        }
-            break;
-        case 3: {
-            //微信帐号已经绑定到其他帐号的提示
-            switch (buttonIndex) {
-                case 0: {   //取消
-                    
-                }
-                    break;
-                case 1: {   //确定
-//                    [self performSegueWithIdentifier:@"BandPhone" sender:self];
-                    _userInfo.wechat_id = _openid;
-                    _isUpdateData = YES;
-                }
-                    break;
-                default:
-                    break;
-            }
-        }
-            break;
-        default:
-            break;
-    }
-    
-}
-
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     if ([@"BandPhone" isEqual:identifier]) {
         if (_userInfo.phone) {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                                message:@"您已经绑定了手机号码,是否重新绑定另一个号码?"
-                                                               delegate:self
-                                                      cancelButtonTitle:@"取消"
-                                                      otherButtonTitles:@"确定", nil];
-            alertView.tag = 1;
-            [alertView show];
+            [SRTool showSRAlertViewWithTitle:@"提示" message:@"你已经绑定了一个号码,\n真的要重新绑定一个吗?"
+                           cancelButtonTitle:@"我再想想" otherButtonTitle:@"是的"
+                       tapCancelButtonHandle:^(NSString *msgString) {
+                           
+                       } tapOtherButtonHandle:^(NSString *msgString) {
+                           [self performSegueWithIdentifier:@"BandPhone" sender:self];
+                       }];
+            
             return NO;
         }
         return YES;

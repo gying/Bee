@@ -511,6 +511,7 @@
                          [self.peopleTableView setFrame:CGRectMake(600, self.peopleTableView.frame.origin.y, self.peopleTableView.frame.size.width, self.peopleTableView.frame.size.height)];
                      }];
 }
+
 //-(void)closeview
 //{
 //    if((self.peopleButton.titleLabel.text = @"关闭")) {

@@ -10,6 +10,7 @@
 #import "GroupPeopleTableViewCell.h"
 #import "SRNet_Manager.h"
 #import <SVProgressHUD.h>
+#import "Model_User.h"
 
 #import "MJExtension.h"
 
@@ -41,6 +42,23 @@
     
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    Model_Group_User *relation = [self.relationshipAry objectAtIndex:indexPath.row];
+    
+    if (relation) {
+        
+        if (![[Model_User loadFromUserDefaults].pk_user isEqualToNumber:relation.fk_user]) {
+            //点选的不是自己
+            [self.rootController.accountView show];
+            Model_User *sendUser = [[Model_User alloc] init];
+            sendUser.pk_user = relation.fk_user;
+            sendUser.nickname = relation.nickname;
+            sendUser.avatar_path = relation.avatar_path;
+            [self.rootController.accountView loadWithUser:sendUser withGroup:self.rootController.group];
+        }
+    }
+}
+
 - (void)loadPeopleDataWithGroup: (Model_Group *)group {
     //读取小组全部的关系
     [SRNet_Manager requestNetWithDic:[SRNet_Manager getAllRelationFromGroupDic:group]
@@ -53,7 +71,6 @@
                                 } else {
                                     
                                 }
-                                
                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                 
                             }];

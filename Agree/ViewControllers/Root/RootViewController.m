@@ -71,9 +71,8 @@
     [self.phoneRegButton setAlpha:0.9];
     [self.weChatLoginButton setAlpha:0.9];
     [self.weChatRegButton setAlpha:0.9];
-  
-
 }
+
 - (IBAction)loginButton:(id)sender {
     NSLog(@"登陆");
     self.loginRegView.hidden = YES;

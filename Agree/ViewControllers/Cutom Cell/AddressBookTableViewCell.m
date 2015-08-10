@@ -219,7 +219,7 @@
         controller.messageComposeDelegate = self.contactsDetailTableVC;
 
         controller.recipients = [NSArray arrayWithObject:firstPhone];
-        controller.body = @"短信输入框默认内容";
+        controller.body = @"亲~ 快来必聚哦~ 我们都在这里聚会呢. 猛按->https://itunes.apple.com/cn/app/bi-ju/id1016321917?l=zh&ls=1&mt=8";
         
         [self.contactsDetailTableVC presentViewController:controller animated:YES completion:nil];
 }

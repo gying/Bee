@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "ScheduleTableViewController.h"
 #import "APService.h"
 #import "SRNet_Manager.h"
 #import <SVProgressHUD.h>
@@ -19,6 +18,7 @@
 #import "EaseMob.h"
 #import "WXApi.h"
 #import "SRTool.h"
+
 
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
@@ -178,10 +178,11 @@
                 //标注主日程更新
                 [SRTool addPartyUpdateTip:1];
                 
-            } else if (self.scheduleDelegate) {
-                //如果在主日程界面
-                //则在主日程进行刷新操作
-                [self.scheduleDelegate refresh:nil];
+//            }
+//            else if (self.scheduleDelegate) {
+//                //如果在主日程界面
+//                //则在主日程进行刷新操作
+//                [self.scheduleDelegate refresh:nil];
             } else {
                 [self.groupDelegate addGroupPartyUpdateStatus:pk_group];
                 
@@ -274,7 +275,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
- 
 
     //清理sdimage
 //    [[SDImageCache sharedImageCache] clearDisk];
@@ -340,11 +340,6 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    
-    //侧边栏
-
-
-    
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     

@@ -22,19 +22,8 @@ PODS:
     - AFNetworking/NSURLSession
   - DQAlertView (1.2.1)
   - EaseMobSDK (2.1.9)
-  - MJRefresh (2.3.2)
-  - MMDrawerController (0.5.7):
-    - MMDrawerController/Core (= 0.5.7)
-    - MMDrawerController/MMDrawerBarButtonItem (= 0.5.7)
-    - MMDrawerController/MMDrawerVisualStates (= 0.5.7)
-    - MMDrawerController/Subclass (= 0.5.7)
-  - MMDrawerController/Core (0.5.7)
-  - MMDrawerController/MMDrawerBarButtonItem (0.5.7):
-    - MMDrawerController/Core
-  - MMDrawerController/MMDrawerVisualStates (0.5.7):
-    - MMDrawerController/Core
-  - MMDrawerController/Subclass (0.5.7):
-    - MMDrawerController/Core
+  - JGActionSheet (1.0.4)
+  - MJRefresh (2.4.1)
   - SDWebImage (3.7.3):
     - SDWebImage/Core (= 3.7.3)
   - SDWebImage/Core (3.7.3)
@@ -44,30 +33,21 @@ PODS:
 DEPENDENCIES:
   - AFNetworking (~> 2.0)
   - DQAlertView (~> 1.2.1)
-  - EaseMobSDK (from `https://github.com/easemob/sdk-ios-cocoapods.git`)
+  - EaseMobSDK
+  - JGActionSheet
   - MJRefresh
-  - MMDrawerController (~> 0.5.7)
   - SDWebImage (~> 3.7)
   - Shimmer
   - SVProgressHUD
-
-EXTERNAL SOURCES:
-  EaseMobSDK:
-    :git: https://github.com/easemob/sdk-ios-cocoapods.git
-
-CHECKOUT OPTIONS:
-  EaseMobSDK:
-    :commit: 4ec299391d5072fe27a548b190c9b77d9fe58c5b
-    :git: https://github.com/easemob/sdk-ios-cocoapods.git
 
 SPEC CHECKSUMS:
   AFNetworking: 05edc0ac4c4c8cf57bcf4b84be5b0744b6d8e71e
   DQAlertView: 438c2799ae5437f2f9683f8a627314aa91eb5032
   EaseMobSDK: cc8415cb99a65debf4711fa2c9c349fd5c843299
-  MJRefresh: 0f6f5e8387970607c26080b44058b229a23065d7
-  MMDrawerController: 7a4cf8e25596bf2434e03ce50d22a8608ddee6a1
+  JGActionSheet: 7c6a947dca93a5c6031032ab76e157b19087d593
+  MJRefresh: 55bedd6a85e23878db77ddd3889bfde678a905f8
   SDWebImage: 1d2b1a1efda1ade1b00b6f8498865f8ddedc8a84
   Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
   SVProgressHUD: 748080e4f36e603f6c02aec292664239df5279c1
 
-COCOAPODS: 0.37.2
+COCOAPODS: 0.38.2
