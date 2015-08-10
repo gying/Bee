@@ -11,13 +11,14 @@
 #import <SVProgressHUD.h>
 #import "MJExtension.h"
 #import "SRImageManager.h"
+#import "SRTool.h"
 
 
 #define kCountDownTime 31
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface RootPhoneRegViewController ()<UINavigationControllerDelegate,UITextFieldDelegate, UIAlertViewDelegate> {
+@interface RootPhoneRegViewController ()<UINavigationControllerDelegate,UITextFieldDelegate> {
     BOOL _sendCodeDone;
     NSString *_phoneNum;
     NSString *_code;
@@ -124,14 +125,17 @@
                                                 //查到用户
                                                 _phoneAccount = [[Model_User objectArrayWithKeyValuesArray:(NSArray *)jsonDic] firstObject];
                                                 
-                                                //已经存在用户,则跳出提示,是否使用帐号进行登录
-                                                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                                                                    message:@"已经存在相关的手机帐号,是否使用已经存在的帐号进行登录?"
-                                                                                                   delegate:self
-                                                                                          cancelButtonTitle:@"取消"
-                                                                                          otherButtonTitles:@"确定", nil];
-                                                alertView.tag = 1;
-                                                [alertView show];
+                                                [SRTool showSRAlertViewWithTitle:@"提示"
+                                                                         message:@"这个手机已经绑定了另外一个帐号,\n是否直接登录呢?" cancelButtonTitle:@"我再想想"
+                                                                otherButtonTitle:@"好!" tapCancelButtonHandle:^(NSString *msgString) {
+                                                                    
+                                                                } tapOtherButtonHandle:^(NSString *msgString) {
+                                                                    [_phoneAccount saveToUserDefaults];
+                                                                    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+                                                                    UITabBarController *rootController = [sb instantiateViewControllerWithIdentifier:@"rootTabbar"];
+                                                                    [self presentViewController:rootController animated:YES completion:nil];
+                                                                    [SVProgressHUD showSuccessWithStatus:@"查找到用户,正在进行登录" maskType:SVProgressHUDMaskTypeGradient];
+                                                                }];
                                                 
                                                 
                                             } else {
@@ -253,35 +257,6 @@
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    switch (alertView.tag) {
-        case 1: {
-            switch (buttonIndex) {
-                case 0: {
-                    
-                }
-                    
-                    break;
-                    
-                default: {
-                    [_phoneAccount saveToUserDefaults];
-                    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-                    UITabBarController *rootController = [sb instantiateViewControllerWithIdentifier:@"rootTabbar"];
-                    [self presentViewController:rootController animated:YES completion:nil];
-                    [SVProgressHUD showSuccessWithStatus:@"查找到用户,正在进行登录" maskType:SVProgressHUDMaskTypeGradient];
-                }
-                    break;
-            }
-            
-        }
-            break;
-            
-        default:
-            break;
-    }
-}
-
 
 #pragma mark - Navigation
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {

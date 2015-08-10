@@ -122,11 +122,11 @@ static NSString * const reuseIdentifier = @"GroupCollectionCell";
                                  message:@"我们的公开聚会功能还在每日每夜的赶工,请期待~"
                        cancelButtonTitle:@"好的"
                         otherButtonTitle:nil
-                         tapCancelButton:^(NSString *msgString) {
+                   tapCancelButtonHandle:^(NSString *msgString) {
                              
-                         } tapOtherButton:^(NSString *msgString) {
+                   } tapOtherButtonHandle:^(NSString *msgString) {
                              
-                         }];
+                   }];
         return NO;
     }
     return YES;

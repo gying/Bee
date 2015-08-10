@@ -8,8 +8,9 @@
 
 #import "PartyMapViewController.h"
 #import <BaiduMapAPI/BMapKit.h>
+#import "SRTool.h"
 
-@interface PartyMapViewController ()<BMKLocationServiceDelegate, UIActionSheetDelegate,BMKMapViewDelegate> {
+@interface PartyMapViewController ()<BMKLocationServiceDelegate, BMKMapViewDelegate> {
     BMKMapView *_bdMapView;
     BMKLocationService *_locService;
     
@@ -65,8 +66,7 @@
     self.availableMaps = [[NSMutableArray alloc] init];
 }
 
-- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation
-{
+- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation {
     
 
    BMKPinAnnotationView *newAnnotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil];
@@ -77,7 +77,7 @@
     [newAnnotationView setContentMode:UIViewContentModeScaleAspectFit];
     customButton = [[UIButton alloc]initWithFrame:CGRectMake(-6.55,-3,45,45)];
     customButton.backgroundColor = [UIColor clearColor];
-    [customButton addTarget:self action:@selector(daohang) forControlEvents:UIControlEventTouchUpInside];
+    [customButton addTarget:self action:@selector(navi) forControlEvents:UIControlEventTouchUpInside];
     [customButton setImage:[UIImage imageNamed:@"sr_map_point"] forState:UIControlStateNormal];
 //    BMKActionPaopaoView * paopaoView = [[BMKActionPaopaoView alloc]initWithCustomView:customButton];
 //    newAnnotationView.paopaoView = paopaoView;
@@ -87,21 +87,10 @@
     
     
 }
--(void)daohang
-{
-    NSLog(@"导航");
-    [self availableMapsApps];
-    UIActionSheet *action = [[UIActionSheet alloc] initWithTitle:@"选择导航方式"
-                                                        delegate:self
-                                               cancelButtonTitle:@"取消"
-                                          destructiveButtonTitle:nil
-                                               otherButtonTitles:nil];
+
+-(void)navi {
+    [self topNavi:nil];
     
-    
-    for (NSDictionary *dic in self.availableMaps) {
-        [action addButtonWithTitle:[NSString stringWithFormat:@"%@", dic[@"name"]]];
-    }
-    [action showInView:self.view];
 }
 
 
@@ -115,19 +104,6 @@
     
     
     _userLocation = userLocation;
-//    if (!_mapViewSetCenter) {
-//        _mapViewSetCenter = true;
-//        [self performSelector:@selector(setMapViewZoomLevel:)
-//                   withObject:@15
-//                   afterDelay:0.5];
-//        [_bdMapView setCenterCoordinate:CLLocationCoordinate2DMake(userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude) animated:YES];
-//    }
-    
-//    //设置用户默认位置
-//    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithDouble:userLocation.location.coordinate.latitude] forKey:@"user_location_lat"];
-//    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithDouble:userLocation.location.coordinate.longitude]  forKey:@"user_location_long"];
-    
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -135,44 +111,26 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)topNavi:(id)sender {
-//    NSMutableArray *nodesArray = [[NSMutableArray alloc] initWithCapacity: 2];
-//    
-//    //起点
-//    BNRoutePlanNode *startNode = [[BNRoutePlanNode alloc] init];
-//    startNode.pos = [[BNPosition alloc] init];
-//    startNode.pos.x = 113.936392;
-//    startNode.pos.y = 22.547058;
-//    startNode.pos.eType = BNCoordinate_BaiduMapSDK;
-//    [nodesArray addObject:startNode];
-//    
-//    //终点
-//    BNRoutePlanNode *endNode = [[BNRoutePlanNode alloc] init];
-//    endNode.pos = [[BNPosition alloc] init];
-//    endNode.pos.x = 114.077075;
-//    endNode.pos.y = 22.543634;
-//    endNode.pos.eType = BNCoordinate_BaiduMapSDK;
-//    [nodesArray addObject:endNode];
-//    
-//    // 发起算路
-//    [BNCoreServices_RoutePlan  startNaviRoutePlan: BNRoutePlanMode_Recommend naviNodes:nodesArray time:nil delegete:self    userInfo:nil];
-    
-    
-    
     [self availableMapsApps];
-    UIActionSheet *action = [[UIActionSheet alloc] initWithTitle:@"选择导航方式"
-                                                        delegate:self
-                                               cancelButtonTitle:@"取消"
-                                          destructiveButtonTitle:nil
-                                               otherButtonTitles:nil];
     
-//    [action addButtonWithTitle:@"使用系统自带地图导航"];
+    NSMutableArray *buttonTitleAry = [[NSMutableArray alloc] init];
     for (NSDictionary *dic in self.availableMaps) {
-        [action addButtonWithTitle:[NSString stringWithFormat:@"%@", dic[@"name"]]];
+        //        [action addButtonWithTitle:[NSString stringWithFormat:@"%@", dic[@"name"]]];
+        [buttonTitleAry addObject:[NSString stringWithFormat:@"%@", dic[@"name"]]];
     }
-//    [action addButtonWithTitle:@"取消"];
-//    action.cancelButtonIndex = self.availableMaps.count + 1;
-//    action.delegate = self;
-    [action showInView:self.view];
+    
+    [SRTool showSRSheetInView:self.view withTitle:@"选择导航方式" message:@"选择一个已经存在于手机中的导航软件"
+              withButtonArray:buttonTitleAry
+              tapButtonHandle:^(int buttonIndex) {
+                  NSDictionary *mapDic = self.availableMaps[buttonIndex];
+                  NSString *urlString = mapDic[@"url"];
+                  urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                  NSURL *url = [NSURL URLWithString:urlString];
+                  //        DEBUG_LOG(@"\n%@\n%@\n%@", mapDic[@"name"], mapDic[@"url"], urlString);
+                  [[UIApplication sharedApplication] openURL:url];
+              } tapCancelHandle:^{
+                  
+              }];
 }
 
 - (void)availableMapsApps {
@@ -205,21 +163,7 @@
     }
 }
 
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (0 == buttonIndex) {
-        //取消
-    } else {
-        NSDictionary *mapDic = self.availableMaps[buttonIndex - 1];
-        NSString *urlString = mapDic[@"url"];
-        urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        NSURL *url = [NSURL URLWithString:urlString];
-        //        DEBUG_LOG(@"\n%@\n%@\n%@", mapDic[@"name"], mapDic[@"url"], urlString);
-        [[UIApplication sharedApplication] openURL:url];
-    }
-}
 - (IBAction)backButton:(id)sender {
-    
-    NSLog(@"返回");
     [self.navigationController popViewControllerAnimated:YES];
 }
 

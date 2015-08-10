@@ -11,10 +11,11 @@
 #import "PeopleListTableViewCell.h"
 #import "SRNet_Manager.h"
 #import <SVProgressHUD/SVProgressHUD.h>
+#import "SRTool.h"
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface PartyPeopleListViewController () <UITableViewDataSource, UITableViewDelegate,UIScrollViewDelegate,UIActionSheetDelegate> {
+@interface PartyPeopleListViewController () <UITableViewDataSource, UITableViewDelegate,UIScrollViewDelegate> {
     NSMutableArray *_inArray;
     NSMutableArray *_outArray;
     NSMutableArray *_unknowArray;
@@ -199,13 +200,60 @@
     }
     
     if (_inArrayIsChange) {
-        UIActionSheet * actionSheet = [[UIActionSheet alloc]initWithTitle:@"是否保存当前信息"
-                                                                 delegate:self
-                                                        cancelButtonTitle:@"取消"
-                                                   destructiveButtonTitle:@"保存后退出"
-                                                        otherButtonTitles:@"直接退出",nil];
+        [SRTool showSRSheetInView:self.view withTitle:@"提示"
+                          message:@"是否保存当前更改的信息?"
+                  withButtonArray:@[@"保存退出", @"不保存,直接退出"]
+                  tapButtonHandle:^(int buttonIndex) {
+                      switch (buttonIndex) {
+                          case 0: {
+                              //保存后退出
+                              [SVProgressHUD showWithStatus:@"正在保存支付信息" maskType:SVProgressHUDMaskTypeGradient];
+                              NSMutableArray *relationAry = [[NSMutableArray alloc] init];
+                              for (Model_User *user in self.relationArray) {
+                                  Model_Party_User *partyRealtion = [[Model_Party_User alloc] init];
+                                  partyRealtion.pk_party_user = user.pk_party_user;
+                                  partyRealtion.pay_type = user.pay_type;
+                                  if (self.party.pay_fk_user) {
+                                      partyRealtion.pay_fk_user = self.party.pay_fk_user;
+                                  } else {
+                                      partyRealtion.pay_fk_user = self.party.fk_user;
+                                  }
+                                  
+                                  [relationAry addObject:partyRealtion];
+                              }
+                              
+                              //点击保存按钮,开始保存数据
+                              [SRNet_Manager requestNetWithDic:[SRNet_Manager updatePartyRelationships:relationAry]
+                                                      complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                                          //保存操作成功
+                                                          [SVProgressHUD showSuccessWithStatus:@"保存成功"];
+                                                          [self.navigationController popViewControllerAnimated:YES];
+                                                      } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                                          [self.navigationController popViewControllerAnimated:YES];
+                                                      }];
+                          }
+                              break;
+                          case 1: {
+                              //直接退出
+                              //需要将更改数组恢复原有属性
+                              for (Model_User *tempUser in _tempInArray) {
+                                  for (Model_User *user in _inArray) {
+                                      if ([user.pk_user isEqualToNumber:tempUser.pk_user]) {
+                                          user.pay_type = tempUser.pay_type;
+                                      }
+                                  }
+                              }
+                              [self.navigationController popViewControllerAnimated:YES];
+                          }
+                              break;
+                          default:
+                              break;
+                      }
+                  } tapCancelHandle:^{
+                      
+                  }];
         
-        [actionSheet showInView:self.view];
+        
     } else {
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -243,53 +291,6 @@
                             }];
 }
 
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    switch (buttonIndex) {
-        case 0: {
-            //保存后退出
-            [SVProgressHUD showWithStatus:@"正在保存支付信息" maskType:SVProgressHUDMaskTypeGradient];
-            NSMutableArray *relationAry = [[NSMutableArray alloc] init];
-            for (Model_User *user in self.relationArray) {
-                Model_Party_User *partyRealtion = [[Model_Party_User alloc] init];
-                partyRealtion.pk_party_user = user.pk_party_user;
-                partyRealtion.pay_type = user.pay_type;
-                if (self.party.pay_fk_user) {
-                    partyRealtion.pay_fk_user = self.party.pay_fk_user;
-                } else {
-                    partyRealtion.pay_fk_user = self.party.fk_user;
-                }
-                
-                [relationAry addObject:partyRealtion];
-            }
-            
-            //点击保存按钮,开始保存数据
-            [SRNet_Manager requestNetWithDic:[SRNet_Manager updatePartyRelationships:relationAry]
-                                    complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
-                                        //保存操作成功
-                                        [SVProgressHUD showSuccessWithStatus:@"保存成功"];
-                                        [self.navigationController popViewControllerAnimated:YES];
-                                    } failure:^(NSError *error, NSURLSessionDataTask *task) {
-                                        [self.navigationController popViewControllerAnimated:YES];
-                                    }];
-        }
-            break;
-        case 1: {
-            //直接退出
-            //需要将更改数组恢复原有属性
-            for (Model_User *tempUser in _tempInArray) {
-                for (Model_User *user in _inArray) {
-                    if ([user.pk_user isEqualToNumber:tempUser.pk_user]) {
-                        user.pay_type = tempUser.pay_type;
-                    }
-                }
-            }
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-            break;
-        default:
-            break;
-    }
-}
 
 /*
 #pragma mark - Navigation

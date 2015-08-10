@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "ScheduleTableViewController.h"
 #import "APService.h"
 #import "SRNet_Manager.h"
 #import <SVProgressHUD.h>
@@ -179,10 +178,11 @@
                 //标注主日程更新
                 [SRTool addPartyUpdateTip:1];
                 
-            } else if (self.scheduleDelegate) {
-                //如果在主日程界面
-                //则在主日程进行刷新操作
-                [self.scheduleDelegate refresh:nil];
+//            }
+//            else if (self.scheduleDelegate) {
+//                //如果在主日程界面
+//                //则在主日程进行刷新操作
+//                [self.scheduleDelegate refresh:nil];
             } else {
                 [self.groupDelegate addGroupPartyUpdateStatus:pk_group];
                 

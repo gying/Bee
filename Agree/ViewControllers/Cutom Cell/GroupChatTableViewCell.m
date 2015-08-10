@@ -322,9 +322,6 @@
 
 //点击好友头像
 - (IBAction)pressedTheAvatarButton:(id)sender {
-    
-
-    
     NSLog(@"好友资料");
     if (![_chat.fk_user isEqual:[Model_User loadFromUserDefaults].pk_user]) {
         [self.topViewController.accountView show];

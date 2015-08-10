@@ -4,37 +4,22 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Pods-AFNetworking.xcscheme</key>
+		<key>AFNetworking.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-DQAlertView.xcscheme</key>
+		<key>DQAlertView.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-MJRefresh.xcscheme</key>
+		<key>JGActionSheet.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-MMDrawerController.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>Pods-SDWebImage.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>Pods-SVProgressHUD.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>Pods-Shimmer.xcscheme</key>
+		<key>MJRefresh.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -44,45 +29,60 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>SDWebImage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>SVProgressHUD.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Shimmer.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>014267632DFBA4875289D16B</key>
+		<key>2C29AA4B3EE55F350769FA9459457C7F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3A2861BF75849F2628B70A07</key>
+		<key>33D3EE95883466F5D9D19AD1B5B3FE61</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5A71487453EF3A6EE4AC1BD2</key>
+		<key>5352D432641F0656C90741034E32F31E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7C00120837FEBEB6BE8DC4E3</key>
+		<key>5C66DF613C7835C7C877A86FD000BDD6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>809955DDC11D4C7F0276D6D5</key>
+		<key>8340BC7494B3A21411E8CB23433106CA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>813F43ECF12A076B8FC522BA</key>
+		<key>B281DA29A9C3EDFB45BA53651F6BA611</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C15EAAF7D834547610B048F7</key>
+		<key>C6574BFC665596632F2F87A0889001C5</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F15C51BB1351662FCA16F2C8</key>
+		<key>D46699EBFD4D20923248E2C563ABDEC5</key>
 		<dict>
 			<key>primary</key>
 			<true/>

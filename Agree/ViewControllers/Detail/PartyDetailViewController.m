@@ -23,10 +23,13 @@
 #import "Model_Party.h"
 #import "SRTool.h"
 
+#import <JGActionSheet.h>
+
+
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface PartyDetailViewController () <UIActionSheetDelegate,BMKLocationServiceDelegate,BMKMapViewDelegate, SRPayDelegate> {
+@interface PartyDetailViewController () <BMKLocationServiceDelegate,BMKMapViewDelegate, SRPayDelegate> {
     Model_Party_User *_relation;
     NSMutableArray *_relArray;
     int _showStatus;
@@ -34,6 +37,7 @@
     
     UIButton * customButton;
     
+    JGActionSheet *_sheet;
 }
 
 @end
@@ -316,10 +320,54 @@
 
 - (IBAction)pressedYesButton:(id)sender {
     if ([@3 isEqual: self.party.pay_type]) {
-        NSLog(@"弹出AlertView");
-        UIAlertView * alertView = [[UIAlertView alloc]initWithTitle:@"确定要参加聚会吗" message:@"该聚会为预付款聚会,如果确认参与之后,将无法取消参与该聚会." delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-        alertView.tag = 3;
-        [alertView show];
+        [SRTool showSRAlertViewWithTitle:@"确定要参加?" message:@"该聚会为预付款聚会,\n参加了就不能取消了哦~" cancelButtonTitle:@"我再想想" otherButtonTitle:@"确定!" tapCancelButtonHandle:^(NSString *msgString) {
+            
+        } tapOtherButtonHandle:^(NSString *msgString) {
+            //确定参加聚会
+            if (1 == [_relation.relationship intValue]) {
+                //取消选中状态
+                _relation.relationship = @0;
+                self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] - 1];
+                [SVProgressHUD showWithStatus:@"正在取消参与请求"];
+                
+                [self.money setTextColor:[UIColor lightGrayColor]];
+                [self.inLabel setTextColor:[UIColor lightGrayColor]];
+                
+            } else {
+                _relation.relationship = @1;
+                self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] + 1];
+                [SVProgressHUD showWithStatus:@"正在确认参与请求"];
+                
+                [self.money setTextColor:[UIColor whiteColor]];
+                [self.inLabel setTextColor:[UIColor whiteColor]];
+                //将聚会关系的状态设置为2 以便服务端识别为预付款聚会
+                _relation.pay_amount = self.party.pay_amount;
+                
+                _relation.pay_type = @0;
+                
+                //这里因为版本兼容关系,如果预付聚会没有收款人,则将收款人设置为创建者.
+                if (self.party.pay_fk_user) {
+                    _relation.pay_fk_user = self.party.pay_fk_user;
+                } else {
+                    _relation.pay_fk_user = self.party.fk_user;
+                }
+                
+                _relation.pay_fk_user = self.party.pay_fk_user;
+                _relation.status = @2;
+            }
+            [SRNet_Manager requestNetWithDic:[SRNet_Manager updateScheduleDic:_relation]
+                                    complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                        if (jsonDic) {
+                                            [self updateScheduleDicDone:jsonDic];
+                                        }
+                                    } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                        
+                                    }];
+            
+            self.yesButton.enabled = NO;
+            self.noButton.enabled = NO;
+        }];
+        
     } else {
         if (1 == [_relation.relationship intValue]) {
             //取消选中状态
@@ -514,353 +562,173 @@
 }
 
 - (IBAction)pressedTheCanelButton:(id)sender {
-    //如果是创建者
-    if ([[Model_User loadFromUserDefaults].pk_user isEqualToNumber:self.party.fk_user])
-        
-    {
-        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择操作类型"
-                                                           delegate:self
-                                                  cancelButtonTitle:@"取消"
-                                             destructiveButtonTitle:@"取消聚会"
-                                                  otherButtonTitles:@"分享",@"添加到系统日历",nil];
-        [sheet showInView:self.view];
-    }else
-    {
-        UIActionSheet * sheet = [[UIActionSheet alloc]initWithTitle:@"选择操作类型" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"分享",@"添加到系统日历", nil];
-        [sheet showInView:self.view];
+    if (!_sheet) {
+        //如果是创建者
+        if ([[Model_User loadFromUserDefaults].pk_user isEqualToNumber:self.party.fk_user]) {
+            _sheet = [SRTool showSRSheetInView:self.view
+                                     withTitle:@"提示"
+                                       message:@"选择想要对聚会做的操作类型"
+                               withButtonArray:@[@"取消聚会", @"分享聚会", @"添加到系统日历"]
+                               tapButtonHandle:^(int buttonIndex) {
+                                   switch (buttonIndex) {
+                                       case 0: {
+                                           //取消聚会
+                                           [self cancelParty];
+                                       }
+                                           break;
+                                       case 1: {
+                                           //分享聚会
+                                           [self shareParty];
+                                       }
+                                           break;
+                                       case 2: {
+                                           //添加到日程
+                                           [self addToEvent];
+                                           
+                                       }
+                                           break;
+                                       default:
+                                           break;
+                                   }
+                                   _sheet = nil;
+                               } tapCancelHandle:^{
+                                   _sheet = nil;
+                               }];
+            
+        } else {
+            _sheet = [SRTool showSRSheetInView:self.view
+                                     withTitle:@"提示"
+                                       message:@"选择想要对聚会做的操作类型"
+                               withButtonArray:@[@"分享聚会", @"添加到系统日历"]
+                               tapButtonHandle:^(int buttonIndex) {
+                                   switch (buttonIndex) {
+                                       case 0: {
+                                           //分享聚会
+                                           [self shareParty];
+                                       }
+                                           break;
+                                       case 1: {
+                                           //添加到日程
+                                           [self addToEvent];
+                                           
+                                       }
+                                           break;
+                                       default:
+                                           break;
+                                   }
+                                   _sheet = nil;
+                               } tapCancelHandle:^{
+                                   _sheet = nil;
+                               }];
+        }
+    } else {
+        [_sheet dismissAnimated:YES];
+        _sheet = nil;
     }
 }
 
+- (void)cancelParty {
+    [SRTool showSRAlertViewWithTitle:@"提示" message:@"确定要取消聚会吗?" cancelButtonTitle:@"我再想想" otherButtonTitle:@"确定!"
+               tapCancelButtonHandle:^(NSString *msgString) {
+                   
+               } tapOtherButtonHandle:^(NSString *msgString) {
+                   [SRNet_Manager requestNetWithDic:[SRNet_Manager cancelPartyDic:self.party]
+                                           complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                               if (jsonDic) {
+                                                   //聚会取消成功
+                                                   [self.navigationController popViewControllerAnimated:YES];
+                                                   [self.delegate cancelParty:self.party with:self.intoType];
+                                               }
+                                           } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                               
+                                           }];
+               }];
+}
+
+- (void)shareParty {
+    [SRNet_Manager requestNetWithDic:[SRNet_Manager sharePartyDic:self.party]
+                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                if (jsonDic) {
+                                    //聚会分享获取链接成功
+                                    //将聚会链接赋值到粘贴板
+                                    UIPasteboard *pboard = [UIPasteboard generalPasteboard];
+                                    pboard.string = (NSString *)jsonDic;
+                                    
+                                    [SRTool showSRAlertOnlyTipWithTitle:@"提示" message:@"聚会链接已经复制到了粘贴板上啦!"];
+                                }
+                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                
+                            }];
+}
+
+- (void)addToEvent {
+    //事件市场
+    EKEventStore *eventStore = [[EKEventStore alloc] init];
+    
+    //6.0及以上通过下面方式写入事件
+    if ([eventStore respondsToSelector:@selector(requestAccessToEntityType:completion:)])
+    {
+        // the selector is available, so we must be on iOS 6 or newer
+        [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (error) {
+                    //错误信息
+                    // display error message here
+                } else if (!granted) {
+                    //被用户拒绝，不允许访问日历
+                    // display access denied error message here
+                } else {
+                    //事件保存到日历
+                    //创建事件
+                    EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
+                    event.title     = self.party.name;
+                    event.location = self.party.location;
+                    
+                    NSDateFormatter *tempFormatter = [[NSDateFormatter alloc]init];
+                    
+                    [tempFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
+                    
+                    event.allDay = NO;
+                    
+                    NSDate * startTime = _party.begin_time;
+                    NSDate * endTime = [NSDate dateWithTimeInterval:3600 sinceDate:startTime];
+                    
+                    event.startDate = startTime;
+                    event.endDate = endTime;
+                    
+                    //在事件前多少秒开始提醒
+                    //提前一个小时提醒
+                    [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60.0 * 60.0]];
+                    
+                    
+                    [event setCalendar:[eventStore defaultCalendarForNewEvents]];
+                    NSError *err;
+                    [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
+                    
+                    
+                    if (!err) {
+                        
+                    }
+                    [SRTool showSRAlertViewWithTitle:@"提示" message:@"聚会已经成功添加到日程~\n"
+                                   cancelButtonTitle:@"好的"
+                                    otherButtonTitle:nil
+                               tapCancelButtonHandle:^(NSString *msgString) {
+                                   
+                               } tapOtherButtonHandle:^(NSString *msgString) {
+                                   
+                               }];
+                }
+            });
+        }];
+    }
+}
 
 - (IBAction)tapBackButton:(id)sender {
        [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
-    if ([[Model_User loadFromUserDefaults].pk_user isEqualToNumber:self.party.fk_user]) {
-        switch (buttonIndex) {
-            case 0: {
-                //取消聚会
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                                    message:@"确定要取消该聚会吗?"
-                                                                   delegate:self
-                                                          cancelButtonTitle:@"取消"
-                                                          otherButtonTitles:@"确定", nil];
-                alertView.tag = 1;
-                [alertView show];
-            }
-                break;
-            case 1: {
-                //分享聚会
-                [SRNet_Manager requestNetWithDic:[SRNet_Manager sharePartyDic:self.party]
-                                        complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
-                                            if (jsonDic) {
-                                                //聚会分享获取链接成功
-                                                //将聚会链接赋值到粘贴板
-                                                UIPasteboard *pboard = [UIPasteboard generalPasteboard];
-                                                pboard.string = (NSString *)jsonDic;
-                                                
-                                                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                                                                    message:@"聚会链接已复制到您的粘贴板"
-                                                                                                   delegate:self
-                                                                                          cancelButtonTitle:@"确定"
-                                                                                          otherButtonTitles:nil];
-                                                alertView.tag = 2;
-                                                [alertView show];
-                                            }
-                                        } failure:^(NSError *error, NSURLSessionDataTask *task) {
-                                            
-                                        }];
-            }
-                break;
-                
-            case 2: {
-                //添加到日程
-                NSLog(@"添加到日程");
-                //事件市场
-                EKEventStore *eventStore = [[EKEventStore alloc] init];
-                
-                //6.0及以上通过下面方式写入事件
-                if ([eventStore respondsToSelector:@selector(requestAccessToEntityType:completion:)])
-                {
-                    // the selector is available, so we must be on iOS 6 or newer
-                    [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            if (error)
-                            {
-                                //错误信息
-                                // display error message here
-                            }
-                            else if (!granted)
-                            {
-                                //被用户拒绝，不允许访问日历
-                                // display access denied error message here
-                            }
-                            else
-                            {
-                                // access granted
-                                // ***** do the important stuff here *****
-                                
-                                //事件保存到日历
-                                
-                                
-                                //创建事件
-                                EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
-                                event.title     = self.party.name;
-                                event.location = self.party.location;
-                                
-                                NSDateFormatter *tempFormatter = [[NSDateFormatter alloc]init];
-                                
-                                [tempFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
-                                
-                                event.allDay = NO;
-                                
-                                NSDate * startTime = _party.begin_time;
-                                NSDate * endTime = [NSDate dateWithTimeInterval:3600 sinceDate:startTime];
-                                
-                                event.startDate = startTime;
-                                event.endDate = endTime;
-                                
-                                //在事件前多少秒开始提醒
-                                //提前一个小时提醒
-                                [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60.0 * 60.0]];
-                                
-                                
-                                [event setCalendar:[eventStore defaultCalendarForNewEvents]];
-                                NSError *err;
-                                [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
-                                
-                                
-                                if (err) {
-                                    
-                                }
-                                UIAlertView *alert = [[UIAlertView alloc]
-                                                      initWithTitle:@"添加成功"
-                                                      message:@" "
-                                                      delegate:nil
-                                                      cancelButtonTitle:@"完成"
-                                                      otherButtonTitles:nil];
-                                [alert show];
-                            }
-                        });
-                    }];
-                }
-            }
-                break;
-            default:
-                break;
-        }
-
-    }else
-    {
-        switch (buttonIndex) {
-    case 0: {
-        //分享聚会
-        [SRNet_Manager requestNetWithDic:[SRNet_Manager sharePartyDic:self.party]
-                                complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
-                                    if (jsonDic) {
-                                        //聚会分享获取链接成功
-                                        //将聚会链接赋值到粘贴板
-                                        UIPasteboard *pboard = [UIPasteboard generalPasteboard];
-                                        pboard.string = (NSString *)jsonDic;
-                                        
-                                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                                                            message:@"聚会链接已复制到您的粘贴板"
-                                                                                           delegate:self
-                                                                                  cancelButtonTitle:@"确定"
-                                                                                  otherButtonTitles:nil];
-                                        alertView.tag = 2;
-                                        [alertView show];
-                                    }
-                                } failure:^(NSError *error, NSURLSessionDataTask *task) {
-                                    
-                                }];
-    }
-        break;
-        
-    case 1: {
-        //添加到日程
-        NSLog(@"添加到日程");
-        //事件市场
-        EKEventStore *eventStore = [[EKEventStore alloc] init];
-        
-        //6.0及以上通过下面方式写入事件
-        if ([eventStore respondsToSelector:@selector(requestAccessToEntityType:completion:)])
-        {
-            // the selector is available, so we must be on iOS 6 or newer
-            [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (error)
-                    {
-                        //错误信息
-                        // display error message here
-                    }
-                    else if (!granted)
-                    {
-                        //被用户拒绝，不允许访问日历
-                        // display access denied error message here
-                    }
-                    else
-                    {
-                        // access granted
-                        // ***** do the important stuff here *****
-                        
-                        //事件保存到日历
-                        
-                        
-                        //创建事件
-                        EKEvent *event  = [EKEvent eventWithEventStore:eventStore];
-                        event.title     = self.party.name;
-                        event.location = self.party.location;
-                        
-                        NSDateFormatter *tempFormatter = [[NSDateFormatter alloc]init];
-                        
-                        [tempFormatter setDateFormat:@"dd-MM-yyyy HH:mm:ss"];
-                        
-                        event.allDay = NO;
-                        
-                        NSDate * startTime = _party.begin_time;
-                        NSDate * endTime = [NSDate dateWithTimeInterval:3600 sinceDate:startTime];
-                        
-                        event.startDate = startTime;
-                        event.endDate = endTime;
-                        
-                        //在事件前多少秒开始提醒
-                        //提前一个小时提醒
-                        [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60.0 * 60.0]];
-                        
-                        
-                        [event setCalendar:[eventStore defaultCalendarForNewEvents]];
-                        NSError *err;
-                        [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
-                        
-                        
-                        if (err) {
-                            
-                        }
-                        UIAlertView *alert = [[UIAlertView alloc]
-                                              initWithTitle:@"添加成功"
-                                              message:@" "
-                                              delegate:nil
-                                              cancelButtonTitle:@"完成"
-                                              otherButtonTitles:nil];
-                        [alert show];
-                    }
-                });
-            }];
-        }
-    }
-        break;
-    default:
-        break;
-    }
-    
-    }
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    switch (alertView.tag) {
-        case 1: {
-            //取消聚会
-            switch (buttonIndex) {
-                case 0: {   //取消
-                }
-                    break;
-                case 1: {   //确定
-                    //取消聚会
-                    [SRNet_Manager requestNetWithDic:[SRNet_Manager cancelPartyDic:self.party]
-                                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
-                                                if (jsonDic) {
-                                                    //聚会取消成功
-                                                    [self.navigationController popViewControllerAnimated:YES];
-                                                    [self.delegate cancelParty:self.party with:self.intoType];
-                                                }
-                                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
-                                                
-                                            }];
-                }
-                    break;
-                default:
-                    break;
-            }
-        }
-            break;
-            
-        case 2: {
-            //分享聚会
-        }
-            break;
-        case 3: {
-            //预付款聚会
-            switch (buttonIndex) {
-                case 0:{
-                    //取消
-                }
-                    break;
-                    
-                case 1:{
-                    //确定参加聚会
-                    NSLog(@"确定参加聚会");
-                    if (1 == [_relation.relationship intValue]) {
-                        //取消选中状态
-                        _relation.relationship = @0;
-                        self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] - 1];
-                        [SVProgressHUD showWithStatus:@"正在取消参与请求"];
-                        
-                        [self.money setTextColor:[UIColor lightGrayColor]];
-                        [self.inLabel setTextColor:[UIColor lightGrayColor]];
-                        
-                    } else {
-                        _relation.relationship = @1;
-                        self.party.inNum = [NSNumber numberWithInt:[self.party.inNum intValue] + 1];
-                        [SVProgressHUD showWithStatus:@"正在确认参与请求"];
-                        
-                        [self.money setTextColor:[UIColor whiteColor]];
-                        [self.inLabel setTextColor:[UIColor whiteColor]];
-                        //将聚会关系的状态设置为2 以便服务端识别为预付款聚会
-                        _relation.pay_amount = self.party.pay_amount;
-                        
-                        _relation.pay_type = @0;
-                        
-                        //这里因为版本兼容关系,如果预付聚会没有收款人,则将收款人设置为创建者.
-                        if (self.party.pay_fk_user) {
-                            _relation.pay_fk_user = self.party.pay_fk_user;
-                        } else {
-                            _relation.pay_fk_user = self.party.fk_user;
-                        }
-                        
-                        _relation.pay_fk_user = self.party.pay_fk_user;
-                        _relation.status = @2;
-                    }
-                    [SRNet_Manager requestNetWithDic:[SRNet_Manager updateScheduleDic:_relation]
-                                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
-                                                if (jsonDic) {
-                                                    [self updateScheduleDicDone:jsonDic];
-                                                }
-                                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
-                                                
-                                            }];
-                    
-                    self.yesButton.enabled = NO;
-                    self.noButton.enabled = NO;
-                }
-                    break;
-                    
-                default:
-                    break;
-            }
-        }
-            break;
-            
-        default:
-            break;
-    }
-}
 
 - (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation {
-    
-    
     BMKPinAnnotationView *newAnnotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil];
     
     [newAnnotationView setFrame:CGRectMake(newAnnotationView.frame.origin.x, newAnnotationView.frame.origin.y,35,35)];
@@ -869,7 +737,7 @@
     [newAnnotationView setContentMode:UIViewContentModeScaleAspectFit];
     customButton = [[UIButton alloc]initWithFrame:CGRectMake(-6.55,-3,45,45)];
     customButton.backgroundColor = [UIColor clearColor];
-    [customButton addTarget:self action:@selector(daohang) forControlEvents:UIControlEventTouchUpInside];
+//    [customButton addTarget:self action:@selector(daohang) forControlEvents:UIControlEventTouchUpInside];
     [customButton setImage:[UIImage imageNamed:@"sr_map_point"] forState:UIControlStateNormal];
     //    BMKActionPaopaoView * paopaoView = [[BMKActionPaopaoView alloc]initWithCustomView:customButton];
     //    newAnnotationView.paopaoView = paopaoView;
@@ -878,11 +746,6 @@
     return newAnnotationView;
     
 }
--(void)daohang
-{
-    NSLog(@"导航");
-}
-
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     if ([@"GoToPay" isEqualToString:identifier]) {

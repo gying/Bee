@@ -16,11 +16,12 @@
 
 #import "UIImageView+WebCache.h"
 #import "RootPhoneRegViewController.h"
+#import "SRTool.h"
 
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface RootAccountRegViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate, UITextFieldDelegate>
+@interface RootAccountRegViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextFieldDelegate>
 {
     UIImagePickerController *_imagePicker;
     UIImageView *_backImageViwe;
@@ -69,8 +70,29 @@
     }
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择图片来源" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"拍照" otherButtonTitles:@"图片库", nil];
-        [sheet showInView:self.view];
+        [SRTool showSRSheetInView:self.view withTitle:@"选择图片来源" message:nil
+                  withButtonArray:@[@"拍照", @"相册"]
+                  tapButtonHandle:^(int buttonIndex) {
+                      UIImagePickerControllerSourceType sourceType;
+                      switch (buttonIndex) {
+                          case 0: {
+                              //拍照
+                              sourceType = UIImagePickerControllerSourceTypeCamera;
+                          }
+                              break;
+                          case 1: {
+                              //相册
+                              sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                          }
+                              break;
+                          default:
+                              break;
+                      }
+                      _imagePicker.sourceType = sourceType;
+                      [self presentViewController:_imagePicker animated:YES completion:nil];
+                  } tapCancelHandle:^{
+                      
+                  }];
     } else {
         _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [self presentViewController:_imagePicker animated:YES completion:nil];
@@ -79,21 +101,6 @@
 
 - (IBAction)pressedTheAvatarButton:(id)sender {
     [self imageBtnClick];
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    UIImagePickerControllerSourceType sourceType;
-    if (0 == buttonIndex) {
-        //直接拍照
-        sourceType = UIImagePickerControllerSourceTypeCamera;
-    } else if (1 == buttonIndex) {
-        //使用相册
-        sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    } else {
-        return;
-    }
-    _imagePicker.sourceType = sourceType;
-    [self presentViewController:_imagePicker animated:YES completion:nil];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -120,8 +127,7 @@
         //昵称输入完成
         [textField resignFirstResponder];
     } else {
-        UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您输入的昵称长度不能少于两个字节" delegate:nil cancelButtonTitle:@"确认" otherButtonTitles: nil];
-        [alertview show];
+        [SRTool showSRAlertOnlyTipWithTitle:@"提示" message:@"输入的昵称不能少于两个字符哦~"];
     }
     return YES;
 }
@@ -142,14 +148,12 @@
             if (_avatarImage) {
                 isDone = YES;
             } else {
-                UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您的头像不能为空"delegate:nil cancelButtonTitle:@"确认" otherButtonTitles: nil];
-                [alertview show];
+                [SRTool showSRAlertOnlyTipWithTitle:@"提示" message:@"头像不能为空哦~"];
             }
             
         } else {
-            UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您的昵称不能为空" delegate:nil cancelButtonTitle:@"确认" otherButtonTitles: nil];
+            [SRTool showSRAlertOnlyTipWithTitle:@"提示" message:@"昵称可不能是空的~"];
             self.userInfo.nickname = self.nicknameTextField.text;
-            [alertview show];
         }
     //从程序代理获取推送信息以及设备号以便于注册
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];

@@ -82,9 +82,9 @@
                                  message:@"聚会的开始时间必须是在当前时间的三个小时后哦~"
                        cancelButtonTitle:@"好的"
                         otherButtonTitle:nil
-                         tapCancelButton:^(NSString *msgString) {
+                   tapCancelButtonHandle:^(NSString *msgString) {
                              
-                         } tapOtherButton:^(NSString *msgString) {
+                 } tapOtherButtonHandle:^(NSString *msgString) {
                              
                          }];
         

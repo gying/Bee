@@ -12,7 +12,7 @@
 #import <SVProgressHUD.h>
 #import "SRTool.h"
 
-@interface FeedBackViewController () <UIAlertViewDelegate>
+@interface FeedBackViewController ()
 @end
 
 @implementation FeedBackViewController
@@ -49,9 +49,9 @@
                                                          message:@"谢谢亲的反馈,我们将会努力做的更好."
                                                cancelButtonTitle:@"好的"
                                                 otherButtonTitle:nil
-                                                 tapCancelButton:^(NSString *msgString) {
+                                           tapCancelButtonHandle:^(NSString *msgString) {
                                                      
-                                                 } tapOtherButton:^(NSString *msgString) {
+                                           } tapOtherButtonHandle:^(NSString *msgString) {
                                                      
                                                  }];
                                 

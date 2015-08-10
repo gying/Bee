@@ -21,7 +21,7 @@
 #import <SVProgressHUD.h>
 #import <MJRefresh.h>
 
-@interface GroupAlbumsCollectionViewController () <UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRPhotoManagerDelegate> {
+@interface GroupAlbumsCollectionViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate, SRPhotoManagerDelegate> {
     
     UIImagePickerController *_imagePicker;
     UIImage *_pickImage;
@@ -169,27 +169,33 @@
     }
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择图片来源" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"拍照" otherButtonTitles:@"图片库", nil];
-        [sheet showInView:self.rootController.view];
+        [SRTool showSRSheetInView:self.rootController.view withTitle:@"选择图片来源" message:nil
+                  withButtonArray:@[@"拍照", @"相册"]
+                  tapButtonHandle:^(int buttonIndex) {
+                      UIImagePickerControllerSourceType sourceType;
+                      switch (buttonIndex) {
+                          case 0: {
+                              //拍照
+                              sourceType = UIImagePickerControllerSourceTypeCamera;
+                          }
+                              break;
+                          case 1: {
+                              //相册
+                              sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                          }
+                              break;
+                          default:
+                              break;
+                      }
+                      _imagePicker.sourceType = sourceType;
+                      [self.rootController presentViewController:_imagePicker animated:YES completion:nil];
+                  } tapCancelHandle:^{
+                      
+                  }];
     } else {
         _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [self.rootController presentViewController:_imagePicker animated:YES completion:nil];
     }
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    UIImagePickerControllerSourceType sourceType;
-    if (0 == buttonIndex) {
-        //直接拍照
-        sourceType = UIImagePickerControllerSourceTypeCamera;
-    } else if (1 == buttonIndex) {
-        //使用相册
-        sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    } else {
-        return;
-    }
-    _imagePicker.sourceType = sourceType;
-    [self.rootController presentViewController:_imagePicker animated:YES completion:nil];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -202,14 +208,15 @@
     
     [SRTool showSRAlertViewWithTitle:@"确认"
                              message:@"真的想要发送这张图片吗?"
-                   cancelButtonTitle:@"是的"
-                    otherButtonTitle:@"不,我再想想"
-                     tapCancelButton:^(NSString *msgString) {
-                         //确定发送
-                         [self sendImage];
-                     } tapOtherButton:^(NSString *msgString) {
-                         //取消发送
-                     }];
+                   cancelButtonTitle:@"不,我再想想"
+                    otherButtonTitle:@"是的"
+               tapCancelButtonHandle:^(NSString *msgString) {
+                   //取消发送
+                         
+               } tapOtherButtonHandle:^(NSString *msgString) {
+                   //取消发送
+                   [self sendImage];
+               }];
 }
 
 - (void)sendImage {

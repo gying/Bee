@@ -12,7 +12,6 @@
 #import "GroupDetailViewController.h"
 #import "GroupViewController.h"
 #import "UserChatViewController.h"
-#import "ScheduleTableViewController.h"
 
 #import "WXApi.h"
 #import "UserSettingViewController.h"
@@ -38,7 +37,6 @@
 @property (nonatomic, weak)UserChatViewController *userChatDelegate;
 @property (nonatomic, weak)GroupViewController *groupDelegate;
 @property (nonatomic, weak)ContactsTableViewController *contactsDelegate;
-@property (nonatomic, weak)ScheduleTableViewController *scheduleDelegate;
 
 @property (nonatomic, strong)UITabBarController *rootController;
 

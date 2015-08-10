@@ -18,6 +18,7 @@
 #import "EModel_User_Chat.h"
 #import "EMSendMessageHepler.h"
 #import "SRKeyboard.h"
+#import "SRTool.h"
 
 #import <MJRefresh.h>
 
@@ -25,7 +26,7 @@
 #define kLoadChatData       1
 #define kSendMessage        2
 
-@interface UserChatViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIAlertViewDelegate, EMChatManagerDelegate,UITableViewDelegate,UIScrollViewDelegate> {
+@interface UserChatViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, EMChatManagerDelegate,UITableViewDelegate,UIScrollViewDelegate> {
     
     SRKeyboard *_srKeyBoard;
     UIImagePickerController *_imagePicker;
@@ -39,7 +40,6 @@
     NSMutableArray * _mchatArray;
     
     
-    UIAlertView *_sendImageAlert;
     EMConversation *_conversation;
     
     
@@ -125,17 +125,7 @@
     
 #pragma mark -- 导航栏标题
     [self.navigationItem setTitle:self.user.nickname];
-
     
-    //初始化图片发送确认警告框
-    _sendImageAlert = [[UIAlertView alloc] initWithTitle:@"确认信息"
-                                                 message:@"是否确认发送图片?"
-                                                delegate:self
-                                       cancelButtonTitle:@"取消"
-                                       otherButtonTitles:@"确认", nil];
-
-    
-
     //聊天信息切换到最底层显示
     
     if (messages.count == 0) {
@@ -373,68 +363,37 @@
         _imagePicker = [[UIImagePickerController alloc] init];
         [_imagePicker setDelegate:self];
         _imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        //判断是否有摄像头
-        if(![UIImagePickerController isSourceTypeAvailable:_imagePicker.sourceType]) {
-            _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        }
+
     }
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        
-        //图片ACTIONSHEET
-        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"选择图片来源" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"拍照" otherButtonTitles:@"图片库", nil];
-        [sheet showInView:self.view];
-        sheet.tag = 1;
+        [SRTool showSRSheetInView:self.view withTitle:@"选择图片来源" message:nil
+                  withButtonArray:@[@"拍照", @"相册"]
+                  tapButtonHandle:^(int buttonIndex) {
+                      UIImagePickerControllerSourceType sourceType;
+                      switch (buttonIndex) {
+                          case 0: {
+                              //拍照
+                              sourceType = UIImagePickerControllerSourceTypeCamera;
+                          }
+                              break;
+                          case 1: {
+                              //相册
+                              sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                          }
+                              break;
+                          default:
+                              break;
+                      }
+                      _imagePicker.sourceType = sourceType;
+                      [self presentViewController:_imagePicker animated:YES completion:nil];
+                  } tapCancelHandle:^{
+                      
+                  }];
+    } else {
+        _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [self presentViewController:_imagePicker animated:YES completion:nil];
     }
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    UIImagePickerControllerSourceType sourceType;
-    
-    
-    switch (actionSheet.tag) {
-        case 1:
-            
-            if (0 == buttonIndex) {
-                    //直接拍照
-                    sourceType = UIImagePickerControllerSourceTypeCamera;
-                } else if (1 == buttonIndex) {
-                    //使用相册
-                    sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                } else {
-                    return;
-                }
-                _imagePicker.sourceType = sourceType;
-                [self presentViewController:_imagePicker animated:YES completion:nil];
-
-            break;
-            
-        case 2:
-           
-            NSLog(@"clickedButtonAtIndex:%ld",(long)buttonIndex);
-                if (0 == buttonIndex)
-                {
-                    NSLog(@"好友资料");
-
-                        if (![self.user.pk_user isEqual:[Model_User loadFromUserDefaults].pk_user]) {
-                            [self.accountView loadWithUser:self.user withGroup:nil];
-                            [self.accountView show];
-                        }
-                }else if(1 == buttonIndex)
-                {
-                    NSLog(@"支付款项");
-                    
-                }else if(2 == buttonIndex)
-                {
-                    NSLog(@"平账");
-                }
-            
-        default:
-            break;
-    }
-    
-    
-
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -443,9 +402,17 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [picker dismissViewControllerAnimated:YES completion:nil];
-    
     _chatPickImage = [info valueForKey:@"UIImagePickerControllerOriginalImage"];
-    [_sendImageAlert show];
+    
+    [SRTool showSRAlertViewWithTitle:@"提示"
+                             message:@"真的要发送这张图片吗?"
+                   cancelButtonTitle:@"我再想想"
+                    otherButtonTitle:@"是的"
+               tapCancelButtonHandle:^(NSString *msgString) {
+                   
+               } tapOtherButtonHandle:^(NSString *msgString) {
+                   [self sendImage];
+               }];
 }
 
 - (void)sendImage {
@@ -540,22 +507,37 @@
 
 //详情BUTTON
 - (IBAction)tapDetailButton:(id)sender {
+    [SRTool showSRSheetInView:self.view
+                    withTitle:@"详细" message:@"选择想要做的操作"
+              withButtonArray:@[@"好友资料", @"支付款项"]
+              tapButtonHandle:^(int buttonIndex) {
+                  switch (buttonIndex) {
+                      case 0: {
+                          if (![self.user.pk_user isEqual:[Model_User loadFromUserDefaults].pk_user]) {
+                              [self.accountView loadWithUser:self.user withGroup:nil];
+                              [self.accountView show];
+                          }
+                      }
+                          break;
+                      case 1: {
+                          [SRTool showSRAlertViewWithTitle:@"提示"
+                                                   message:@"我们很快将会开通资金支付的功能,请各位小伙伴耐心等待哦~"
+                                         cancelButtonTitle:@"好的"
+                                          otherButtonTitle:nil
+                                     tapCancelButtonHandle:^(NSString *msgString) {
+                                         
+                                     } tapOtherButtonHandle:^(NSString *msgString) {
+                                         
+                                     }];
+                      }
+                          break;
+                      default:
+                          break;
+                  }
+              } tapCancelHandle:^{
+                  
+              }];
     
-    //详情ACTIONSHEET
-        UIActionSheet * avatarActionSheet = [[UIActionSheet alloc]initWithTitle:@"详细" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"好友资料",@"支付款项",@"平账", nil];
-    [avatarActionSheet showInView:self.view];
-    avatarActionSheet.tag = 2;
-    
-}
-
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (0 == buttonIndex) {
-        //取消发送
-    } else {
-        //确认发送
-        [self sendImage];
-    }
 }
 
 

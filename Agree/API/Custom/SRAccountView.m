@@ -15,6 +15,7 @@
 
 #import "AppDelegate.h"
 #import "SRImageManager.h"
+#import "SRTool.h"
 
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
@@ -470,8 +471,8 @@
             {
                 NSLog(@"Danger Will Robinson! Danger!");
             }
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"通知" message:@"联系人保存成功" delegate:nil cancelButtonTitle:@"确认" otherButtonTitles: nil];
-            [alert show];
+            
+            [SRTool showSRAlertOnlyTipWithTitle:@"通知" message:@"联系人保存成功"];
             
 
         }
@@ -541,13 +542,36 @@
         }
             break;
         case 5: {
-            //删除好友
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示"
-                                                            message:@"您是否确定要删除该好友?"
-                                                           delegate:self
-                                                  cancelButtonTitle:@"取消"
-                                                  otherButtonTitles:@"确定", nil];
-            [alert show];
+            //删除好友            
+            [SRTool showSRAlertViewWithTitle:@"提示"
+                                     message:@"你真的要删除这个好友吗?"
+                           cancelButtonTitle:@"我再想想" otherButtonTitle:@"是的!"
+                       tapCancelButtonHandle:^(NSString *msgString) {
+                           
+                       } tapOtherButtonHandle:^(NSString *msgString) {
+                           Model_user_user *sendRealtion = [[Model_user_user alloc] init];
+                           [sendRealtion setFk_user_from:[Model_User loadFromUserDefaults].pk_user];
+                           [sendRealtion setFk_user_to:_user.pk_user];
+                           
+                           [SRNet_Manager requestNetWithDic:[SRNet_Manager removeFriendDic:sendRealtion]
+                                                   complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                                       if (jsonDic) {
+                                                           [self hiddenPhoneNum:YES];
+                                                           [self hiddenFriendHandleButton:YES];
+                                                           [self updateRelation];
+                                                       } else {
+                                                           [self hiddenPhoneNum:YES];
+                                                           [self hiddenFriendHandleButton:YES];
+                                                           [self updateRelation];
+                                                       }
+                                                       [SVProgressHUD dismiss];
+                                                   } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                                       [SVProgressHUD dismiss];
+                                                   }];
+                           
+                           [self updateRelation];
+                       }];
+            
         }
             break;
         case 6: {
@@ -614,41 +638,6 @@
         result = window.rootViewController;
     
     return result;
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    switch (buttonIndex) {
-        case 0: {   //取消
-            
-        }
-            break;
-        case 1: {   //确定删除
-            Model_user_user *sendRealtion = [[Model_user_user alloc] init];
-            [sendRealtion setFk_user_from:[Model_User loadFromUserDefaults].pk_user];
-            [sendRealtion setFk_user_to:_user.pk_user];
-            
-            [SRNet_Manager requestNetWithDic:[SRNet_Manager removeFriendDic:sendRealtion]
-                                    complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
-                                        if (jsonDic) {
-                                            [self hiddenPhoneNum:YES];
-                                            [self hiddenFriendHandleButton:YES];
-                                            [self updateRelation];
-                                        } else {
-                                            [self hiddenPhoneNum:YES];
-                                            [self hiddenFriendHandleButton:YES];
-                                            [self updateRelation];
-                                        }
-                                        [SVProgressHUD dismiss];
-                                    } failure:^(NSError *error, NSURLSessionDataTask *task) {
-                                        [SVProgressHUD dismiss];
-                                    }];
-            
-            [self updateRelation];
-        }
-            break;
-        default:
-            break;
-    }
 }
 
 - (void)updateRelation {

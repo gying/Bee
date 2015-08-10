@@ -10,7 +10,6 @@
 
 #import "CD_Party.h"
 
-#import "ScheduleTableViewController.h"
 #import "HistoryPartyTableViewDelegate.h"
 
 #import "PartyDetailViewController.h"

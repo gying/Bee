@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Model_Party.h"
 #import <SVProgressHUD.h>
+#import <JGActionSheet.h>
 
 @interface SRTool : NSObject
 
@@ -18,6 +19,13 @@ typedef void (^tapOtherButton)(NSString *msgString);
 
 @property (strong)tapCancelButton tapCancelBlock;
 @property (strong)tapOtherButton tapOtherBlock;
+
+
+typedef void (^tapSheetCancelButton)(void);
+typedef void (^tapSheetOtherButton)(int buttonIndex);
+
+@property (strong)tapSheetCancelButton tapSheetCancelBlock;
+@property (strong)tapSheetOtherButton tapSheetOtherBlock;
 
 + (NSString *)dateToString: (NSDate *)date;
 //+ (NSDate *)stringToDate: (NSString *)string;
@@ -41,7 +49,17 @@ typedef void (^tapOtherButton)(NSString *msgString);
                          message:(NSString *)message
                cancelButtonTitle:(NSString *)cancelTitle
                 otherButtonTitle:(NSString *)otherButtonTitle
-                 tapCancelButton:(tapCancelButton)tapCancelBlock
-                  tapOtherButton:(tapOtherButton)tapOtherBlock;
+           tapCancelButtonHandle:(tapCancelButton)tapCancelBlock
+            tapOtherButtonHandle:(tapOtherButton)tapOtherBlock;
+
++ (void)showSRAlertOnlyTipWithTitle:(NSString *)title
+                            message:(NSString *)message;
+
++ (JGActionSheet *)showSRSheetInView:(UIView *)view
+                           withTitle:(NSString *)title
+                             message:(NSString *)message
+                     withButtonArray:(NSArray *)buttonAry
+                     tapButtonHandle:(tapSheetOtherButton)tapSheetOtherButton
+                     tapCancelHandle:(tapSheetCancelButton)tapSheetCancelButton;
 
 @end

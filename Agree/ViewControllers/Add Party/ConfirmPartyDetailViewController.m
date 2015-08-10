@@ -10,7 +10,6 @@
 #import "SRNet_Manager.h"
 #import "MJExtension.h"
 #import <SVProgressHUD.h>
-#import "ScheduleTableViewController.h"
 #import "GroupDetailViewController.h"
 #import "ChooseLoctaionViewController.h"
 #import "ChooseDateViewController.h"
@@ -130,8 +129,8 @@
                                             [self.navigationController popToViewController:rootController animated:YES];
                                         });
                                     } else {
-                                        ScheduleTableViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
-                                        rootController.loadAgain = true;
+//                                        ScheduleTableViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
+//                                        rootController.loadAgain = true;
                                         
                                         
                                         dispatch_async(dispatch_get_main_queue(), ^{
@@ -264,9 +263,10 @@
                 [SRTool showSRAlertViewWithTitle:@"提示"
                                          message:@"预付费的钱可不能为空哦~"
                                cancelButtonTitle:@"好的"
-                                otherButtonTitle:nil tapCancelButton:^(NSString *msgString) {
+                                otherButtonTitle:nil
+                           tapCancelButtonHandle:^(NSString *msgString) {
                                     
-                                } tapOtherButton:^(NSString *msgString) {
+                           } tapOtherButtonHandle:^(NSString *msgString) {
                     
                                 }];
             }
