@@ -235,7 +235,6 @@
         default:
             break;
     }
-    
 }
 
 #pragma mark 环信登录收取离线信息
