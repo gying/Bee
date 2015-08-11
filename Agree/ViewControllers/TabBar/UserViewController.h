@@ -7,10 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "AboutUsViewController.h"
+#import "FeedBackViewController.h"
 
 
 @interface UserViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+
+
+
+
+
+
 
 @property (weak, nonatomic) IBOutlet UIButton *avatarButton;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;

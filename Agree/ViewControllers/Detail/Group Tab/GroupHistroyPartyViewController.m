@@ -70,8 +70,7 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)tapBackButton:(id)sender {
-    
-    
+
     NSLog(@"返回");
      [self.navigationController popViewControllerAnimated:YES];
 }

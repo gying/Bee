@@ -19,6 +19,7 @@
 		C68EBEDD1B73045200A6F2E5 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C68EBEDC1B73045200A6F2E5 /* ScheduleViewController.m */; };
 		C69BC6181B704D1B003540DB /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C69BC6171B704D1B003540DB /* RootViewController.m */; };
 		C6B4DA031B5CD0A000EF9BE7 /* PrepayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B4DA021B5CD0A000EF9BE7 /* PrepayViewController.m */; };
+		C6D11D481B79DF65005D7889 /* GroupSettingUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C6D11D471B79DF65005D7889 /* GroupSettingUITableViewCell.m */; };
 		C6E25B841B57A3C70031A6B9 /* SchedulePartyTableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C6E25B831B57A3C70031A6B9 /* SchedulePartyTableViewDelegate.m */; };
 		C6E25B8A1B57ACEB0031A6B9 /* HistoryPartyTableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C6E25B891B57ACEB0031A6B9 /* HistoryPartyTableViewDelegate.m */; };
 		C6E25B8D1B57B1FA0031A6B9 /* CreatedPartyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C6E25B8C1B57B1FA0031A6B9 /* CreatedPartyTableViewCell.m */; };
@@ -202,6 +203,8 @@
 		C69BC6171B704D1B003540DB /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		C6B4DA011B5CD0A000EF9BE7 /* PrepayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrepayViewController.h; sourceTree = "<group>"; };
 		C6B4DA021B5CD0A000EF9BE7 /* PrepayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrepayViewController.m; sourceTree = "<group>"; };
+		C6D11D461B79DF65005D7889 /* GroupSettingUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupSettingUITableViewCell.h; sourceTree = "<group>"; };
+		C6D11D471B79DF65005D7889 /* GroupSettingUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupSettingUITableViewCell.m; sourceTree = "<group>"; };
 		C6E25B821B57A3C70031A6B9 /* SchedulePartyTableViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SchedulePartyTableViewDelegate.h; sourceTree = "<group>"; };
 		C6E25B831B57A3C70031A6B9 /* SchedulePartyTableViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SchedulePartyTableViewDelegate.m; sourceTree = "<group>"; };
 		C6E25B881B57ACEB0031A6B9 /* HistoryPartyTableViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryPartyTableViewDelegate.h; sourceTree = "<group>"; };
@@ -739,6 +742,8 @@
 				C64F1D631B26CB9D0063C012 /* ChoosefriendsTableViewCell.m */,
 				C6749BB01B789F54002F4D6E /* UserSettingTableViewCell.h */,
 				C6749BB11B789F54002F4D6E /* UserSettingTableViewCell.m */,
+				C6D11D461B79DF65005D7889 /* GroupSettingUITableViewCell.h */,
+				C6D11D471B79DF65005D7889 /* GroupSettingUITableViewCell.m */,
 			);
 			path = "Cutom Cell";
 			sourceTree = "<group>";
@@ -1181,6 +1186,7 @@
 				F06765A41A9DA81E005937B4 /* PartyPeopleListViewController.m in Sources */,
 				F0068C0D1A679E0600B9CB60 /* ChooseDateViewController.m in Sources */,
 				F0F5C27D1A66F1490029BF7A /* NSObject+MJMember.m in Sources */,
+				C6D11D481B79DF65005D7889 /* GroupSettingUITableViewCell.m in Sources */,
 				F07F36CD1B2FFE7300D76D4C /* Agree.xcdatamodeld in Sources */,
 				F0B5F4AB1AAA97180013111F /* MJPhotoBrowser.m in Sources */,
 				F02169F41A927CFC00353879 /* GroupPartyTableViewCell.m in Sources */,

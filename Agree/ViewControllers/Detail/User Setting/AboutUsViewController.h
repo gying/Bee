@@ -6,9 +6,14 @@
 //  Copyright (c) 2015年 superRabbit. All rights reserved.
 //
 
+#define kName   1
+#define kSex    2
+
 #import <UIKit/UIKit.h>
 
 @interface AboutUsViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UIImageView *appIconImageView;
+
+@property int inputType;
 
 @end

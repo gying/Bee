@@ -13,24 +13,19 @@
 @interface GroupSettingViewController : UIViewController
 
 @property (nonatomic, strong)Model_Group *group;
-@property (weak, nonatomic) IBOutlet UIButton *codeButton;
-@property (weak, nonatomic) IBOutlet UILabel *codeRemarkLabel;
 
 
-@property (weak, nonatomic) IBOutlet UIButton *partyTipButton;
-@property (weak, nonatomic) IBOutlet UILabel *partyTipLabel;
 
-@property (weak, nonatomic) IBOutlet UIButton *chatTipButton;
-@property (weak, nonatomic) IBOutlet UILabel *chatTipLabel;
-
-@property (weak, nonatomic) IBOutlet UIButton *phoneButton;
-@property (weak, nonatomic) IBOutlet UILabel *phoneLabel;
-
-@property (weak, nonatomic) IBOutlet UIButton *quitButton;
-@property (weak, nonatomic) IBOutlet UICollectionView *peopleCollectionView;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
 
 @property (nonatomic, strong)GroupDetailViewController *rootController;
 
 @property (weak, nonatomic) IBOutlet UIButton *GroupHistroyPartyButton;
+
+
+
+
+@property (weak, nonatomic) IBOutlet UITableView *groupSettingTableView;
+@property (weak, nonatomic) IBOutlet UIView *avatarView;
+@property (weak, nonatomic) IBOutlet UIButton *inButton;
 @end
