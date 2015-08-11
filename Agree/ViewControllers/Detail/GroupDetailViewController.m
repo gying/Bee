@@ -437,32 +437,6 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-    //进入小组详情
-    if ([@"AddNewParty"  isEqual: segue.identifier]) {
-        //读取小组详情数据并赋值小组数据
-        ChooseLoctaionViewController *controller = (ChooseLoctaionViewController *)segue.destinationViewController;
-        controller.chooseGroup = self.group;
-        controller.isGroupParty = TRUE;
-    } else if ([@"GroupSetting" isEqual:segue.identifier]) {
-        //进入小组设置
-        [SVProgressHUD show];
-        GroupSettingViewController *controller = (GroupSettingViewController *)segue.destinationViewController;
-        controller.rootController = self;
-        controller.group = self.group;
-    } else if ([@"PartyDetail" isEqual:segue.identifier]) {
-        PartyDetailViewController *controller = (PartyDetailViewController *)segue.destinationViewController;
-        controller.delegate = _partyDelegate;
-        controller.party = self.chooseParty;
-    } else {
-    
-    }
-}
-
-
 #pragma mark -- 侧边栏
 //侧边栏
 - (IBAction)peopleButton:(id)sender
@@ -508,18 +482,31 @@
                      }];
 }
 
-//-(void)closeview
-//{
-//    if((self.peopleButton.titleLabel.text = @"关闭")) {
-//        [self.peopleButton setTitle:@"成员" forState:UIControlStateNormal];
-//    }
-//    [UIView animateWithDuration:0.5
-//                     animations:^{
-//                         [self.rightSideView setAlpha:0];
-//                         [self.peopleTableView setFrame:CGRectMake(600, self.peopleTableView.frame.origin.y, self.peopleTableView.frame.size.width, self.peopleTableView.frame.size.height)];
-//                     }];
-//    [self.peopleTableView removeGestureRecognizer:swipe];
-//}
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    //进入小组详情
+    if ([@"AddNewParty"  isEqual: segue.identifier]) {
+        //读取小组详情数据并赋值小组数据
+        ChooseLoctaionViewController *controller = (ChooseLoctaionViewController *)segue.destinationViewController;
+        controller.chooseGroup = self.group;
+        controller.isGroupParty = TRUE;
+    } else if ([@"GroupSetting" isEqual:segue.identifier]) {
+        //进入小组设置
+        [SVProgressHUD show];
+        GroupSettingViewController *controller = (GroupSettingViewController *)segue.destinationViewController;
+        controller.rootController = self;
+        controller.group = self.group;
+    } else if ([@"PartyDetail" isEqual:segue.identifier]) {
+        PartyDetailViewController *controller = (PartyDetailViewController *)segue.destinationViewController;
+        controller.delegate = _partyDelegate;
+        controller.party = self.chooseParty;
+    } else {
+        
+    }
+}
 
 
 @end

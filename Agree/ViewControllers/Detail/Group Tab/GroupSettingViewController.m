@@ -18,6 +18,7 @@
 #import "Model_User.h"
 #import "SRImageManager.h"
 #import "SRTool.h"
+#import "GroupHistroyPartyViewController.h"
 
 
 
@@ -313,10 +314,11 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    
-
-    
+    if ([@"GroupPartyHistroy" isEqualToString:segue.identifier]) {
+        //历史聚会详情
+        GroupDetailViewController *childController = segue.destinationViewController;
+        childController.group = self.group;
+    }
 }
-
 
 @end

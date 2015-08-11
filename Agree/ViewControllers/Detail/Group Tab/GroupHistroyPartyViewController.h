@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Model_Group.h"
 
 @interface GroupHistroyPartyViewController : UIViewController
 
@@ -14,12 +15,11 @@
 @property (weak, nonatomic) IBOutlet UITableView *myGroupHistroyPartyTableView;
 @property (weak, nonatomic) IBOutlet UILabel *textLabel1;
 
-
-
 @property int chooseRow;
+@property BOOL loadAgain;
+
+@property (nonatomic, retain)Model_Group *group;
 
 - (void)reloadTipView: (NSInteger)aryCount withType:(int)inttype;
-
-@property BOOL loadAgain;
 
 @end

@@ -10,7 +10,7 @@
 #import "CD_Party.h"
 
 #import "SchedulePartyTableViewDelegate.h"
-#import "GroupHistroyPartyTableViewController.h"
+#import "GroupHistroyPartyTableViewDelegate.h"
 
 #import <MJRefresh.h>
 
@@ -19,9 +19,7 @@
     NSDictionary *norDic;
     NSDictionary *selDic;
     
-
-
-    GroupHistroyPartyTableViewController * _groupHistroyDelegate;
+    GroupHistroyPartyTableViewDelegate * _groupHistroyDelegate;
     
     BOOL _firstLoadingDone;
 }
@@ -33,14 +31,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-
-    
-    _groupHistroyDelegate = [[GroupHistroyPartyTableViewController alloc] init];
+    _groupHistroyDelegate = [[GroupHistroyPartyTableViewDelegate alloc] init];
     _groupHistroyDelegate.rootController = self;
     self.myGroupHistroyPartyTableView.delegate = _groupHistroyDelegate;
     self.myGroupHistroyPartyTableView.dataSource = _groupHistroyDelegate;
     [_groupHistroyDelegate loadPartyData];
-    
 
     
 //     设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）

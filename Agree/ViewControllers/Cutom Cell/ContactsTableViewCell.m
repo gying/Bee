@@ -29,6 +29,8 @@
     _user = user;
     [self.avatarButton.layer setCornerRadius:self.avatarButton.frame.size.height/2];
     [self.avatarButton.layer setMasksToBounds:YES];
+    self.avatarButton.layer.borderWidth = 0.5;
+    self.avatarButton.layer.borderColor = [UIColor grayColor].CGColor;
     
     [self.avatarButton addTarget:self action:@selector(tapAvatarButton:) forControlEvents:UIControlEventTouchUpInside];
     

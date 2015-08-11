@@ -1,5 +1,5 @@
 //
-//  GroupHistroyPartyTableViewController.h
+//  GroupHistroyPartyTableViewDelegate.h
 //  Agree
 //
 //  Created by Agree on 15/8/10.
@@ -12,7 +12,7 @@
 #import "SRNet_Manager.h"
 #import "ScheduleViewController.h"
 #import "GroupHistroyPartyViewController.h"
-@interface GroupHistroyPartyTableViewController : UITableViewController<UITableViewDataSource, UITableViewDelegate>
+@interface GroupHistroyPartyTableViewDelegate : NSObject<UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong)NSMutableArray *schAry;
 @property (nonatomic, strong)Model_Group *group;

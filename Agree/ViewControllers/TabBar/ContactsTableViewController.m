@@ -47,7 +47,7 @@
     [self backView];
 
     
-    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+//    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
     self.accountView = [[SRAccountView alloc] init];
     self.accountView.rootController = self;
@@ -58,8 +58,6 @@
     _isfirstLoad = TRUE;
     [self reloadTipView:_friendArray.count];
     [self loadDataFromNet];
-    
-    
     
     // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
     self.tableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh:)];
@@ -94,8 +92,7 @@
 }
 
 
--(void)backView
-{
+-(void)backView {
     _backView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     _backView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:_backView];
@@ -218,6 +215,16 @@
     _selectIndex = indexPath.row;
     return indexPath;
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    //设置分组的标签区域高度为0
+    return 0.00001f;
+    
+}
+
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+//    return @"hellooo..";
+//}
 
 - (void)reloadTableViewAndUnreadData {
     NSMutableArray *tempArray = [NSMutableArray arrayWithArray:_friendArray];
