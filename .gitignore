@@ -4,3 +4,5 @@ Agree.xcodeproj/project.xcworkspace/xcuserdata/G4ddle.xcuserdatad/UserInterfaceS
 *.xcuserstate
 
 Pods/Pods.xcodeproj/xcuserdata/G4ddle.xcuserdatad/xcschemes/xcschememanagement.plist
+
+*.plist

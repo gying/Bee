@@ -91,6 +91,12 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self refreshUpdateInfo];
+    
+    //设置当前视图控制器为根控制器
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    delegate.topRootViewController = self;
+    [self.navigationController.tabBarItem setBadgeValue:nil];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

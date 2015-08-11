@@ -32,7 +32,7 @@
 
 
 
-@interface GroupDetailViewController () <UITabBarDelegate,UIScrollViewDelegate> {
+@interface GroupDetailViewController () <UITabBarDelegate,UIScrollViewDelegate, SRReceivingDelegate> {
     GroupChatTableViewController *_chatDelegate;
     GroupPartyTableViewController *_partyDelegate;
     GroupAlbumsCollectionViewController *_albumsDelegate;
@@ -186,13 +186,22 @@
     [_peopleTableDelegate setRootController:self];
     
     [_peopleTableDelegate loadPeopleDataWithGroup:self.group];
-    
 }
 
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate setRevDelegate:self];
+    
+    if (self.partyLoadingAgain) {
+        [_partyDelegate loadPartyData];
+        self.partyLoadingAgain = FALSE;
+    }
+}
+- (void)viewDidDisappear:(BOOL)animated {
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate setRevDelegate:nil];
+    [super viewDidDisappear:animated];
 }
 
 - (void)setkeyBoard {
@@ -201,26 +210,13 @@
     [_srKeyboard textViewShowView:self customKeyboardDelegate:_chatDelegate withMoveView:nil];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [delegate setChatDelegate:self];
-    
-    if (self.partyLoadingAgain) {
-        [_partyDelegate loadPartyData];
-        self.partyLoadingAgain = FALSE;
-    }
-}
+
 
 - (void)receiveParty {
     [_partyDelegate loadPartyData];
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [delegate setChatDelegate:nil];
-    [super viewDidDisappear:animated];
-}
+
 
 - (void)showImageAtIndexPath:(int)indexPath withImageArray: (NSMutableArray *)imageViewArray {
     MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];

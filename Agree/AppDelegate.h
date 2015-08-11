@@ -22,7 +22,12 @@
 
 #import "RootViewController.h"
 
+@protocol SRReceivingDelegate <NSObject>
 
+@optional
+- (void)receivingData: (id)revData;
+
+@end
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -33,7 +38,6 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 
-@property (nonatomic, weak)GroupDetailViewController *chatDelegate;
 @property (nonatomic, weak)UserChatViewController *userChatDelegate;
 @property (nonatomic, weak)GroupViewController *groupDelegate;
 @property (nonatomic, weak)ContactsTableViewController *contactsDelegate;
@@ -50,7 +54,9 @@
 
 @property (nonatomic, strong)UIViewController<WXApiDelegate> *wechatViewController;
 
-
+//接收代理
+@property (nonatomic, strong)id<SRReceivingDelegate>revDelegate;
+@property (nonatomic, strong)UIViewController *topRootViewController;
 
 - (void)logout;
 

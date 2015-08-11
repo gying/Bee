@@ -65,6 +65,35 @@
     self.tableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh:)];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    //设置当前视图控制器为根控制器
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    delegate.topRootViewController = self;
+    [delegate setContactsDelegate:self];
+    [self.navigationController.tabBarItem setBadgeValue:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"contact_update"] isEqualToNumber:@0] || ![[[NSUserDefaults standardUserDefaults] objectForKey:@"relation_update"] isEqualToNumber:@0]) {
+        //信息有更新
+        
+        if (!_isfirstLoad) {
+            [self loadDataFromNet];
+        }
+    }
+    
+    [self.navigationController.tabBarItem setBadgeValue:nil];
+    
+    NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"relation_update"];
+    if ([updateValue isEqual:@0]) {
+        [self.updateView setHidden:YES];
+    } else {
+        [self.updateView setHidden:NO];
+    }
+    [super viewDidAppear:YES];
+}
+
+
 -(void)backView
 {
     _backView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
@@ -154,42 +183,6 @@
                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
                                 
                             }];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"contact_update"] isEqualToNumber:@0] || ![[[NSUserDefaults standardUserDefaults] objectForKey:@"relation_update"] isEqualToNumber:@0]) {
-        //信息有更新
-        
-        if (!_isfirstLoad) {
-            [self loadDataFromNet];
-        }
-    }
-    
-    [self.navigationController.tabBarItem setBadgeValue:nil];
-    
-    NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"relation_update"];
-    if ([updateValue isEqual:@0]) {
-        [self.updateView setHidden:YES];
-    } else {
-        [self.updateView setHidden:NO];
-    }
-    
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [delegate setContactsDelegate:self];
-    [super viewDidAppear:YES];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [delegate setContactsDelegate:nil];
-    [super viewWillDisappear:YES];
-}
-
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source

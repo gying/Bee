@@ -17,6 +17,7 @@
 #import "CD_Group_User.h"
 #import "CD_Photo.h"
 #import "SRTool.h"
+#import "AppDelegate.h"
 
 #import <SVProgressHUD.h>
 
@@ -46,8 +47,15 @@
     
     //BB号
     //[self.accountLabel setText:[NSString stringWithFormat:@"BB号:  %@",[Model_User loadFromUserDefaults].pk_user.stringValue]];
+    
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    //设置当前视图控制器为根控制器
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    delegate.topRootViewController = self;
+    [self.navigationController.tabBarItem setBadgeValue:nil];
+}
 
 - (void)resetAvatar {
     //下载图片

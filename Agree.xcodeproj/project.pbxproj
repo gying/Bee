@@ -819,10 +819,10 @@
 			children = (
 				F0DDC5BD1A8E7B43007BF39F /* GroupViewController.h */,
 				F0DDC5BE1A8E7B43007BF39F /* GroupViewController.m */,
-				F09F05551AB693880079D6DB /* ContactsTableViewController.h */,
-				F09F05561AB693880079D6DB /* ContactsTableViewController.m */,
 				C68EBEDB1B73045200A6F2E5 /* ScheduleViewController.h */,
 				C68EBEDC1B73045200A6F2E5 /* ScheduleViewController.m */,
+				F09F05551AB693880079D6DB /* ContactsTableViewController.h */,
+				F09F05561AB693880079D6DB /* ContactsTableViewController.m */,
 				F01487E71A8F827800E41A63 /* UserViewController.h */,
 				F01487E81A8F827800E41A63 /* UserViewController.m */,
 			);

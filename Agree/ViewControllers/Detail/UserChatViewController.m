@@ -120,8 +120,6 @@
     }
     
     [self subChatArray];
-
-    
     
 #pragma mark -- 导航栏标题
     [self.navigationItem setTitle:self.user.nickname];
@@ -135,6 +133,10 @@
     [self tableViewIsScrollToBottom:YES withAnimated:NO];
     [self.userChatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
     [_conversation markAllMessagesAsRead:YES];
+    
+    
+    
+    
 }
 
 
