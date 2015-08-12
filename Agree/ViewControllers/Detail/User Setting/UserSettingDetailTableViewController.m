@@ -9,7 +9,7 @@
 #import "UserSettingDetailTableViewController.h"
 #import "UserSettingDetailTableViewCell.h"
 #import "UserViewController.h"
-
+#import "FeedbackTableViewCell.h"
 
 @interface UserSettingDetailTableViewController (){
      NSArray *_sexArray;
@@ -47,6 +47,14 @@
     return 1;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (kFeedback == self.inputType) {
+        return 100;
+    }
+    return 44;
+}
+
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     switch (self.inputType) {
@@ -63,6 +71,11 @@
             //绑定手机号码
             return 1;
         }
+        case kFeedback: {
+            //反馈信息
+            return 1;
+        }
+
             break;
 
             break;
@@ -73,49 +86,74 @@
     }
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (kChooseSex == self.inputType) {
+        NSArray *array = [tableView visibleCells];
+        for (UITableViewCell *cell in array) {
+            [cell setAccessoryType:UITableViewCellAccessoryNone];
+        }
+        UITableViewCell *cell=[self.tableView cellForRowAtIndexPath:indexPath];
+        [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+    }
+
+}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *cellIdentifier = @"InputTableCell";
-    UserSettingDetailTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
-    
-    if (nil == cell) {
-        cell = [[UserSettingDetailTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-    }
-    
-    switch (self.inputType) {
-        case 1: {
-            //选择性别
-            [cell.inputTextField setEnabled:NO];
-            [cell.inputTextField setHidden:YES];
-            [cell.textLabel setFont:[UIFont systemFontOfSize:13]];
-            [cell.textLabel setText:[_sexArray objectAtIndex:indexPath.row]];
-            
+    if (kFeedback == self.inputType) {
+        static NSString *cellIdentifier = @"FeedbackCell";
+        FeedbackTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+        if (nil == cell) {
+            cell = [[FeedbackTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         }
-            break;
-        case 2: {
-            //更改昵称
-            [cell.inputTextField becomeFirstResponder];
+        [cell.feedbackTextView becomeFirstResponder];
+        
+        return cell;
+        
+    } else {
+        static NSString *cellIdentifier = @"InputTableCell";
+        UserSettingDetailTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+        
+        if (nil == cell) {
+            cell = [[UserSettingDetailTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         }
-        case 3: {
-            //绑定手机号码
-            [cell.inputTextField setPlaceholder:@"手机号码"];
-            [cell.inputTextField setKeyboardType:UIKeyboardTypeNumberPad];
-            [cell.inputTextField becomeFirstResponder];
-        }
+        
+        switch (self.inputType) {
+            case kChooseSex: {
+                //选择性别
+                [cell.inputTextField setEnabled:NO];
+                [cell.inputTextField setHidden:YES];
+                [cell.textLabel setFont:[UIFont systemFontOfSize:13]];
+                [cell.textLabel setText:[_sexArray objectAtIndex:indexPath.row]];
 
-            break;
-        default: {
-            return cell;
+               
+                
+            }
+                break;
+            case kNickName: {
+                //更改昵称
+                [cell.inputTextField setPlaceholder:@"昵称"];
+                [cell.inputTextField becomeFirstResponder];
+            }
+                break;
+                
+            case kBandPhone: {
+                //绑定手机号码
+                [cell.inputTextField setPlaceholder:@"手机号码"];
+                [cell.inputTextField setKeyboardType:UIKeyboardTypeNumberPad];
+                [cell.inputTextField becomeFirstResponder];
+            }
+                break;
+            default: {
+                return cell;
+            }
+                break;
         }
-            break;
+        
+        return cell;
     }
-    
-    
-    
-    // Configure the cell...
-    
-    return cell;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -133,6 +171,11 @@
             //更改昵称
             return @"请输入你的手机号码";
         }
+        case kFeedback: {
+            //回馈内容
+            return @"请输入你的想要反馈的问题以及对我们的建议";
+        }
+
 
             break;
         default: {
@@ -160,6 +203,11 @@
             //绑定手机号码
             return @"小提示:\n手机号码为11位纯数字,\n不需要在号码前面加上0或者+86";
         }
+        case kFeedback: {
+            //绑定手机号码
+            return @"小提示:\n我们将会十分重视你的意见.";
+        }
+
 
             break;
         default: {
@@ -197,8 +245,7 @@
 
 
 - (IBAction)tapBackButton:(id)sender {
-    
-    
+
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -277,6 +324,11 @@
     }
     else if (kChooseSex == self.inputType){
         NSLog(@"保存性别的实现");
+        
+        return NO;
+    }
+    else if (kFeedback == self.inputType){
+        NSLog(@"保存反馈的实现");
         
         return NO;
     }

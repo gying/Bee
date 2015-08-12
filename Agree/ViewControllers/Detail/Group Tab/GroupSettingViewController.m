@@ -48,12 +48,15 @@
     
     _tableAry = @[@[@"小组名称",@"小组历史聚会",@"邀请好友加入"], @[@"聚会的信息提示",@"聊天的信息提示",@"公开手机号码"],@[@"退出小组"]];
     
-    self.avatarView.layer.cornerRadius = 3.0;
+    self.avatarButton.layer.cornerRadius = 3.0;
     //类型的边框与圆弧
     self.inButton.layer.cornerRadius = self.inButton.frame.size.height/4;
     self.inButton.layer.borderColor = [UIColor colorWithWhite:0.8 alpha:1.0].CGColor;
     self.inButton.layer.borderWidth = 0.5;
     
+}
+- (IBAction)changeAvatar:(id)sender {
+    NSLog(@"更换头像");
 }
 
 //- (void)viewDidLoad {
@@ -319,55 +322,153 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ((0 == indexPath.section)&&(0 == indexPath.row)) {
-        NSLog(@"小组名称");
-        
-    }
-    else if ((0 == indexPath.section)&&(1 == indexPath.row)) {
-        NSLog(@"小组历史聚会");
-        
-        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-        
-        GroupHistroyPartyViewController *childController = [sb instantiateViewControllerWithIdentifier:@"GroupHistroyPartyViewController"];
-        [self.navigationController showViewController:childController sender:self];
-        
-    }
-    else if ((0 == indexPath.section)&&(2 == indexPath.row)) {
-        NSLog(@"邀请好友加入");
-        
-    }
-    else if ((1 == indexPath.section)&&(0 == indexPath.row)) {
-        NSLog(@"聚会信息提示");
-        
-    }
-    else if ((1 == indexPath.section)&&(1 == indexPath.row)) {
-        NSLog(@"聊天信息提示");
-        
-    }
-    else if ((1 == indexPath.section)&&(2 == indexPath.row)) {
-        NSLog(@"公开手机号码");
-        
-    }
-    else if ((2 == indexPath.section)&&(0 == indexPath.row)) {
-        NSLog(@"退出小组");
-        
-        [SRTool showSRAlertViewWithTitle:@"警告" message:@"真的要退出这个小组吗?"
-                            cancelButtonTitle:@"我再想想" otherButtonTitle:@"是的"
-                        tapCancelButtonHandle:^(NSString *msgString) {
-         
-                        } tapOtherButtonHandle:^(NSString *msgString) {
-                            //确认发送
-                            _relationship.status = @0;
-                            _saveForQuit = YES;
-                            [SRNet_Manager requestNetWithDic:[SRNet_Manager updateGroupRelationShip:_relationship]
-                                                    complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
-                                                        [self updateGroupRelationShipDone:jsonDic];
-                                                    } failure:^(NSError *error, NSURLSessionDataTask *task) {
-         
-                                                    }];
-                        }];
+//    if ((0 == indexPath.section)&&(0 == indexPath.row)) {
+//        NSLog(@"小组名称");
+//        
+//    }
+//    else if ((0 == indexPath.section)&&(1 == indexPath.row)) {
+//        NSLog(@"小组历史聚会");
+//        
+//        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+//        
+//        GroupHistroyPartyViewController *childController = [sb instantiateViewControllerWithIdentifier:@"GroupHistroyPartyViewController"];
+//        [self.navigationController showViewController:childController sender:self];
+//        
+//    }
+//    else if ((0 == indexPath.section)&&(2 == indexPath.row)) {
+//        NSLog(@"邀请好友加入");
+//        
+//    }
+//    else if ((1 == indexPath.section)&&(0 == indexPath.row)) {
+//        NSLog(@"聚会信息提示");
+//        
+//    }
+//    else if ((1 == indexPath.section)&&(1 == indexPath.row)) {
+//        NSLog(@"聊天信息提示");
+//        
+//    }
+//    else if ((1 == indexPath.section)&&(2 == indexPath.row)) {
+//        NSLog(@"公开手机号码");
+//        
+//    }
+//    else if ((2 == indexPath.section)&&(0 == indexPath.row)) {
+//        NSLog(@"退出小组");
+//        
+//        [SRTool showSRAlertViewWithTitle:@"警告" message:@"真的要退出这个小组吗?"
+//                            cancelButtonTitle:@"我再想想" otherButtonTitle:@"是的"
+//                        tapCancelButtonHandle:^(NSString *msgString) {
+//         
+//                        } tapOtherButtonHandle:^(NSString *msgString) {
+//                            //确认发送
+//                            _relationship.status = @0;
+//                            _saveForQuit = YES;
+//                            [SRNet_Manager requestNetWithDic:[SRNet_Manager updateGroupRelationShip:_relationship]
+//                                                    complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+//                                                        [self updateGroupRelationShipDone:jsonDic];
+//                                                    } failure:^(NSError *error, NSURLSessionDataTask *task) {
+//         
+//                                                    }];
+//                        }];
+//
+//    }
+//    
+    
+    switch (indexPath.section) {
+        case 0:
+            switch (indexPath.row) {
+                case 0:
+                {
+                     NSLog(@"小组名称");
+                    
+                }
+                    break;
+                case 1:
+                {
+                    NSLog(@"小组历史聚会");
+                    
+                    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+                    
+                    GroupHistroyPartyViewController *childController = [sb instantiateViewControllerWithIdentifier:@"GroupHistroyPartyViewController"];
+                    [self.navigationController showViewController:childController sender:self];
 
+                    
+                }
+                    break;
+                case 2:
+                {
+                     NSLog(@"邀请好友加入");
+                    
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+            break;
+        case 1:
+            switch (indexPath.row) {
+                case 0:
+                {
+                     NSLog(@"聚会信息提示");
+                    
+                }
+                    break;
+                case 1:
+                {
+                     NSLog(@"聊天信息提示");
+                    
+                }
+                    break;
+                case 2:
+                {
+                    NSLog(@"公开手机号码");
+                    
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+            break;
+        case 2:
+            switch (indexPath.row) {
+                case 0:
+                {
+                    NSLog(@"退出小组");
+                    
+                    [SRTool showSRAlertViewWithTitle:@"警告" message:@"真的要退出这个小组吗?"
+                                   cancelButtonTitle:@"我再想想" otherButtonTitle:@"是的"
+                               tapCancelButtonHandle:^(NSString *msgString) {
+                                   
+                               } tapOtherButtonHandle:^(NSString *msgString) {
+                                   //确认发送
+                                   _relationship.status = @0;
+                                   _saveForQuit = YES;
+                                   [SRNet_Manager requestNetWithDic:[SRNet_Manager updateGroupRelationShip:_relationship]
+                                                           complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                                               [self updateGroupRelationShipDone:jsonDic];
+                                                           } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                                               
+                                                           }];
+                               }];
+                    
+
+                }
+                    break;
+
+                    
+                default:
+                    break;
+            }
+            break;
+            
+            
+        default:
+            break;
     }
+    
+    
+    
 }
 
 

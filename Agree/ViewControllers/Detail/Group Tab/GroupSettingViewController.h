@@ -26,6 +26,7 @@
 
 
 @property (weak, nonatomic) IBOutlet UITableView *groupSettingTableView;
-@property (weak, nonatomic) IBOutlet UIView *avatarView;
+@property (weak, nonatomic) IBOutlet UIButton *avatarButton;
+
 @property (weak, nonatomic) IBOutlet UIButton *inButton;
 @end
