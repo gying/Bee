@@ -20,7 +20,7 @@
 
 @property (nonatomic, strong)GroupDetailViewController *rootController;
 
-@property (weak, nonatomic) IBOutlet UIButton *GroupHistroyPartyButton;
+
 
 
 

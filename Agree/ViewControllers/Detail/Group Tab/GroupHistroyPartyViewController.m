@@ -14,8 +14,10 @@
 
 #import <MJRefresh.h>
 
+#import "PartyDetailViewController.h"
+
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
-@interface GroupHistroyPartyViewController () {
+@interface GroupHistroyPartyViewController ()<SRPartyDetailDelegate> {
     NSDictionary *norDic;
     NSDictionary *selDic;
     
@@ -109,6 +111,70 @@
        
     }
 }
+
+- (void)detailChange: (Model_Party *)party with:(int)type
+{
+    switch (type) {
+        case 1: {
+            //日程
+            for (Model_Party *theParty in _groupHistroyDelegate.schAry) {
+                if ([theParty.pk_party isEqualToString:party.pk_party]) {
+                    theParty.relationship = party.relationship;
+                }
+            }
+            [self.myGroupHistroyPartyTableView reloadData];
+        }
+            break;
+                default:
+            break;
+    }
+
+}
+
+
+- (void)cancelParty: (Model_Party *)party with:(int)type
+{
+    Model_Party *cancelParty;
+    switch (type) {
+        case 1: {
+            //日程
+            cancelParty = nil;
+            for (Model_Party *theParty in _groupHistroyDelegate.schAry) {
+                if ([theParty.pk_party isEqualToString:party.pk_party]) {
+                    cancelParty = theParty;
+                }
+            }
+            
+            if (cancelParty) {
+                [_groupHistroyDelegate.schAry removeObject:cancelParty];
+                [self reloadTipView:_groupHistroyDelegate.schAry.count withType:1];
+                [self.myGroupHistroyPartyTableView reloadData];
+            }
+        }
+            break;
+        default:
+            break;
+    }
+
+}
+
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    
+    //1 日程
+    //2 历史聚会
+    //intoType
+    if ([@"GroupHistroyParty" isEqualToString:segue.identifier]) {
+        PartyDetailViewController *childController = (PartyDetailViewController *)segue.destinationViewController;
+        childController.party = [_groupHistroyDelegate.schAry objectAtIndex:self.chooseRow];
+        childController.intoType = 1;
+        childController.delegate = self;
+        
+    }
+}
+
 
 
 

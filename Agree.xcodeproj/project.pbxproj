@@ -17,6 +17,9 @@
 		C6749BAF1B787E09002F4D6E /* GroupHistroyPartyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6749BAE1B787E09002F4D6E /* GroupHistroyPartyTableViewController.m */; };
 		C6749BB21B789F54002F4D6E /* UserSettingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C6749BB11B789F54002F4D6E /* UserSettingTableViewCell.m */; };
 		C68EBEDD1B73045200A6F2E5 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C68EBEDC1B73045200A6F2E5 /* ScheduleViewController.m */; };
+		C699A9171B7AE77100CE0C5E /* UserSettingDetailTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C699A9161B7AE77100CE0C5E /* UserSettingDetailTableViewController.m */; };
+		C699A91A1B7AE7F600CE0C5E /* UserSettingDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C699A9191B7AE7F600CE0C5E /* UserSettingDetailTableViewCell.m */; };
+		C699A91D1B7B1F9600CE0C5E /* CodeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C699A91C1B7B1F9600CE0C5E /* CodeInputViewController.m */; };
 		C69BC6181B704D1B003540DB /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C69BC6171B704D1B003540DB /* RootViewController.m */; };
 		C6B4DA031B5CD0A000EF9BE7 /* PrepayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B4DA021B5CD0A000EF9BE7 /* PrepayViewController.m */; };
 		C6D11D481B79DF65005D7889 /* GroupSettingUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C6D11D471B79DF65005D7889 /* GroupSettingUITableViewCell.m */; };
@@ -199,6 +202,12 @@
 		C6749BB11B789F54002F4D6E /* UserSettingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSettingTableViewCell.m; sourceTree = "<group>"; };
 		C68EBEDB1B73045200A6F2E5 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleViewController.h; sourceTree = "<group>"; };
 		C68EBEDC1B73045200A6F2E5 /* ScheduleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScheduleViewController.m; sourceTree = "<group>"; };
+		C699A9151B7AE77100CE0C5E /* UserSettingDetailTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSettingDetailTableViewController.h; sourceTree = "<group>"; };
+		C699A9161B7AE77100CE0C5E /* UserSettingDetailTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSettingDetailTableViewController.m; sourceTree = "<group>"; };
+		C699A9181B7AE7F600CE0C5E /* UserSettingDetailTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSettingDetailTableViewCell.h; sourceTree = "<group>"; };
+		C699A9191B7AE7F600CE0C5E /* UserSettingDetailTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSettingDetailTableViewCell.m; sourceTree = "<group>"; };
+		C699A91B1B7B1F9600CE0C5E /* CodeInputViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CodeInputViewController.h; sourceTree = "<group>"; };
+		C699A91C1B7B1F9600CE0C5E /* CodeInputViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CodeInputViewController.m; sourceTree = "<group>"; };
 		C69BC6161B704D1B003540DB /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		C69BC6171B704D1B003540DB /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		C6B4DA011B5CD0A000EF9BE7 /* PrepayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrepayViewController.h; sourceTree = "<group>"; };
@@ -618,6 +627,10 @@
 				F05EAC3C1AD13B1F006F505B /* AboutUsViewController.m */,
 				F05EAC3E1AD13B42006F505B /* FeedBackViewController.h */,
 				F05EAC3F1AD13B42006F505B /* FeedBackViewController.m */,
+				C699A9151B7AE77100CE0C5E /* UserSettingDetailTableViewController.h */,
+				C699A9161B7AE77100CE0C5E /* UserSettingDetailTableViewController.m */,
+				C699A91B1B7B1F9600CE0C5E /* CodeInputViewController.h */,
+				C699A91C1B7B1F9600CE0C5E /* CodeInputViewController.m */,
 			);
 			path = "User Setting";
 			sourceTree = "<group>";
@@ -742,6 +755,8 @@
 				C64F1D631B26CB9D0063C012 /* ChoosefriendsTableViewCell.m */,
 				C6749BB01B789F54002F4D6E /* UserSettingTableViewCell.h */,
 				C6749BB11B789F54002F4D6E /* UserSettingTableViewCell.m */,
+				C699A9181B7AE7F600CE0C5E /* UserSettingDetailTableViewCell.h */,
+				C699A9191B7AE7F600CE0C5E /* UserSettingDetailTableViewCell.m */,
 				C6D11D461B79DF65005D7889 /* GroupSettingUITableViewCell.h */,
 				C6D11D471B79DF65005D7889 /* GroupSettingUITableViewCell.m */,
 			);
@@ -1198,12 +1213,14 @@
 				F08B809D1A75F7110012E3D9 /* PartyDetailViewController.m in Sources */,
 				F0A97FC21A92175F00FFA4F2 /* GroupChatTableViewCell.m in Sources */,
 				C6749BAF1B787E09002F4D6E /* GroupHistroyPartyTableViewController.m in Sources */,
+				C699A91A1B7AE7F600CE0C5E /* UserSettingDetailTableViewCell.m in Sources */,
 				F036D2721AB492C3002C3B81 /* BandingPhoneViewController.m in Sources */,
 				F0F5C2721A66F1490029BF7A /* SRNet_Manager.m in Sources */,
 				F07BBDAE1A9EE48A00B44C65 /* PeopleListTableViewCell.m in Sources */,
 				F0CF4EB21ACAEDF500BBD4AF /* EModel_User_Chat.m in Sources */,
 				F0B5F4A91AAA97180013111F /* MJPhoto.m in Sources */,
 				F09F05571AB693880079D6DB /* ContactsTableViewController.m in Sources */,
+				C699A9171B7AE77100CE0C5E /* UserSettingDetailTableViewController.m in Sources */,
 				C6B4DA031B5CD0A000EF9BE7 /* PrepayViewController.m in Sources */,
 				F0F5C2941A66F1620029BF7A /* Model_Group_User.m in Sources */,
 				F0B5F4AC1AAA97180013111F /* MJPhotoLoadingView.m in Sources */,
@@ -1228,6 +1245,7 @@
 				C64F1D5E1B26881A0063C012 /* ChoosefriendsViewController.m in Sources */,
 				C6E25B901B57B2190031A6B9 /* HistoryPartyTableViewCell.m in Sources */,
 				C64F1D641B26CB9D0063C012 /* ChoosefriendsTableViewCell.m in Sources */,
+				C699A91D1B7B1F9600CE0C5E /* CodeInputViewController.m in Sources */,
 				F01487E91A8F827800E41A63 /* UserViewController.m in Sources */,
 				F0F5C2921A66F1620029BF7A /* Model_Feedback.m in Sources */,
 				F0F5C27B1A66F1490029BF7A /* NSObject+MJCoding.m in Sources */,
