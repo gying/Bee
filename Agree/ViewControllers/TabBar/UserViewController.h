@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "AboutUsViewController.h"
+#import "FeedBackViewController.h"
 
 
 @interface UserViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>

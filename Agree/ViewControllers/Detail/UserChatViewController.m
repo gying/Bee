@@ -133,10 +133,6 @@
     [self tableViewIsScrollToBottom:YES withAnimated:NO];
     [self.userChatTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
     [_conversation markAllMessagesAsRead:YES];
-    
-    
-    
-    
 }
 
 
@@ -427,8 +423,6 @@
 
 
 - (void)sendMessageFromString: (NSString *)text {
-
-    
     [self sendMessageDone:[EMSendMessageHepler sendTextMessageWithString:text
                                                               toUsername:self.user.pk_user.stringValue
                                                              isChatGroup:NO

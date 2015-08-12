@@ -75,7 +75,6 @@
     [self.groupCollectionView.header endRefreshing];
 }
 
-
 /*!
  @method
  @brief 用户自动登录完成后的回调

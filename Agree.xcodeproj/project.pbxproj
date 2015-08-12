@@ -19,6 +19,7 @@
 		C68EBEDD1B73045200A6F2E5 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C68EBEDC1B73045200A6F2E5 /* ScheduleViewController.m */; };
 		C69BC6181B704D1B003540DB /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C69BC6171B704D1B003540DB /* RootViewController.m */; };
 		C6B4DA031B5CD0A000EF9BE7 /* PrepayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B4DA021B5CD0A000EF9BE7 /* PrepayViewController.m */; };
+		C6D11D481B79DF65005D7889 /* GroupSettingUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C6D11D471B79DF65005D7889 /* GroupSettingUITableViewCell.m */; };
 		C6E25B841B57A3C70031A6B9 /* SchedulePartyTableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C6E25B831B57A3C70031A6B9 /* SchedulePartyTableViewDelegate.m */; };
 		C6E25B8A1B57ACEB0031A6B9 /* HistoryPartyTableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C6E25B891B57ACEB0031A6B9 /* HistoryPartyTableViewDelegate.m */; };
 		C6E25B8D1B57B1FA0031A6B9 /* CreatedPartyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C6E25B8C1B57B1FA0031A6B9 /* CreatedPartyTableViewCell.m */; };
@@ -93,6 +94,7 @@
 		F0B1989B1B75E5B600BF1ADC /* GroupPeopleTableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F0B1989A1B75E5B600BF1ADC /* GroupPeopleTableViewDelegate.m */; };
 		F0B1989E1B75E5CC00BF1ADC /* GroupPeopleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0B1989D1B75E5CC00BF1ADC /* GroupPeopleTableViewCell.m */; };
 		F0B198A11B75E94900BF1ADC /* GroupSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0B198A01B75E94900BF1ADC /* GroupSettingViewController.m */; };
+		F0B3A2261B7A2115000D94BE /* loading-red-spot.gif in Resources */ = {isa = PBXBuildFile; fileRef = F0B3A2251B7A2115000D94BE /* loading-red-spot.gif */; };
 		F0B5F4A91AAA97180013111F /* MJPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = F0B5F49A1AAA97180013111F /* MJPhoto.m */; };
 		F0B5F4AA1AAA97180013111F /* MJPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F0B5F49B1AAA97180013111F /* MJPhotoBrowser.bundle */; };
 		F0B5F4AB1AAA97180013111F /* MJPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = F0B5F49D1AAA97180013111F /* MJPhotoBrowser.m */; };
@@ -202,6 +204,8 @@
 		C69BC6171B704D1B003540DB /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		C6B4DA011B5CD0A000EF9BE7 /* PrepayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrepayViewController.h; sourceTree = "<group>"; };
 		C6B4DA021B5CD0A000EF9BE7 /* PrepayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrepayViewController.m; sourceTree = "<group>"; };
+		C6D11D461B79DF65005D7889 /* GroupSettingUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupSettingUITableViewCell.h; sourceTree = "<group>"; };
+		C6D11D471B79DF65005D7889 /* GroupSettingUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupSettingUITableViewCell.m; sourceTree = "<group>"; };
 		C6E25B821B57A3C70031A6B9 /* SchedulePartyTableViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SchedulePartyTableViewDelegate.h; sourceTree = "<group>"; };
 		C6E25B831B57A3C70031A6B9 /* SchedulePartyTableViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SchedulePartyTableViewDelegate.m; sourceTree = "<group>"; };
 		C6E25B881B57ACEB0031A6B9 /* HistoryPartyTableViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryPartyTableViewDelegate.h; sourceTree = "<group>"; };
@@ -334,6 +338,7 @@
 		F0B1989D1B75E5CC00BF1ADC /* GroupPeopleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupPeopleTableViewCell.m; sourceTree = "<group>"; };
 		F0B1989F1B75E94900BF1ADC /* GroupSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupSettingViewController.h; sourceTree = "<group>"; };
 		F0B198A01B75E94900BF1ADC /* GroupSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupSettingViewController.m; sourceTree = "<group>"; };
+		F0B3A2251B7A2115000D94BE /* loading-red-spot.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "loading-red-spot.gif"; sourceTree = "<group>"; };
 		F0B5F4991AAA97180013111F /* MJPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJPhoto.h; sourceTree = "<group>"; };
 		F0B5F49A1AAA97180013111F /* MJPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPhoto.m; sourceTree = "<group>"; };
 		F0B5F49B1AAA97180013111F /* MJPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJPhotoBrowser.bundle; sourceTree = "<group>"; };
@@ -739,6 +744,8 @@
 				C64F1D631B26CB9D0063C012 /* ChoosefriendsTableViewCell.m */,
 				C6749BB01B789F54002F4D6E /* UserSettingTableViewCell.h */,
 				C6749BB11B789F54002F4D6E /* UserSettingTableViewCell.m */,
+				C6D11D461B79DF65005D7889 /* GroupSettingUITableViewCell.h */,
+				C6D11D471B79DF65005D7889 /* GroupSettingUITableViewCell.m */,
 			);
 			path = "Cutom Cell";
 			sourceTree = "<group>";
@@ -746,6 +753,7 @@
 		F0F5C1BB1A66CEBE0029BF7A = {
 			isa = PBXGroup;
 			children = (
+				F0B3A2251B7A2115000D94BE /* loading-red-spot.gif */,
 				F0F5C1C61A66CEBE0029BF7A /* Agree */,
 				F0F5C1E31A66CEBE0029BF7A /* AgreeTests */,
 				F0F5C1C51A66CEBE0029BF7A /* Products */,
@@ -1071,6 +1079,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0B3A2261B7A2115000D94BE /* loading-red-spot.gif in Resources */,
 				F02169F61A927F1500353879 /* LangTingGBK.TTF in Resources */,
 				F0D1A1181B32A677009A5B26 /* Media.xcassets in Resources */,
 				F07642EE1AF1DDFC0075E0C2 /* MainStoryBoard.storyboard in Resources */,
@@ -1181,6 +1190,7 @@
 				F06765A41A9DA81E005937B4 /* PartyPeopleListViewController.m in Sources */,
 				F0068C0D1A679E0600B9CB60 /* ChooseDateViewController.m in Sources */,
 				F0F5C27D1A66F1490029BF7A /* NSObject+MJMember.m in Sources */,
+				C6D11D481B79DF65005D7889 /* GroupSettingUITableViewCell.m in Sources */,
 				F07F36CD1B2FFE7300D76D4C /* Agree.xcdatamodeld in Sources */,
 				F0B5F4AB1AAA97180013111F /* MJPhotoBrowser.m in Sources */,
 				F02169F41A927CFC00353879 /* GroupPartyTableViewCell.m in Sources */,

@@ -222,14 +222,11 @@
         controller.body = @"亲~ 快来必聚哦~ 我们都在这里聚会呢. 猛按->https://itunes.apple.com/cn/app/bi-ju/id1016321917?l=zh&ls=1&mt=8";
         
         [self.contactsDetailTableVC presentViewController:controller animated:YES completion:nil];
-}
-    
+    }
 }
 
-- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
-{
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
     NSLog(@"MFmessage回调方法");
-    
 }
 
 

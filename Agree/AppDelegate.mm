@@ -101,7 +101,7 @@
 #pragma mark 收到聊天信息
 - (void)didReceiveMessage:(EMMessage *)message {
     //这里收到了信息
-    if (message.messageType == eMessageTypeGroupChat) {
+//    if (message.messageType == eMessageTypeGroupChat) {
         //群聊
 //        if (self.chatDelegate) {
 //            //处于某小组的详情界面中
@@ -171,7 +171,6 @@
                 }
             }
         } else {
-            //个人聊天有问题.
             if ([self.revDelegate isKindOfClass:[UserChatViewController class]]) {
                 //直接在用户聊天界面
                 UserChatViewController *ucDelegate = (UserChatViewController *)self.revDelegate;
@@ -196,7 +195,7 @@
                 }
             }
         }
-    }
+//    }
 }
 
 #pragma mark 应用内收取推送信息
@@ -288,6 +287,11 @@
                     [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = @"1";
                 }
             }
+        }
+            break;
+            
+        case 11: {   //获取到私聊推送
+            //这里暂不做任何更新操作
         }
             break;
         default:

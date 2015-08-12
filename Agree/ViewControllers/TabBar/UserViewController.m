@@ -19,7 +19,6 @@
 #import "SRTool.h"
 #import "AppDelegate.h"
 #import <SVProgressHUD.h>
-
 #import "UserSettingTableViewCell.h"
 
 @interface UserViewController () {
@@ -27,9 +26,8 @@
     
     UILabel * titleLabel;
     
-    
     NSArray *_tableAry;
-    
+
 }
 
 @end
@@ -49,6 +47,9 @@
     [_backImageViwe.layer setMasksToBounds:YES];
     [_backImageViwe.layer setCornerRadius:_backImageViwe.frame.size.width/2];
     [self resetAvatar];
+    
+    self.nameLabel.text = [Model_User loadFromUserDefaults].nickname;
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -135,11 +136,43 @@
 //被选中的CELL执行内容
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if ((0 == indexPath.section)&&(0 == indexPath.row)) {
+        NSLog(@"姓名");
+        
+    }else if ((0 == indexPath.section)&&(1 == indexPath.row)) {
+        NSLog(@"性别");
+        
+    }else if ((0 == indexPath.section)&&(2 == indexPath.row)) {
+        NSLog(@"绑定手机");
+        
+    }else if ((0 == indexPath.section)&&(3 == indexPath.row)) {
+        NSLog(@"绑定微信");
+        
+    }else if ((1 == indexPath.section)&&(0 == indexPath.row)) {
+        NSLog(@"绑定微信钱包");
+        
+    }else if ((1 == indexPath.section)&&(1 == indexPath.row)) {
+        NSLog(@"绑定支付宝");
+        
+    }else if ((2 == indexPath.section)&&(0 == indexPath.row)) {
+        NSLog(@"反馈");
 
-   
-    
-    #pragma mark -- 注销登陆
-    if ((3 == indexPath.section) && (0 == indexPath.row)) {
+        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+        
+        FeedBackViewController *childController = [sb instantiateViewControllerWithIdentifier:@"FeedBackViewController"];
+        [self.navigationController showViewController:childController sender:self];
+        
+    }else if ((2 == indexPath.section)&&(1 == indexPath.row)) {
+        NSLog(@"关于必聚");
+
+        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+        
+        AboutUsViewController *childController = [sb instantiateViewControllerWithIdentifier:@"AboutUsViewController"];
+        childController.inputType = kSex;
+
+        [self.navigationController showViewController:childController sender:self];
+        
+    }else if ((3 == indexPath.section) && (0 == indexPath.row)) {
         
         [SRTool showSRAlertViewWithTitle:@"警告" message:@"确定要登出帐号吗?\n保存的资料将会被清空哦~"
                        cancelButtonTitle:@"我再想想" otherButtonTitle:@"是的"
@@ -168,8 +201,6 @@
                        [delegate logout];
                        [SVProgressHUD showSuccessWithStatus:@"退出成功"];
                    }];
-  
-
     }
     
 }

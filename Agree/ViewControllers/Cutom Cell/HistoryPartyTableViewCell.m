@@ -15,7 +15,7 @@
 - (void)awakeFromNib {
     // Initialization code
     
-    [self.dateView.layer setCornerRadius:4];
+    [self.dateView.layer setCornerRadius:3];
     [self.dateView.layer setMasksToBounds:YES];
 }
 
