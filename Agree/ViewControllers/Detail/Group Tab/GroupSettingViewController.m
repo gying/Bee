@@ -19,15 +19,19 @@
 #import "SRImageManager.h"
 #import "SRTool.h"
 #import "GroupHistroyPartyViewController.h"
+#import "ChoosefriendsViewController.h"
 
 
 #import "GroupSettingUITableViewCell.h"
 #import "GroupHistroyPartyViewController.h"
 
 
+#import "UserSettingDetailTableViewController.h"
+
+
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
-@interface GroupSettingViewController ()<UITableViewDataSource, UITableViewDelegate> {
+@interface GroupSettingViewController ()<UITableViewDataSource, UITableViewDelegate, SRChooseFriendsDelegate> {
     Model_Group_User *_relationship;
     UIImageView *_backImageViwe;
     
@@ -36,6 +40,8 @@
     SRAccountView *_accountView;
     
     NSArray *_tableAry;
+    
+    NSMutableArray *_chooseFriendList;
 }
 
 @end
@@ -372,6 +378,11 @@
                 case 0:
                 {
                      NSLog(@"小组名称");
+                
+                    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+                    UserSettingDetailTableViewController *childController = [sb instantiateViewControllerWithIdentifier:@"UserSettingDetail"];
+                    childController.inputType = kNickName;
+                    [self.navigationController showViewController:childController sender:self];
                     
                 }
                     break;
@@ -390,6 +401,7 @@
                 case 2:
                 {
                      NSLog(@"邀请好友加入");
+                    [self performSegueWithIdentifier:@"GoToChooseFriends" sender:self];
                     
                 }
                     break;
@@ -476,7 +488,10 @@
     // Dispose of any resources that can be recreated.
 }
 
-
+#pragma mark - choose friends delegate 
+- (void)saveFriendList:(NSMutableArray *)friendList {
+    _chooseFriendList = friendList;
+}
 
 #pragma mark - Navigation
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -487,6 +502,17 @@
         //历史聚会详情
         GroupDetailViewController *childController = segue.destinationViewController;
         childController.group = self.group;
+    }
+    
+    if ([@"GoToChooseFriends" isEqualToString:segue.identifier]) {
+        
+        if (!_chooseFriendList) {
+            _chooseFriendList = [[NSMutableArray alloc] init];
+        }
+        
+        ChoosefriendsViewController *childController = segue.destinationViewController;
+        childController.choosePeopleArray = _chooseFriendList;
+        childController.delegate = self;
     }
 }
 

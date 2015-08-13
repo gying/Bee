@@ -187,15 +187,8 @@
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-//    if((3 == _selectedIndex.section) && (0 == _selectedIndex.row)) {
-//        return NO;
-//    }
-    
-    
     switch (_selectedIndex.section) {
-            
-            
-        case 0:
+        case 0: {
             switch (_selectedIndex.row) {
                 case 3: {
                     NSLog(@"绑定微信");
@@ -232,7 +225,11 @@
                 default:
                     break;
             }
-        case 3:
+            
+        }
+            break;
+            
+        case 3: {
             switch (_selectedIndex.row) {
                 case 0:
                     return NO;
@@ -241,11 +238,13 @@
                 default:
                     break;
             }
+        }
             break;
             
         default:
             break;
     }
+    
     return YES;
 }
 
