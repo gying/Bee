@@ -11,6 +11,7 @@
 #define kChooseSex      1
 #define kNickName       2
 #define kBandPhone      3
+#define kFeedback       4
 
 @interface UserSettingDetailTableViewController : UITableViewController
 

@@ -1629,6 +1629,20 @@
                                     <rect key="frame" x="0.0" y="64" width="600" height="160"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1IM-ZH-JEI" userLabel="小组头像">
+                                            <rect key="frame" x="260" y="35" width="80" height="80"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="80" id="nyK-jh-L0V"/>
+                                                <constraint firstAttribute="height" constant="80" id="oSS-ez-dSA"/>
+                                            </constraints>
+                                            <state key="normal">
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="changeAvatar:" destination="YRY-pL-6HV" eventType="touchUpInside" id="yxh-28-UfV"/>
+                                            </connections>
+                                        </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rfs-xf-h7E">
                                             <rect key="frame" x="235" y="120" width="130" height="30"/>
                                             <constraints>
@@ -1641,21 +1655,13 @@
                                                 <action selector="pressedTheCodeButton:" destination="YRY-pL-6HV" eventType="touchUpInside" id="dVb-go-FcX"/>
                                             </connections>
                                         </button>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iNk-JO-Dq6" userLabel="avatarView">
-                                            <rect key="frame" x="260" y="35" width="80" height="80"/>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="80" id="E9e-Ka-ys7"/>
-                                                <constraint firstAttribute="width" constant="80" id="qo0-cm-jmT"/>
-                                            </constraints>
-                                        </view>
                                     </subviews>
                                     <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
-                                        <constraint firstAttribute="centerX" secondItem="iNk-JO-Dq6" secondAttribute="centerX" id="2u5-G6-M4g"/>
-                                        <constraint firstItem="Rfs-xf-h7E" firstAttribute="top" secondItem="iNk-JO-Dq6" secondAttribute="bottom" constant="5" id="A63-pg-h3L"/>
-                                        <constraint firstItem="iNk-JO-Dq6" firstAttribute="top" secondItem="fuZ-w5-0Tb" secondAttribute="top" constant="35" id="PFf-D9-wSk"/>
+                                        <constraint firstItem="Rfs-xf-h7E" firstAttribute="top" secondItem="1IM-ZH-JEI" secondAttribute="bottom" constant="5" id="VJo-S5-PeJ"/>
+                                        <constraint firstItem="1IM-ZH-JEI" firstAttribute="top" secondItem="fuZ-w5-0Tb" secondAttribute="top" constant="35" id="VrK-ug-reF"/>
                                         <constraint firstAttribute="centerX" secondItem="Rfs-xf-h7E" secondAttribute="centerX" id="Xom-Ws-29W"/>
+                                        <constraint firstAttribute="centerX" secondItem="1IM-ZH-JEI" secondAttribute="centerX" id="dld-7g-XLr"/>
                                     </constraints>
                                 </view>
                                 <prototypes>
@@ -1713,7 +1719,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="avatarView" destination="iNk-JO-Dq6" id="7xa-ra-8tg"/>
+                        <outlet property="avatarButton" destination="1IM-ZH-JEI" id="Eh8-2B-5qo"/>
                         <outlet property="groupSettingTableView" destination="tQb-C9-sYZ" id="vHO-AD-B3n"/>
                         <outlet property="inButton" destination="Rfs-xf-h7E" id="ogQ-Ht-jhv"/>
                         <outlet property="saveButton" destination="uuN-fD-eoI" id="oJO-AQ-tbO"/>
@@ -5585,6 +5591,30 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="inputTextField" destination="ufG-At-2Fu" id="sg8-q1-Ztu"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" restorationIdentifier="FeedbackCell" selectionStyle="default" indentationWidth="10" reuseIdentifier="FeedbackCell" rowHeight="100" id="JOL-yQ-CUa" customClass="FeedbackTableViewCell">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JOL-yQ-CUa" id="cuu-8w-Q6i">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iIF-WD-BmP">
+                                            <rect key="frame" x="10" y="5" width="580" height="89"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        </textView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="iIF-WD-BmP" secondAttribute="trailing" constant="10" id="25E-bt-9ct"/>
+                                        <constraint firstAttribute="bottom" secondItem="iIF-WD-BmP" secondAttribute="bottom" constant="5" id="bZd-tm-TCM"/>
+                                        <constraint firstItem="iIF-WD-BmP" firstAttribute="top" secondItem="cuu-8w-Q6i" secondAttribute="top" constant="5" id="k7d-v8-n7g"/>
+                                        <constraint firstItem="iIF-WD-BmP" firstAttribute="leading" secondItem="cuu-8w-Q6i" secondAttribute="leading" constant="10" id="lZc-Cy-cgK"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="feedbackTextView" destination="iIF-WD-BmP" id="vWf-aZ-ERn"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
