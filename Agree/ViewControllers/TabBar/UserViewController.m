@@ -187,7 +187,8 @@
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
     switch (_selectedIndex.section) {
-        case 0:
+        case 0: {
+
             switch (_selectedIndex.row) {
                 case 3: {
                     NSLog(@"绑定微信");
@@ -252,6 +253,7 @@
                 default:
                     break;
             }
+        }
             break;
             
         default:
@@ -261,6 +263,7 @@
             break;
             
     }
+    
     return YES;
 }
 
