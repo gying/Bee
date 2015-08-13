@@ -14,7 +14,7 @@
 		C64F1D5E1B26881A0063C012 /* ChoosefriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C64F1D5D1B26881A0063C012 /* ChoosefriendsViewController.m */; };
 		C64F1D641B26CB9D0063C012 /* ChoosefriendsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C64F1D631B26CB9D0063C012 /* ChoosefriendsTableViewCell.m */; };
 		C6749BAC1B787AB9002F4D6E /* GroupHistroyPartyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6749BAB1B787AB9002F4D6E /* GroupHistroyPartyViewController.m */; };
-		C6749BAF1B787E09002F4D6E /* GroupHistroyPartyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6749BAE1B787E09002F4D6E /* GroupHistroyPartyTableViewController.m */; };
+		C6749BAF1B787E09002F4D6E /* GroupHistroyPartyTableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C6749BAE1B787E09002F4D6E /* GroupHistroyPartyTableViewDelegate.m */; };
 		C6749BB21B789F54002F4D6E /* UserSettingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C6749BB11B789F54002F4D6E /* UserSettingTableViewCell.m */; };
 		C68EBEDD1B73045200A6F2E5 /* ScheduleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C68EBEDC1B73045200A6F2E5 /* ScheduleViewController.m */; };
 		C699A9171B7AE77100CE0C5E /* UserSettingDetailTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C699A9161B7AE77100CE0C5E /* UserSettingDetailTableViewController.m */; };
@@ -59,6 +59,7 @@
 		F05EAC3D1AD13B1F006F505B /* AboutUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F05EAC3C1AD13B1F006F505B /* AboutUsViewController.m */; };
 		F05EAC401AD13B42006F505B /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F05EAC3F1AD13B42006F505B /* FeedBackViewController.m */; };
 		F05F30001AFBD50300AA6BE8 /* SRKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = F05F2FFF1AFBD50300AA6BE8 /* SRKeyboard.m */; };
+		F0652C0C1B7C778A005FA148 /* SRTextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0652C0B1B7C7789005FA148 /* SRTextFieldTableViewCell.m */; };
 		F06765A41A9DA81E005937B4 /* PartyPeopleListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F06765A31A9DA81E005937B4 /* PartyPeopleListViewController.m */; };
 		F06A62B21A7EA016005C6155 /* GroupAlbumsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F06A62B11A7EA016005C6155 /* GroupAlbumsCollectionViewController.m */; };
 		F073CAFB1ACF937E00E282E6 /* PartyMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F073CAFA1ACF937E00E282E6 /* PartyMapViewController.m */; };
@@ -88,7 +89,10 @@
 		F08E3B061A70CE970027625D /* SRImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F08E3B051A70CE970027625D /* SRImageManager.m */; };
 		F09F05541AB67FB50079D6DB /* Model_user_user.m in Sources */ = {isa = PBXBuildFile; fileRef = F09F05531AB67FB50079D6DB /* Model_user_user.m */; };
 		F09F05571AB693880079D6DB /* ContactsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F09F05561AB693880079D6DB /* ContactsTableViewController.m */; };
+		F0A243621B7C66C000657C46 /* CreateGroupTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0A243611B7C66C000657C46 /* CreateGroupTableViewController.m */; };
 		F0A592EC1AB9D9CB007C822A /* ContactsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0A592EB1AB9D9CB007C822A /* ContactsTableViewCell.m */; };
+		F0A914E21B7B36C700F1F18A /* InvitationCodeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0A914E11B7B36C700F1F18A /* InvitationCodeInputViewController.m */; };
+		F0A914E51B7B432500F1F18A /* GroupProfilesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0A914E41B7B432500F1F18A /* GroupProfilesTableViewController.m */; };
 		F0A971281ABAEF8D00829942 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0A971271ABAEF8D00829942 /* AddressBook.framework */; };
 		F0A9712A1ABAEF9300829942 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0A971291ABAEF9300829942 /* AddressBookUI.framework */; };
 		F0A9712D1ABB278C00829942 /* People.m in Sources */ = {isa = PBXBuildFile; fileRef = F0A9712C1ABB278C00829942 /* People.m */; };
@@ -98,6 +102,7 @@
 		F0B1989B1B75E5B600BF1ADC /* GroupPeopleTableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F0B1989A1B75E5B600BF1ADC /* GroupPeopleTableViewDelegate.m */; };
 		F0B1989E1B75E5CC00BF1ADC /* GroupPeopleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0B1989D1B75E5CC00BF1ADC /* GroupPeopleTableViewCell.m */; };
 		F0B198A11B75E94900BF1ADC /* GroupSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0B198A01B75E94900BF1ADC /* GroupSettingViewController.m */; };
+		F0B3A2261B7A2115000D94BE /* loading-red-spot.gif in Resources */ = {isa = PBXBuildFile; fileRef = F0B3A2251B7A2115000D94BE /* loading-red-spot.gif */; };
 		F0B5F4A91AAA97180013111F /* MJPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = F0B5F49A1AAA97180013111F /* MJPhoto.m */; };
 		F0B5F4AA1AAA97180013111F /* MJPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F0B5F49B1AAA97180013111F /* MJPhotoBrowser.bundle */; };
 		F0B5F4AB1AAA97180013111F /* MJPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = F0B5F49D1AAA97180013111F /* MJPhotoBrowser.m */; };
@@ -197,8 +202,8 @@
 		C64F1D631B26CB9D0063C012 /* ChoosefriendsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosefriendsTableViewCell.m; sourceTree = "<group>"; };
 		C6749BAA1B787AB9002F4D6E /* GroupHistroyPartyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupHistroyPartyViewController.h; sourceTree = "<group>"; };
 		C6749BAB1B787AB9002F4D6E /* GroupHistroyPartyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupHistroyPartyViewController.m; sourceTree = "<group>"; };
-		C6749BAD1B787E09002F4D6E /* GroupHistroyPartyTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupHistroyPartyTableViewController.h; sourceTree = "<group>"; };
-		C6749BAE1B787E09002F4D6E /* GroupHistroyPartyTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupHistroyPartyTableViewController.m; sourceTree = "<group>"; };
+		C6749BAD1B787E09002F4D6E /* GroupHistroyPartyTableViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupHistroyPartyTableViewDelegate.h; sourceTree = "<group>"; };
+		C6749BAE1B787E09002F4D6E /* GroupHistroyPartyTableViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupHistroyPartyTableViewDelegate.m; sourceTree = "<group>"; };
 		C6749BB01B789F54002F4D6E /* UserSettingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSettingTableViewCell.h; sourceTree = "<group>"; };
 		C6749BB11B789F54002F4D6E /* UserSettingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSettingTableViewCell.m; sourceTree = "<group>"; };
 		C68EBEDB1B73045200A6F2E5 /* ScheduleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScheduleViewController.h; sourceTree = "<group>"; };
@@ -274,6 +279,8 @@
 		F05EAC3F1AD13B42006F505B /* FeedBackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedBackViewController.m; sourceTree = "<group>"; };
 		F05F2FFE1AFBD50300AA6BE8 /* SRKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRKeyboard.h; sourceTree = "<group>"; };
 		F05F2FFF1AFBD50300AA6BE8 /* SRKeyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRKeyboard.m; sourceTree = "<group>"; };
+		F0652C0A1B7C7789005FA148 /* SRTextFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRTextFieldTableViewCell.h; sourceTree = "<group>"; };
+		F0652C0B1B7C7789005FA148 /* SRTextFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRTextFieldTableViewCell.m; sourceTree = "<group>"; };
 		F06765A21A9DA81E005937B4 /* PartyPeopleListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PartyPeopleListViewController.h; path = ../PartyPeopleListViewController.h; sourceTree = "<group>"; };
 		F06765A31A9DA81E005937B4 /* PartyPeopleListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PartyPeopleListViewController.m; path = ../PartyPeopleListViewController.m; sourceTree = "<group>"; };
 		F06A62B01A7EA016005C6155 /* GroupAlbumsCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupAlbumsCollectionViewController.h; sourceTree = "<group>"; };
@@ -331,8 +338,14 @@
 		F09F05531AB67FB50079D6DB /* Model_user_user.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Model_user_user.m; sourceTree = "<group>"; };
 		F09F05551AB693880079D6DB /* ContactsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsTableViewController.h; sourceTree = "<group>"; };
 		F09F05561AB693880079D6DB /* ContactsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsTableViewController.m; sourceTree = "<group>"; };
+		F0A243601B7C66C000657C46 /* CreateGroupTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateGroupTableViewController.h; sourceTree = "<group>"; };
+		F0A243611B7C66C000657C46 /* CreateGroupTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateGroupTableViewController.m; sourceTree = "<group>"; };
 		F0A592EA1AB9D9CB007C822A /* ContactsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsTableViewCell.h; sourceTree = "<group>"; };
 		F0A592EB1AB9D9CB007C822A /* ContactsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ContactsTableViewCell.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		F0A914E01B7B36C700F1F18A /* InvitationCodeInputViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InvitationCodeInputViewController.h; sourceTree = "<group>"; };
+		F0A914E11B7B36C700F1F18A /* InvitationCodeInputViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InvitationCodeInputViewController.m; sourceTree = "<group>"; };
+		F0A914E31B7B432500F1F18A /* GroupProfilesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupProfilesTableViewController.h; sourceTree = "<group>"; };
+		F0A914E41B7B432500F1F18A /* GroupProfilesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupProfilesTableViewController.m; sourceTree = "<group>"; };
 		F0A971271ABAEF8D00829942 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		F0A971291ABAEF9300829942 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		F0A9712B1ABB278C00829942 /* People.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = People.h; sourceTree = "<group>"; };
@@ -349,6 +362,7 @@
 		F0B1989D1B75E5CC00BF1ADC /* GroupPeopleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupPeopleTableViewCell.m; sourceTree = "<group>"; };
 		F0B1989F1B75E94900BF1ADC /* GroupSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupSettingViewController.h; sourceTree = "<group>"; };
 		F0B198A01B75E94900BF1ADC /* GroupSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupSettingViewController.m; sourceTree = "<group>"; };
+		F0B3A2251B7A2115000D94BE /* loading-red-spot.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "loading-red-spot.gif"; sourceTree = "<group>"; };
 		F0B5F4991AAA97180013111F /* MJPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJPhoto.h; sourceTree = "<group>"; };
 		F0B5F49A1AAA97180013111F /* MJPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPhoto.m; sourceTree = "<group>"; };
 		F0B5F49B1AAA97180013111F /* MJPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJPhotoBrowser.bundle; sourceTree = "<group>"; };
@@ -555,6 +569,12 @@
 				C64F1D5D1B26881A0063C012 /* ChoosefriendsViewController.m */,
 				F0068C081A679E0600B9CB60 /* JoinUserViewController.h */,
 				F0068C091A679E0600B9CB60 /* JoinUserViewController.m */,
+				F0A914E01B7B36C700F1F18A /* InvitationCodeInputViewController.h */,
+				F0A914E11B7B36C700F1F18A /* InvitationCodeInputViewController.m */,
+				F0A914E31B7B432500F1F18A /* GroupProfilesTableViewController.h */,
+				F0A914E41B7B432500F1F18A /* GroupProfilesTableViewController.m */,
+				F0A243601B7C66C000657C46 /* CreateGroupTableViewController.h */,
+				F0A243611B7C66C000657C46 /* CreateGroupTableViewController.m */,
 			);
 			path = "Create or Join Group";
 			sourceTree = "<group>";
@@ -764,6 +784,8 @@
 				C6D11D471B79DF65005D7889 /* GroupSettingUITableViewCell.m */,
 				C699A91E1B7B318200CE0C5E /* FeedbackTableViewCell.h */,
 				C699A91F1B7B318200CE0C5E /* FeedbackTableViewCell.m */,
+				F0652C0A1B7C7789005FA148 /* SRTextFieldTableViewCell.h */,
+				F0652C0B1B7C7789005FA148 /* SRTextFieldTableViewCell.m */,
 			);
 			path = "Cutom Cell";
 			sourceTree = "<group>";
@@ -771,6 +793,7 @@
 		F0F5C1BB1A66CEBE0029BF7A = {
 			isa = PBXGroup;
 			children = (
+				F0B3A2251B7A2115000D94BE /* loading-red-spot.gif */,
 				F0F5C1C61A66CEBE0029BF7A /* Agree */,
 				F0F5C1E31A66CEBE0029BF7A /* AgreeTests */,
 				F0F5C1C51A66CEBE0029BF7A /* Products */,
@@ -849,10 +872,10 @@
 			children = (
 				F0DDC5BD1A8E7B43007BF39F /* GroupViewController.h */,
 				F0DDC5BE1A8E7B43007BF39F /* GroupViewController.m */,
-				F09F05551AB693880079D6DB /* ContactsTableViewController.h */,
-				F09F05561AB693880079D6DB /* ContactsTableViewController.m */,
 				C68EBEDB1B73045200A6F2E5 /* ScheduleViewController.h */,
 				C68EBEDC1B73045200A6F2E5 /* ScheduleViewController.m */,
+				F09F05551AB693880079D6DB /* ContactsTableViewController.h */,
+				F09F05561AB693880079D6DB /* ContactsTableViewController.m */,
 				F01487E71A8F827800E41A63 /* UserViewController.h */,
 				F01487E81A8F827800E41A63 /* UserViewController.m */,
 			);
@@ -1000,8 +1023,8 @@
 				F06A62B11A7EA016005C6155 /* GroupAlbumsCollectionViewController.m */,
 				C6749BAA1B787AB9002F4D6E /* GroupHistroyPartyViewController.h */,
 				C6749BAB1B787AB9002F4D6E /* GroupHistroyPartyViewController.m */,
-				C6749BAD1B787E09002F4D6E /* GroupHistroyPartyTableViewController.h */,
-				C6749BAE1B787E09002F4D6E /* GroupHistroyPartyTableViewController.m */,
+				C6749BAD1B787E09002F4D6E /* GroupHistroyPartyTableViewDelegate.h */,
+				C6749BAE1B787E09002F4D6E /* GroupHistroyPartyTableViewDelegate.m */,
 			);
 			name = Group;
 			path = "Group Tab";
@@ -1096,6 +1119,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0B3A2261B7A2115000D94BE /* loading-red-spot.gif in Resources */,
 				F02169F61A927F1500353879 /* LangTingGBK.TTF in Resources */,
 				F0D1A1181B32A677009A5B26 /* Media.xcassets in Resources */,
 				F07642EE1AF1DDFC0075E0C2 /* MainStoryBoard.storyboard in Resources */,
@@ -1189,6 +1213,7 @@
 				F0F5C2951A66F1620029BF7A /* Model_Party.m in Sources */,
 				F0068C0F1A679E0600B9CB60 /* ConfirmPartyDetailViewController.m in Sources */,
 				F07F71201A72AB92006208A1 /* JTCalendarMenuMonthView.m in Sources */,
+				F0A914E51B7B432500F1F18A /* GroupProfilesTableViewController.m in Sources */,
 				F0068C101A679E0600B9CB60 /* CreateGroupViewController.m in Sources */,
 				F05AC3C51A9B24E500CABD01 /* AllPartyTableViewCell.m in Sources */,
 				F0F5C2971A66F1620029BF7A /* Model_Photo.m in Sources */,
@@ -1200,6 +1225,7 @@
 				F07F71221A72AB92006208A1 /* JTCalendarMonthView.m in Sources */,
 				F0DAB6901ACD2EFA00E77647 /* EModel_Chat.m in Sources */,
 				F0B5F4AD1AAA97180013111F /* MJPhotoProgressView.m in Sources */,
+				F0652C0C1B7C778A005FA148 /* SRTextFieldTableViewCell.m in Sources */,
 				F0F5C2931A66F1620029BF7A /* Model_Group.m in Sources */,
 				F07F71231A72AB92006208A1 /* JTCalendarMonthWeekDaysView.m in Sources */,
 				F0F5C2731A66F1490029BF7A /* SRTool.m in Sources */,
@@ -1217,7 +1243,7 @@
 				F0F5C2981A66F1620029BF7A /* Model_User.m in Sources */,
 				F08B809D1A75F7110012E3D9 /* PartyDetailViewController.m in Sources */,
 				F0A97FC21A92175F00FFA4F2 /* GroupChatTableViewCell.m in Sources */,
-				C6749BAF1B787E09002F4D6E /* GroupHistroyPartyTableViewController.m in Sources */,
+				C6749BAF1B787E09002F4D6E /* GroupHistroyPartyTableViewDelegate.m in Sources */,
 				C699A91A1B7AE7F600CE0C5E /* UserSettingDetailTableViewCell.m in Sources */,
 				F036D2721AB492C3002C3B81 /* BandingPhoneViewController.m in Sources */,
 				F0F5C2721A66F1490029BF7A /* SRNet_Manager.m in Sources */,
@@ -1242,6 +1268,7 @@
 				F07F36D31B3001A000D76D4C /* CD_Party.m in Sources */,
 				F0A592EC1AB9D9CB007C822A /* ContactsTableViewCell.m in Sources */,
 				F0F969061B2A83D00030C84B /* SRShimmerManager.m in Sources */,
+				F0A914E21B7B36C700F1F18A /* InvitationCodeInputViewController.m in Sources */,
 				F0068C111A679E0600B9CB60 /* JoinUserViewController.m in Sources */,
 				F0DA151A1AC019EA00FA6199 /* Model_User_Chat.m in Sources */,
 				F073CAFB1ACF937E00E282E6 /* PartyMapViewController.m in Sources */,
@@ -1250,6 +1277,7 @@
 				F0F5C1CD1A66CEBE0029BF7A /* AppDelegate.mm in Sources */,
 				C64F1D5E1B26881A0063C012 /* ChoosefriendsViewController.m in Sources */,
 				C6E25B901B57B2190031A6B9 /* HistoryPartyTableViewCell.m in Sources */,
+				F0A243621B7C66C000657C46 /* CreateGroupTableViewController.m in Sources */,
 				C64F1D641B26CB9D0063C012 /* ChoosefriendsTableViewCell.m in Sources */,
 				C699A91D1B7B1F9600CE0C5E /* CodeInputViewController.m in Sources */,
 				F01487E91A8F827800E41A63 /* UserViewController.m in Sources */,

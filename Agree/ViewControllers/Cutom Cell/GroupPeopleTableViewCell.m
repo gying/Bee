@@ -33,6 +33,9 @@
     _user = user;
     [self.avatarButton.layer setCornerRadius:self.avatarButton.frame.size.height/2];
     [self.avatarButton.layer setMasksToBounds:YES];
+    
+//    self.avatarButton.layer.borderWidth = 0.5;
+//    self.avatarButton.layer.borderColor = [UIColor lightTextColor].CGColor;
     //下载图片
     NSURL *imageUrl = [SRImageManager miniAvatarImageFromOSS:user.avatar_path];
     [self.avatarButton sd_setBackgroundImageWithURL:imageUrl forState:UIControlStateNormal];

@@ -365,4 +365,11 @@
                                 andRequestType:kSettleParty] ;
 }
 
++ (NSMutableDictionary *)getGroupPartyHistroy: (Model_Group_User *)relation {
+    return [SRNet_Manager toRequestDicWithData:relation.keyValues
+                                andRequestType:kGroupHistroyParty] ;
+}
+
+
+
 @end

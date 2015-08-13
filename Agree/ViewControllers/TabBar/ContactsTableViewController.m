@@ -47,7 +47,7 @@
     [self backView];
 
     
-    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+//    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
     self.accountView = [[SRAccountView alloc] init];
     self.accountView.rootController = self;
@@ -59,14 +59,40 @@
     [self reloadTipView:_friendArray.count];
     [self loadDataFromNet];
     
-    
-    
     // 设置回调（一旦进入刷新状态，就调用target的action，也就是调用self的loadNewData方法）
     self.tableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh:)];
 }
 
--(void)backView
-{
+- (void)viewWillAppear:(BOOL)animated {
+    //设置当前视图控制器为根控制器
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    delegate.topRootViewController = self;
+    [delegate setContactsDelegate:self];
+    [self.navigationController.tabBarItem setBadgeValue:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"contact_update"] isEqualToNumber:@0] || ![[[NSUserDefaults standardUserDefaults] objectForKey:@"relation_update"] isEqualToNumber:@0]) {
+        //信息有更新
+        
+        if (!_isfirstLoad) {
+            [self loadDataFromNet];
+        }
+    }
+    
+    [self.navigationController.tabBarItem setBadgeValue:nil];
+    
+    NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"relation_update"];
+    if ([updateValue isEqual:@0]) {
+        [self.updateView setHidden:YES];
+    } else {
+        [self.updateView setHidden:NO];
+    }
+    [super viewDidAppear:YES];
+}
+
+
+-(void)backView {
     _backView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     _backView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:_backView];
@@ -156,42 +182,6 @@
                             }];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"contact_update"] isEqualToNumber:@0] || ![[[NSUserDefaults standardUserDefaults] objectForKey:@"relation_update"] isEqualToNumber:@0]) {
-        //信息有更新
-        
-        if (!_isfirstLoad) {
-            [self loadDataFromNet];
-        }
-    }
-    
-    [self.navigationController.tabBarItem setBadgeValue:nil];
-    
-    NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"relation_update"];
-    if ([updateValue isEqual:@0]) {
-        [self.updateView setHidden:YES];
-    } else {
-        [self.updateView setHidden:NO];
-    }
-    
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [delegate setContactsDelegate:self];
-    [super viewDidAppear:YES];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [delegate setContactsDelegate:nil];
-    [super viewWillDisappear:YES];
-}
-
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark - Table view data source
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -225,6 +215,16 @@
     _selectIndex = indexPath.row;
     return indexPath;
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    //设置分组的标签区域高度为0
+    return 0.00001f;
+    
+}
+
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+//    return @"hellooo..";
+//}
 
 - (void)reloadTableViewAndUnreadData {
     NSMutableArray *tempArray = [NSMutableArray arrayWithArray:_friendArray];

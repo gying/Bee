@@ -149,7 +149,7 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [picker dismissViewControllerAnimated:YES completion:nil];
     
-    UIImage *pickImage = [info valueForKey:@"UIImagePickerControllerOriginalImage"];
+    UIImage *pickImage = [info valueForKey:@"UIImagePickerControllerEditedImage"];
     
     _groupCoverImage = [SRImageManager getSubImage:pickImage withRect:CGRectMake(0, 0, self.groupCoverButton.frame.size.width * 2, self.groupCoverButton.frame.size.height * 2)];
     

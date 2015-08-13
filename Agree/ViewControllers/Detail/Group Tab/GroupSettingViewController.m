@@ -18,6 +18,7 @@
 #import "Model_User.h"
 #import "SRImageManager.h"
 #import "SRTool.h"
+#import "GroupHistroyPartyViewController.h"
 
 
 #import "GroupSettingUITableViewCell.h"
@@ -41,7 +42,6 @@
 
 @implementation GroupSettingViewController
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     [SVProgressHUD dismiss];
@@ -50,9 +50,6 @@
     
     self.avatarButton.layer.cornerRadius = 3.0;
     //类型的边框与圆弧
-    self.inButton.layer.cornerRadius = self.inButton.frame.size.height/4;
-    self.inButton.layer.borderColor = [UIColor colorWithWhite:0.8 alpha:1.0].CGColor;
-    self.inButton.layer.borderWidth = 0.5;
     
 }
 - (IBAction)changeAvatar:(id)sender {
@@ -265,10 +262,6 @@
 //    
 //    _saveForQuit = true;
 //}
-
-
-
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     GroupSettingUITableViewCell *cell = [self.groupSettingTableView dequeueReusableCellWithIdentifier:@"GROUPSETTINGCELL" forIndexPath:indexPath];
@@ -490,10 +483,11 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    
-
-    
+    if ([@"GroupPartyHistroy" isEqualToString:segue.identifier]) {
+        //历史聚会详情
+        GroupDetailViewController *childController = segue.destinationViewController;
+        childController.group = self.group;
+    }
 }
-
 
 @end

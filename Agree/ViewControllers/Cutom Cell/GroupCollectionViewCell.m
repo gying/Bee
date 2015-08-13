@@ -17,11 +17,13 @@
 - (void)initCellWithGroup: (Model_Group *)group isAddView: (BOOL)isAddView {
     if (!self.initDone) {
         
-        self.groupView.layer.shadowColor = [UIColor grayColor].CGColor;
-        self.groupView.layer.shadowOffset = CGSizeMake(0, 0);
-        self.groupView.layer.shadowOpacity = 0.5;
+//        self.groupView.layer.shadowColor = [UIColor grayColor].CGColor;
+//        self.groupView.layer.shadowOffset = CGSizeMake(0, 0);
+//        self.groupView.layer.shadowOpacity = 0.5;
         self.groupView.layer.cornerRadius = 3;
-        self.groupView.layer.shadowRadius = 1.5;
+//        self.groupView.layer.shadowRadius = 1.5;
+        self.groupView.layer.borderWidth = 0.5;
+        self.groupView.layer.borderColor = [UIColor lightGrayColor].CGColor;
         
         [self.group2ndView.layer setMasksToBounds:YES];
         [self.group2ndView.layer setCornerRadius:3];

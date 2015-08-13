@@ -32,7 +32,7 @@
 
 
 
-@interface GroupDetailViewController () <UITabBarDelegate,UIScrollViewDelegate> {
+@interface GroupDetailViewController () <UITabBarDelegate,UIScrollViewDelegate, SRReceivingDelegate> {
     GroupChatTableViewController *_chatDelegate;
     GroupPartyTableViewController *_partyDelegate;
     GroupAlbumsCollectionViewController *_albumsDelegate;
@@ -186,13 +186,22 @@
     [_peopleTableDelegate setRootController:self];
     
     [_peopleTableDelegate loadPeopleDataWithGroup:self.group];
-    
 }
 
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate setRevDelegate:self];
+    
+    if (self.partyLoadingAgain) {
+        [_partyDelegate loadPartyData];
+        self.partyLoadingAgain = FALSE;
+    }
+}
+- (void)viewDidDisappear:(BOOL)animated {
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate setRevDelegate:nil];
+    [super viewDidDisappear:animated];
 }
 
 - (void)setkeyBoard {
@@ -201,26 +210,13 @@
     [_srKeyboard textViewShowView:self customKeyboardDelegate:_chatDelegate withMoveView:nil];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [delegate setChatDelegate:self];
-    
-    if (self.partyLoadingAgain) {
-        [_partyDelegate loadPartyData];
-        self.partyLoadingAgain = FALSE;
-    }
-}
+
 
 - (void)receiveParty {
     [_partyDelegate loadPartyData];
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [delegate setChatDelegate:nil];
-    [super viewDidDisappear:animated];
-}
+
 
 - (void)showImageAtIndexPath:(int)indexPath withImageArray: (NSMutableArray *)imageViewArray {
     MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
@@ -441,32 +437,6 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-    //进入小组详情
-    if ([@"AddNewParty"  isEqual: segue.identifier]) {
-        //读取小组详情数据并赋值小组数据
-        ChooseLoctaionViewController *controller = (ChooseLoctaionViewController *)segue.destinationViewController;
-        controller.chooseGroup = self.group;
-        controller.isGroupParty = TRUE;
-    } else if ([@"GroupSetting" isEqual:segue.identifier]) {
-        //进入小组设置
-        [SVProgressHUD show];
-        GroupSettingViewController *controller = (GroupSettingViewController *)segue.destinationViewController;
-        controller.rootController = self;
-        controller.group = self.group;
-    } else if ([@"PartyDetail" isEqual:segue.identifier]) {
-        PartyDetailViewController *controller = (PartyDetailViewController *)segue.destinationViewController;
-        controller.delegate = _partyDelegate;
-        controller.party = self.chooseParty;
-    } else {
-    
-    }
-}
-
-
 #pragma mark -- 侧边栏
 //侧边栏
 - (IBAction)peopleButton:(id)sender
@@ -512,18 +482,33 @@
                      }];
 }
 
-//-(void)closeview
-//{
-//    if((self.peopleButton.titleLabel.text = @"关闭")) {
-//        [self.peopleButton setTitle:@"成员" forState:UIControlStateNormal];
-//    }
-//    [UIView animateWithDuration:0.5
-//                     animations:^{
-//                         [self.rightSideView setAlpha:0];
-//                         [self.peopleTableView setFrame:CGRectMake(600, self.peopleTableView.frame.origin.y, self.peopleTableView.frame.size.width, self.peopleTableView.frame.size.height)];
-//                     }];
-//    [self.peopleTableView removeGestureRecognizer:swipe];
-//}
+
+#pragma mark - 导航方法
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    //进入小组详情
+    if ([@"AddNewParty"  isEqual: segue.identifier]) {
+        //读取小组详情数据并赋值小组数据
+        ChooseLoctaionViewController *controller = (ChooseLoctaionViewController *)segue.destinationViewController;
+        controller.chooseGroup = self.group;
+        controller.isGroupParty = TRUE;
+    } else if ([@"GoToGroupSetting" isEqual:segue.identifier]) {
+        //进入小组设置
+        [SVProgressHUD show];
+        GroupSettingViewController *controller = (GroupSettingViewController *)segue.destinationViewController;
+        controller.rootController = self;
+        controller.group = self.group;
+    } else if ([@"PartyDetail" isEqual:segue.identifier]) {
+        PartyDetailViewController *controller = (PartyDetailViewController *)segue.destinationViewController;
+        controller.delegate = _partyDelegate;
+        controller.party = self.chooseParty;
+    } else {
+        
+    }
+}
 
 
 @end

@@ -38,7 +38,6 @@
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-//    self.myPartyVC.chooseRow = (int)indexPath.row;
     self.rootController.chooseRow = (int)indexPath.row;
     return indexPath;
 }
@@ -52,25 +51,22 @@
                             complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
                                 if (jsonDic) {
                                     self.schAry = (NSMutableArray *)[Model_Party objectArrayWithKeyValuesArray:jsonDic];
-//                                    [self.myPartyVC reloadTipView:self.schAry.count withType:2];
-//                                    [self.myPartyVC.historyPartyTableView reloadData];
-                                    
                                     [self.rootController reloadTipView:self.schAry.count withType:2];
                                     [self.rootController.historyPartyTableView reloadData]; 
                                     
                                 } else {
                                     [self.schAry removeAllObjects];
-//                                    [self.myPartyVC.historyPartyTableView reloadData];
                                     [self.rootController.historyPartyTableView reloadData];
                                 }
-                                
-//                                [self.myPartyVC.historyPartyTableView.header endRefreshing];
                                 [self.rootController.historyPartyTableView.header endRefreshing];
                             } failure:^(NSError *error, NSURLSessionDataTask *task) {
-                                
-//                                [self.myPartyVC.historyPartyTableView.header endRefreshing];
                                 [self.rootController.historyPartyTableView.header endRefreshing];
                             }];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    //设置分组的标签区域高度为0
+    return 0.00001f;
     
 }
 

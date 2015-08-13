@@ -15,14 +15,13 @@
 
 @implementation MJRefreshHeader
 #pragma mark - 构造方法
-+ (instancetype)headerWithRefreshingBlock:(MJRefreshComponentRefreshingBlock)refreshingBlock
-{
++ (instancetype)headerWithRefreshingBlock:(MJRefreshComponentRefreshingBlock)refreshingBlock {
     MJRefreshHeader *cmp = [[self alloc] init];
     cmp.refreshingBlock = refreshingBlock;
     return cmp;
 }
-+ (instancetype)headerWithRefreshingTarget:(id)target refreshingAction:(SEL)action
-{
+
++ (instancetype)headerWithRefreshingTarget:(id)target refreshingAction:(SEL)action {
     MJRefreshHeader *cmp = [[self alloc] init];
     [cmp setRefreshingTarget:target refreshingAction:action];
     return cmp;

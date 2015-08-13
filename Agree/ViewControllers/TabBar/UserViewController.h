@@ -15,7 +15,6 @@
 
 @interface UserViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,WXApiDelegate>
 
-
 @property (weak, nonatomic) IBOutlet UIButton *avatarButton;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UITableView *settingTableVIew;

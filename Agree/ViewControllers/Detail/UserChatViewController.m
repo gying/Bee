@@ -120,8 +120,6 @@
     }
     
     [self subChatArray];
-
-    
     
 #pragma mark -- 导航栏标题
     [self.navigationItem setTitle:self.user.nickname];
@@ -402,7 +400,7 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [picker dismissViewControllerAnimated:YES completion:nil];
-    _chatPickImage = [info valueForKey:@"UIImagePickerControllerOriginalImage"];
+    _chatPickImage = [info valueForKey:@"UIImagePickerControllerEditedImage"];
     
     [SRTool showSRAlertViewWithTitle:@"提示"
                              message:@"真的要发送这张图片吗?"
@@ -425,8 +423,6 @@
 
 
 - (void)sendMessageFromString: (NSString *)text {
-
-    
     [self sendMessageDone:[EMSendMessageHepler sendTextMessageWithString:text
                                                               toUsername:self.user.pk_user.stringValue
                                                              isChatGroup:NO

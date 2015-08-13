@@ -17,6 +17,7 @@
 #import "CD_Group_User.h"
 #import "CD_Photo.h"
 #import "SRTool.h"
+#import "AppDelegate.h"
 #import <SVProgressHUD.h>
 #import "UserSettingTableViewCell.h"
 #import "UserSettingDetailTableViewController.h"
@@ -49,8 +50,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-
-    
     _tableAry = @[@[@"姓名",@"性别",@"绑定手机",@"绑定微信"], @[@"绑定微信钱包",@"绑定支付宝"],@[@"反馈",@"关于必聚"],@[@"退出登录"]];
 
     //头像区
@@ -61,11 +60,19 @@
     [_backImageViwe.layer setCornerRadius:_backImageViwe.frame.size.width/2];
     [self resetAvatar];
     
+    self.nameLabel.text = [Model_User loadFromUserDefaults].nickname;
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    //设置当前视图控制器为根控制器
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    delegate.topRootViewController = self;
+    [self.navigationController.tabBarItem setBadgeValue:nil];
 }
 
 - (void)resetAvatar {
     //下载图片
-
     [_backImageViwe sd_setImageWithURL:[SRImageManager avatarImageFromOSS:[Model_User loadFromUserDefaults].avatar_path]
                              completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                                  if (!error) {

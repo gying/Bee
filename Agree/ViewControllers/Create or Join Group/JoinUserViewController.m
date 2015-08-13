@@ -164,7 +164,7 @@
         }
         
         ChoosefriendsViewController *childController = (ChoosefriendsViewController *)segue.destinationViewController;
-        childController.rootController = self;
+//        childController.rootController = self;
         childController.choosePeopleArray = self.choosePeopleArray;
     }
 }

@@ -14,9 +14,9 @@
 
 #import "PartyDetailViewController.h"
 #import "SchedulePartyTableViewDelegate.h"
-
-
 #import <MJRefresh.h>
+
+#import "AppDelegate.h"
 
 
 
@@ -88,6 +88,11 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    //设置当前视图控制器为根控制器
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    delegate.topRootViewController = self;
+    [self.navigationController.tabBarItem setBadgeValue:nil];
+    
     if (_firstLoadingDone) {
         NSNumber *pn = [[NSUserDefaults standardUserDefaults] objectForKey:@"party_update"];
         if (pn && pn.intValue != 0) {

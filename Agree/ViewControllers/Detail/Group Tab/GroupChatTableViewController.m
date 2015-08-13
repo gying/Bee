@@ -338,7 +338,7 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [picker dismissViewControllerAnimated:YES completion:nil];
 
-    _chatPickImage = [info valueForKey:@"UIImagePickerControllerOriginalImage"];
+    _chatPickImage = [info valueForKey:@"UIImagePickerControllerEditedImage"];
     
     //初始化图片发送确认警告框
     [SRTool showSRAlertViewWithTitle:@"确认" message:@"你真的扼要发送这张图片吗?"
