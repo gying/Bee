@@ -41,6 +41,7 @@
     NSArray *_tableAry;
     
     NSMutableArray *_chooseFriendList;
+    
 }
 
 @end
@@ -276,7 +277,23 @@
     NSArray *subAry = [_tableAry objectAtIndex:indexPath.section];
     cell.textLabel.text = [subAry objectAtIndex:indexPath.row];
     [cell.textLabel setFont:[UIFont systemFontOfSize:14]];
-    [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+    
+    switch (indexPath.section) {
+        case 0:
+            [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+            break;
+        case 1:
+            
+            //判断用户关系是否开启提示
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            break;
+        case 2:
+            [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+            break;
+        default:
+            break;
+    }
+
     
     return cell;
 }
@@ -414,19 +431,37 @@
                 case 0:
                 {
                      NSLog(@"聚会信息提示");
+                    GroupSettingUITableViewCell *cell = (GroupSettingUITableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+                    if (UITableViewCellAccessoryCheckmark == cell.accessoryType) {
+                        cell.accessoryType = UITableViewCellAccessoryNone;
+                    } else {
+                        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                    }
+                    
                     
                 }
                     break;
                 case 1:
                 {
                      NSLog(@"聊天信息提示");
+                    GroupSettingUITableViewCell *cell = (GroupSettingUITableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+                    if (UITableViewCellAccessoryCheckmark == cell.accessoryType) {
+                        cell.accessoryType = UITableViewCellAccessoryNone;
+                    } else {
+                        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                    }
                     
                 }
                     break;
                 case 2:
                 {
                     NSLog(@"公开手机号码");
-                    
+                    GroupSettingUITableViewCell *cell = (GroupSettingUITableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+                    if (UITableViewCellAccessoryCheckmark == cell.accessoryType) {
+                        cell.accessoryType = UITableViewCellAccessoryNone;
+                    } else {
+                        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                    }
                 }
                     break;
                     
