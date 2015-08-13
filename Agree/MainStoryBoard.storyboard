@@ -1580,7 +1580,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="tQb-C9-sYZ">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="fuZ-w5-0Tb" userLabel="upView">
                                     <rect key="frame" x="0.0" y="64" width="600" height="160"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -2305,7 +2305,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="HNF-hL-mz8">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="487"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="A7d-zy-z8S" userLabel="upView">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="160"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -2337,7 +2337,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
-                                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                    <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstItem="SEf-it-C5y" firstAttribute="top" secondItem="R9E-JJ-GZ3" secondAttribute="bottom" constant="5" id="7kz-6c-U36"/>
                                         <constraint firstAttribute="centerX" secondItem="R9E-JJ-GZ3" secondAttribute="centerX" id="KVw-42-wUj"/>
@@ -2761,7 +2761,6 @@
         <!--帐号设置-->
         <scene sceneID="lRz-IV-REu">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="966-gy-xOB" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController hidesBottomBarWhenPushed="YES" id="iCS-FZ-roa" customClass="UserSettingViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="uWL-DM-b9K"/>
@@ -2965,6 +2964,7 @@
                         <outlet property="weChatButton" destination="caf-eA-sON" id="Kpq-LL-IRf"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="966-gy-xOB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-278" y="2840"/>
         </scene>
@@ -5732,7 +5732,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="JaY-yg-9Uq" firstAttribute="top" secondItem="wrm-A3-TSJ" secondAttribute="bottom" constant="38" id="1di-1f-IFJ"/>
                             <constraint firstItem="8Y5-6k-cMk" firstAttribute="leading" secondItem="PgQ-NN-4T1" secondAttribute="trailing" constant="18" id="6ri-qr-GOf"/>
