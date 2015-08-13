@@ -7,7 +7,6 @@
 //
 
 #import "UserViewController.h"
-#import "UserSettingViewController.h"
 #import "UIImageView+WebCache.h"
 #import "AppDelegate.h"
 #import "EaseMob.h"
@@ -187,14 +186,7 @@
 }
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-//    if((3 == _selectedIndex.section) && (0 == _selectedIndex.row)) {
-//        return NO;
-//    }
-    
-    
     switch (_selectedIndex.section) {
-            
-            
         case 0:
             switch (_selectedIndex.row) {
                 case 3: {
@@ -232,12 +224,31 @@
                 default:
                     break;
             }
-        case 3:
+            break;
+            
+        case 2: {
+            switch (_selectedIndex.row) {
+                case 1:{
+                    if ([identifier isEqualToString:@"GoToAboutUs"]) {
+                        return YES;
+                    } else {
+                        [self performSegueWithIdentifier:@"GoToAboutUs" sender:self];
+                        return NO;
+                    }
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+            
+        }
+            break;
+        case 3: {
             switch (_selectedIndex.row) {
                 case 0:
                     return NO;
                     break;
-                    
                 default:
                     break;
             }
@@ -245,47 +256,15 @@
             
         default:
             break;
+        
+        }
+            break;
+            
     }
     return YES;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-//    
-//    if ((0 == _selectedIndex.section)&&(0 == _selectedIndex.row)) {
-//        NSLog(@"姓名");
-//        UserSettingDetailTableViewController *childController = segue.destinationViewController;
-//        childController.inputType = kNickName;
-//        
-//    }else if ((0 == _selectedIndex.section)&&(1 == _selectedIndex.row)) {
-//        NSLog(@"性别");
-//        UserSettingDetailTableViewController *childController = segue.destinationViewController;
-//        childController.inputType = kChooseSex;
-//        
-//    }else if ((0 == _selectedIndex.section)&&(2 == _selectedIndex.row)) {
-//        NSLog(@"绑定手机");
-//        UserSettingDetailTableViewController *childController = segue.destinationViewController;
-//        childController.inputType = kBandPhone;
-//        
-//        
-//    }else if ((0 == _selectedIndex.section)&&(3 == _selectedIndex.row)) {
-//        NSLog(@"绑定微信");
-//
-//    }else if ((1 == _selectedIndex.section)&&(0 == _selectedIndex.row)) {
-//        NSLog(@"绑定微信钱包");
-//        
-//    }else if ((1 == _selectedIndex.section)&&(1 == _selectedIndex.row)) {
-//        NSLog(@"绑定支付宝");
-//        
-//    }else if ((2 == _selectedIndex.section)&&(0 == _selectedIndex.row)) {
-//        NSLog(@"反馈");
-//        UserSettingDetailTableViewController *childController = segue.destinationViewController;
-//        childController.inputType = kFeedback;
-//    }else if ((2 == _selectedIndex.section)&&(1 == _selectedIndex.row)) {
-//        NSLog(@"关于必聚");
-//
-//    }
-//    
-
     switch (_selectedIndex.section) {
         case 0:
             switch (_selectedIndex.row) {

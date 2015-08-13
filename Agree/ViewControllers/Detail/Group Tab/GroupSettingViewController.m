@@ -13,7 +13,6 @@
 #import "MJExtension.h"
 #import "GroupViewController.h"
 #import "UIImageView+WebCache.h"
-#import "GroupPeopleCollectionViewCell.h"
 #import "SRAccountView.h"
 #import "Model_User.h"
 #import "SRImageManager.h"
