@@ -111,7 +111,7 @@
     [picker dismissViewControllerAnimated:YES completion:nil];
     
     //对原始图片进行裁剪,并保存到用户头像信息
-    _avatarImage = [SRImageManager getSubImage:[info valueForKey:@"UIImagePickerControllerOriginalImage"]
+    _avatarImage = [SRImageManager getSubImage:[info valueForKey:@"UIImagePickerControllerEditedImage"]
                                               withRect:CGRectMake(0, 0, 360, 360)];
     [_backImageViwe setImage:_avatarImage];
     

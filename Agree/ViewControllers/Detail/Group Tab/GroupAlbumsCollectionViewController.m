@@ -204,7 +204,7 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [picker dismissViewControllerAnimated:YES completion:nil];
-    _pickImage = [info valueForKey:@"UIImagePickerControllerOriginalImage"];
+    _pickImage = [info valueForKey:@"UIImagePickerControllerEditedImage"];
     
     [SRTool showSRAlertViewWithTitle:@"确认"
                              message:@"真的想要发送这张图片吗?"

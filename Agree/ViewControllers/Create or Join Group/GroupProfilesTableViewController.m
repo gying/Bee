@@ -104,7 +104,6 @@
         //这里暂时只有一行,直接操作
         [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
     }
-    
     return cell;
 }
 

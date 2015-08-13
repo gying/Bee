@@ -59,6 +59,7 @@
 		F05EAC3D1AD13B1F006F505B /* AboutUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F05EAC3C1AD13B1F006F505B /* AboutUsViewController.m */; };
 		F05EAC401AD13B42006F505B /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F05EAC3F1AD13B42006F505B /* FeedBackViewController.m */; };
 		F05F30001AFBD50300AA6BE8 /* SRKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = F05F2FFF1AFBD50300AA6BE8 /* SRKeyboard.m */; };
+		F0652C0C1B7C778A005FA148 /* SRTextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0652C0B1B7C7789005FA148 /* SRTextFieldTableViewCell.m */; };
 		F06765A41A9DA81E005937B4 /* PartyPeopleListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F06765A31A9DA81E005937B4 /* PartyPeopleListViewController.m */; };
 		F06A62B21A7EA016005C6155 /* GroupAlbumsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F06A62B11A7EA016005C6155 /* GroupAlbumsCollectionViewController.m */; };
 		F073CAFB1ACF937E00E282E6 /* PartyMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F073CAFA1ACF937E00E282E6 /* PartyMapViewController.m */; };
@@ -88,6 +89,7 @@
 		F08E3B061A70CE970027625D /* SRImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F08E3B051A70CE970027625D /* SRImageManager.m */; };
 		F09F05541AB67FB50079D6DB /* Model_user_user.m in Sources */ = {isa = PBXBuildFile; fileRef = F09F05531AB67FB50079D6DB /* Model_user_user.m */; };
 		F09F05571AB693880079D6DB /* ContactsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F09F05561AB693880079D6DB /* ContactsTableViewController.m */; };
+		F0A243621B7C66C000657C46 /* CreateGroupTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0A243611B7C66C000657C46 /* CreateGroupTableViewController.m */; };
 		F0A592EC1AB9D9CB007C822A /* ContactsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0A592EB1AB9D9CB007C822A /* ContactsTableViewCell.m */; };
 		F0A914E21B7B36C700F1F18A /* InvitationCodeInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0A914E11B7B36C700F1F18A /* InvitationCodeInputViewController.m */; };
 		F0A914E51B7B432500F1F18A /* GroupProfilesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0A914E41B7B432500F1F18A /* GroupProfilesTableViewController.m */; };
@@ -277,6 +279,8 @@
 		F05EAC3F1AD13B42006F505B /* FeedBackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedBackViewController.m; sourceTree = "<group>"; };
 		F05F2FFE1AFBD50300AA6BE8 /* SRKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRKeyboard.h; sourceTree = "<group>"; };
 		F05F2FFF1AFBD50300AA6BE8 /* SRKeyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRKeyboard.m; sourceTree = "<group>"; };
+		F0652C0A1B7C7789005FA148 /* SRTextFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRTextFieldTableViewCell.h; sourceTree = "<group>"; };
+		F0652C0B1B7C7789005FA148 /* SRTextFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRTextFieldTableViewCell.m; sourceTree = "<group>"; };
 		F06765A21A9DA81E005937B4 /* PartyPeopleListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PartyPeopleListViewController.h; path = ../PartyPeopleListViewController.h; sourceTree = "<group>"; };
 		F06765A31A9DA81E005937B4 /* PartyPeopleListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PartyPeopleListViewController.m; path = ../PartyPeopleListViewController.m; sourceTree = "<group>"; };
 		F06A62B01A7EA016005C6155 /* GroupAlbumsCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupAlbumsCollectionViewController.h; sourceTree = "<group>"; };
@@ -334,6 +338,8 @@
 		F09F05531AB67FB50079D6DB /* Model_user_user.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Model_user_user.m; sourceTree = "<group>"; };
 		F09F05551AB693880079D6DB /* ContactsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsTableViewController.h; sourceTree = "<group>"; };
 		F09F05561AB693880079D6DB /* ContactsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsTableViewController.m; sourceTree = "<group>"; };
+		F0A243601B7C66C000657C46 /* CreateGroupTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateGroupTableViewController.h; sourceTree = "<group>"; };
+		F0A243611B7C66C000657C46 /* CreateGroupTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateGroupTableViewController.m; sourceTree = "<group>"; };
 		F0A592EA1AB9D9CB007C822A /* ContactsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsTableViewCell.h; sourceTree = "<group>"; };
 		F0A592EB1AB9D9CB007C822A /* ContactsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ContactsTableViewCell.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		F0A914E01B7B36C700F1F18A /* InvitationCodeInputViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InvitationCodeInputViewController.h; sourceTree = "<group>"; };
@@ -567,6 +573,8 @@
 				F0A914E11B7B36C700F1F18A /* InvitationCodeInputViewController.m */,
 				F0A914E31B7B432500F1F18A /* GroupProfilesTableViewController.h */,
 				F0A914E41B7B432500F1F18A /* GroupProfilesTableViewController.m */,
+				F0A243601B7C66C000657C46 /* CreateGroupTableViewController.h */,
+				F0A243611B7C66C000657C46 /* CreateGroupTableViewController.m */,
 			);
 			path = "Create or Join Group";
 			sourceTree = "<group>";
@@ -776,6 +784,8 @@
 				C6D11D471B79DF65005D7889 /* GroupSettingUITableViewCell.m */,
 				C699A91E1B7B318200CE0C5E /* FeedbackTableViewCell.h */,
 				C699A91F1B7B318200CE0C5E /* FeedbackTableViewCell.m */,
+				F0652C0A1B7C7789005FA148 /* SRTextFieldTableViewCell.h */,
+				F0652C0B1B7C7789005FA148 /* SRTextFieldTableViewCell.m */,
 			);
 			path = "Cutom Cell";
 			sourceTree = "<group>";
@@ -1215,6 +1225,7 @@
 				F07F71221A72AB92006208A1 /* JTCalendarMonthView.m in Sources */,
 				F0DAB6901ACD2EFA00E77647 /* EModel_Chat.m in Sources */,
 				F0B5F4AD1AAA97180013111F /* MJPhotoProgressView.m in Sources */,
+				F0652C0C1B7C778A005FA148 /* SRTextFieldTableViewCell.m in Sources */,
 				F0F5C2931A66F1620029BF7A /* Model_Group.m in Sources */,
 				F07F71231A72AB92006208A1 /* JTCalendarMonthWeekDaysView.m in Sources */,
 				F0F5C2731A66F1490029BF7A /* SRTool.m in Sources */,
@@ -1266,6 +1277,7 @@
 				F0F5C1CD1A66CEBE0029BF7A /* AppDelegate.mm in Sources */,
 				C64F1D5E1B26881A0063C012 /* ChoosefriendsViewController.m in Sources */,
 				C6E25B901B57B2190031A6B9 /* HistoryPartyTableViewCell.m in Sources */,
+				F0A243621B7C66C000657C46 /* CreateGroupTableViewController.m in Sources */,
 				C64F1D641B26CB9D0063C012 /* ChoosefriendsTableViewCell.m in Sources */,
 				C699A91D1B7B1F9600CE0C5E /* CodeInputViewController.m in Sources */,
 				F01487E91A8F827800E41A63 /* UserViewController.m in Sources */,

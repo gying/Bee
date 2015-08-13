@@ -39,6 +39,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setTitle:@"选择好友"];
+    //开始读取好友的数据
     [self loadDataFromNet];
 }
 
@@ -74,8 +75,7 @@
 }
 
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ChoosefriendsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ChooseFriends" forIndexPath:indexPath];
     
     if (nil == cell) {
@@ -150,17 +150,13 @@
     return FALSE;
 }
 
-//界面将要退出的时候,对父控制器进行被备选数组的赋值
+//界面将要退出的时候,对代理控制器控制器进行被备选数组的赋值
 - (void)viewWillDisappear:(BOOL)animated {
-    self.rootController.choosePeopleArray = self.choosePeopleArray;
+    [self.delegate saveFriendList:self.choosePeopleArray];
     [super viewWillDisappear:animated];
 }
 
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 - (IBAction)tapBackButton:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
