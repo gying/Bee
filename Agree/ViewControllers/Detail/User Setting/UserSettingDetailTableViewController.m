@@ -127,9 +127,6 @@
                 [cell.inputTextField setHidden:YES];
                 [cell.textLabel setFont:[UIFont systemFontOfSize:13]];
                 [cell.textLabel setText:[_sexArray objectAtIndex:indexPath.row]];
-
-               
-                
             }
                 break;
             case kNickName: {

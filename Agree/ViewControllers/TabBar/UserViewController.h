@@ -9,15 +9,18 @@
 #import <UIKit/UIKit.h>
 #import "AboutUsViewController.h"
 #import "FeedBackViewController.h"
+#import "Model_User.h"
+#import "WXApiObject.h"
+#import "WXApi.h"
 
-
-@interface UserViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@interface UserViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,WXApiDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *avatarButton;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UITableView *settingTableVIew;
 @property (weak, nonatomic) IBOutlet UIView *upView;
 
+@property (nonatomic , strong)NSString * codeStr;
 
 
 - (void)resetAvatar;
