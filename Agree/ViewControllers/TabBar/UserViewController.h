@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "AboutUsViewController.h"
-#import "FeedBackViewController.h"
 #import "Model_User.h"
 #import "WXApiObject.h"
 #import "WXApi.h"

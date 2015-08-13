@@ -14,7 +14,6 @@
 #import "UserChatViewController.h"
 
 #import "WXApi.h"
-#import "UserSettingViewController.h"
 
 #import <ALBB_OSS_IOS_SDK/ALBBOSSServiceProvider.h>
 #import <ALBB_OSS_IOS_SDK/OSSTool.h>

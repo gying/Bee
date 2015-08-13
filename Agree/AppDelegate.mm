@@ -10,7 +10,6 @@
 #import "APService.h"
 #import "SRNet_Manager.h"
 #import <SVProgressHUD.h>
-#import "UserSettingViewController.h"
 
 #import <BaiduMapAPI/BMapKit.h>
 #import "SDImageCache.h"
@@ -101,101 +100,60 @@
 #pragma mark 收到聊天信息
 - (void)didReceiveMessage:(EMMessage *)message {
     //这里收到了信息
-//    if (message.messageType == eMessageTypeGroupChat) {
+    if (message.messageType == eMessageTypeGroupChat) {
         //群聊
-//        if (self.chatDelegate) {
-//            //处于某小组的详情界面中
-//            if ([message.from isEqualToString:self.chatDelegate.group.em_id]) {
-//                //处于同一小组的界面中,进行刷新
-//            } else {
-//                //处于不同小组
-//                [self.groupDelegate addGroupChatUpdateStatus:message.from];
-//            }
-//        } else {
-//            //处于小组详情外
-//            [self.groupDelegate addGroupChatUpdateStatus:message.from];
-//            if (!self.groupDelegate) {
-//                int badgeNum = [(UIViewController *)[self.rootController.viewControllers objectAtIndex:0] tabBarItem].badgeValue.intValue;
-//                if (badgeNum) {
-//                    badgeNum += 1;
-//                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:0] tabBarItem].badgeValue = [NSNumber numberWithInt:badgeNum].stringValue;
-//                }
-//            }
-//        }
-//    } else {
-//        //非群聊
-//        if (self.contactsDelegate) {
-////            [self.contactsDelegate.tableView reloadData];
-//            [self.contactsDelegate reloadTableViewAndUnreadData];
-//        } else {
-////            [[NSUserDefaults standardUserDefaults] setObject:@1 forKey:@"contact_update"];
-//            
-//            
-//            NSNumber *updateValue = [[NSUserDefaults standardUserDefaults] objectForKey:@"contact_update"];
-//            updateValue = [NSNumber numberWithInt: updateValue.intValue + 1];
-//            [[NSUserDefaults standardUserDefaults] setObject:updateValue forKey:@"contact_update"];
-//            
-//            if (updateValue) {
-//                [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = updateValue.stringValue;
-//            }
-//        }
-//    }
-    
-        if (message.messageType == eMessageTypeGroupChat) {
-            //群聊
-            if ([self.revDelegate isKindOfClass:[GroupDetailViewController class]]) {
-                GroupDetailViewController *delegateController = (GroupDetailViewController *)self.revDelegate;
-                if ([message.from isEqualToString:delegateController.group.em_id]) {
-                    //在当前的小组详情中
-                    //这里将会进行再判断.
-                } else {
-                    //在其他小组的详情中
-                    [self.groupDelegate addGroupChatUpdateStatus:message.from];
-                }
+        if ([self.revDelegate isKindOfClass:[GroupDetailViewController class]]) {
+            GroupDetailViewController *delegateController = (GroupDetailViewController *)self.revDelegate;
+            if ([message.from isEqualToString:delegateController.group.em_id]) {
+                //在当前的小组详情中
+                //这里将会进行再判断.
             } else {
-                if ([self.topRootViewController isKindOfClass:[GroupViewController class]]) {
-                    //主导航控制器在小组模块
-                     [self.groupDelegate addGroupChatUpdateStatus:message.from];
-                    
-                } else {
-                    //主导航控制器不在小组模块
-                     [self.groupDelegate addGroupChatUpdateStatus:message.from];
-                    //设置群聊的更新标识.
-                    int badgeNum = [(UIViewController *)[self.rootController.viewControllers objectAtIndex:0] tabBarItem].badgeValue.intValue;
-                    if (badgeNum) {
-                        badgeNum += 1;
-                    } else {
-                        badgeNum = 1;
-                    }
-                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:0] tabBarItem].badgeValue = [NSNumber numberWithInt:badgeNum].stringValue;
-                }
+                //在其他小组的详情中
+                [self.groupDelegate addGroupChatUpdateStatus:message.from];
             }
         } else {
-            if ([self.revDelegate isKindOfClass:[UserChatViewController class]]) {
-                //直接在用户聊天界面
-                UserChatViewController *ucDelegate = (UserChatViewController *)self.revDelegate;
+            if ([self.topRootViewController isKindOfClass:[GroupViewController class]]) {
+                //主导航控制器在小组模块
+                [self.groupDelegate addGroupChatUpdateStatus:message.from];
                 
-                if (ucDelegate.user.pk_user.intValue == message.from.intValue) {
-                    //正处于当前用户的聊天界面,直接刷新
-                } else {
-                    //在其他人的聊天界面
-                    [self.contactsDelegate reloadTableViewAndUnreadData];
-                }
             } else {
-                if ([self.topRootViewController isKindOfClass:[ContactsTableViewController class]]) {
-                    [self.contactsDelegate reloadTableViewAndUnreadData];
+                //主导航控制器不在小组模块
+                [self.groupDelegate addGroupChatUpdateStatus:message.from];
+                //设置群聊的更新标识.
+                int badgeNum = [(UIViewController *)[self.rootController.viewControllers objectAtIndex:0] tabBarItem].badgeValue.intValue;
+                if (badgeNum) {
+                    badgeNum += 1;
                 } else {
-                    int badgeNum = [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue.intValue;
-                    if (badgeNum) {
-                        badgeNum += 1;
-                    } else {
-                        badgeNum = 1;
-                    }
-                    [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = [NSNumber numberWithInt:badgeNum].stringValue;
+                    badgeNum = 1;
                 }
+                [(UIViewController *)[self.rootController.viewControllers objectAtIndex:0] tabBarItem].badgeValue = [NSNumber numberWithInt:badgeNum].stringValue;
             }
         }
-//    }
+    } else {
+        if ([self.revDelegate isKindOfClass:[UserChatViewController class]]) {
+            //直接在用户聊天界面
+            UserChatViewController *ucDelegate = (UserChatViewController *)self.revDelegate;
+            
+            if (ucDelegate.user.pk_user.intValue == message.from.intValue) {
+                //正处于当前用户的聊天界面,直接刷新
+            } else {
+                //在其他人的聊天界面
+                [self.contactsDelegate reloadTableViewAndUnreadData];
+            }
+        } else {
+            if ([self.topRootViewController isKindOfClass:[ContactsTableViewController class]]) {
+                [self.contactsDelegate reloadTableViewAndUnreadData];
+            } else {
+                int badgeNum = [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue.intValue;
+                if (badgeNum) {
+                    badgeNum += 1;
+                } else {
+                    badgeNum = 1;
+                }
+                [(UIViewController *)[self.rootController.viewControllers objectAtIndex:2] tabBarItem].badgeValue = [NSNumber numberWithInt:badgeNum].stringValue;
+            }
+        }
+    }
 }
 
 #pragma mark 应用内收取推送信息
