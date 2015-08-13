@@ -22,17 +22,18 @@
 
 
 #import "GroupSettingUITableViewCell.h"
+#import "GroupHistroyPartyViewController.h"
 
 
 #define AgreeBlue [UIColor colorWithRed:82/255.0 green:213/255.0 blue:204/255.0 alpha:1.0]
 
 @interface GroupSettingViewController ()<UITableViewDataSource, UITableViewDelegate> {
-//    Model_Group_User *_relationship;
-//    UIImageView *_backImageViwe;
-//    
-//    NSMutableArray *_relationArray;
-//    BOOL _saveForQuit;
-//    SRAccountView *_accountView;
+    Model_Group_User *_relationship;
+    UIImageView *_backImageViwe;
+    
+    NSMutableArray *_relationArray;
+    BOOL _saveForQuit;
+    SRAccountView *_accountView;
     
     NSArray *_tableAry;
 }
@@ -40,6 +41,17 @@
 @end
 
 @implementation GroupSettingViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [SVProgressHUD dismiss];
+    
+    _tableAry = @[@[@"小组名称",@"小组历史聚会",@"邀请好友加入"], @[@"聚会的信息提示",@"聊天的信息提示",@"公开手机号码"],@[@"退出小组"]];
+    
+    self.avatarView.layer.cornerRadius = 3.0;
+    //类型的边框与圆弧
+    
+}
 
 //- (void)viewDidLoad {
 //    [super viewDidLoad];
@@ -91,40 +103,12 @@
 //    
 //}
 //
-//- (void)reloadButtonStatusSetting {
-//    
-//    if (1 == _relationship.message_warn.intValue) {
-//        [self.chatTipButton setTitleColor:AgreeBlue forState:UIControlStateNormal];
-//        [self.chatTipLabel setText:@"已开启"];
-//    } else {
-//        [self.chatTipButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-//        [self.chatTipLabel setText:@"已关闭"];
-//    }
-//    
-//    if (1 == _relationship.party_warn.intValue) {
-//        [self.partyTipButton setTitleColor:AgreeBlue forState:UIControlStateNormal];
-//        [self.partyTipLabel setText:@"已开启"];
-//    } else {
-//        [self.partyTipButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-//        [self.partyTipLabel setText:@"已关闭"];
-//    }
-//    
-//    if (1 == _relationship.public_phone.intValue) {
-//        [self.phoneButton setTitleColor:AgreeBlue forState:UIControlStateNormal];
-//        [self.phoneLabel setText:@"已公开"];
-//    } else {
-//        [self.phoneButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-//        [self.phoneLabel setText:@"未公开"];
-//    }
-//}
-//
+
 
 
 #pragma mark -- 点击生成验证码
-
 - (IBAction)pressedTheCodeButton:(UIButton *)sender {
-    
-    NSLog(@"!!!!");
+
     Model_Group *theGroup = [[Model_Group alloc] init];
     theGroup.pk_group = self.group.pk_group;
 
@@ -161,73 +145,73 @@
 
 
 #pragma mark -- 保存BUTTON
-//- (IBAction)tapSaveButton:(id)sender {
-//    _saveForQuit = NO;
+- (IBAction)tapSaveButton:(id)sender {
+    _saveForQuit = NO;
 //    [SVProgressHUD show];
 //    [SRNet_Manager requestNetWithDic:[SRNet_Manager updateGroupRelationShip:_relationship]
 //                            complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
 //                                [self updateGroupRelationShipDone:jsonDic];
-//                                [SVProgressHUD showSuccessWithStatus:@"设置保存成功"];
+                                [SVProgressHUD showSuccessWithStatus:@"设置保存成功"];
 //                            } failure:^(NSError *error, NSURLSessionDataTask *task) {
 //                                
 //                            }];
-//}
+}
 
 
 #pragma mark -- 返回BUTTON
 - (IBAction)tapBackButton:(id)sender {
-//    if (_saveForQuit) {
-//        //资料已更改
-//        [SRTool showSRSheetInView:self.view withTitle:@"提示" message:@"小组的信息已经更改,是否保存后退出?"
-//                  withButtonArray:@[@"是的", @"不,我想要直接退出"]
-//                  tapButtonHandle:^(int buttonIndex) {
-//                      switch (buttonIndex) {
-//                          case 0: {
-//                              //保存后退出
-//                              //保存退出
-//                              _saveForQuit = NO;
-//                              [SRNet_Manager requestNetWithDic:[SRNet_Manager updateGroupRelationShip:_relationship]
-//                                                      complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
-//                                                          [self updateGroupRelationShipDone:jsonDic];
-//                                                      } failure:^(NSError *error, NSURLSessionDataTask *task) {
-//                                                          
-//                                                      }];
-//                              [self.navigationController popViewControllerAnimated:YES];
-//                              [self.rootController tapCloseButton:nil];
-//                          }
-//                              break;
-//                          case 1: {
-//                              //直接退出
-//                              [self.navigationController popViewControllerAnimated:YES];
-//                              [self.rootController tapCloseButton:nil];
-//                          }
-//                              break;
-//                          default:
-//                              break;
-//                      }
-//                  } tapCancelHandle:^{
-//                      
-//                  }];
-//        
-//    } else {
-//        
+    if (_saveForQuit) {
+        //资料已更改
+        [SRTool showSRSheetInView:self.view withTitle:@"提示" message:@"小组的信息已经更改,是否保存后退出?"
+                  withButtonArray:@[@"是的", @"不,我想要直接退出"]
+                  tapButtonHandle:^(int buttonIndex) {
+                      switch (buttonIndex) {
+                          case 0: {
+                              //保存后退出
+                              //保存退出
+                              _saveForQuit = NO;
+                              [SRNet_Manager requestNetWithDic:[SRNet_Manager updateGroupRelationShip:_relationship]
+                                                      complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                                          [self updateGroupRelationShipDone:jsonDic];
+                                                      } failure:^(NSError *error, NSURLSessionDataTask *task) {
+                                                          
+                                                      }];
+                              [self.navigationController popViewControllerAnimated:YES];
+                              [self.rootController tapCloseButton:nil];
+                          }
+                              break;
+                          case 1: {
+                              //直接退出
+                              [self.navigationController popViewControllerAnimated:YES];
+                              [self.rootController tapCloseButton:nil];
+                          }
+                              break;
+                          default:
+                              break;
+                      }
+                  } tapCancelHandle:^{
+                      
+                  }];
+        
+    } else {
+        
         [self.rootController tapCloseButton:nil];
 
         [self.navigationController popViewControllerAnimated:YES];
-//    }
+    }
     
 }
 
 
-//- (void)updateGroupRelationShipDone: (id)jsonDic {
-//    if (_saveForQuit) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            GroupViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
-//            [rootController loadUserGroupRelationship];
-//            [self.navigationController popToRootViewControllerAnimated:YES];
-//        });
-//    }
-//}
+- (void)updateGroupRelationShipDone: (id)jsonDic {
+    if (_saveForQuit) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            GroupViewController *rootController = [self.navigationController.viewControllers objectAtIndex:0];
+            [rootController loadUserGroupRelationship];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        });
+    }
+}
 
 #pragma mark -- 第一响应
 - (BOOL)canBecomeFirstResponder{
@@ -241,24 +225,6 @@
     pboard.string = self.inButton.titleLabel.text;
 }
 
-#pragma mark -- 退出小组
-//- (IBAction)pressedTheExitButton:(id)sender {
-//    [SRTool showSRAlertViewWithTitle:@"警告" message:@"真的要退出这个小组吗?"
-//                   cancelButtonTitle:@"我再想想" otherButtonTitle:@"是的"
-//               tapCancelButtonHandle:^(NSString *msgString) {
-//                   
-//               } tapOtherButtonHandle:^(NSString *msgString) {
-//                   //确认发送
-//                   _relationship.status = @0;
-//                   _saveForQuit = YES;
-//                   [SRNet_Manager requestNetWithDic:[SRNet_Manager updateGroupRelationShip:_relationship]
-//                                           complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
-//                                               [self updateGroupRelationShipDone:jsonDic];
-//                                           } failure:^(NSError *error, NSURLSessionDataTask *task) {
-//                                               
-//                                           }];
-//               }];
-//}
 
 #pragma mark -- 聚会信息提醒
 //- (IBAction)pressedThePartyButton:(UIButton *)sender {
@@ -293,20 +259,6 @@
 //    
 //    _saveForQuit = true;
 //}
-
-
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    [SVProgressHUD dismiss];
-    
-    _tableAry = @[@[@"小组名称",@"小组历史聚会",@"邀请好友加入"], @[@"聚会的信息提示",@"聊天的信息提示",@"公开手机号码"],@[@"退出小组"]];
-    
-    self.avatarView.layer.cornerRadius = 3.0;
-    //类型的边框与圆弧
-     
-}
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     GroupSettingUITableViewCell *cell = [self.groupSettingTableView dequeueReusableCellWithIdentifier:@"GROUPSETTINGCELL" forIndexPath:indexPath];
@@ -356,9 +308,59 @@
     return 1;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ((0 == indexPath.section)&&(0 == indexPath.row)) {
+        NSLog(@"小组名称");
+        
+    }
+    else if ((0 == indexPath.section)&&(1 == indexPath.row)) {
+        NSLog(@"小组历史聚会");
+        
+        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
+        
+        GroupHistroyPartyViewController *childController = [sb instantiateViewControllerWithIdentifier:@"GroupHistroyPartyViewController"];
+        [self.navigationController showViewController:childController sender:self];
+        
+    }
+    else if ((0 == indexPath.section)&&(2 == indexPath.row)) {
+        NSLog(@"邀请好友加入");
+        
+    }
+    else if ((1 == indexPath.section)&&(0 == indexPath.row)) {
+        NSLog(@"聚会信息提示");
+        
+    }
+    else if ((1 == indexPath.section)&&(1 == indexPath.row)) {
+        NSLog(@"聊天信息提示");
+        
+    }
+    else if ((1 == indexPath.section)&&(2 == indexPath.row)) {
+        NSLog(@"公开手机号码");
+        
+    }
+    else if ((2 == indexPath.section)&&(0 == indexPath.row)) {
+        NSLog(@"退出小组");
+        
+        [SRTool showSRAlertViewWithTitle:@"警告" message:@"真的要退出这个小组吗?"
+                            cancelButtonTitle:@"我再想想" otherButtonTitle:@"是的"
+                        tapCancelButtonHandle:^(NSString *msgString) {
+         
+                        } tapOtherButtonHandle:^(NSString *msgString) {
+                            //确认发送
+                            _relationship.status = @0;
+                            _saveForQuit = YES;
+                            [SRNet_Manager requestNetWithDic:[SRNet_Manager updateGroupRelationShip:_relationship]
+                                                    complete:^(NSString *msgString, id jsonDic, int interType, NSURLSessionDataTask *task) {
+                                                        [self updateGroupRelationShipDone:jsonDic];
+                                                    } failure:^(NSError *error, NSURLSessionDataTask *task) {
+         
+                                                    }];
+                        }];
+
+    }
 }
 
 
@@ -368,7 +370,10 @@
 
 
 
-
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
 
 
 

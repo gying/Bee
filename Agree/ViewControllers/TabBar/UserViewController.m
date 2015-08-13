@@ -20,6 +20,7 @@
 #import "AppDelegate.h"
 #import <SVProgressHUD.h>
 #import "UserSettingTableViewCell.h"
+#import "UserSettingDetailTableViewController.h"
 
 @interface UserViewController () {
     UIImageView *_backImageViwe;
@@ -28,6 +29,7 @@
     
     NSArray *_tableAry;
 
+    NSIndexPath *_selectedIndex;
 }
 
 @end
@@ -132,47 +134,16 @@
 }
 
 
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    _selectedIndex = indexPath;
+    return indexPath;
+}
+
 
 //被选中的CELL执行内容
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ((0 == indexPath.section)&&(0 == indexPath.row)) {
-        NSLog(@"姓名");
-        
-    }else if ((0 == indexPath.section)&&(1 == indexPath.row)) {
-        NSLog(@"性别");
-        
-    }else if ((0 == indexPath.section)&&(2 == indexPath.row)) {
-        NSLog(@"绑定手机");
-        
-    }else if ((0 == indexPath.section)&&(3 == indexPath.row)) {
-        NSLog(@"绑定微信");
-        
-    }else if ((1 == indexPath.section)&&(0 == indexPath.row)) {
-        NSLog(@"绑定微信钱包");
-        
-    }else if ((1 == indexPath.section)&&(1 == indexPath.row)) {
-        NSLog(@"绑定支付宝");
-        
-    }else if ((2 == indexPath.section)&&(0 == indexPath.row)) {
-        NSLog(@"反馈");
-
-        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-        
-        FeedBackViewController *childController = [sb instantiateViewControllerWithIdentifier:@"FeedBackViewController"];
-        [self.navigationController showViewController:childController sender:self];
-        
-    }else if ((2 == indexPath.section)&&(1 == indexPath.row)) {
-        NSLog(@"关于必聚");
-
-        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"MainStoryBoard" bundle:nil];
-        
-        AboutUsViewController *childController = [sb instantiateViewControllerWithIdentifier:@"AboutUsViewController"];
-        childController.inputType = kSex;
-
-        [self.navigationController showViewController:childController sender:self];
-        
-    }else if ((3 == indexPath.section) && (0 == indexPath.row)) {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if((3 == indexPath.section) && (0 == indexPath.row)) {
         
         [SRTool showSRAlertViewWithTitle:@"警告" message:@"确定要登出帐号吗?\n保存的资料将会被清空哦~"
                        cancelButtonTitle:@"我再想想" otherButtonTitle:@"是的"
@@ -205,9 +176,47 @@
     
 }
 
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    if((3 == _selectedIndex.section) && (0 == _selectedIndex.row)) {
+        return NO;
+    }
+    return YES;
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
+    if ((0 == _selectedIndex.section)&&(0 == _selectedIndex.row)) {
+        NSLog(@"姓名");
+        UserSettingDetailTableViewController *childController = segue.destinationViewController;
+        childController.inputType = kNickName;
+        
+    }else if ((0 == _selectedIndex.section)&&(1 == _selectedIndex.row)) {
+        NSLog(@"性别");
+        UserSettingDetailTableViewController *childController = segue.destinationViewController;
+        childController.inputType = kChooseSex;
+        
+    }else if ((0 == _selectedIndex.section)&&(2 == _selectedIndex.row)) {
+        NSLog(@"绑定手机");
+        UserSettingDetailTableViewController *childController = segue.destinationViewController;
+        childController.inputType = kBandPhone;
+        
+        
+    }else if ((0 == _selectedIndex.section)&&(3 == _selectedIndex.row)) {
+        NSLog(@"绑定微信");
 
+    }else if ((1 == _selectedIndex.section)&&(0 == _selectedIndex.row)) {
+        NSLog(@"绑定微信钱包");
+        
+    }else if ((1 == _selectedIndex.section)&&(1 == _selectedIndex.row)) {
+        NSLog(@"绑定支付宝");
+        
+    }else if ((2 == _selectedIndex.section)&&(0 == _selectedIndex.row)) {
+        NSLog(@"反馈");
+
+    }else if ((2 == _selectedIndex.section)&&(1 == _selectedIndex.row)) {
+        NSLog(@"关于必聚");
+
+    }
 }
 
 
