@@ -12,6 +12,8 @@
 
 - (void)awakeFromNib {
     // Initialization code
+    
+    self.detailTextLabel.text = @"小组名称";
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

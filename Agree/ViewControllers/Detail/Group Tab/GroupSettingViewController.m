@@ -272,7 +272,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     GroupSettingUITableViewCell *cell = [self.groupSettingTableView dequeueReusableCellWithIdentifier:@"GROUPSETTINGCELL" forIndexPath:indexPath];
     if (!cell) {
-        cell = [[GroupSettingUITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"GROUPSETTINGCELL"];
+        cell = [[GroupSettingUITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"GROUPSETTINGCELL"];
     }
     NSArray *subAry = [_tableAry objectAtIndex:indexPath.section];
     cell.textLabel.text = [subAry objectAtIndex:indexPath.row];
@@ -281,6 +281,7 @@
     switch (indexPath.section) {
         case 0:
             [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
+         
             break;
         case 1:
             
@@ -293,6 +294,9 @@
         default:
             break;
     }
+
+
+
 
     
     return cell;

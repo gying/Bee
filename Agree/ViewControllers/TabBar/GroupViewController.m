@@ -254,17 +254,6 @@
         _chooseIndexPath = 0;
         return NO;
     }
-    if ([identifier isEqualToString:@"CreateGroup"]) {
-        if (!self.codeView.hidden) {
-            //正在输入邀请码
-            self.codeView.hidden = YES;
-            [self.codeInputTextField resignFirstResponder];
-            [self.createButton setTitle:@"新建" forState:UIControlStateNormal];
-            return NO;
-        } else {
-            return YES;
-        }
-    }
     
     return YES;
 }
@@ -280,6 +269,7 @@
         GroupDetailViewController *controller = (GroupDetailViewController *)segue.destinationViewController;
         controller.group = [self.groupAry objectAtIndex:_chooseIndexPath];
     }
+//    else if ([@"CreateGroup" isEqual:segue.identifier])
 }
 
 - (IBAction)pressedCodeButton:(id)sender {
